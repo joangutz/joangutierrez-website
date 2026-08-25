@@ -10,3 +10,6 @@ shoot.local.mjs
 measure.local.mjs
 interact.local.mjs
 clip.local.mjs
+audit.local.mjs
+verify.local.mjs
+legacy.local.mjs

@@ -28,7 +28,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- The cards carry depth. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">{s.cards.title}</span>
       <p class="section-note">{s.cards.body}</p>
@@ -41,7 +41,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- The price grid carries comparison. A different job, kept separate. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">{s.prices.title}</span>
       <p class="section-note">{s.prices.body}</p>
@@ -52,7 +52,7 @@ const offerings = (await getCollection('offerings')).sort(
   <!-- The arc. A real sequence, so the numbers are earned — and they live in
        the empty left column, which is what that column is for. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <h2 class="section-title">{s.arc.title}</h2>
       <p class="arc-intro">{s.arc.intro}</p>
@@ -75,7 +75,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- Consent -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <h2 class="section-title">{s.consent.title}</h2>
       {s.consent.paragraphs.map((p) => <p class="body-text">{p}</p>)}
@@ -84,7 +84,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <div class="note">
         <span class="label">{s.note.title}</span>

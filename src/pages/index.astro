@@ -43,7 +43,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- 2 · Who this work is for -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <span class="label">{h.audience.title}</span>
       <ul class="audience rise">
@@ -55,7 +55,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- 3 · The three realms -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">The three realms</span>
       <h2 class="section-title">{h.realms.title}</h2>
@@ -69,7 +69,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- 4 · The four offerings, at rest -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">Sessions</span>
       <h2 class="section-title">{h.sessions.title}</h2>
@@ -104,7 +104,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- 5 · One portrait, two sentences -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide story rise">
       <div class="story-portrait">
         <Portrait src={h.story.portrait} alt={h.story.alt} sizes="(max-width: 900px) 60vw, 26vw" />
@@ -119,7 +119,7 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- 6 · The seasonal letter -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <span class="label">{h.letter.title}</span>
       <p class="letter-body">{h.letter.body}</p>
@@ -129,13 +129,41 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- 7 · Begin -->
   <section class="band section close on-dark grained">
-    <div class="rail"><Aperture size="72px" open={0.6} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="72px" open={0.6} bloomOnView /></div>
     <div class="col">
       <h2 class="section-title">{h.close.title}</h2>
       <p class="close-body">{h.close.body}</p>
       <a class="begin" href="/begin/">{booking.label}</a>
     </div>
   </section>
+
+  {/*
+    Testimonials slot. Deliberately empty until there are real testimonials —
+    a section here with invented or placeholder quotes would be worse than no
+    section. Drop them into /content/ and render them between the story and
+    the seasonal letter.
+
+    <section class="band section">
+      <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+      <div class="wide"> … </div>
+    </section>
+  */}
+
+  <script is:inline>
+    // The site this replaces was one page behind hash anchors. Those links are
+    // out in the world — in Substack posts, in messages — and the fragment
+    // never reaches the server, so the redirect has to happen here.
+    (function () {
+      var moved = {
+        '#approach': '/the-work/',
+        '#about': '/roots/',
+        '#offerings': '/sessions/',
+        '#connect': '/begin/',
+      };
+      var to = moved[window.location.hash];
+      if (to) window.location.replace(to);
+    })();
+  </script>
 </Base>
 
 <style>

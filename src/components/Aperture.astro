@@ -29,13 +29,26 @@ const {
   label,
 } = Astro.props;
 
+/**
+ * Also honour the animation classes if they arrive via `class` rather than the
+ * props — passing class="bloom-on-view" once left the inline --open in place,
+ * which silently beat the stylesheet and stopped the mark opening at all.
+ */
+const animated =
+  bloom || bloomOnView || /\bbloom(-on-view)?\b/.test(className);
+
 const petals = [0, 45, 90, 135, 180, 225, 270, 315];
 const inner = [22.5, 112.5, 202.5, 292.5];
 ---
 
 <svg
   class:list={['aperture', className, { bloom, 'bloom-on-view': bloomOnView }]}
-  style={`--open:${open};--size:${size}`}
+  {/*
+    An inline --open would beat every stylesheet rule, including the ones that
+    open the mark — so animated marks carry only the target value and let CSS
+    drive --open itself.
+  */}
+  style={`--open-to:${open};--size:${size}${animated ? '' : `;--open:${open}`}`}
   viewBox="0 0 100 100"
   role={label ? 'img' : undefined}
   aria-label={label}
@@ -114,7 +127,7 @@ const inner = [22.5, 112.5, 202.5, 292.5];
     }
 
     .js .aperture.bloom-on-view.in-view {
-      --open: 1;
+      --open: var(--open-to, 1);
       transition: --open 1400ms var(--ease-open);
     }
 
@@ -136,7 +149,7 @@ const inner = [22.5, 112.5, 202.5, 292.5];
 
     .aperture.bloom,
     .aperture.bloom-on-view {
-      --open: 1;
+      --open: var(--open-to, 1);
     }
   }
 </style>

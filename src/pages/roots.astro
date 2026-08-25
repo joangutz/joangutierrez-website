@@ -53,7 +53,7 @@ const rendered = await Promise.all(
   <!-- The land, given a section rather than a footer line. -->
   <section class="land on-dark grained">
     <div class="band section">
-      <div class="rail"><Aperture size="52px" open={0.35} class="bloom-on-view" /></div>
+      <div class="rail"><Aperture size="52px" open={0.35} bloomOnView /></div>
       <div class="col">
         <span class="label">{r.land.title}</span>
         {r.land.paragraphs.map((p) => <p class="land-text">{p}</p>)}
@@ -64,7 +64,7 @@ const rendered = await Promise.all(
   <!-- The epigraph gets a page to itself, or near enough. -->
   <section class="band epigraph">
     <div class="full epigraph-inner">
-      <Aperture size="clamp(56px, 8vw, 90px)" open={0.2} class="bloom-on-view" />
+      <Aperture size="clamp(56px, 8vw, 90px)" open={0.2} bloomOnView />
       <blockquote>
         <p>{r.epigraph.quote}</p>
         <cite>— {r.epigraph.source}</cite>
@@ -74,7 +74,7 @@ const rendered = await Promise.all(
 
   <!-- Credentials: complete, verifiable, and quiet. -->
   <section class="band section credentials">
-    <div class="rail"><Aperture size="40px" open={0.18} class="bloom-on-view" /></div>
+    <div class="rail"><Aperture size="40px" open={0.18} bloomOnView /></div>
     <div class="wide">
       <span class="label">{r.credentials.title}</span>
       <p class="cred-note">{r.credentials.note}</p>
