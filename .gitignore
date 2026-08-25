@@ -6,10 +6,8 @@ dist/
 .env
 .env.production
 .netlify/
-shoot.local.mjs
-measure.local.mjs
-interact.local.mjs
-clip.local.mjs
-audit.local.mjs
-verify.local.mjs
-legacy.local.mjs
+
+# Throwaway scripts used to render, measure, and audit the site during the
+# build — screenshots, contrast checks, the preview bundler. Not part of it.
+*.local.mjs
+preview.html
