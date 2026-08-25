@@ -1,0 +1,300 @@
+---
+import Base from '../layouts/Base.astro';
+import Aperture from '../components/Aperture.astro';
+import Portrait from '../components/Portrait.astro';
+import TornEdge from '../components/TornEdge.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import { contact, booking } from '../site';
+
+const entry = await getEntry('rootsPage', 'roots');
+if (!entry) throw new Error('Missing /content/roots/roots.md');
+const r = entry.data;
+
+const territories = (await getCollection('territories')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const rendered = await Promise.all(
+  territories.map(async (t) => ({ data: t.data, Content: (await render(t)).Content }))
+);
+---
+
+<Base title={r.title} description={r.description}>
+  <section class="band section intro">
+    <div class="rail">
+      <Aperture size="clamp(64px, 10vw, 110px)" bloom />
+    </div>
+    <div class="col">
+      <span class="label">{r.eyebrow}</span>
+      <h1 class="page-title">{r.lede}</h1>
+    </div>
+    <div class="wide intro-portrait">
+      <Portrait src={r.portrait.src} alt={r.portrait.alt} sizes="(max-width: 900px) 80vw, 34vw" />
+    </div>
+  </section>
+
+  <!-- Named territories, not chronology. -->
+  {
+    rendered.map(({ data, Content }) => (
+      <>
+        {data.torn && <TornEdge fill="var(--color-bract)" class="territory-tear" />}
+        <section class="band section territory">
+          <div class="rail">
+            <span class="territory-title">{data.title}</span>
+          </div>
+          <div class="col prose">
+            <Content />
+          </div>
+        </section>
+      </>
+    ))
+  }
+
+  <!-- The land, given a section rather than a footer line. -->
+  <section class="land on-dark grained">
+    <div class="band section">
+      <div class="rail"><Aperture size="52px" open={0.35} class="bloom-on-view" /></div>
+      <div class="col">
+        <span class="label">{r.land.title}</span>
+        {r.land.paragraphs.map((p) => <p class="land-text">{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- The epigraph gets a page to itself, or near enough. -->
+  <section class="band epigraph">
+    <div class="full epigraph-inner">
+      <Aperture size="clamp(56px, 8vw, 90px)" open={0.2} class="bloom-on-view" />
+      <blockquote>
+        <p>{r.epigraph.quote}</p>
+        <cite>— {r.epigraph.source}</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Credentials: complete, verifiable, and quiet. -->
+  <section class="band section credentials">
+    <div class="rail"><Aperture size="40px" open={0.18} class="bloom-on-view" /></div>
+    <div class="wide">
+      <span class="label">{r.credentials.title}</span>
+      <p class="cred-note">{r.credentials.note}</p>
+
+      {
+        r.credentials.groups.map((g) => (
+          <div class="cred-group">
+            <h2 class="cred-heading">{g.heading}</h2>
+            <ul>
+              {g.items.map((item) => (
+                <li>
+                  <span class="cred-name">{item.name}</span>
+                  {item.detail && <span class="cred-detail">{item.detail}</span>}
+                  <span class="cred-meta tabular">
+                    {[item.where, item.when].filter(Boolean).join(' · ')}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <p class="ethics">
+        {r.credentials.ethics} <a href={contact.ethics}>Read the code of ethics</a>.
+      </p>
+
+      <a class="door" href="/begin/">{booking.label}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+    row-gap: 3rem;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    margin-top: 1.5rem;
+    max-width: 18ch;
+  }
+
+  .intro-portrait {
+    max-width: 26rem;
+  }
+
+  /* ---- Territories ---- */
+  .territory-tear {
+    margin-top: clamp(2rem, 6vw, 4rem);
+  }
+
+  .territory {
+    padding-block: clamp(2.5rem, 7vw, 5rem);
+  }
+
+  .territory-title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(0.72rem, 1.4vw, 0.85rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    line-height: 1.6;
+    color: var(--color-cochineal);
+    position: sticky;
+    top: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .territory-title {
+      position: static;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  /* ---- The land ---- */
+  .land {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+    margin-block: clamp(2rem, 6vw, 4rem);
+  }
+
+  .land-text {
+    margin: 1.5rem 0 0;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.55;
+    max-width: 34ch;
+  }
+
+  /* ---- Epigraph ---- */
+  .epigraph {
+    padding-block: clamp(4rem, 14vw, 9rem);
+  }
+
+  .epigraph-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+  }
+
+  /* No max-width here: 24ch resolves against the body font and would choke the
+     much larger display type inside. The measure belongs on the paragraph. */
+  blockquote {
+    margin: 0;
+  }
+
+  blockquote p {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3.4vw, 2.4rem);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    font-weight: 300;
+    margin: 0;
+    text-wrap: balance;
+    max-width: 20ch;
+    margin-inline: auto;
+  }
+
+  cite {
+    display: block;
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--color-ink-2);
+  }
+
+  /* ---- Credentials ---- */
+  .credentials {
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .cred-note {
+    margin: 0.75rem 0 3rem;
+    color: var(--color-ink-2);
+    font-size: 0.98rem;
+  }
+
+  .cred-group + .cred-group {
+    margin-top: 3rem;
+  }
+
+  .cred-heading {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-quick-ink);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .cred-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cred-group li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .cred-name {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .cred-detail,
+  .cred-meta {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  .cred-meta {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .ethics {
+    margin: 2.5rem 0 0;
+    font-size: 0.95rem;
+    color: var(--color-ink-2);
+    max-width: 52ch;
+  }
+
+  .ethics a {
+    text-decoration-color: var(--color-quick-ink);
+  }
+
+  .door {
+    display: inline-block;
+    margin-top: 2.5rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-quick-ink);
+    padding-bottom: 0.3rem;
+  }
+
+  .door:hover {
+    border-bottom-color: currentColor;
+  }
+</style>

@@ -55,6 +55,11 @@ const found = files[`/assets/portraits/${src}`];
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* Black and white applies to photographs, not to the placeholder — which
+     was being desaturated out of the palette. */
+  img.portrait {
     filter: grayscale(1) contrast(1.05);
   }
 

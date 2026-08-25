@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro';
+import Aperture from '../components/Aperture.astro';
+import { getEntry, render } from 'astro:content';
+import { contact, booking } from '../site';
+
+const entry = await getEntry('pages', 'for-clinicians');
+if (!entry) throw new Error('Missing /content/pages/for-clinicians.md');
+const { Content } = await render(entry);
+const p = entry.data;
+---
+
+<Base title={p.title} description={p.description}>
+  <section class="band section intro">
+    <div class="rail">
+      <Aperture size="clamp(64px, 10vw, 110px)" bloom />
+    </div>
+    <div class="col">
+      <span class="label">{p.eyebrow}</span>
+      <h1 class="page-title">{p.lede}</h1>
+    </div>
+  </section>
+
+  <section class="band body">
+    <div class="rail">
+      <Aperture size="52px" open={0.28} class="bloom-on-view rail-mark" />
+    </div>
+    <div class="col prose">
+      <Content />
+    </div>
+  </section>
+
+  <section class="band section refer on-dark grained">
+    <div class="rail"><Aperture size="64px" open={0.6} class="bloom-on-view" /></div>
+    <div class="col">
+      <h2 class="refer-title">Refer a client</h2>
+      <ul class="refer-list">
+        <li><a href={booking.url}>{booking.label}</a> — {booking.duration}, no obligation</li>
+        <li><a href={contact.smsHref}>Text {contact.smsDisplay}</a></li>
+        {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-bottom: clamp(1rem, 3vw, 2rem);
+  }
+
+  .page-title {
+    font-size: clamp(1.9rem, 4.6vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    margin-top: 1.5rem;
+    max-width: 20ch;
+  }
+
+  .body {
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
+
+  .rail-mark {
+    position: sticky;
+    top: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .rail-mark {
+      position: static;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  /* The scope-of-practice paragraphs arrive italic from the source. Set them
+     calm and at full reading size — a professional boundary, not fine print. */
+  .prose :global(em) {
+    font-style: italic;
+  }
+
+  .refer {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .refer-title {
+    font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+    line-height: 1.15;
+  }
+
+  .refer-list {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    font-size: 1.02rem;
+  }
+
+  .refer-list a {
+    text-decoration-color: var(--color-quick);
+  }
+</style>

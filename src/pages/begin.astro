@@ -1,0 +1,125 @@
+---
+import Base from '../layouts/Base.astro';
+import Aperture from '../components/Aperture.astro';
+import BookingEmbed from '../components/BookingEmbed.astro';
+import { site, contact, booking } from '../site';
+---
+
+<Base
+  title="Begin"
+  description="Book a free twenty-minute consultation with Joan Gutiérrez. Chicago, Brooklyn, and online."
+>
+  <!-- One action. The aperture is fully open here — this is where it opens to. -->
+  <section class="band begin-hero">
+    <div class="rail">
+      <Aperture size="clamp(120px, 24vw, 250px)" bloom />
+    </div>
+    <div class="col">
+      <span class="label">Begin</span>
+      <h1 class="page-title">Twenty minutes, free, no obligation.</h1>
+      <p class="lede begin-lede">
+        We talk about where you are, what you're longing for, and whether this work is the
+        right fit. If it isn't, I'll say so.
+      </p>
+    </div>
+  </section>
+
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="col">
+      <BookingEmbed />
+    </div>
+  </section>
+
+  <section class="band section other">
+    <div class="rail"><Aperture size="40px" open={0.18} class="bloom-on-view" /></div>
+    <div class="wide other-grid">
+      <div>
+        <span class="label">Another way</span>
+        <ul class="plain">
+          <li><a href={contact.smsHref}>Text {contact.smsDisplay}</a></li>
+          {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
+          <li><a href={contact.substack}>The seasonal letter</a></li>
+        </ul>
+        <p class="curiosity">Curiosity is welcomed. Collaborations are too.</p>
+      </div>
+
+      <div>
+        <span class="label">Where we can work</span>
+        <ul class="plain">
+          {site.locations.map((l) => <li>{l.place} — {l.mode.toLowerCase()}</li>)}
+        </ul>
+      </div>
+
+      <div>
+        <span class="label">If you're a clinician</span>
+        <p class="clin">
+          There is a page written for therapists and pelvic floor physical therapists.
+          <a href="/for-clinicians/">Read it here</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .begin-hero {
+    padding-block: clamp(3rem, 10vh, 6rem) clamp(2rem, 5vw, 3rem);
+    row-gap: 2.5rem;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5.4vw, 3.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    margin-top: 1.5rem;
+    max-width: 16ch;
+  }
+
+  .begin-lede {
+    margin: 1.75rem 0 0;
+    max-width: 40ch;
+  }
+
+  .other {
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .other-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2.5rem;
+  }
+
+  .other-grid .label {
+    margin-bottom: 1rem;
+  }
+
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.98rem;
+  }
+
+  .plain a {
+    text-decoration-color: var(--color-quick-ink);
+  }
+
+  .curiosity,
+  .clin {
+    margin: 1.25rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    max-width: 30ch;
+  }
+
+  .clin a {
+    text-decoration-color: var(--color-quick-ink);
+  }
+</style>

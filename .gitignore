@@ -9,3 +9,4 @@ dist/
 shoot.local.mjs
 measure.local.mjs
 interact.local.mjs
+clip.local.mjs

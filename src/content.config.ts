@@ -56,7 +56,7 @@ const territories = defineCollection({
 });
 
 const pages = defineCollection({
-  loader: glob({ base: './content/pages', pattern: '**/*.md' }),
+  loader: glob({ base: './content/pages', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     title: z.string(),
     eyebrow: z.string().optional(),
@@ -126,4 +126,48 @@ const sessionsPage = defineCollection({
   }),
 });
 
-export const collections = { offerings, territories, pages, home, sessionsPage };
+/** Roots: the land, the epigraph, and the credentials kept complete but quiet. */
+const rootsPage = defineCollection({
+  loader: glob({ base: './content/roots', pattern: '**/*.md' }),
+  schema: z.object({
+    eyebrow: z.string(),
+    title: z.string(),
+    lede: z.string(),
+    description: z.string(),
+    portrait: z.object({ src: z.string(), alt: z.string() }),
+    land: z.object({
+      title: z.string(),
+      paragraphs: z.array(z.string()),
+      image: z.string(),
+      alt: z.string(),
+    }),
+    epigraph: z.object({ quote: z.string(), source: z.string() }),
+    credentials: z.object({
+      title: z.string(),
+      note: z.string(),
+      groups: z.array(
+        z.object({
+          heading: z.string(),
+          items: z.array(
+            z.object({
+              name: z.string(),
+              detail: z.string().optional(),
+              where: z.string().optional(),
+              when: z.string().optional(),
+            })
+          ),
+        })
+      ),
+      ethics: z.string(),
+    }),
+  }),
+});
+
+export const collections = {
+  offerings,
+  territories,
+  pages,
+  home,
+  sessionsPage,
+  rootsPage,
+};
