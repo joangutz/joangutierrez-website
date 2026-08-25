@@ -34,8 +34,8 @@ red for nearly all type** — not a neutral page with a red accent. No cream. No
 | **Madder** | `#D6A09B` | The ground. Every page, nearly everywhere. |
 | **Cochineal** | `#5A121C` | The ink. Nearly all type, all sizes. |
 | **Plumstone** | `#2C0B12` | Deep ground for inverted sections; the aperture mark; focus rings on light grounds. |
-| **Bract** | `#E9CAC0` | Lifted panels — session cards, price tiles; type on dark grounds. |
-| **Quick** | `#8E241F` | The one live red. Rules, the open aperture's centre, the price-as-button. Never carries body text. |
+| **Bract** | `#EED4CB` | Lifted panels — session cards, price tiles; type on dark grounds. |
+| **Quick** | `#ED3943` | The one live red, used as a *field*: price tiles, the Begin panel, the aperture core on dark grounds. Carries Plumstone type. Dark variant `#A11119` for marks on the light ground. |
 
 **Why these.**
 
@@ -52,20 +52,35 @@ copy says formed her sensibility.
 It gives the site somewhere to go deep without introducing black, which would read clinical.
 
 *Bract* is the leaf-like sheath that holds a flower before it opens. It is a pale warm pink,
-emphatically **not** cream — it lifts cards off the ground without leaving the flower.
+emphatically **not** cream — it lifts cards off the ground without leaving the flower. Taken one
+tone lighter than first proposed (`#E9CAC0` → `#EED4CB`), which raises its lightness from 83% to
+86% while its saturation goes *up*, not down: it gets lighter without washing toward neutral. For
+comparison, the banned cream `#F4F1EA` sits at hue 42° and 31% saturation; Bract is at hue 15° and
+51%. The gap is not close.
 
-*Quick* is "the quick": the living flesh under a nail. Sparing, hot, alive.
+*Quick* is "the quick": the living flesh under a nail. Sparing, hot, alive. This is Pooja Prema's
+`rgb(237, 57, 67)` taken exactly, and taking it exactly changes what the colour can do — see the
+finding below.
 
 **Contrast, measured.** Cochineal on Madder is **6.09:1** — AA at body size with room, which is
-what lets one ink carry everything. Cochineal on Bract is 8.89:1. Bract on Plumstone is 11.75:1.
+what lets one ink carry everything. Cochineal on Bract is 9.70:1. Bract on Plumstone is 12.82:1.
+
+One consequence of the brighter Quick worth stating: **Bract on Quick is only 2.83:1**, so type on
+a hot red tile is Plumstone, never Bract.
 
 Two findings that change the build:
 
-- **Quick can never carry text.** At its brightest usable value it reaches 2.96:1 on the
-  ground. `#8E241F` was chosen as the darkest value that still reads hot, giving **3.86:1** —
-  enough for a *meaningful non-text mark* (the aperture), not enough for a word. So Quick is
-  strictly a graphic colour. This is a constraint, and it is also the discipline the brief
-  asked for: one ink, one live mark.
+- **At `#ED3943`, Quick becomes a ground rather than a mark.** Against the Madder ground it
+  measures **1.78:1** — as an 8px aperture core or a hairline rule it would effectively vanish.
+  Against Plumstone it reaches **4.53:1**, and it carries Plumstone *type* at the same 4.53:1.
+  So the bright red works as a field, not as a line: price tiles, the Begin panel, the aperture
+  core where it sits on a dark ground. That is also how Pooja uses it — large blocks, not
+  hairlines. Where the live red must appear *on* the Madder ground, it takes the dark variant
+  **`#A11119`** — the same hue (357°) and saturation (81%), dropped in lightness to reach 3.59:1.
+  One hue, two lightnesses, each with a stated job. Full-strength `#ED3943` sits directly on the
+  Madder ground wherever it is a *field* — two adjacent grounds have no contrast requirement
+  between them, so the hot red tile on rose is the one place the colour gets to be loud.
+  It never appears as a small mark on Brick or Clay, where it fails (2.34:1, 1.87:1).
 - **The focus ring flips.** Plumstone rings fail on the dark grounds (1.0–2.4:1); Bract rings
   fail on the light ones (1.0–1.5:1). One token, two values resolved by context — Plumstone on
   Madder/Bract, Bract on Plumstone/card faces. Visible keyboard focus is in §1's quality floor,
@@ -75,10 +90,10 @@ Two findings that change the build:
 
 | Offering | Register | Bract on it |
 |---|---|---|
-| Erotic Embodiment Education | Plumstone `#2C0B12` | 11.75:1 |
-| Desire & Pleasure Mapping | Cochineal `#5A121C` | 8.89:1 |
-| Scar Tissue Care | Brick `#7E2A26` | 6.09:1 |
-| All-In-One | Clay `#8E3B2E` | 4.86:1 |
+| Erotic Embodiment Education | Plumstone `#2C0B12` | 12.82:1 |
+| Desire & Pleasure Mapping | Cochineal `#5A121C` | 9.70:1 |
+| Scar Tissue Care | Brick `#7E2A26` | 6.64:1 |
+| All-In-One | Clay `#8E3B2E` | 5.30:1 |
 
 These are tints of the five, not new colours.
 
