@@ -1,0 +1,110 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Home suppresses the page title prefix. */
+  bare?: boolean;
+}
+
+const { title, description, bare = false } = Astro.props;
+const fullTitle = bare ? title : `${title} · ${site.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#d6a09b" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // The one orchestrated motion: things open when they arrive.
+      // Guarded so reduced-motion users get everything at rest, already open.
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      if (!reduce.matches) {
+        const targets = document.querySelectorAll('.bloom-on-view, .rise');
+
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('in-view');
+                  io.unobserve(entry.target);
+                }
+              }
+            },
+            { rootMargin: '0px 0px -12% 0px', threshold: 0.15 }
+          );
+          targets.forEach((t) => io.observe(t));
+        } else {
+          targets.forEach((t) => t.classList.add('in-view'));
+        }
+      }
+    </script>
+
+    <style is:global>
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 100;
+        background: var(--color-plumstone);
+        color: var(--color-bract);
+        padding: 0.75rem 1.25rem;
+        font-family: var(--font-display);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+
+      .skip:focus {
+        left: 0.5rem;
+        top: 0.5rem;
+      }
+
+      /* Reveals are openings, never slides or scale-ups. */
+      .rise {
+        opacity: 1;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .rise {
+          opacity: 0;
+          transition:
+            opacity 900ms var(--ease-open),
+            translate 900ms var(--ease-open);
+          translate: 0 0.6rem;
+        }
+
+        .rise.in-view {
+          opacity: 1;
+          translate: 0 0;
+        }
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+---
+/**
+ * The aperture. One flower, one parameter: how open it is (0 → 1).
+ *
+ * The same object is the 8px section mark, the transition between sections,
+ * the 250px ground of Begin, and the motion the session cards open with.
+ * Nothing else on the site animates; everything that reveals, opens.
+ */
+interface Props {
+  /** 0 = closed, 1 = fully open. */
+  open?: number;
+  /** Any CSS length. */
+  size?: string;
+  /** Opens on load, at breath pace. */
+  bloom?: boolean;
+  /** Opens when scrolled into view. */
+  bloomOnView?: boolean;
+  class?: string;
+  /** Omit for decorative marks — they are aria-hidden. */
+  label?: string;
+}
+
+const {
+  open = 1,
+  size = '64px',
+  bloom = false,
+  bloomOnView = false,
+  class: className = '',
+  label,
+} = Astro.props;
+
+const petals = [0, 45, 90, 135, 180, 225, 270, 315];
+const inner = [22.5, 112.5, 202.5, 292.5];
+---
+
+<svg
+  class:list={['aperture', className, { bloom, 'bloom-on-view': bloomOnView }]}
+  style={`--open:${open};--size:${size}`}
+  viewBox="0 0 100 100"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  {
+    petals.map((a) => (
+      <path
+        class="petal"
+        style={`--a:${a}deg`}
+        d="M50,50 C43,35 43,21 50,10 C57,21 57,35 50,50 Z"
+      />
+    ))
+  }
+  {
+    inner.map((a) => (
+      <path
+        class="petal petal-inner"
+        style={`--a:${a}deg`}
+        d="M50,50 C45,39 45,29 50,21 C55,29 55,39 50,50 Z"
+      />
+    ))
+  }
+  <circle class="core" cx="50" cy="50" r="4"></circle>
+</svg>
+
+<style is:global>
+  /* Registered so --open can be animated and transitioned. */
+  @property --open {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  .aperture {
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    overflow: visible;
+    flex: none;
+  }
+
+  .aperture .petal {
+    fill: var(--petal, var(--color-plumstone));
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transform: rotate(var(--a)) scale(calc(0.22 + 0.78 * var(--open)));
+    transition: transform 900ms var(--ease-open);
+  }
+
+  .aperture .petal-inner {
+    fill: var(--petal-inner, var(--color-cochineal));
+    opacity: calc(var(--open) * 0.9);
+  }
+
+  /* Quick is 1.78:1 on the rose ground, so the core takes the dark variant
+     on light grounds and full-strength Quick only on dark ones. */
+  .aperture .core {
+    fill: var(--core, var(--color-quick-ink));
+  }
+
+  .on-dark .aperture {
+    --petal: var(--color-bract);
+    --petal-inner: var(--color-madder);
+    --core: var(--color-quick);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .aperture.bloom {
+      animation: aperture-bloom 1600ms var(--ease-open) 120ms both;
+    }
+
+    .aperture.bloom-on-view {
+      --open: 0.12;
+    }
+
+    .aperture.bloom-on-view.in-view {
+      --open: 1;
+      transition: --open 1400ms var(--ease-open);
+    }
+
+    @keyframes aperture-bloom {
+      from {
+        --open: 0.02;
+      }
+      to {
+        --open: 1;
+      }
+    }
+  }
+
+  /* At rest, open, no motion. */
+  @media (prefers-reduced-motion: reduce) {
+    .aperture .petal {
+      transition: none;
+    }
+
+    .aperture.bloom,
+    .aperture.bloom-on-view {
+      --open: 1;
+    }
+  }
+</style>

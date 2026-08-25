@@ -1,0 +1,106 @@
+---
+import Aperture from './Aperture.astro';
+import { site, contact, booking } from '../site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-dark grained">
+  <div class="band">
+    <div class="rail">
+      <Aperture size="48px" open={0.3} />
+    </div>
+
+    <div class="wide footer-grid">
+      <div class="footer-col">
+        <span class="label">Where</span>
+        <ul class="plain">
+          {site.locations.map((l) => <li>{l.place} — {l.mode.toLowerCase()}</li>)}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <span class="label">Reach me</span>
+        <ul class="plain">
+          <li><a href={booking.url}>{booking.label}</a></li>
+          <li><a href={contact.smsHref}>Text {contact.smsDisplay}</a></li>
+          {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
+          <li><a href={contact.substack}>The seasonal letter</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <span class="label">More</span>
+        <ul class="plain">
+          <li><a href="/for-clinicians/">For clinicians</a></li>
+          <li><a href={contact.art}>Art practice</a></li>
+          <li><a href={contact.ethics}>Code of ethics</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wide footer-base">
+      <p class="credit">
+        Collage artwork by Joan Gutiérrez.
+      </p>
+      <p class="credit">© {year} {site.name}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+    padding-block: clamp(3rem, 7vw, 5rem);
+    margin-top: clamp(4rem, 10vw, 8rem);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .footer-col .label {
+    margin-bottom: 1rem;
+  }
+
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .plain a {
+    text-decoration-color: rgb(238 212 203 / 0.4);
+  }
+
+  .plain a:hover {
+    text-decoration-color: var(--color-quick);
+  }
+
+  .footer-base {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule-soft);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    flex-wrap: wrap;
+  }
+
+  .credit {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    opacity: 0.7;
+  }
+</style>

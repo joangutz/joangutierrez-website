@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+
+/**
+ * Joan's collage work. Original art — it is given space, never cropped into a
+ * decorative strip, and never has text laid over it.
+ *
+ * Until a file exists at /assets/collage/<name>, this renders a grained
+ * placeholder in the offering's register. Adding the real art is a filename
+ * swap: no component changes. See /assets/MANIFEST.md.
+ */
+interface Props {
+  /** Filename inside /assets/collage/. */
+  src: string;
+  alt: string;
+  register?: 'plumstone' | 'cochineal' | 'brick' | 'clay';
+  /** The hero collage is the LCP element and must not be lazy. */
+  priority?: boolean;
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  register = 'cochineal',
+  priority = false,
+  sizes = '(max-width: 900px) 100vw, 45vw',
+  class: className = '',
+} = Astro.props;
+
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  '/assets/collage/**/*.{jpeg,jpg,png,webp,avif}',
+  { eager: true }
+);
+
+const found = files[`/assets/collage/${src}`];
+---
+
+{
+  found ? (
+    <Image
+      src={found.default}
+      alt={alt}
+      sizes={sizes}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding={priority ? 'sync' : 'async'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      class:list={['collage', className]}
+    />
+  ) : (
+    <div
+      class:list={['collage collage-placeholder grained', `reg-${register}`, className]}
+      role="img"
+      aria-label={`Placeholder for collage artwork: ${alt}`}
+    >
+      <span class="collage-note">
+        <span class="collage-note-file">{src}</span>
+        <span class="collage-note-hint">awaiting artwork</span>
+      </span>
+    </div>
+  )
+}
+
+<style>
+  .collage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .collage-placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 100%;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .reg-plumstone {
+    background: radial-gradient(120% 100% at 30% 15%, #4a1520 0%, var(--color-plumstone) 70%);
+  }
+
+  .reg-cochineal {
+    background: radial-gradient(120% 100% at 30% 15%, #78202c 0%, var(--color-cochineal) 70%);
+  }
+
+  .reg-brick {
+    background: radial-gradient(120% 100% at 30% 15%, #9c3a33 0%, var(--color-brick) 70%);
+  }
+
+  .reg-clay {
+    background: radial-gradient(120% 100% at 30% 15%, #ab4d3c 0%, var(--color-clay) 70%);
+  }
+
+  .collage-note {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-bract);
+    opacity: 0.55;
+  }
+
+  .collage-note-hint {
+    opacity: 0.7;
+  }
+</style>

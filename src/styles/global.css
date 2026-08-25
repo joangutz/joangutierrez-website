@@ -1,0 +1,273 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/newsreader';
+
+/* ------------------------------------------------------------------
+   Tokens. Five named colours, plus the register tints derived from
+   them. Contrast is measured, not assumed — see reference/design-plan.md.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-madder: #d6a09b;
+  --color-cochineal: #5a121c;
+  --color-plumstone: #2c0b12;
+  --color-bract: #eed4cb;
+  --color-quick: #ed3943;
+
+  /* Same hue and saturation as Quick, dropped in lightness so it can be a
+     mark on the light ground (3.59:1). Quick itself is 1.78:1 there. */
+  --color-quick-ink: #a11119;
+
+  /* Secondary ink. 5.21:1 on Madder. */
+  --color-ink-2: #6b1a23;
+
+  /* Card registers. Each carries a Bract title at 5.3:1 or better. */
+  --color-brick: #7e2a26;
+  --color-clay: #8e3b2e;
+
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+
+  --ease-open: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    --rule: rgb(90 18 28 / 0.28);
+    --rule-soft: rgb(90 18 28 / 0.14);
+
+    /* Focus rings flip by ground: Plumstone fails on dark, Bract fails on light. */
+    --focus: var(--color-plumstone);
+
+    --measure: 63ch;
+  }
+
+  /* Any dark ground re-points the context-dependent tokens. */
+  .on-dark {
+    --focus: var(--color-bract);
+    --rule: rgb(238 212 203 / 0.3);
+    --rule-soft: rgb(238 212 203 / 0.16);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background: var(--color-madder);
+    color: var(--color-cochineal);
+    font-family: var(--font-body);
+    font-size: clamp(1.0625rem, 0.35vw + 1rem, 1.1875rem);
+    line-height: 1.75;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Grain. One fractal-noise tile over the whole viewport, so no ground is flat. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.055;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 30, 'WONK' 0;
+    font-weight: 400;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  ::selection {
+    background: var(--color-quick);
+    color: var(--color-plumstone);
+  }
+}
+
+@layer components {
+  /* ----------------------------------------------------------------
+     The empty left third. Prose sits in columns 5–10; the left three
+     hold the aperture, the torn edge, and — only on the session arc —
+     a number.
+     ---------------------------------------------------------------- */
+  .band {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 8fr) minmax(0, 1fr);
+    gap: 0 clamp(1.5rem, 4vw, 3.5rem);
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 4rem);
+  }
+
+  .band > .rail {
+    grid-column: 1;
+  }
+
+  .band > .col {
+    grid-column: 2;
+    max-width: var(--measure);
+  }
+
+  .band > .wide {
+    grid-column: 2 / -1;
+  }
+
+  .band > .full {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 900px) {
+    .band {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .band > .rail,
+    .band > .col,
+    .band > .wide,
+    .band > .full {
+      grid-column: 1;
+      max-width: 100%;
+    }
+  }
+
+  .section {
+    padding-block: clamp(3.5rem, 9vw, 7rem);
+  }
+
+  .label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .label {
+    color: rgb(238 212 203 / 0.72);
+  }
+
+  .lede {
+    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+    line-height: 1.55;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .lede {
+    color: rgb(238 212 203 / 0.86);
+  }
+
+  /* Long-form prose. Used by every markdown body on the site. */
+  .prose > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose h2 {
+    font-size: clamp(1.6rem, 3.4vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-top: 2.5em;
+  }
+
+  .prose h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-top: 2em;
+  }
+
+  .prose strong {
+    font-weight: 500;
+    color: var(--color-plumstone);
+  }
+
+  .on-dark .prose strong {
+    color: #fff;
+  }
+
+  .prose ul {
+    padding-left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .prose li::marker {
+    color: var(--color-quick-ink);
+  }
+
+  .prose blockquote {
+    border-left: 2px solid var(--color-quick-ink);
+    padding-left: 1.5rem;
+    margin-left: 0;
+    font-style: italic;
+    color: var(--color-ink-2);
+  }
+
+  .prose a {
+    text-decoration-color: var(--color-quick-ink);
+  }
+
+  .prose a:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Grain applied to a single element rather than the viewport. */
+  .grained {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grained::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.14;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+}
