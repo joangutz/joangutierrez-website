@@ -1,0 +1,43 @@
+---
+/**
+ * A torn-paper edge between territories. Physical, collage-native — already
+ * Joan's medium. Decorative, so it is hidden from assistive technology.
+ */
+interface Props {
+  /** The colour the torn sheet above is made of. */
+  fill?: string;
+  flip?: boolean;
+  class?: string;
+}
+
+const { fill = 'var(--color-madder)', flip = false, class: className = '' } = Astro.props;
+---
+
+<svg
+  class:list={['torn', className, { flip }]}
+  viewBox="0 0 1200 26"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+  style={`--torn-fill:${fill}`}
+>
+  <path
+    d="M0,0 L1200,0 L1200,13 L1183,9 L1168,15 L1150,10 L1131,17 L1114,11 L1098,18 L1079,12 L1061,19 L1043,13 L1026,20 L1007,14 L989,21 L971,15 L953,22 L934,16 L916,23 L898,17 L879,24 L861,18 L843,25 L824,19 L806,24 L788,18 L770,23 L751,17 L733,22 L715,16 L697,21 L678,15 L660,20 L642,14 L624,19 L605,13 L587,18 L569,12 L551,17 L532,11 L514,16 L496,10 L478,15 L459,9 L441,14 L423,8 L405,13 L386,7 L368,12 L350,6 L332,11 L313,5 L295,10 L277,6 L259,12 L240,7 L222,13 L204,8 L186,14 L167,9 L149,15 L131,10 L113,16 L94,11 L76,17 L58,12 L40,18 L21,13 L0,19 Z"
+  ></path>
+</svg>
+
+<style>
+  .torn {
+    display: block;
+    width: 100%;
+    height: clamp(14px, 2vw, 26px);
+  }
+
+  .torn path {
+    fill: var(--torn-fill);
+  }
+
+  .flip {
+    transform: scaleY(-1);
+  }
+</style>

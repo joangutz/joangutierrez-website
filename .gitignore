@@ -6,3 +6,5 @@ dist/
 .env
 .env.production
 .netlify/
+shoot.local.mjs
+measure.local.mjs

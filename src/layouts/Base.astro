@@ -30,6 +30,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Reveals hide themselves only once we know something is here to reveal
+      // them. Without this class every .rise block stays at opacity 0 forever
+      // if the module script fails to run.
+      document.documentElement.classList.add('js');
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -51,13 +57,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           const io = new IntersectionObserver(
             (entries) => {
               for (const entry of entries) {
-                if (entry.isIntersecting) {
+                // Threshold 0 so any sliver counts, plus a catch for anything
+                // a fast flick carried past the viewport between samples —
+                // without it that content would stay invisible for good.
+                const scrolledPast = entry.boundingClientRect.top < 0;
+                if (entry.isIntersecting || scrolledPast) {
                   entry.target.classList.add('in-view');
                   io.unobserve(entry.target);
                 }
               }
             },
-            { rootMargin: '0px 0px -12% 0px', threshold: 0.15 }
+            { rootMargin: '0px 0px -8% 0px', threshold: 0 }
           );
           targets.forEach((t) => io.observe(t));
         } else {
@@ -92,7 +102,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       }
 
       @media (prefers-reduced-motion: no-preference) {
-        .rise {
+        .js .rise {
           opacity: 0;
           transition:
             opacity 900ms var(--ease-open),
@@ -100,7 +110,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           translate: 0 0.6rem;
         }
 
-        .rise.in-view {
+        .js .rise.in-view {
           opacity: 1;
           translate: 0 0;
         }

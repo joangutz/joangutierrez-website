@@ -1,0 +1,147 @@
+---
+import { getCollection } from 'astro:content';
+import { booking } from '../site';
+
+/**
+ * The comparison view. The collage cards carry depth; this carries
+ * comparison, so every offering, duration, and price sits in one grid with
+ * no scrolling to compare and no "contact for rates".
+ *
+ * Each tile takes its offering's own register, tying it back to its card.
+ * The free consultation sits inside the grid as the lowest rung — last,
+ * cheapest, and the only tile in Quick, because it is the one to click first.
+ *
+ * Booking runs on the existing Cal.com consultation: every tier starts with
+ * the same conversation, so every tile leads there.
+ */
+const offerings = (await getCollection('offerings')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const tiles = offerings.flatMap((o) =>
+  o.data.prices.map((p) => ({
+    name: o.data.title,
+    duration: p.label,
+    amount: `$${p.amount.toLocaleString('en-US')}`,
+    note: p.note,
+    register: o.data.register,
+  }))
+);
+---
+
+<div class="price-grid" id="prices">
+  {
+    tiles.map((t) => (
+      <a class:list={['tile', `reg-${t.register}`, 'grained']} href={booking.url}>
+        <span class="tile-name">{t.name}</span>
+        <span class="tile-duration">{t.duration}</span>
+        <span class="tile-price tabular">{t.amount}</span>
+        {t.note && <span class="tile-note">{t.note}</span>}
+        <span class="tile-action">Start with a consultation</span>
+      </a>
+    ))
+  }
+
+  <a class="tile tile-free grained" href={booking.url}>
+    <span class="tile-name">Consultation</span>
+    <span class="tile-duration">{booking.duration}</span>
+    <span class="tile-price">Free</span>
+    <span class="tile-note">No obligation to continue</span>
+    <span class="tile-action">Book a free consultation</span>
+  </a>
+</div>
+
+<style>
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    text-decoration: none;
+    color: var(--color-bract);
+    min-height: 12rem;
+  }
+
+  .reg-plumstone {
+    background: var(--color-plumstone);
+  }
+
+  .reg-cochineal {
+    background: var(--color-cochineal);
+  }
+
+  .reg-brick {
+    background: var(--color-brick);
+  }
+
+  .reg-clay {
+    background: var(--color-clay);
+  }
+
+  /* The only tile in Quick. Plumstone type on it measures 4.53:1;
+     Bract would be 2.83:1, so it is never used here. */
+  .tile-free {
+    background: var(--color-quick);
+    color: var(--color-plumstone);
+  }
+
+  .tile-name {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .tile-duration {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+
+  .tile-price {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    line-height: 1;
+    margin-top: 0.5rem;
+  }
+
+  .tile-note {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+
+  .tile-action {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    border-bottom: 1px solid transparent;
+    align-self: flex-start;
+  }
+
+  .tile:hover .tile-action,
+  .tile:focus-visible .tile-action {
+    border-bottom-color: currentColor;
+  }
+
+  /* Focus ring flips: these grounds are all dark except the Quick tile. */
+  .tile:focus-visible {
+    outline: 2px solid var(--color-bract);
+    outline-offset: -6px;
+  }
+
+  .tile-free:focus-visible {
+    outline-color: var(--color-plumstone);
+  }
+</style>

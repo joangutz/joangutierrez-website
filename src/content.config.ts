@@ -65,4 +65,42 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { offerings, territories, pages };
+/**
+ * Home is a sequence of teasers rather than one piece of prose, so its copy is
+ * structured rather than a markdown body. Everything here is Joan's own
+ * writing, carried across unaltered from /content/_source/.
+ */
+const home = defineCollection({
+  loader: glob({ base: './content/home', pattern: '**/*.md' }),
+  schema: z.object({
+    hero: z.object({
+      eyebrow: z.string(),
+      headline: z.string(),
+      sub: z.string(),
+      collage: z.string(),
+      alt: z.string(),
+    }),
+    audience: z.object({
+      title: z.string(),
+      lines: z.array(z.string()),
+      link: z.string(),
+    }),
+    realms: z.object({
+      title: z.string(),
+      body: z.string(),
+      link: z.string(),
+    }),
+    sessions: z.object({ title: z.string(), body: z.string(), link: z.string() }),
+    story: z.object({
+      title: z.string(),
+      paragraphs: z.array(z.string()),
+      portrait: z.string(),
+      alt: z.string(),
+      link: z.string(),
+    }),
+    letter: z.object({ title: z.string(), body: z.string() }),
+    close: z.object({ title: z.string(), body: z.string() }),
+  }),
+});
+
+export const collections = { offerings, territories, pages, home };
