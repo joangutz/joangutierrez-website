@@ -103,4 +103,27 @@ const home = defineCollection({
   }),
 });
 
-export const collections = { offerings, territories, pages, home };
+/** Sessions is part structured, part prose — the arc, consent, and the note. */
+const sessionsPage = defineCollection({
+  loader: glob({ base: './content/sessions', pattern: '**/*.md' }),
+  schema: z.object({
+    eyebrow: z.string(),
+    title: z.string(),
+    lede: z.string(),
+    description: z.string(),
+    cards: z.object({ title: z.string(), body: z.string() }),
+    prices: z.object({ title: z.string(), body: z.string() }),
+    arc: z.object({
+      title: z.string(),
+      intro: z.string(),
+      steps: z.array(z.object({ lead: z.string(), rest: z.string() })),
+      after: z.string(),
+    }),
+    consent: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
+    /** Verbatim scope-of-practice text. A professional boundary, not fine print. */
+    note: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
+    clinicians: z.object({ body: z.string(), link: z.string() }),
+  }),
+});
+
+export const collections = { offerings, territories, pages, home, sessionsPage };

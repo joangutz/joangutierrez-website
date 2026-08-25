@@ -8,3 +8,4 @@ dist/
 .netlify/
 shoot.local.mjs
 measure.local.mjs
+interact.local.mjs

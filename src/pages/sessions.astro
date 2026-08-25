@@ -1,0 +1,231 @@
+---
+import Base from '../layouts/Base.astro';
+import Aperture from '../components/Aperture.astro';
+import OfferingCard from '../components/OfferingCard.astro';
+import PriceGrid from '../components/PriceGrid.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const entry = await getEntry('sessionsPage', 'sessions');
+if (!entry) throw new Error('Missing /content/sessions/sessions.md');
+const s = entry.data;
+
+const offerings = (await getCollection('offerings')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<Base title={s.title} description={s.description}>
+  <section class="band section intro">
+    <div class="rail">
+      <Aperture size="clamp(64px, 10vw, 110px)" bloom />
+    </div>
+    <div class="col">
+      <span class="label">{s.eyebrow}</span>
+      <h1 class="page-title">{s.title}</h1>
+      <p class="lede intro-lede">{s.lede}</p>
+    </div>
+  </section>
+
+  <!-- The cards carry depth. -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="wide">
+      <span class="label">{s.cards.title}</span>
+      <p class="section-note">{s.cards.body}</p>
+
+      <div class="card-stack">
+        {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- The price grid carries comparison. A different job, kept separate. -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="wide">
+      <span class="label">{s.prices.title}</span>
+      <p class="section-note">{s.prices.body}</p>
+      <PriceGrid />
+    </div>
+  </section>
+
+  <!-- The arc. A real sequence, so the numbers are earned — and they live in
+       the empty left column, which is what that column is for. -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="col">
+      <h2 class="section-title">{s.arc.title}</h2>
+      <p class="arc-intro">{s.arc.intro}</p>
+
+      <ol class="arc">
+        {
+          s.arc.steps.map((step) => (
+            <li>
+              <span class="arc-text">
+                <strong>{step.lead}</strong>{step.rest}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="arc-after">{s.arc.after}</p>
+    </div>
+  </section>
+
+  <!-- Consent -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="col">
+      <h2 class="section-title">{s.consent.title}</h2>
+      {s.consent.paragraphs.map((p) => <p class="body-text">{p}</p>)}
+    </div>
+  </section>
+
+  <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} class="bloom-on-view" /></div>
+    <div class="col">
+      <div class="note">
+        <span class="label">{s.note.title}</span>
+        {s.note.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+
+      <p class="clinicians">
+        {s.clinicians.body}
+        <a href="/for-clinicians/">{s.clinicians.link}</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .page-title {
+    font-size: clamp(2.1rem, 5.6vw, 3.6rem);
+    line-height: 1.03;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    margin-top: 1.5rem;
+  }
+
+  .intro-lede {
+    margin: 1.75rem 0 0;
+    max-width: 40ch;
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 3.8vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .section-note {
+    margin: 1rem 0 2.5rem;
+    max-width: 46ch;
+    color: var(--color-ink-2);
+  }
+
+  .card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  /* ---- The arc ---- */
+  .arc-intro {
+    margin: 1.5rem 0 2rem;
+  }
+
+  .arc {
+    list-style: none;
+    counter-reset: arc;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .arc li {
+    counter-increment: arc;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 0 1rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .arc li:last-child {
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .arc li::before {
+    content: counter(arc, decimal-leading-zero);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-quick-ink);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.4em;
+  }
+
+  .arc-text {
+    line-height: 1.6;
+  }
+
+  .arc-text strong {
+    font-weight: 500;
+    color: var(--color-plumstone);
+  }
+
+  .arc-after {
+    margin-top: 2rem;
+  }
+
+  .body-text {
+    margin: 1.5rem 0 0;
+  }
+
+  /* ---- Note on all plans ---- */
+  .note {
+    background: var(--color-bract);
+    border: 1px solid var(--rule);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .note .label {
+    margin-bottom: 1.5rem;
+  }
+
+  .note p {
+    margin: 0 0 1.25em;
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
+  .note p:last-child {
+    margin-bottom: 0;
+  }
+
+  .clinicians {
+    margin: 2.5rem 0 0;
+    font-size: 0.98rem;
+    color: var(--color-ink-2);
+  }
+
+  .clinicians a {
+    text-decoration-color: var(--color-quick-ink);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    .arc li {
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+      gap: 0 0.75rem;
+    }
+  }
+</style>
