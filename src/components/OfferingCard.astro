@@ -1,6 +1,6 @@
 ---
 import Collage from './Collage.astro';
-import Aperture from './Aperture.astro';
+import Vessel from './Vessel.astro';
 import type { CollectionEntry } from 'astro:content';
 
 /**
@@ -49,7 +49,7 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
         <div class="front-foot">
           <span class="front-price tabular">{priceLine}</span>
           <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
-            <Aperture size="18px" open={0.25} class="turn-mark" />
+            <Vessel size="20px" form="egg" class="turn-mark" />
             <span>What this includes</span>
           </button>
         </div>

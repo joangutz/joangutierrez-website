@@ -1,5 +1,5 @@
 ---
-import Aperture from './Aperture.astro';
+import Vessel from './Vessel.astro';
 import { nav, site, withBase } from '../site';
 
 const path = Astro.url.pathname;
@@ -16,7 +16,7 @@ const isCurrent = (href: string) => {
         wordmark carries the current-page state — otherwise landing on Home
         leaves nothing in the nav marked and the reader has no anchor. */}
     <a class="brand" href={withBase('/')} aria-current={isCurrent('/') ? 'page' : undefined}>
-      <Aperture size="26px" open={0.45} class="brand-mark" />
+      <Vessel size="34px" open={0.7} class="brand-mark" />
       <span class="brand-name">{site.name}</span>
     </a>
 

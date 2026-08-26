@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
-import Aperture from '../components/Aperture.astro';
+import Vessel from '../components/Vessel.astro';
 import { getEntry, render } from 'astro:content';
 import { booking, withBase } from '../site';
 
@@ -13,8 +13,8 @@ const p = entry.data;
 
 <Base title={p.title} description={p.description}>
   <section class="band section intro">
-    <div class="mark aura">
-      <Aperture size="clamp(64px, 10vw, 110px)" bloom />
+    <div class="mark">
+      <Vessel size="clamp(64px, 10vw, 110px)" bloom />
     </div>
     <div class="col">
       <span class="label">{p.eyebrow}</span>

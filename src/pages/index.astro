@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
-import Aperture from '../components/Aperture.astro';
+import Vessel from '../components/Vessel.astro';
 import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
@@ -33,8 +33,8 @@ const movedAnchors = {
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
   <!-- 1 · Hero. One collage held in silence; the line arrives at breath pace. -->
   <section class="band hero">
-    <div class="mark hero-rail aura">
-      <Aperture size="clamp(96px, 18vw, 190px)" bloom label="A flower opening — the mark of this practice." />
+    <div class="mark hero-rail">
+      <Vessel size="clamp(96px, 18vw, 190px)" bloom label="Petals opening to reveal a lit egg — the mark of this practice." />
     </div>
 
     <div class="col hero-text breath">

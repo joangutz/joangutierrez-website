@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
-import Aperture from '../components/Aperture.astro';
+import Vessel from '../components/Vessel.astro';
 import Portrait from '../components/Portrait.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { contact, booking, withBase } from '../site';
@@ -21,8 +21,8 @@ const rendered = await Promise.all(
 
 <Base title={r.title} description={r.description}>
   <section class="band section intro">
-    <div class="mark aura">
-      <Aperture size="clamp(64px, 10vw, 110px)" bloom />
+    <div class="mark">
+      <Vessel size="clamp(64px, 10vw, 110px)" bloom />
     </div>
     <div class="col">
       <span class="label">{r.eyebrow}</span>
@@ -63,7 +63,7 @@ const rendered = await Promise.all(
   <!-- The epigraph gets a page to itself, or near enough. -->
   <section class="band epigraph">
     <div class="full epigraph-inner">
-      <span class="aura epi-mark"><Aperture size="clamp(56px, 8vw, 90px)" open={0.2} bloomOnView /></span>
+      <span class="epi-mark"><Vessel size="clamp(56px, 8vw, 90px)" open={0.4} bloomOnView /></span>
       <blockquote>
         <p>{r.epigraph.quote}</p>
         <cite>— {r.epigraph.source}</cite>

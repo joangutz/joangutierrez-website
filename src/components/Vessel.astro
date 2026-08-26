@@ -80,7 +80,7 @@ const petal = (len: number) => {
 ---
 
 <svg
-  class:list={['vessel', className, { bloom, 'bloom-on-view': bloomOnView }]}
+  class:list={['vessel', 'shaded', className, { bloom, 'bloom-on-view': bloomOnView }]}
   style={`--open-to:${open};--size:${size}${animated ? '' : `;--open:${open}`}`}
   viewBox="0 0 100 100"
   role={label ? 'img' : undefined}
