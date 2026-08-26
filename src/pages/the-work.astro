@@ -12,7 +12,7 @@ const p = entry.data;
 
 <Base title={p.title} description={p.description}>
   <section class="band section intro">
-    <div class="rail">
+    <div class="mark aura">
       <Aperture size="clamp(64px, 10vw, 110px)" bloom />
     </div>
     <div class="col">
@@ -22,16 +22,12 @@ const p = entry.data;
   </section>
 
   <section class="band body">
-    <div class="rail">
-      <Aperture size="52px" open={0.28} bloomOnView class="rail-mark" />
-    </div>
     <div class="col prose">
       <Content />
     </div>
   </section>
 
   <section class="band section close on-dark grained">
-    <div class="rail"><Aperture size="64px" open={0.6} bloomOnView /></div>
     <div class="col">
       <h2 class="close-title">The invitation is simple: watch, learn, practice, and savor.</h2>
       <div class="close-links">

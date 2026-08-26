@@ -14,11 +14,27 @@ const offerings = (await getCollection('offerings')).sort(
   (a, b) => a.data.order - b.data.order
 );
 
+/**
+ * One abstract line mark per step of the arc, in the manner of the labelled
+ * diagram grids on the Cosmos board. Diagram marks, not illustration — each
+ * encodes the shape of its step, and the words carry the meaning.
+ */
+const motifs = [
+  'M32,44 L32,20 M32,16 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0',
+  'M14,16 L14,48 M50,16 L50,48 M20,32 L44,32',
+  'M12,22 H52 M12,32 H52 M12,42 H52 M22,18 V46 M42,18 V46',
+  'M32,32 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0 M32,32 m-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0 M32,32 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0',
+  'M18,42 C18,24 30,18 32,32 C34,46 46,40 46,22',
+  'M10,32 C18,16 26,48 34,32 C42,16 50,48 56,32',
+  'M16,32 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0 M24,23 A12,12 0 0,1 24,41 M32,17 A20,20 0 0,1 32,47 M40,11 A28,28 0 0,1 40,53',
+  'M32,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M32,32 m-21,0 a21,21 0 1,0 42,0 a21,21 0 1,0 -42,0',
+  'M44,20 a16,16 0 1,1 -12,-6 M44,20 l-1,-8 M44,20 l-8,2',
+];
 ---
 
 <Base title={s.title} description={s.description}>
   <section class="band section intro">
-    <div class="rail">
+    <div class="mark aura">
       <Aperture size="clamp(64px, 10vw, 110px)" bloom />
     </div>
     <div class="col">
@@ -30,11 +46,21 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- The cards carry depth. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">{s.cards.title}</span>
       <p class="section-note">{s.cards.body}</p>
 
+      {/* The four registers read as one range — until now they only ever
+          appeared separately, one per offering. Doubles as a key. */}
+      <ol class="range" aria-label="The four offerings, by register">
+        {
+          offerings.map((o) => (
+            <li class={`range-step reg-${o.data.register}`}>
+              <span class="range-name">{o.data.title}</span>
+            </li>
+          ))
+        }
+      </ol>
 
       <div class="card-stack">
         {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
@@ -44,7 +70,6 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- The price grid carries comparison. A different job, kept separate. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">{s.prices.title}</span>
       <p class="section-note">{s.prices.body}</p>
@@ -55,15 +80,17 @@ const offerings = (await getCollection('offerings')).sort(
   <!-- The arc. A real sequence, so the numbers are earned — and they live in
        the empty left column, which is what that column is for. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
-    <div class="col">
+    <div class="wide">
       <h2 class="section-title">{s.arc.title}</h2>
       <p class="arc-intro">{s.arc.intro}</p>
 
       <ol class="arc">
         {
-          s.arc.steps.map((step) => (
+          s.arc.steps.map((step, i) => (
             <li>
+              <svg class="arc-motif" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <path d={motifs[i]} />
+              </svg>
               <span class="arc-text">
                 <strong>{step.lead}</strong>{step.rest}
               </span>
@@ -78,7 +105,6 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- Consent -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <h2 class="section-title">{s.consent.title}</h2>
       {s.consent.paragraphs.map((p) => <p class="body-text">{p}</p>)}
@@ -87,7 +113,6 @@ const offerings = (await getCollection('offerings')).sort(
 
   <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <div class="note">
         <span class="label">{s.note.title}</span>
@@ -132,6 +157,45 @@ const offerings = (await getCollection('offerings')).sort(
     color: var(--color-ink-2);
   }
 
+  .range {
+    list-style: none;
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .range-step {
+    min-height: 4.5rem;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.75rem;
+  }
+
+  .range-name {
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    color: var(--color-bract);
+  }
+
+  .reg-plumstone { background: var(--color-plumstone); }
+  .reg-cochineal { background: var(--color-cochineal); }
+  .reg-brick { background: var(--color-brick); }
+  .reg-clay { background: var(--color-clay); }
+
+  @media (max-width: 560px) {
+    .range {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   .card-stack {
     display: flex;
     flex-direction: column;
@@ -143,48 +207,69 @@ const offerings = (await getCollection('offerings')).sort(
     margin: 1.5rem 0 2rem;
   }
 
+  /* A labelled diagram grid rather than a list — the arc is a real sequence,
+     so the numbers stay earned, and each cell carries the shape of its step. */
   .arc {
     list-style: none;
     counter-reset: arc;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
   }
 
   .arc li {
     counter-increment: arc;
-    display: grid;
-    grid-template-columns: 3rem minmax(0, 1fr);
-    gap: 0 1rem;
-    padding: 1.1rem 0;
-    border-top: 1px solid var(--rule-soft);
-  }
-
-  .arc li:last-child {
-    border-bottom: 1px solid var(--rule-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: clamp(1rem, 2.2vw, 1.5rem);
+    background: var(--color-madder);
   }
 
   .arc li::before {
     content: counter(arc, decimal-leading-zero);
     font-family: var(--font-display);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--color-quick);
     font-variant-numeric: tabular-nums;
-    padding-top: 0.4em;
+  }
+
+  .arc-motif {
+    display: block;
+    width: 44px;
+    height: 44px;
+  }
+
+  .arc-motif path {
+    fill: none;
+    stroke: var(--color-cochineal);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
   }
 
   .arc-text {
-    line-height: 1.6;
+    line-height: 1.55;
+    font-size: 0.93rem;
   }
 
-  @media (max-width: 480px) {
-    .arc li {
-      grid-template-columns: 2.25rem minmax(0, 1fr);
-      gap: 0 0.75rem;
-    }
+  .arc-intro,
+  .arc-after {
+    max-width: var(--measure);
+  }
+
+  @media (max-width: 780px) {
+    .arc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 460px) {
+    .arc { grid-template-columns: minmax(0, 1fr); }
   }
 
   .arc-text strong {

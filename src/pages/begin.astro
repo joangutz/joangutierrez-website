@@ -11,7 +11,7 @@ import { site, contact, booking, withBase } from '../site';
 >
   <!-- One action. The aperture is fully open here — this is where it opens to. -->
   <section class="band begin-hero">
-    <div class="rail">
+    <div class="mark aura begin-mark">
       <Aperture size="clamp(120px, 24vw, 250px)" bloom />
     </div>
     <div class="col">
@@ -25,14 +25,12 @@ import { site, contact, booking, withBase } from '../site';
   </section>
 
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <BookingEmbed />
     </div>
   </section>
 
   <section class="band section other">
-    <div class="rail"><Aperture size="40px" open={0.18} bloomOnView /></div>
     <div class="wide other-grid">
       <div>
         <span class="label">Another way</span>
@@ -63,6 +61,10 @@ import { site, contact, booking, withBase } from '../site';
 </Base>
 
 <style>
+  .begin-mark {
+    --aura-size: 210%;
+  }
+
   .begin-hero {
     padding-block: clamp(3rem, 10vh, 6rem) clamp(2rem, 5vw, 3rem);
     row-gap: 2.5rem;

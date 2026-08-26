@@ -24,6 +24,11 @@
   --color-brick: #7e2a26;
   --color-clay: #8e3b2e;
 
+  /* Barro — the earth counter-tone, from the board's adobe walls. Light
+     plaster, so it takes DARK type only: Plumstone 6.19:1, Cochineal 4.68:1.
+     Bract fails at 2.07:1 and Quick does not read as a mark on it. */
+  --color-barro: #c68a5e;
+
   --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
 
@@ -123,44 +128,36 @@
      hold the aperture, the torn edge, and — only on the session arc —
      a number.
      ---------------------------------------------------------------- */
+  /* ----------------------------------------------------------------
+     One centred column. The wide empty gutter read as leftover rather
+     than luxury, and space comes more reliably from a narrow measure,
+     tall line-height and large gaps between sections — all of which
+     were already doing the work.
+     ---------------------------------------------------------------- */
   .band {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 8fr) minmax(0, 1fr);
-    gap: 0 clamp(1.5rem, 4vw, 3.5rem);
-    max-width: 1240px;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 62rem;
     margin-inline: auto;
-    padding-inline: clamp(1.25rem, 5vw, 4rem);
-  }
-
-  .band > .rail {
-    grid-column: 1;
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
   }
 
   .band > .col {
-    grid-column: 2;
     max-width: var(--measure);
   }
 
-  .band > .wide {
-    grid-column: 2 / -1;
-  }
-
+  .band > .wide,
   .band > .full {
-    grid-column: 1 / -1;
+    max-width: 100%;
   }
 
-  @media (max-width: 900px) {
-    .band {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .band > .rail,
-    .band > .col,
-    .band > .wide,
-    .band > .full {
-      grid-column: 1;
-      max-width: 100%;
-    }
+  /* A mark that opens a page sits above its title rather than beside it.
+     width:fit-content matters — the aura sizes off this box, and a full-width
+     block would spread the glow across the whole header instead of haloing
+     the flower. */
+  .band > .mark {
+    width: fit-content;
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
   }
 
   .section {
@@ -250,6 +247,56 @@
 @layer utilities {
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+
+  /**
+   * The aura, from the Cosmos board — a soft grainy radial bloom, tied to the
+   * aperture so it is the mark's own light rather than scattered decoration.
+   *
+   * Lit warm rather than red: the coral version read as loud, and Quick at
+   * this scale would stain instead of glow. The grain is masked to the same
+   * circle as the gradient; blended across the full box it paints grey where
+   * the gradient is transparent and reads as a hard rectangle.
+   */
+  .aura {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .aura::before,
+  .aura::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    width: var(--aura-size, 260%);
+    aspect-ratio: 1;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .aura::before {
+    background: radial-gradient(
+      circle closest-side,
+      var(--aura-core, rgb(240 206 196 / 0.6)) 0%,
+      var(--aura-mid, rgb(142 36 31 / 0.1)) 44%,
+      transparent 72%
+    );
+  }
+
+  .aura::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    mix-blend-mode: overlay;
+    opacity: 0.4;
+    -webkit-mask-image: radial-gradient(circle closest-side, #000 0%, #000 30%, transparent 70%);
+    mask-image: radial-gradient(circle closest-side, #000 0%, #000 30%, transparent 70%);
+  }
+
+  .on-dark .aura::before {
+    --aura-core: rgb(238 212 203 / 0.22);
+    --aura-mid: rgb(238 212 203 / 0.07);
   }
 
   /* Grain applied to a single element rather than the viewport. */

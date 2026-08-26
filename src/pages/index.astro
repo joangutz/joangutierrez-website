@@ -32,7 +32,7 @@ const movedAnchors = {
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
   <!-- 1 · Hero. One collage held in silence; the line arrives at breath pace. -->
   <section class="band hero">
-    <div class="rail hero-rail">
+    <div class="mark hero-rail aura">
       <Aperture size="clamp(96px, 18vw, 190px)" bloom label="A flower opening — the mark of this practice." />
     </div>
 
@@ -55,7 +55,6 @@ const movedAnchors = {
 
   <!-- 2 · Who this work is for -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <span class="label">{h.audience.title}</span>
       <ul class="audience rise">
@@ -67,7 +66,6 @@ const movedAnchors = {
 
   <!-- 3 · The three realms -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">The three realms</span>
       <h2 class="section-title">{h.realms.title}</h2>
@@ -81,7 +79,6 @@ const movedAnchors = {
 
   <!-- 4 · The four offerings, at rest -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide">
       <span class="label">Sessions</span>
       <h2 class="section-title">{h.sessions.title}</h2>
@@ -116,7 +113,6 @@ const movedAnchors = {
 
   <!-- 5 · One portrait, two sentences -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="wide story rise">
       <div class="story-portrait">
         <Portrait src={h.story.portrait} alt={h.story.alt} sizes="(max-width: 900px) 60vw, 26vw" />
@@ -131,7 +127,6 @@ const movedAnchors = {
 
   <!-- 6 · The seasonal letter -->
   <section class="band section">
-    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
     <div class="col">
       <span class="label">{h.letter.title}</span>
       <p class="letter-body">{h.letter.body}</p>
@@ -141,7 +136,6 @@ const movedAnchors = {
 
   <!-- 7 · Begin -->
   <section class="band section close on-dark grained">
-    <div class="rail"><Aperture size="72px" open={0.6} bloomOnView /></div>
     <div class="col">
       <h2 class="section-title">{h.close.title}</h2>
       <p class="close-body">{h.close.body}</p>
@@ -156,7 +150,6 @@ const movedAnchors = {
     the seasonal letter.
 
     <section class="band section">
-      <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
       <div class="wide"> … </div>
     </section>
   */}
@@ -175,9 +168,7 @@ const movedAnchors = {
   }
 
   .hero-rail {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: clamp(0.5rem, 2vw, 1.5rem);
+    --aura-size: 220%;
   }
 
   .hero-eyebrow {
@@ -222,12 +213,6 @@ const movedAnchors = {
   }
 
   @media (max-width: 900px) {
-    .hero-rail {
-      justify-content: flex-start;
-      padding-right: 0;
-      margin-bottom: 2rem;
-    }
-
     .hero-art {
       aspect-ratio: 4 / 3;
     }
