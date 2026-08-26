@@ -1,7 +1,21 @@
 ---
 import Vessel from './Vessel.astro';
-import { nav, site, withBase } from '../site';
+import Link from './Link.astro';
+import { nav, site, booking, contact, withBase } from '../site';
 
+/**
+ * The bar carries the wordmark and one control. The pages themselves live in
+ * a panel that takes the whole viewport when it opens.
+ *
+ * Progressive enhancement, and the order matters: the inline list is the real
+ * navigation and ships in the markup. Only once the .js class is present does
+ * it give way to the Menu button. With scripting off, or before the script
+ * runs, every page is still one ordinary link away.
+ *
+ * A full panel is also more honest about the site's shape than a bar was: For
+ * Clinicians and the ways to reach Joan were reachable only from inside
+ * Sessions and the footer, and there is room for them here.
+ */
 const path = Astro.url.pathname;
 // Compare against the based href — pathname includes the base in production.
 const isCurrent = (href: string) => {
@@ -20,7 +34,7 @@ const isCurrent = (href: string) => {
       <span class="brand-name">{site.name}</span>
     </a>
 
-    <nav aria-label="Primary">
+    <nav class="nav-inline" aria-label="Primary">
       <ul>
         {
           nav.map((item) => (
@@ -33,8 +47,68 @@ const isCurrent = (href: string) => {
         }
       </ul>
     </nav>
+
+    <button
+      class="menu-btn"
+      type="button"
+      data-menu-open
+      aria-expanded="false"
+      aria-controls="site-menu"
+    >
+      <span class="menu-rules" aria-hidden="true"><i></i><i></i></span>
+      <span>Menu</span>
+    </button>
   </div>
 </header>
+
+<div class="menu on-dark grained" id="site-menu" data-menu hidden>
+  <div class="menu-inner">
+    <div class="menu-top">
+      <a class="menu-brand" href={withBase('/')}>
+        <Vessel size="30px" open={0.7} />
+        <span>{site.name}</span>
+      </a>
+      <button class="menu-btn menu-close" type="button" data-menu-close>
+        <span class="menu-rules menu-rules-x" aria-hidden="true"><i></i><i></i></span>
+        <span>Close</span>
+      </button>
+    </div>
+
+    <nav class="menu-nav" aria-label="All pages">
+      <ul class="menu-list">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={withBase(item.href)}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                <Vessel size="0.62em" form="egg" class="menu-egg" />
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="menu-foot">
+      <div class="menu-col">
+        <span class="menu-label">Also</span>
+        <a class="menu-link" href={withBase('/for-clinicians/')}>For clinicians</a>
+      </div>
+      <div class="menu-col">
+        <span class="menu-label">Reach me</span>
+        <Link href={booking.url}>Book a free consultation</Link>
+        <Link href={contact.smsHref}>Text {contact.smsDisplay}</Link>
+      </div>
+      <div class="menu-col">
+        <span class="menu-label">Where</span>
+        {site.locations.map((l) => <span class="menu-where">{l.place} — {l.mode.toLowerCase()}</span>)}
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   .nav-bar {
@@ -82,13 +156,20 @@ const isCurrent = (href: string) => {
     --open: 1;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .brand :global(.brand-mark) {
-      transition: none;
-    }
+  /* The inline list is the navigation until scripting says otherwise. */
+  .menu-btn {
+    display: none;
   }
 
-  ul {
+  :global(.js) .nav-inline {
+    display: none;
+  }
+
+  :global(.js) .menu-btn {
+    display: inline-flex;
+  }
+
+  .nav-inline ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -98,9 +179,9 @@ const isCurrent = (href: string) => {
   }
 
   /* Where am I: the current page is the only item in full ink, and the only
-     one carrying a solid rule. Hover is a lighter, dashed hint, so hovering
-     never impersonates the page you are on. */
-  nav a {
+     one carrying a solid rule. Hover is a lighter hint, so hovering never
+     impersonates the page you are on. */
+  .nav-inline a {
     font-family: var(--font-display);
     font-size: 0.72rem;
     font-weight: 600;
@@ -113,14 +194,247 @@ const isCurrent = (href: string) => {
     white-space: nowrap;
   }
 
-  nav a:hover {
+  .nav-inline a:hover {
     color: var(--color-cochineal);
     border-bottom-color: rgb(142 36 31 / 0.35);
   }
 
-  nav a[aria-current='page'] {
+  .nav-inline a[aria-current='page'] {
     color: var(--color-cochineal);
     border-bottom-color: var(--color-quick);
+  }
+
+  /* ---- The control ---- */
+  .menu-btn {
+    align-items: center;
+    gap: 0.65rem;
+    background: none;
+    border: 0;
+    color: var(--color-cochineal);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 0.35rem 0;
+    cursor: pointer;
+  }
+
+  .menu-rules {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 22px;
+    height: 12px;
+  }
+
+  .menu-rules i {
+    display: block;
+    height: 1px;
+    background: currentColor;
+    transition: translate 300ms var(--ease-open);
+  }
+
+  .menu-btn:hover .menu-rules i:first-child {
+    translate: 0 -1px;
+  }
+
+  .menu-btn:hover .menu-rules i:last-child {
+    translate: 0 1px;
+  }
+
+  /* ---- The panel ---- */
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .menu[hidden] {
+    display: none;
+  }
+
+  .menu-inner {
+    min-height: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding: 1.25rem clamp(1.25rem, 5vw, 4rem) clamp(2rem, 6vw, 4rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: clamp(1.5rem, 5vw, 3rem);
+  }
+
+  .menu-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .menu-close {
+    color: var(--color-bract);
+  }
+
+  .menu-rules-x i:first-child {
+    rotate: 20deg;
+  }
+
+  .menu-rules-x i:last-child {
+    rotate: -20deg;
+  }
+
+  .menu-btn.menu-close:hover .menu-rules i {
+    translate: 0;
+  }
+
+  .menu-nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(1rem, 4vw, 2rem);
+  }
+
+  .menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .menu-list li + li {
+    border-top: 1px solid rgb(238 212 203 / 0.16);
+  }
+
+  .menu-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 4.25rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    padding-block: clamp(0.6rem, 2vw, 1.1rem);
+    color: rgb(238 212 203 / 0.82);
+    transition: color 300ms var(--ease-open);
+  }
+
+  .menu-list a:hover,
+  .menu-list a[aria-current='page'] {
+    color: var(--color-bract);
+  }
+
+  /* The egg lights on the item you are on, and on the one under the cursor —
+     the same reveal the mark performs everywhere else on the site. */
+  .menu-list :global(.menu-egg) {
+    opacity: 0.28;
+    transition:
+      opacity 400ms var(--ease-open),
+      --open 700ms var(--ease-open);
+  }
+
+  .menu-list a:hover :global(.menu-egg),
+  .menu-list a:focus-visible :global(.menu-egg),
+  .menu-list a[aria-current='page'] :global(.menu-egg) {
+    opacity: 1;
+  }
+
+  .menu-foot {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    border-top: 1px solid rgb(238 212 203 / 0.16);
+  }
+
+  .menu-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .menu-label {
+    font-family: var(--font-display);
+    font-size: 0.64rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgb(238 212 203 / 0.6);
+  }
+
+  .menu-link {
+    text-decoration-color: var(--color-madder);
+    text-underline-offset: 3px;
+  }
+
+  .menu-where {
+    font-size: 0.95rem;
+    color: rgb(238 212 203 / 0.8);
+  }
+
+  /* The panel arrives rather than snapping. Opacity and a short rise only —
+     nothing that moves far enough to be felt as motion sickness. */
+  @media (prefers-reduced-motion: no-preference) {
+    .menu {
+      opacity: 0;
+      transition:
+        opacity 320ms var(--ease-open),
+        translate 320ms var(--ease-open);
+      translate: 0 -0.75rem;
+    }
+
+    .menu.is-open {
+      opacity: 1;
+      translate: 0;
+    }
+
+    .menu.is-open .menu-list li {
+      animation: menu-item 520ms var(--ease-open) both;
+    }
+
+    .menu-list li:nth-child(1) { animation-delay: 60ms; }
+    .menu-list li:nth-child(2) { animation-delay: 120ms; }
+    .menu-list li:nth-child(3) { animation-delay: 180ms; }
+    .menu-list li:nth-child(4) { animation-delay: 240ms; }
+
+    @keyframes menu-item {
+      from {
+        opacity: 0;
+        translate: 0 0.6rem;
+      }
+      to {
+        opacity: 1;
+        translate: 0;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand :global(.brand-mark),
+    .menu-rules i,
+    .menu-list a,
+    .menu-list :global(.menu-egg) {
+      transition: none;
+    }
   }
 
   @media (max-width: 430px) {
@@ -128,13 +442,72 @@ const isCurrent = (href: string) => {
       gap: 0.85rem;
     }
 
-    ul {
+    .nav-inline ul {
       gap: 1rem;
     }
 
-    nav a {
+    .nav-inline a {
       font-size: 0.68rem;
       letter-spacing: 0.16em;
     }
   }
 </style>
+
+<script>
+  const panel = document.querySelector<HTMLElement>('[data-menu]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  if (panel && openBtn && closeBtn) {
+    const FOCUSABLE = 'a[href], button:not([disabled])';
+    let lastFocused: HTMLElement | null = null;
+
+    const open = () => {
+      lastFocused = document.activeElement as HTMLElement;
+      panel.hidden = false;
+      // A frame between unhiding and the class, or the transition has no
+      // start state to move from and the panel simply appears.
+      requestAnimationFrame(() => panel.classList.add('is-open'));
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn.focus({ preventScroll: true });
+    };
+
+    const close = () => {
+      panel.classList.remove('is-open');
+      panel.hidden = true;
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      (lastFocused ?? openBtn).focus({ preventScroll: true });
+    };
+
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+
+    document.addEventListener('keydown', (e) => {
+      if (panel.hidden) return;
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
+      }
+
+      // Keep Tab inside the panel while it covers the page, or focus walks
+      // onto the links behind it with nothing on screen to show where it went.
+      if (e.key === 'Tab') {
+        const items = [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)];
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  }
+</script>
