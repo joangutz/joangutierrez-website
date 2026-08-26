@@ -4,7 +4,7 @@ import Aperture from '../components/Aperture.astro';
 import Portrait from '../components/Portrait.astro';
 import TornEdge from '../components/TornEdge.astro';
 import { getCollection, getEntry, render } from 'astro:content';
-import { contact, booking } from '../site';
+import { contact, booking, withBase } from '../site';
 
 const entry = await getEntry('rootsPage', 'roots');
 if (!entry) throw new Error('Missing /content/roots/roots.md');
@@ -102,7 +102,7 @@ const rendered = await Promise.all(
         {r.credentials.ethics} <a href={contact.ethics}>Read the code of ethics</a>.
       </p>
 
-      <a class="door" href="/begin/">{booking.label}</a>
+      <a class="door" href={withBase('/begin/')}>{booking.label}</a>
     </div>
   </section>
 </Base>

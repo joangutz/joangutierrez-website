@@ -13,3 +13,4 @@ dist/
 preview.html
 aura.local.mjs
 clip2.local.mjs
+basecheck.local.mjs
