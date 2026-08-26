@@ -2,7 +2,7 @@
 /**
  * A chapter rail, in the manner of a book's thumb index.
  *
- * One tick per section down the left margin. The section you are in lights and
+ * One tick per section down the right margin. The section you are in lights and
  * names itself as you scroll, so a long page stops being an undifferentiated
  * scroll and becomes a set of chapters you can watch yourself move through.
  *
@@ -17,8 +17,14 @@
  *   narrow    no rail at all; an "On this page" disclosure above the prose
  *
  * The narrow form is what nearly every site with this pattern does — MDN,
- * Stripe, GitHub's docs, Astro's own — because a left rail on a phone takes
- * width the words need and gives back very little.
+ * Stripe, GitHub's docs, Astro's own — because a rail on a phone takes width
+ * the words need and gives back very little.
+ *
+ * It sits on the right because that is where the space already is. The prose
+ * column is capped at its measure and left-aligned, so the right margin runs
+ * from 210px at 1024 to over 600px at 1920 while the left is the narrow one.
+ * Reserving room on the left meant taking it from the scarce side to feed the
+ * abundant one — and inset every full-bleed section by the same amount.
  *
  * Nothing here renders without JavaScript, which is why it may only ever carry
  * navigation that also exists in the page itself.
@@ -36,8 +42,15 @@
   /* ---- The rail ---- */
   .rail {
     position: fixed;
-    left: clamp(0.9rem, 2.2vw, 2rem);
+    right: clamp(0.9rem, 2.2vw, 2rem);
     top: 0;
+    /* Ticks flush to the right edge, titles reading inward toward them. */
+    text-align: right;
+    /* An explicit width, because every child of a link here is absolutely
+       positioned and so contributes nothing to its size. Left to size itself
+       the rail measured zero pixels across, which left the tick — eighteen
+       pixels of it — as the only thing you could put a cursor on. */
+    width: 2.2rem;
     z-index: 40;
     display: flex;
     flex-direction: column;
@@ -70,6 +83,7 @@
   .rail :global(a) {
     position: relative;
     display: block;
+    width: 100%;
     /* Compact on purpose. The Work carries sixteen sections, and the rail has
        to fit between the sticky bar and the footer on a laptop screen or it
        cannot come to rest above the dark ground — which is its whole job at
@@ -81,7 +95,7 @@
 
   .rail :global(.rail-tick) {
     position: absolute;
-    left: 0;
+    right: 0;
     top: 50%;
     translate: 0 -50%;
     display: block;
@@ -96,10 +110,13 @@
 
   .rail :global(.rail-name) {
     position: absolute;
-    left: 2.6rem;
+    right: 2.6rem;
     top: 50%;
     width: max-content;
-    max-width: 10.5rem;
+    /* Grows with the margin it sits in. Fixed at 9rem it truncated titles that
+       the page had ample room for — at 1440 the gap between the prose and the
+       rail measures 458px. */
+    max-width: clamp(9rem, 14vw, 16rem);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -109,18 +126,26 @@
     text-transform: uppercase;
     letter-spacing: 0.12em;
     opacity: 0;
-    translate: -0.35rem -50%;
+    /* Drifts in from the right, the direction it belongs to now. */
+    translate: 0.35rem -50%;
     transition:
       opacity 320ms var(--ease-open),
       translate 320ms var(--ease-open);
   }
 
-  /* Between 900 and 1280 there is room for the ticks but not for words beside
-     them — on an iPad the titles ran straight over the prose. The rail keeps
-     its whole job as a position indicator without them. */
-  @media (max-width: 1279px) {
+  /* On the narrowest screens that still carry a rail there is room for the
+     ticks but not for words beside them; the rail keeps its whole job as a
+     position indicator without them. */
+  @media (max-width: 1023px) {
     .rail :global(.rail-name) {
       display: none;
+    }
+  }
+
+  /* Wide enough to hold the titles, and to be pointed at. */
+  @media (min-width: 1024px) {
+    .rail {
+      width: clamp(11.6rem, 16.5vw, 18.6rem);
     }
   }
 
@@ -249,20 +274,16 @@
 </style>
 
 <style is:global>
-  /* The rail lives in the left margin, so that margin is reserved before the
-     centred column gets its share. The column then centres inside what is
-     left, which biases the whole page right — deliberately. Without this the
-     ticks simply sat on top of the prose at laptop and tablet widths, where
-     there is no spare margin at all. */
-  @media (min-width: 900px) {
-    .has-rail main {
-      padding-left: 5.5rem;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .has-rail main {
-      padding-left: 14rem;
+  /* Nothing is reserved on main any more. Padding there inset every
+     full-bleed section by the same amount — Roots' land band arrived with a
+     pink strip down its edge — and the prose did not need it: the measure
+     already leaves the right margin wide open.
+     
+     Only the full-width blocks need holding back, and only where they would
+     otherwise reach under the rail. The prose column never gets near it. */
+  @media (min-width: 900px) and (max-width: 1460px) {
+    .has-rail main .band > .wide {
+      max-width: calc(100% - 9rem);
     }
   }
 </style>

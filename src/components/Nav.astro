@@ -124,10 +124,12 @@ const isCurrent = (href: string) => {
     border-bottom: 1px solid var(--rule-soft);
   }
 
+  /* Same box as a .band, so the wordmark sits directly above the first
+     character of the page's own text rather than out on its own margin. */
   .nav-inner {
-    max-width: 1240px;
+    max-width: 62rem;
     margin-inline: auto;
-    padding: 1.25rem clamp(1.25rem, 5vw, 4rem);
+    padding: 1.25rem clamp(1.25rem, 5vw, 3rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
