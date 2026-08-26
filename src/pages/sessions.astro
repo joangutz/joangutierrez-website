@@ -5,7 +5,8 @@ import Vessel from '../components/Vessel.astro';
 import OfferingCard from '../components/OfferingCard.astro';
 import PriceGrid from '../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { withBase } from '../site';
+import KitSignup from '../components/KitSignup.astro';
+import { withBase, contact, booking } from '../site';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
@@ -75,12 +76,22 @@ const motifs = [
       <span class="label">{s.prices.title}</span>
       <p class="section-note">{s.prices.body}</p>
       <PriceGrid />
+      <p class="trust">
+        Certified in Somatic Sexological Bodywork · practicing under the
+        <Link href={contact.ethics}>ACSB code of ethics</Link> · an educator, not a therapist.
+      </p>
+
+      <div class="not-ready">
+        <KitSignup
+          heading="Not ready?"
+          body="Begin with the Red Rose Meditation instead — alone, free, at your own pace. It arrives in your inbox."
+        />
+      </div>
     </div>
   </section>
 
-  <!-- The arc. A real sequence, so the numbers are earned — and they live in
-       the empty left column, which is what that column is for. -->
-  <section class="band section">
+  <!-- The arc. A real sequence, so the numbers are earned. -->
+  <section class="band section" id="arc">
     <div class="wide">
       <h2 class="section-title">{s.arc.title}</h2>
       <p class="arc-intro">{s.arc.intro}</p>
@@ -112,6 +123,24 @@ const motifs = [
     </div>
   </section>
 
+  <!-- Common questions — the unasked ones are the bounce reasons. Answers
+       assembled from Joan's own copy; the gaps live in the content file. -->
+  <section class="band section" id="faq">
+    <div class="col">
+      <h2 class="section-title">Common questions</h2>
+      <dl class="faq">
+        {
+          s.faq.filter((f) => !f.todo).map((f) => (
+            <>
+              <dt>{f.q}</dt>
+              <dd>{f.a}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
   <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
   <section class="band section">
     <div class="col">
@@ -120,6 +149,16 @@ const motifs = [
         {s.note.paragraphs.map((p) => <p>{p}</p>)}
       </div>
 
+    </div>
+  </section>
+
+  <!-- The buying page ends the way every page ends: with a door in, not a
+       sideways exit. The clinicians line is real but demoted to small type. -->
+  <section class="band section close on-dark grained">
+    <div class="col">
+      <h2 class="section-title">{s.close.title}</h2>
+      <p class="close-body">{s.close.body}</p>
+      <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
       <p class="clinicians">
         {s.clinicians.body}
         <Link href={withBase('/for-clinicians/')}>{s.clinicians.link}</Link>
@@ -131,14 +170,6 @@ const motifs = [
 <style>
   .intro {
     padding-bottom: clamp(1.5rem, 4vw, 3rem);
-  }
-
-  .page-title {
-    font-size: clamp(2.1rem, 5.6vw, 3.6rem);
-    line-height: 1.03;
-    letter-spacing: -0.02em;
-    font-weight: 300;
-    margin-top: 1.5rem;
   }
 
   .intro-lede {
@@ -307,15 +338,49 @@ const motifs = [
     margin-bottom: 0;
   }
 
-  .clinicians {
-    margin: 2.5rem 0 0;
-    font-size: 0.98rem;
+  .trust {
+    margin: 1.25rem 0 0;
+    font-size: 0.88rem;
     color: var(--color-ink-2);
   }
 
-  .clinicians a {
-    text-decoration-color: var(--color-quick);
-    white-space: nowrap;
+  .not-ready {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .faq {
+    margin: 2rem 0 0;
+  }
+
+  .faq dt {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-top: 2rem;
+  }
+
+  .faq dd {
+    margin: 0.6rem 0 0;
+    line-height: 1.7;
+  }
+
+  .close {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .close-body {
+    margin: 1.25rem 0 2.25rem;
+    max-width: 42ch;
+    color: rgb(238 212 203 / 0.86);
+  }
+
+  .clinicians {
+    margin: 3rem 0 0;
+    font-size: 0.85rem;
+    color: rgb(238 212 203 / 0.65);
+    max-width: 52ch;
   }
 
   .arc-intro,

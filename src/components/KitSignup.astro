@@ -1,0 +1,195 @@
+---
+import Vessel from './Vessel.astro';
+import { kit } from '../site';
+
+/**
+ * The one email capture, used everywhere a capture appears: mid-way through
+ * The Work, after the price grid, on Begin for the not-yet-ready, on Home,
+ * and compactly in the footer.
+ *
+ * Our own markup posting natively to Kit — none of Kit's styling ever
+ * appears. The mark is the lit egg, so the offer looks like it grew here
+ * rather than being bolted on.
+ *
+ * Renders NOTHING until site.ts kit.formAction is set (TODO-KIT there), so
+ * the structure can ship before the Kit form exists without a broken block
+ * appearing on the live site.
+ */
+interface Props {
+  heading?: string;
+  body?: string;
+  compact?: boolean;
+  class?: string;
+}
+
+const {
+  heading = kit.freebie,
+  body = 'A guided audio meditation, free. Try a small piece of this work alone, at your own pace — it arrives in your inbox.',
+  compact = false,
+  class: className = '',
+} = Astro.props;
+
+const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+{
+  kit.formAction && (
+    <div class:list={['kit', { 'kit-compact': compact }, className]}>
+      {!compact && (
+        <div class="kit-head">
+          <Vessel size="30px" form="egg" />
+          <span class="kit-title">{heading}</span>
+        </div>
+      )}
+      {!compact && <p class="kit-body">{body}</p>}
+      {compact && (
+        <span class="kit-title kit-title-compact">{heading}</span>
+      )}
+
+      <form class="kit-form" action={kit.formAction} method="post">
+        <label class="kit-label" for={uid}>Email address</label>
+        <div class="kit-row">
+          <input
+            class="kit-input"
+            id={uid}
+            type="email"
+            name="email_address"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+          <button class="kit-submit" type="submit">Send the meditation</button>
+        </div>
+      </form>
+      <p class="kit-note">Free. Unsubscribe any time.</p>
+    </div>
+  )
+}
+
+<style>
+  .kit {
+    max-width: 32rem;
+    position: relative;
+  }
+
+  .kit-head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .kit-title {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .kit-title-compact {
+    display: block;
+    font-size: 0.66rem;
+    margin-bottom: 0.7rem;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .kit-title-compact {
+    color: rgb(238 212 203 / 0.72);
+  }
+
+  .kit-body {
+    margin: 0.9rem 0 1.4rem;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--color-ink-2);
+    max-width: 44ch;
+  }
+
+  .on-dark .kit-body {
+    color: rgb(238 212 203 / 0.85);
+  }
+
+  .kit-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .kit-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .kit-input {
+    flex: 1 1 13rem;
+    min-width: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-cochineal);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.6rem 0.1rem;
+  }
+
+  .kit-input::placeholder {
+    color: var(--color-ink-2);
+    opacity: 0.55;
+  }
+
+  .on-dark .kit-input {
+    color: var(--color-bract);
+  }
+
+  .on-dark .kit-input::placeholder {
+    color: rgb(238 212 203 / 0.5);
+  }
+
+  /* Keep the site's focus ring — suppressing it for the underline treatment
+     left the field with no visible focus, which the audit caught. */
+  .kit-input:focus-visible {
+    border-bottom-color: var(--color-quick);
+    border-bottom-width: 2px;
+  }
+
+  .kit-submit {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-bract);
+    background: var(--color-quick);
+    border: 0;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+  }
+
+  .kit-submit:hover {
+    background: var(--color-plumstone);
+  }
+
+  .on-dark .kit-submit:hover {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+
+  .kit-note {
+    margin: 0.8rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .kit-note {
+    color: rgb(238 212 203 / 0.7);
+  }
+
+  .kit-compact .kit-note {
+    font-size: 0.78rem;
+  }
+</style>

@@ -44,17 +44,20 @@ const p = entry.data;
     padding-bottom: clamp(1rem, 3vw, 2rem);
   }
 
-  .page-title {
-    font-size: clamp(2rem, 5.2vw, 3.4rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    font-weight: 300;
-    margin-top: 1.5rem;
-    max-width: 20ch;
-  }
-
   .body {
     padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
+
+  /* Structural inserts inside the prose column — doors and the mid-page
+     capture — spaced as pauses in the reading, not as interruptions. */
+  .prose :global(.work-door) {
+    margin-block: 2.5rem;
+  }
+
+  .prose :global(.work-capture) {
+    margin-block: clamp(2.5rem, 6vw, 4rem);
+    border-block: 1px solid var(--rule-soft);
+    padding-block: clamp(1.75rem, 4vw, 2.5rem);
   }
 
   /* The mark stays alongside the reader down the long column. */

@@ -1,6 +1,7 @@
 ---
 import Vessel from './Vessel.astro';
 import Link from './Link.astro';
+import KitSignup from './KitSignup.astro';
 import { site, contact, booking, withBase } from '../site';
 
 const year = new Date().getFullYear();
@@ -28,6 +29,10 @@ const year = new Date().getFullYear();
           {contact.email && <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>}
           <li><Link href={contact.substack}>The seasonal letter</Link></li>
         </ul>
+      </div>
+
+      <div class="footer-col">
+        <KitSignup compact heading="The Red Rose Meditation" />
       </div>
 
       <div class="footer-col">

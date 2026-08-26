@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import Vessel from '../components/Vessel.astro';
 import BookingEmbed from '../components/BookingEmbed.astro';
+import KitSignup from '../components/KitSignup.astro';
 import { site, contact, booking, withBase } from '../site';
 ---
 
@@ -28,6 +29,17 @@ import { site, contact, booking, withBase } from '../site';
   <section class="band section">
     <div class="col">
       <BookingEmbed />
+    </div>
+  </section>
+
+  {/* The not-yet fallback: most first visits to this page end without a
+      booking, and until now they ended with nothing. */}
+  <section class="band section">
+    <div class="col">
+      <KitSignup
+        heading="Not ready to book?"
+        body="Begin alone instead. The Red Rose Meditation is a guided audio practice — free, private, at your own pace. It arrives in your inbox."
+      />
     </div>
   </section>
 
@@ -69,15 +81,6 @@ import { site, contact, booking, withBase } from '../site';
   .begin-hero {
     padding-block: clamp(3rem, 10vh, 6rem) clamp(2rem, 5vw, 3rem);
     row-gap: 2.5rem;
-  }
-
-  .page-title {
-    font-size: clamp(2rem, 5.4vw, 3.5rem);
-    line-height: 1.04;
-    letter-spacing: -0.02em;
-    font-weight: 300;
-    margin-top: 1.5rem;
-    max-width: 16ch;
   }
 
   .begin-lede {

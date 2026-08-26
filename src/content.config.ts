@@ -104,7 +104,7 @@ const home = defineCollection({
       alt: z.string(),
       link: z.string(),
     }),
-    letter: z.object({ title: z.string(), body: z.string() }),
+    freebie: z.object({ title: z.string(), body: z.string() }),
     close: z.object({ title: z.string(), body: z.string() }),
   }),
 });
@@ -128,6 +128,15 @@ const sessionsPage = defineCollection({
     consent: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
     /** Verbatim scope-of-practice text. A professional boundary, not fine print. */
     note: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
+    /**
+     * Answers assembled from Joan's existing copy only. Entries marked
+     * todo: true are questions that still need her words — they are kept in
+     * the content file as the visible gap list and never rendered.
+     */
+    faq: z.array(
+      z.object({ q: z.string(), a: z.string(), todo: z.boolean().default(false) })
+    ),
+    close: z.object({ title: z.string(), body: z.string() }),
     clinicians: z.object({ body: z.string(), link: z.string() }),
   }),
 });

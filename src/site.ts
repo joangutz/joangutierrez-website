@@ -36,6 +36,22 @@ export const booking = {
   label: 'Book a free consultation',
 } as const;
 
+/**
+ * The Kit list and the Red Rose Meditation freebie.
+ *
+ * TODO-KIT: this one value turns on every signup block on the site at once.
+ * In Kit: create a form for the Red Rose Meditation with an incentive email
+ * that delivers the audio, then paste the form's action URL here (from the
+ * form's HTML embed — it looks like
+ * https://app.kit.com/forms/1234567/subscriptions).
+ * While this is null, no signup block renders anywhere, so nothing on the
+ * live site ever looks broken.
+ */
+export const kit = {
+  formAction: null as string | null,
+  freebie: 'The Red Rose Meditation',
+} as const;
+
 export const contact = {
   sms: '9312778555',
   smsHref: 'sms:+19312778555',

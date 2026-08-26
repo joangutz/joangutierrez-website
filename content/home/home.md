@@ -42,9 +42,9 @@ story:
   alt: 'TODO-ALT: describe the portrait of Joan.'
   link: Read the roots
 
-letter:
-  title: The seasonal letter
-  body: A letter a few times a year, when there is something worth saying.
+freebie:
+  title: The Red Rose Meditation
+  body: Try a small piece of this work before ever talking to anyone — alone, free, at your own pace.
 
 close:
   title: Begin with a conversation

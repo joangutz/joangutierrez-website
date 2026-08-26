@@ -5,7 +5,7 @@ import Vessel from '../components/Vessel.astro';
 import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
-import SeasonalLetter from '../components/SeasonalLetter.astro';
+import KitSignup from '../components/KitSignup.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { site, booking, withBase } from '../site';
 
@@ -108,7 +108,10 @@ const movedAnchors = {
         }
       </ul>
 
-      <Link variant="door" href={withBase('/sessions/')}>{h.sessions.link}</Link>
+      <div class="doors">
+        <Link variant="door" href={withBase('/sessions/')}>{h.sessions.link}</Link>
+        <Link variant="door" href={withBase('/sessions/#arc')}>See what a practice session looks like</Link>
+      </div>
     </div>
   </section>
 
@@ -126,12 +129,10 @@ const movedAnchors = {
     </div>
   </section>
 
-  <!-- 6 · The seasonal letter -->
+  <!-- 6 · The Red Rose Meditation — the low-commitment rung of the ladder -->
   <section class="band section">
     <div class="col">
-      <span class="label">{h.letter.title}</span>
-      <p class="letter-body">{h.letter.body}</p>
-      <SeasonalLetter />
+      <KitSignup heading={h.freebie.title} body={h.freebie.body} />
     </div>
   </section>
 
@@ -409,11 +410,10 @@ const movedAnchors = {
     }
   }
 
-  /* ---- Letter ---- */
-  .letter-body {
-    margin: 1rem 0 2rem;
-    max-width: 40ch;
-    color: var(--color-ink-2);
+  .doors {
+    display: flex;
+    gap: 1rem 2.5rem;
+    flex-wrap: wrap;
   }
 
   /* ---- Close ---- */

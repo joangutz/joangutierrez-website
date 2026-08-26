@@ -11,10 +11,10 @@ import Link from './Link.astro';
 ---
 
 <div class="booking" data-booking>
-  <button type="button" class="booking-open" data-booking-open>
-    Open the booking calendar
-  </button>
-
+  {/* The calendar loads itself when this section nears the viewport — the
+      button-first version added a decision exactly where friction is most
+      expensive, at the end of the funnel. First paint stays clean because
+      nothing loads until the reader is already headed here. */}
   <div class="booking-slot" data-booking-slot hidden></div>
 
   <p class="booking-alt">
@@ -28,24 +28,6 @@ import Link from './Link.astro';
     flex-direction: column;
     gap: 1.25rem;
     align-items: flex-start;
-  }
-
-  .booking-open {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    padding: 0.9rem 1.4rem;
-    background: var(--color-quick);
-    color: var(--color-bract);
-    border: 0;
-    cursor: pointer;
-  }
-
-  .booking-open:hover {
-    background: var(--color-quick);
-    color: var(--color-bract);
   }
 
   .booking-slot {
@@ -71,29 +53,37 @@ import Link from './Link.astro';
     color: rgb(238 212 203 / 0.82);
   }
 
-  .on-dark .booking-open:hover {
-    background: var(--color-bract);
-    color: var(--color-plumstone);
-  }
 </style>
 
 <script>
   const url = 'https://cal.com/joan.gutierrez/20min';
 
-  for (const root of document.querySelectorAll<HTMLElement>('[data-booking]')) {
-    const btn = root.querySelector<HTMLButtonElement>('[data-booking-open]');
-    const slot = root.querySelector<HTMLElement>('[data-booking-slot]');
-    if (!btn || !slot) continue;
+  const inject = (slot: HTMLElement) => {
+    const frame = document.createElement('iframe');
+    frame.src = url;
+    frame.title = 'Book a free consultation with Joan Gutiérrez';
+    frame.loading = 'lazy';
+    slot.replaceChildren(frame);
+    slot.hidden = false;
+  };
 
-    btn.addEventListener('click', () => {
-      const frame = document.createElement('iframe');
-      frame.src = url;
-      frame.title = 'Book a free consultation with Joan Gutiérrez';
-      frame.loading = 'lazy';
-      slot.replaceChildren(frame);
-      slot.hidden = false;
-      btn.hidden = true;
-      frame.focus();
-    });
+  for (const root of document.querySelectorAll<HTMLElement>('[data-booking]')) {
+    const slot = root.querySelector<HTMLElement>('[data-booking-slot]');
+    if (!slot) continue;
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            inject(slot);
+            io.disconnect();
+          }
+        },
+        { rootMargin: '200px 0px' }
+      );
+      io.observe(root);
+    } else {
+      inject(slot);
+    }
   }
 </script>

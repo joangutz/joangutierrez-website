@@ -283,6 +283,19 @@
     color: rgb(238 212 203 / 0.72);
   }
 
+  /* One page-title scale for the whole site — five pages had drifted to four
+     slightly different clamps, which read as sloppiness, not hierarchy. */
+  .page-title {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 30, 'WONK' 0;
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    margin-top: 1.5rem;
+    text-wrap: balance;
+  }
+
   .lede {
     font-size: clamp(1.2rem, 2.2vw, 1.45rem);
     line-height: 1.55;
