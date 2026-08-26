@@ -29,13 +29,21 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   <div class="card-inner" data-inner>
     <!-- Resting face -->
     <div class="face face-front" data-face="front">
+      {/* El Corazón's structure: ruled double frame, one image, name plate at
+          the foot. Mexican vernacular on a site whose copy names the borderland.
+          The frame and the plate are taken; not the number — four offerings
+          are not a sequence. */}
       <div class="front-art">
-        <Collage src={o.collage} alt={o.alt} register={o.register} />
+        <div class="loteria">
+          <div class="loteria-image">
+            <Collage src={o.collage} alt={o.alt} register={o.register} />
+          </div>
+          <h2 class="loteria-plate">{o.title}</h2>
+        </div>
       </div>
 
       <div class="front-text">
         <span class="label">{o.container}</span>
-        <h2 class="front-title">{o.title}</h2>
         <p class="front-teaser">{o.teaser}</p>
 
         <div class="front-foot">
@@ -131,15 +139,41 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   }
 
   .front-art {
-    position: relative;
-    min-height: 15rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
     border-right: 1px solid var(--rule);
-    overflow: hidden;
+    display: flex;
   }
 
-  .front-art :global(.collage) {
+  .loteria {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 3px double var(--color-cochineal);
+    padding: 5px;
+    min-height: 15rem;
+  }
+
+  .loteria-image {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    min-height: 11rem;
+  }
+
+  .loteria-image :global(.collage) {
     position: absolute;
     inset: 0;
+  }
+
+  .loteria-plate {
+    font-family: var(--font-display);
+    font-size: clamp(0.62rem, 1.2vw, 0.72rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    text-align: center;
+    padding: 0.7rem 0.4rem 0.3rem;
   }
 
   .front-text {
@@ -147,12 +181,6 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-  }
-
-  .front-title {
-    font-size: clamp(1.5rem, 3vw, 2.1rem);
-    line-height: 1.05;
-    letter-spacing: -0.015em;
   }
 
   .front-teaser {
@@ -357,8 +385,6 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     .front-art {
       border-right: 0;
       border-bottom: 1px solid var(--rule);
-      aspect-ratio: 4 / 3;
-      min-height: 0;
     }
 
     .panels {

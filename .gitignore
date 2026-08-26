@@ -12,3 +12,4 @@ dist/
 *.local.mjs
 preview.html
 aura.local.mjs
+clip2.local.mjs

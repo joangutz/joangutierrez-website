@@ -25,6 +25,16 @@
   --color-brick: #7e2a26;
   --color-clay: #8e3b2e;
 
+  /**
+   * Barro — the one earth counter-tone, from the Cosmos board's adobe walls
+   * and clay pots. Spanish for the clay a comal or molcajete is made from,
+   * which is the right language for a borderland practice.
+   *
+   * Light plaster, so it takes DARK type only: Plumstone 6.19:1, Cochineal
+   * 4.68:1. Bract fails at 2.07:1 and neither Quick works as a mark on it.
+   */
+  --color-barro: #c68a5e;
+
   --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
 

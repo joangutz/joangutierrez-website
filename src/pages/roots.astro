@@ -51,7 +51,7 @@ const rendered = await Promise.all(
   }
 
   <!-- The land, given a section rather than a footer line. -->
-  <section class="land on-dark grained">
+  <section class="land grained">
     <div class="band section">
       <div class="rail"><Aperture size="52px" open={0.35} bloomOnView /></div>
       <div class="col">
@@ -156,11 +156,17 @@ const rendered = await Promise.all(
     }
   }
 
-  /* ---- The land ---- */
+  /* ---- The land ----
+     Warm adobe rather than near-black: the board's earth is light plaster,
+     not shadow. Barro takes dark type only. */
   .land {
-    background: var(--color-plumstone);
-    color: var(--color-bract);
+    background: var(--color-barro);
+    color: var(--color-plumstone);
     margin-block: clamp(2rem, 6vw, 4rem);
+  }
+
+  .land :global(.label) {
+    color: var(--color-cochineal);
   }
 
   .land-text {
