@@ -9,11 +9,18 @@ import { realms } from '../site';
  * computation rather than by eye — the first version was 332 wide and only
  * 252 tall, a squashed isoceles that read as an accident.
  *
- * Each side is drawn from 17% to 83% of its length, so the lines stop short
- * of the corners and the words sit in real gaps instead of masking the lines
- * with background patches. Behind each vertex a blush glow lifts the words
- * off the ground and makes the figure read as its own object; the page-wide
- * grain overlay textures the glow, so it is never a flat gradient.
+ * Every side is drawn from GAP to 1-GAP of its length, so all three drawn
+ * segments are the same length by construction and the lines stop short of
+ * the corners. Each label sits centred on its own vertex, so a line emerges
+ * from the vertical middle of that label's blush rather than floating above
+ * it — and the words sit in real gaps instead of masking the lines with
+ * background patches.
+ *
+ * The label type is sized in container units, which is what makes the
+ * clearance between line-end and word hold at every width. Sized in rem it
+ * did not: the figure scales with the page while rem type does not, so the
+ * words grew proportionally larger as the figure shrank and eventually
+ * collided with the lines.
  *
  * The words are real HTML at the vertices — selectable, translatable, and
  * read in order by a screen reader.
@@ -26,14 +33,28 @@ interface Props {
 
 const { detailed = false, class: className = '' } = Astro.props;
 
-/** Vertices of the 400×420 viewBox: apex, lower right, lower left. */
-const SIDES = [
-  'M225.8,114.8 L326.2,288.5',
-  'M300.3,333.3 L99.7,333.3',
-  'M73.8,288.5 L174.2,114.8',
-];
+/** Apex, lower right, lower left of the 400×420 viewBox. */
+const A = [200, 70];
+const B = [352, 333.3];
+const C = [48, 333.3];
 
-/** Vertex centres as percentages of the viewBox, for glow and label alike. */
+/**
+ * How much of each side is left undrawn at each end. One value for all three
+ * sides is what keeps the figure symmetric — the drawn segments cannot drift
+ * out of step because they are computed from the same number.
+ */
+const GAP = 0.26;
+
+const side = ([px, py]: number[], [qx, qy]: number[]) => {
+  const at = (t: number) => [px + t * (qx - px), py + t * (qy - py)];
+  const [sx, sy] = at(GAP);
+  const [ex, ey] = at(1 - GAP);
+  return `M${sx.toFixed(1)},${sy.toFixed(1)} L${ex.toFixed(1)},${ey.toFixed(1)}`;
+};
+
+const SIDES = [side(A, B), side(B, C), side(C, A)];
+
+/** Vertex centres as percentages of the viewBox — glow and label alike. */
 const V = [
   { x: 50, y: 16.7 },
   { x: 12, y: 79.4 },
@@ -49,7 +70,7 @@ const V = [
 
     {
       realms.map((realm, i) => (
-        <div class:list={['vertex', i === 0 ? 'v-apex' : 'v-base']} style={`--vx:${V[i].x}%;--vy:${V[i].y}%`}>
+        <div class="vertex" style={`--vx:${V[i].x}%;--vy:${V[i].y}%`}>
           <span class="v-name">{realm.name}</span>
           <span class="v-gloss">{realm.gloss}</span>
           {detailed && <span class="v-detail">{realm.detail}</span>}
@@ -63,19 +84,22 @@ const V = [
   .triad {
     margin: 0 auto;
     width: 100%;
-    max-width: 26rem;
-    /* Room for the lower labels, which hang below the figure's baseline. */
-    padding-bottom: 1.25rem;
-  }
-
-  .triad.detailed {
-    padding-bottom: 2.75rem;
+    max-width: 30rem;
+    /* The corner labels are centred on their vertices, so half of each hangs
+       outside the shape box. This is the room they hang into. */
+    padding-inline: clamp(1rem, 5%, 2.5rem);
+    /* The vertices sit at 79.4% of the shape, so the box already carries room
+       below the base for the labels that hang into it. Only the top needs air. */
+    padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
   }
 
   .triad-shape {
     position: relative;
     aspect-ratio: 400 / 420;
     width: 100%;
+    /* Label type is sized against this box, not the root, so the figure keeps
+       its proportions — and its line-to-word clearance — at every width. */
+    container-type: inline-size;
   }
 
   .triad-lines {
@@ -94,47 +118,35 @@ const V = [
     vector-effect: non-scaling-stroke;
   }
 
-  /* Labels anchor to their vertices. The apex centres on its point — the
-     upper legs diverge around it, so there is room. The base labels hang
-     fully BELOW the base line: text is rem-sized while the SVG scales, so
-     any centred placement eventually collides with the line at some width.
-     Below the line, no width can cause a strike-through. */
+  /* Every label centres on its vertex — one rule, three corners, so the
+     figure stays symmetric and each line emerges from the middle of a blush. */
   .vertex {
     position: absolute;
     left: var(--vx);
     top: var(--vy);
+    translate: -50% -50%;
     isolation: isolate;
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
     text-align: center;
-    /* max-content, or the right-hand label computes its width from the sliver
-       of containing block left of the right edge and wraps into a column
-       while the left-hand label doesn't — asymmetric wrapping for free. */
+    /* max-content, or a label near the right edge computes its width from the
+       sliver of containing block beside it and wraps into a column while its
+       left-hand twin doesn't — asymmetric wrapping for free. */
     width: max-content;
-    max-width: 11rem;
-  }
-
-  .v-apex {
-    translate: -50% -50%;
-  }
-
-  .v-base {
-    translate: -50% 0.5rem;
+    max-width: 30cqw;
   }
 
   /* The blush is the label's own halo rather than a circle fixed at the
-     vertex — fixed circles centred on the geometry while the words hung
-     below them, so the base labels sat under their glow. Attached to the
-     label, it centres on the text at every width and in both modes. */
+     vertex, so it centres on the words at every width and in both modes. */
   .vertex::before {
     content: '';
     position: absolute;
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    width: calc(100% + 5rem);
-    height: calc(100% + 4rem);
+    width: calc(100% + 12cqw);
+    height: calc(100% + 10cqw);
     z-index: -1;
     pointer-events: none;
     background: radial-gradient(
@@ -147,22 +159,27 @@ const V = [
 
   .v-name {
     font-family: var(--font-display);
-    font-size: clamp(0.8rem, 2.4vw, 0.95rem);
+    font-size: clamp(0.72rem, 3.6cqw, 0.95rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
   }
 
   .v-gloss {
-    font-size: clamp(0.78rem, 2vw, 0.88rem);
+    font-size: clamp(0.7rem, 3.3cqw, 0.88rem);
     font-style: italic;
     color: var(--color-ink-2);
     line-height: 1.35;
   }
 
+  /* Two lines' worth whether the sentence needs them or not. Centring each
+     label on its vertex aligns the blushes, but a one-line detail next to a
+     two-line one still lands its NAME half a line higher than its neighbour's,
+     which reads as the figure being crooked. Equal heights align both. */
   .v-detail {
-    font-size: 0.82rem;
+    font-size: clamp(0.68rem, 3.1cqw, 0.82rem);
     line-height: 1.45;
+    min-height: calc(2 * 1.45em);
     color: var(--color-ink-2);
     margin-top: 0.2rem;
   }
