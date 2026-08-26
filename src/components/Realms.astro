@@ -5,9 +5,18 @@ import { realms } from '../site';
  * Mosher's three realms as a plain triangle. No icons, no illustration —
  * a shape asserting that three things are one thing.
  *
- * The triangle itself is decorative SVG; the words are real HTML at the
- * vertices, so they stay selectable, translatable, and legible to a
- * screen reader in order.
+ * The triangle is exactly equilateral: every side is 304 units, verified by
+ * computation rather than by eye — the first version was 332 wide and only
+ * 252 tall, a squashed isoceles that read as an accident.
+ *
+ * Each side is drawn from 17% to 83% of its length, so the lines stop short
+ * of the corners and the words sit in real gaps instead of masking the lines
+ * with background patches. Behind each vertex a blush glow lifts the words
+ * off the ground and makes the figure read as its own object; the page-wide
+ * grain overlay textures the glow, so it is never a flat gradient.
+ *
+ * The words are real HTML at the vertices — selectable, translatable, and
+ * read in order by a screen reader.
  */
 interface Props {
   /** The Work shows each realm's detail line; Home shows only the words. */
@@ -16,17 +25,41 @@ interface Props {
 }
 
 const { detailed = false, class: className = '' } = Astro.props;
+
+/** Vertices of the 400×420 viewBox: apex, lower right, lower left. */
+const SIDES = [
+  'M225.8,114.8 L326.2,288.5',
+  'M300.3,333.3 L99.7,333.3',
+  'M73.8,288.5 L174.2,114.8',
+];
+
+/** Vertex centres as percentages of the viewBox, for glow and label alike. */
+const V = [
+  { x: 50, y: 16.7 },
+  { x: 12, y: 79.4 },
+  { x: 88, y: 79.4 },
+];
 ---
 
-<figure class:list={['triad', className]}>
+<figure class:list={['triad', { detailed }, className]}>
   <div class="triad-shape">
-    <svg viewBox="0 0 400 320" aria-hidden="true" focusable="false" class="triad-lines">
-      <polygon points="200,34 366,286 34,286"></polygon>
+    <svg viewBox="0 0 400 420" aria-hidden="true" focusable="false" class="triad-lines">
+      <defs>
+        <radialGradient id="triad-blush">
+          <stop offset="0%" stop-color="var(--triad-glow, #f2d6cb)" stop-opacity="0.85"></stop>
+          <stop offset="60%" stop-color="var(--triad-glow, #f2d6cb)" stop-opacity="0.3"></stop>
+          <stop offset="100%" stop-color="var(--triad-glow, #f2d6cb)" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+      <circle cx="200" cy="70" r="64" fill="url(#triad-blush)"></circle>
+      <circle cx="48" cy="333" r="64" fill="url(#triad-blush)"></circle>
+      <circle cx="352" cy="333" r="64" fill="url(#triad-blush)"></circle>
+      {SIDES.map((d) => <path d={d} />)}
     </svg>
 
     {
       realms.map((realm, i) => (
-        <div class:list={['vertex', `v-${i}`]}>
+        <div class:list={['vertex', i === 0 ? 'v-apex' : 'v-base']} style={`--vx:${V[i].x}%;--vy:${V[i].y}%`}>
           <span class="v-name">{realm.name}</span>
           <span class="v-gloss">{realm.gloss}</span>
           {detailed && <span class="v-detail">{realm.detail}</span>}
@@ -38,14 +71,20 @@ const { detailed = false, class: className = '' } = Astro.props;
 
 <style>
   .triad {
-    margin: 0;
+    margin: 0 auto;
     width: 100%;
-    max-width: 30rem;
+    max-width: 26rem;
+    /* Room for the lower labels, which hang below the figure's baseline. */
+    padding-bottom: 1.25rem;
+  }
+
+  .triad.detailed {
+    padding-bottom: 2.75rem;
   }
 
   .triad-shape {
     position: relative;
-    aspect-ratio: 400 / 320;
+    aspect-ratio: 400 / 420;
     width: 100%;
   }
 
@@ -54,45 +93,43 @@ const { detailed = false, class: className = '' } = Astro.props;
     inset: 0;
     width: 100%;
     height: 100%;
+    overflow: visible;
   }
 
-  .triad-lines polygon {
+  .triad-lines path {
     fill: none;
     stroke: var(--color-quick);
-    stroke-width: 1;
+    stroke-width: 1.25;
+    stroke-linecap: round;
     vector-effect: non-scaling-stroke;
   }
 
+  /* Labels anchor to their vertices. The apex centres on its point — the
+     upper legs diverge around it, so there is room. The base labels hang
+     fully BELOW the base line: text is rem-sized while the SVG scales, so
+     any centred placement eventually collides with the line at some width.
+     Below the line, no width can cause a strike-through. */
   .vertex {
     position: absolute;
+    left: var(--vx);
+    top: var(--vy);
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
     text-align: center;
-    background: var(--color-madder);
-    padding: 0.35rem 0.7rem;
+    /* max-content, or the right-hand label computes its width from the sliver
+       of containing block left of the right edge and wraps into a column
+       while the left-hand label doesn't — asymmetric wrapping for free. */
+    width: max-content;
     max-width: 11rem;
   }
 
-  /* Feel — apex. */
-  .v-0 {
-    top: 0;
-    left: 50%;
-    translate: -50% -42%;
+  .v-apex {
+    translate: -50% -50%;
   }
 
-  /* Connect — lower left. */
-  .v-1 {
-    bottom: 0;
-    left: 0;
-    translate: -6% 44%;
-  }
-
-  /* Play — lower right. */
-  .v-2 {
-    bottom: 0;
-    right: 0;
-    translate: 6% 44%;
+  .v-base {
+    translate: -50% 0.5rem;
   }
 
   .v-name {
@@ -117,22 +154,16 @@ const { detailed = false, class: className = '' } = Astro.props;
     margin-top: 0.2rem;
   }
 
-  .on-dark .vertex {
-    background: var(--color-plumstone);
-  }
-
   .on-dark .v-gloss,
   .on-dark .v-detail {
     color: rgb(238 212 203 / 0.8);
   }
 
-  .on-dark .triad-lines polygon {
-    stroke: var(--color-quick);
+  .on-dark .triad-lines path {
+    stroke: var(--color-madder);
   }
 
-  @media (max-width: 480px) {
-    .vertex {
-      padding: 0.25rem 0.4rem;
-    }
+  .on-dark .triad-shape {
+    --triad-glow: rgb(238 212 203 / 0.35);
   }
 </style>

@@ -73,9 +73,10 @@ const p = entry.data;
     }
   }
 
-  /* The triangle sits in the flow of the realms section. */
+  /* The triangle sits in the flow of the realms section, centred, with more
+     air than a paragraph gets — it is a figure, not a line of text. */
   .prose :global(.triad) {
-    margin-block: 3rem;
+    margin-block: clamp(3rem, 8vw, 4.5rem);
   }
 
   .close {
