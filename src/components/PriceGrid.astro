@@ -136,11 +136,11 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
     background: var(--color-clay);
   }
 
-  /* The only tile in Quick, and it comes first. Plumstone type on it measures
-     4.53:1; Bract would be 2.83:1, so it is never used here. */
+  /* The only tile in Quick, and it comes first. Bract type on it measures
+     6.48:1. */
   .tile-free {
     background: var(--color-quick);
-    color: var(--color-plumstone);
+    color: var(--color-bract);
   }
 
   /* A common height for the name block so the prices line up across the row —
@@ -291,7 +291,5 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
     outline-offset: -6px;
   }
 
-  .tile-free:focus-visible {
-    outline-color: var(--color-plumstone);
-  }
+
 </style>

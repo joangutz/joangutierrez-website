@@ -29,21 +29,13 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   <div class="card-inner" data-inner>
     <!-- Resting face -->
     <div class="face face-front" data-face="front">
-      {/* El Corazón's structure: ruled double frame, one image, name plate at
-          the foot. Mexican vernacular on a site whose copy names the borderland.
-          The frame and the plate are taken; not the number — four offerings
-          are not a sequence. */}
       <div class="front-art">
-        <div class="loteria">
-          <div class="loteria-image">
-            <Collage src={o.collage} alt={o.alt} register={o.register} />
-          </div>
-          <h2 class="loteria-plate">{o.title}</h2>
-        </div>
+        <Collage src={o.collage} alt={o.alt} register={o.register} />
       </div>
 
       <div class="front-text">
         <span class="label">{o.container}</span>
+        <h2 class="front-title">{o.title}</h2>
         <p class="front-teaser">{o.teaser}</p>
 
         <div class="front-foot">
@@ -126,9 +118,12 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     transform-style: preserve-3d;
   }
 
+  /* The card is a ruled frame on the ground rather than a pale slab. Four
+     large Bract panels stacked read as stark white against the rose, and the
+     fill was never doing any work the rule doesn't do. */
   .face {
     border: 1px solid var(--rule);
-    background: var(--color-bract);
+    background: var(--color-madder);
   }
 
   /* ---- Resting face ---- */
@@ -139,41 +134,21 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   }
 
   .front-art {
-    padding: clamp(1rem, 2vw, 1.5rem);
-    border-right: 1px solid var(--rule);
-    display: flex;
-  }
-
-  .loteria {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border: 3px double var(--color-cochineal);
-    padding: 5px;
-    min-height: 15rem;
-  }
-
-  .loteria-image {
     position: relative;
-    flex: 1;
+    min-height: 15rem;
+    border-right: 1px solid var(--rule);
     overflow: hidden;
-    min-height: 11rem;
   }
 
-  .loteria-image :global(.collage) {
+  .front-art :global(.collage) {
     position: absolute;
     inset: 0;
   }
 
-  .loteria-plate {
-    font-family: var(--font-display);
-    font-size: clamp(0.62rem, 1.2vw, 0.72rem);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    line-height: 1.4;
-    text-align: center;
-    padding: 0.7rem 0.4rem 0.3rem;
+  .front-title {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
   }
 
   .front-text {
@@ -280,7 +255,7 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--color-quick-ink);
+    background: var(--color-quick);
   }
 
   .panel-right p {
@@ -313,7 +288,7 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    text-decoration-color: var(--color-quick-ink);
+    text-decoration-color: var(--color-quick);
   }
 
   /* ---- The control ---- */
@@ -334,7 +309,7 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   }
 
   .turn:hover {
-    border-color: var(--color-quick-ink);
+    border-color: var(--color-quick);
   }
 
   .turn :global(.turn-mark) {
@@ -385,6 +360,8 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     .front-art {
       border-right: 0;
       border-bottom: 1px solid var(--rule);
+      aspect-ratio: 4 / 3;
+      min-height: 0;
     }
 
     .panels {

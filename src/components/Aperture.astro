@@ -105,16 +105,16 @@ const inner = [22.5, 112.5, 202.5, 292.5];
     opacity: calc(var(--open) * 0.9);
   }
 
-  /* Quick is 1.78:1 on the rose ground, so the core takes the dark variant
-     on light grounds and full-strength Quick only on dark ones. */
+  /* Quick reads on the rose ground; on a deep ground it needs the lighter
+     Madder, or the centre disappears. */
   .aperture .core {
-    fill: var(--core, var(--color-quick-ink));
+    fill: var(--core, var(--color-quick));
   }
 
   .on-dark .aperture {
     --petal: var(--color-bract);
     --petal-inner: var(--color-madder);
-    --core: var(--color-quick);
+    --core: var(--color-madder);
   }
 
   @media (prefers-reduced-motion: no-preference) {

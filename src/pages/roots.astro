@@ -51,7 +51,7 @@ const rendered = await Promise.all(
   }
 
   <!-- The land, given a section rather than a footer line. -->
-  <section class="land grained">
+  <section class="land on-dark grained">
     <div class="band section">
       <div class="rail"><Aperture size="52px" open={0.35} bloomOnView /></div>
       <div class="col">
@@ -156,17 +156,11 @@ const rendered = await Promise.all(
     }
   }
 
-  /* ---- The land ----
-     Warm adobe rather than near-black: the board's earth is light plaster,
-     not shadow. Barro takes dark type only. */
+  /* ---- The land ---- */
   .land {
-    background: var(--color-barro);
-    color: var(--color-plumstone);
+    background: var(--color-plumstone);
+    color: var(--color-bract);
     margin-block: clamp(2rem, 6vw, 4rem);
-  }
-
-  .land :global(.label) {
-    color: var(--color-cochineal);
   }
 
   .land-text {
@@ -238,7 +232,7 @@ const rendered = await Promise.all(
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: var(--color-quick-ink);
+    color: var(--color-quick);
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--rule);
   }
@@ -284,7 +278,7 @@ const rendered = await Promise.all(
   }
 
   .ethics a {
-    text-decoration-color: var(--color-quick-ink);
+    text-decoration-color: var(--color-quick);
   }
 
   .door {
@@ -296,7 +290,7 @@ const rendered = await Promise.all(
     text-transform: uppercase;
     letter-spacing: 0.2em;
     text-decoration: none;
-    border-bottom: 1px solid var(--color-quick-ink);
+    border-bottom: 1px solid var(--color-quick);
     padding-bottom: 0.3rem;
   }
 

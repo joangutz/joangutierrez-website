@@ -12,11 +12,10 @@
   --color-cochineal: #5a121c;
   --color-plumstone: #2c0b12;
   --color-bract: #eed4cb;
-  --color-quick: #ed3943;
-
-  /* Same hue and saturation as Quick, dropped in lightness so it can be a
-     mark on the light ground (3.59:1). Quick itself is 1.78:1 there. */
-  --color-quick-ink: #a11119;
+  /* One live red, dark enough to work as a mark on the rose ground at 3.86:1.
+     A brighter coral was tried and pulled back: it measured 1.78:1 here, which
+     forced a second value and a set of rules to keep them apart. */
+  --color-quick: #8e241f;
 
   /* Secondary ink. 5.21:1 on Madder. */
   --color-ink-2: #6b1a23;
@@ -24,16 +23,6 @@
   /* Card registers. Each carries a Bract title at 5.3:1 or better. */
   --color-brick: #7e2a26;
   --color-clay: #8e3b2e;
-
-  /**
-   * Barro — the one earth counter-tone, from the Cosmos board's adobe walls
-   * and clay pots. Spanish for the clay a comal or molcajete is made from,
-   * which is the right language for a borderland practice.
-   *
-   * Light plaster, so it takes DARK type only: Plumstone 6.19:1, Cochineal
-   * 4.68:1. Bract fails at 2.07:1 and neither Quick works as a mark on it.
-   */
-  --color-barro: #c68a5e;
 
   --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
@@ -124,7 +113,7 @@
 
   ::selection {
     background: var(--color-quick);
-    color: var(--color-plumstone);
+    color: var(--color-bract);
   }
 }
 
@@ -238,11 +227,11 @@
   }
 
   .prose li::marker {
-    color: var(--color-quick-ink);
+    color: var(--color-quick);
   }
 
   .prose blockquote {
-    border-left: 2px solid var(--color-quick-ink);
+    border-left: 2px solid var(--color-quick);
     padding-left: 1.5rem;
     margin-left: 0;
     font-style: italic;
@@ -250,7 +239,7 @@
   }
 
   .prose a {
-    text-decoration-color: var(--color-quick-ink);
+    text-decoration-color: var(--color-quick);
   }
 
   .prose a:hover {
@@ -261,61 +250,6 @@
 @layer utilities {
   .tabular {
     font-variant-numeric: tabular-nums;
-  }
-
-  /**
-   * The aura. From the Cosmos board, where a soft grainy radial glow recurs
-   * more than any other device — repeatedly paired with the word "breathe",
-   * which is also where Joan's practice starts.
-   *
-   * It is deliberately tied to the aperture rather than scattered: the aura is
-   * the mark's own light, so it appears only where the flower does. The grain
-   * is blended into the gradient itself, not laid over it — a clean radial
-   * gradient is exactly the design-tool default the brief warns against.
-   */
-  .aura {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .aura::before,
-  .aura::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    translate: -50% -50%;
-    width: var(--aura-size, 260%);
-    aspect-ratio: 1;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  .aura::before {
-    background: radial-gradient(
-      circle closest-side,
-      var(--aura-core, rgb(237 57 67 / 0.34)) 0%,
-      var(--aura-mid, rgb(161 17 25 / 0.13)) 42%,
-      transparent 70%
-    );
-  }
-
-  /* The grain has to be masked to the same circle. Blended across the full box
-     it paints grey where the gradient is transparent, which reads as a hard
-     rectangle rather than a glow. */
-  .aura::after {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    mix-blend-mode: overlay;
-    opacity: 0.4;
-    -webkit-mask-image: radial-gradient(circle closest-side, #000 0%, #000 30%, transparent 70%);
-    mask-image: radial-gradient(circle closest-side, #000 0%, #000 30%, transparent 70%);
-  }
-
-  /* On a deep ground the glow reads as light rather than stain. */
-  .on-dark .aura::before {
-    --aura-core: rgb(237 57 67 / 0.5);
-    --aura-mid: rgb(238 212 203 / 0.12);
   }
 
   /* Grain applied to a single element rather than the viewport. */
