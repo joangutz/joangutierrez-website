@@ -99,10 +99,12 @@ const petal = (len: number) => {
   {/* The light the egg gives off. It grows as the petals open. */}
   <circle class="glow" cx="50" cy="50" r="44" fill="url(#vessel-glow)"></circle>
 
-  {/* Behind the petals, so closing them hides it and opening reveals it.
-      It reaches all the way down to the root the petals turn about, so the
-      opening cradle has no hollow left under it — and the shape is a true
-      egg, narrow at the top and broad at the base, rather than an ellipse. */}
+  {/* Behind the petals, and born from them: at closed it is absent, and as
+      the petals open it emerges from the fold and grows to full size, rooted
+      at the same point the petals turn about — revealed, not merely
+      uncovered. It reaches down to that root so the open cradle has no
+      hollow, and the shape is a true egg, narrow at the top and broad at
+      the base. */}
   <path
     class="egg"
     d="M50,26 C58.5,26 64.5,39 64.5,53 C64.5,66 58,74.5 50,74.5 C42,74.5 35.5,66 35.5,53 C35.5,39 41.5,26 50,26 Z"
@@ -161,17 +163,24 @@ const petal = (len: number) => {
   .on-dark .vessel.shaded .t2 { fill: #b8837c; }
   .on-dark .vessel.shaded .t3 { fill: #97655f; }
 
-  /* The egg stays largely opaque and is revealed by the petals moving, not by
-     fading in. A semi-transparent light shape over a deep ground reads grey,
-     which made the egg look dull at mid-values instead of lit. */
+  /* The egg is hidden until the petals have begun to part, then emerges and
+     grows from the shared root. Opacity resolves fully opaque by ~0.7 open —
+     a semi-transparent light shape over a deep ground reads grey, so the
+     reveal is carried by scale and the petals' motion, not by a long fade.
+     CSS clamps opacity to [0,1], so the expression needs no clamp(). */
   .vessel .egg {
     fill: var(--shell, #f4dcd2);
-    opacity: calc(0.5 + 0.5 * var(--open));
-    transition: opacity 900ms var(--ease-open);
+    opacity: calc((var(--open) - 0.18) / 0.5);
+    transform-box: view-box;
+    transform-origin: 50px 74.5px;
+    transform: scale(calc(0.5 + 0.5 * var(--open)));
+    transition:
+      opacity 900ms var(--ease-open),
+      transform 900ms var(--ease-open);
   }
 
   .vessel .glow {
-    opacity: calc(var(--open) * 0.85);
+    opacity: calc((var(--open) - 0.15) * 1.0);
     transform-box: fill-box;
     transform-origin: center;
     transform: scale(calc(0.4 + 0.6 * var(--open)));
@@ -217,6 +226,9 @@ const petal = (len: number) => {
     .vessel .glow {
       transition: none;
     }
+
+    /* At rest the mark is at its target value; the egg's emergence math
+       resolves to fully present there. */
 
     .vessel.bloom,
     .vessel.bloom-on-view {

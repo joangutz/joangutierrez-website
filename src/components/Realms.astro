@@ -44,16 +44,6 @@ const V = [
 <figure class:list={['triad', { detailed }, className]}>
   <div class="triad-shape">
     <svg viewBox="0 0 400 420" aria-hidden="true" focusable="false" class="triad-lines">
-      <defs>
-        <radialGradient id="triad-blush">
-          <stop offset="0%" stop-color="var(--triad-glow, #f2d6cb)" stop-opacity="0.85"></stop>
-          <stop offset="60%" stop-color="var(--triad-glow, #f2d6cb)" stop-opacity="0.3"></stop>
-          <stop offset="100%" stop-color="var(--triad-glow, #f2d6cb)" stop-opacity="0"></stop>
-        </radialGradient>
-      </defs>
-      <circle cx="200" cy="70" r="64" fill="url(#triad-blush)"></circle>
-      <circle cx="48" cy="333" r="64" fill="url(#triad-blush)"></circle>
-      <circle cx="352" cy="333" r="64" fill="url(#triad-blush)"></circle>
       {SIDES.map((d) => <path d={d} />)}
     </svg>
 
@@ -113,6 +103,7 @@ const V = [
     position: absolute;
     left: var(--vx);
     top: var(--vy);
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
@@ -130,6 +121,28 @@ const V = [
 
   .v-base {
     translate: -50% 0.5rem;
+  }
+
+  /* The blush is the label's own halo rather than a circle fixed at the
+     vertex — fixed circles centred on the geometry while the words hung
+     below them, so the base labels sat under their glow. Attached to the
+     label, it centres on the text at every width and in both modes. */
+  .vertex::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    width: calc(100% + 5rem);
+    height: calc(100% + 4rem);
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side,
+      var(--triad-glow, rgb(242 214 203 / 0.85)) 0%,
+      var(--triad-glow-mid, rgb(242 214 203 / 0.3)) 58%,
+      transparent 100%
+    );
   }
 
   .v-name {
@@ -164,6 +177,7 @@ const V = [
   }
 
   .on-dark .triad-shape {
-    --triad-glow: rgb(238 212 203 / 0.35);
+    --triad-glow: rgb(238 212 203 / 0.3);
+    --triad-glow-mid: rgb(238 212 203 / 0.1);
   }
 </style>
