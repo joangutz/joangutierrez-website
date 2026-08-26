@@ -1,75 +1,87 @@
 ---
 /**
- * The vessel — two open hands holding an illuminated egg.
+ * The vessel — petals that open to reveal a lit egg.
  *
- * Built to the same rules as the aperture: one SVG, one parameter, palette
- * tokens, and a context flip so it reads on light and deep grounds alike.
- * Where the flower's parameter is how open it is, the vessel's is how lit the
- * egg is — `--lit`, 0 to 1 — which drives the glow and the warmth of the shell.
+ * This resolves the flower and the hands into one mark rather than choosing
+ * between them. The forms that cradle the egg are petals; arranged low and
+ * splaying outward they read as cupped hands. Closed, they wrap the egg like
+ * a bud and it is barely visible. Open, they fold down and out and the egg is
+ * revealed and lit.
  *
- * The hands are drawn as nested hooks rather than traced fingers. A literal
- * hand collapses into mush below about 40px; nested strokes keep their
- * rhythm as they shrink, the way the flower's petals do.
+ * One parameter, `--open`, 0 to 1 — the same name and the same range the
+ * aperture used, because it is the same gesture. Everything already built on
+ * that gesture keeps working: the bloom on load, the reveal on scroll, and the
+ * turn of a session card.
  *
- * Two forms, because one mark cannot do both jobs:
- *   full  hands and egg — page heads, the hero, Begin
- *   egg   the egg alone — small marks, where hands would not resolve
+ * Petals are rooted at a single point low in the frame and rotated around it.
+ * That root is what makes them read as fingers from one hand rather than
+ * shapes scattered around a circle.
  */
 interface Props {
-  /** 0 = unlit, 1 = fully lit. */
-  lit?: number;
+  /** 0 = closed around the egg, 1 = open and revealing it. */
+  open?: number;
   size?: string;
-  /** 'full' includes the hands; 'egg' is the shell alone. */
+  /** 'full' is petals and egg; 'egg' is the egg alone, for small marks. */
   form?: 'full' | 'egg';
-  /** How literal the hands are: 'cradle' is two arcs, 'cupped' is four. */
-  hands?: 'cradle' | 'cupped';
-  /** Lights on load, at breath pace. */
-  kindle?: boolean;
-  /** Lights when scrolled into view. */
-  kindleOnView?: boolean;
+  /** Opens on load, at breath pace. */
+  bloom?: boolean;
+  /** Opens when scrolled into view. */
+  bloomOnView?: boolean;
   class?: string;
   label?: string;
 }
 
 const {
-  lit = 1,
+  open = 1,
   size = '64px',
   form = 'full',
-  hands = 'cupped',
-  kindle = false,
-  kindleOnView = false,
+  bloom = false,
+  bloomOnView = false,
   class: className = '',
   label,
 } = Astro.props;
 
-const animated = kindle || kindleOnView || /\bkindle(-on-view)?\b/.test(className);
+const animated = bloom || bloomOnView || /\bbloom(-on-view)?\b/.test(className);
+
+const ROOT_X = 50;
+const ROOT_Y = 74;
 
 /**
- * Abstracted rather than traced. Counting fingers made the mark a diagram of
- * a hand; two or four sweeping arcs read as hands holding something without
- * anyone stopping to count. The same move the aperture makes with petals.
+ * Angles fan across the lower two-thirds, never over the top — a ring of
+ * petals is a flower seen face-on, but a fan rooted low is a pair of hands.
+ * The outer petals are shorter so the silhouette cups rather than splays.
  *
- * cradle  one arc per hand — the most reduced form
- * cupped  two per hand, an outer sweep and an inner — suggests fingers
- *         without enumerating them
+ * The innermost pair sits at 38°, not nearer the centre: petals that stay
+ * vertical when open cover the egg at every value, so the mark never actually
+ * reveals anything. The gap between them is what the opening is for.
  */
-const ARCS = {
-  outer: 'M16,44 C16,72 28,85 44,85',
-  inner: 'M29,53 C29,73 35,79 43,79',
+const PETALS = [
+  { a: -122, len: 31 },
+  { a: -94, len: 38 },
+  { a: -66, len: 44 },
+  { a: -38, len: 48 },
+  { a: 38, len: 48 },
+  { a: 66, len: 44 },
+  { a: 94, len: 38 },
+  { a: 122, len: 31 },
+];
+
+/** A teardrop rooted at the base, pointing up, of a given length. */
+const petal = (len: number) => {
+  const w = len * 0.17;
+  const t = ROOT_Y - len;
+  return [
+    `M${ROOT_X},${ROOT_Y}`,
+    `C${ROOT_X - w},${ROOT_Y - len * 0.34} ${ROOT_X - w},${ROOT_Y - len * 0.72} ${ROOT_X},${t}`,
+    `C${ROOT_X + w},${ROOT_Y - len * 0.72} ${ROOT_X + w},${ROOT_Y - len * 0.34} ${ROOT_X},${ROOT_Y}`,
+    'Z',
+  ].join(' ');
 };
-
-/* The hands stop short of each other. Ends that nearly touch weld into a
-   blob at small sizes; the gap is where the cradle opens. */
-
-const mirror = (d: string) =>
-  d.replace(/([ML]|C\s?)?(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)/g, (_m, cmd, x, y) =>
-    `${cmd ?? ''}${100 - parseFloat(x)},${y}`
-  );
 ---
 
 <svg
-  class:list={['vessel', className, { kindle, 'kindle-on-view': kindleOnView }]}
-  style={`--lit-to:${lit};--size:${size}${animated ? '' : `;--lit:${lit}`}`}
+  class:list={['vessel', className, { bloom, 'bloom-on-view': bloomOnView }]}
+  style={`--open-to:${open};--size:${size}${animated ? '' : `;--open:${open}`}`}
   viewBox="0 0 100 100"
   role={label ? 'img' : undefined}
   aria-label={label}
@@ -78,40 +90,31 @@ const mirror = (d: string) =>
 >
   <defs>
     <radialGradient id="vessel-glow">
-      <stop offset="0%" stop-color="var(--glow, #f0cec4)" stop-opacity="0.95"></stop>
-      <stop offset="55%" stop-color="var(--glow, #f0cec4)" stop-opacity="0.28"></stop>
-      <stop offset="100%" stop-color="var(--glow, #f0cec4)" stop-opacity="0"></stop>
+      <stop offset="0%" stop-color="var(--glow, #f4dcd2)" stop-opacity="0.95"></stop>
+      <stop offset="52%" stop-color="var(--glow, #f4dcd2)" stop-opacity="0.26"></stop>
+      <stop offset="100%" stop-color="var(--glow, #f4dcd2)" stop-opacity="0"></stop>
     </radialGradient>
   </defs>
 
-  {/* The light the egg gives off, not a ring around it. */}
-  <circle class="glow" cx="50" cy="38" r="44" fill="url(#vessel-glow)"></circle>
+  {/* The light the egg gives off. It grows as the petals open. */}
+  <circle class="glow" cx="50" cy="45" r="42" fill="url(#vessel-glow)"></circle>
 
-  <path
-    class="shell"
-    d="M50,14 C59,14 66,26 66,39 C66,52 59,62 50,62 C41,62 34,52 34,39 C34,26 41,14 50,14 Z"
-  ></path>
+  {/* Behind the petals, so closing them hides it and opening reveals it. */}
+  <ellipse class="egg" cx="50" cy="45" rx="11.5" ry="14.5"></ellipse>
 
   {
     form === 'full' && (
-      <g class="hands">
-        <path d={ARCS.outer} />
-        <path d={mirror(ARCS.outer)} />
-        {
-          hands === 'cupped' && (
-            <>
-              <path d={ARCS.inner} />
-              <path d={mirror(ARCS.inner)} />
-            </>
-          )
-        }
+      <g class="petals">
+        {PETALS.map((p) => (
+          <path style={`--a:${p.a}deg`} d={petal(p.len)} />
+        ))}
       </g>
     )
   }
 </svg>
 
 <style is:global>
-  @property --lit {
+  @property --open {
     syntax: '<number>';
     inherits: true;
     initial-value: 1;
@@ -125,72 +128,74 @@ const mirror = (d: string) =>
     flex: none;
   }
 
+  /* Rotation happens about the shared root, not each petal's own box —
+     transform-box: view-box is what lets transform-origin mean a point in
+     the drawing rather than the centre of the path. */
+  .vessel .petals path {
+    fill: var(--petal, var(--color-cochineal));
+    transform-box: view-box;
+    transform-origin: 50px 74px;
+    transform: rotate(calc(var(--a) * (0.16 + 0.84 * var(--open))));
+    transition: transform 900ms var(--ease-open);
+  }
+
+  .vessel .egg {
+    fill: var(--shell, #f4dcd2);
+    opacity: calc(0.12 + 0.88 * var(--open));
+    transition: opacity 900ms var(--ease-open);
+  }
+
   .vessel .glow {
-    opacity: calc(var(--lit) * 0.9);
+    opacity: calc(var(--open) * 0.85);
     transform-box: fill-box;
     transform-origin: center;
-    transform: scale(calc(0.45 + 0.55 * var(--lit)));
+    transform: scale(calc(0.4 + 0.6 * var(--open)));
     transition:
       opacity 900ms var(--ease-open),
       transform 900ms var(--ease-open);
   }
 
-  /* A sheet of colour rather than an outline. It survives shrinking — an
-     outlined egg fills in and becomes a blob — and reads as the lit thing
-     being held rather than a drawing of one. */
-  .vessel .shell {
-    fill: var(--shell, #f2d6cb);
-    transition: fill 900ms var(--ease-open);
-  }
-
-  .vessel .hands path {
-    fill: none;
-    stroke: var(--hands, var(--color-cochineal));
-    stroke-width: 7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  /* On a deep ground the mark inverts: light hands, a warm shell. */
+  /* On a deep ground the mark inverts: light petals, the egg still the light. */
   .on-dark .vessel {
-    --hands: var(--color-bract);
-    --shell: #f6e2d8;
+    --petal: var(--color-bract);
+    --shell: #fbeee7;
     --glow: #eed4cb;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .vessel.kindle {
-      animation: vessel-kindle 1800ms var(--ease-open) 150ms both;
+    .vessel.bloom {
+      animation: vessel-bloom 1800ms var(--ease-open) 150ms both;
     }
 
-    .js .vessel.kindle-on-view {
-      --lit: 0.05;
+    .js .vessel.bloom-on-view {
+      --open: 0.08;
     }
 
-    .js .vessel.kindle-on-view.in-view {
-      --lit: var(--lit-to, 1);
-      transition: --lit 1400ms var(--ease-open);
+    .js .vessel.bloom-on-view.in-view {
+      --open: var(--open-to, 1);
+      transition: --open 1400ms var(--ease-open);
     }
 
-    @keyframes vessel-kindle {
+    @keyframes vessel-bloom {
       from {
-        --lit: 0;
+        --open: 0;
       }
       to {
-        --lit: 1;
+        --open: 1;
       }
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .vessel .glow,
-    .vessel .shell {
+    .vessel .petals path,
+    .vessel .egg,
+    .vessel .glow {
       transition: none;
     }
 
-    .vessel.kindle,
-    .vessel.kindle-on-view {
-      --lit: var(--lit-to, 1);
+    .vessel.bloom,
+    .vessel.bloom-on-view {
+      --open: var(--open-to, 1);
     }
   }
 </style>
