@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import Aperture from '../components/Aperture.astro';
+import { getEntry, render } from 'astro:content';
+import { booking } from '../site';
+
+const entry = await getEntry('pages', 'the-work');
+if (!entry) throw new Error('Missing /content/pages/the-work.mdx');
+const { Content } = await render(entry);
+const p = entry.data;
+---
+
+<Base title={p.title} description={p.description}>
+  <section class="band section intro">
+    <div class="rail">
+      <Aperture size="clamp(64px, 10vw, 110px)" bloom />
+    </div>
+    <div class="col">
+      <span class="label">{p.eyebrow}</span>
+      <h1 class="page-title">{p.lede}</h1>
+    </div>
+  </section>
+
+  <section class="band body">
+    <div class="rail">
+      <Aperture size="52px" open={0.28} bloomOnView class="rail-mark" />
+    </div>
+    <div class="col prose">
+      <Content />
+    </div>
+  </section>
+
+  <section class="band section close on-dark grained">
+    <div class="rail"><Aperture size="64px" open={0.6} bloomOnView /></div>
+    <div class="col">
+      <h2 class="close-title">The invitation is simple: watch, learn, practice, and savor.</h2>
+      <div class="close-links">
+        <a class="begin" href="/begin/">{booking.label}</a>
+        <a class="door" href="/sessions/">See the four offerings</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-bottom: clamp(1rem, 3vw, 2rem);
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    margin-top: 1.5rem;
+    max-width: 20ch;
+  }
+
+  .body {
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
+
+  /* The mark stays alongside the reader down the long column. */
+  .rail-mark {
+    position: sticky;
+    top: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .rail-mark {
+      position: static;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  /* The triangle sits in the flow of the realms section. */
+  .prose :global(.triad) {
+    margin-block: 3rem;
+  }
+
+  .close {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .close-title {
+    font-size: clamp(1.5rem, 3.4vw, 2.3rem);
+    line-height: 1.15;
+    max-width: 22ch;
+  }
+
+  .close-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem 2rem;
+    flex-wrap: wrap;
+    margin-top: 2.25rem;
+  }
+
+  .begin {
+    display: inline-block;
+    background: var(--color-quick);
+    color: var(--color-plumstone);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 0.95rem 1.5rem;
+    text-decoration: none;
+  }
+
+  .begin:hover {
+    background: var(--color-bract);
+  }
+
+  .door {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-quick);
+    padding-bottom: 0.3rem;
+  }
+
+  .door:hover {
+    border-bottom-color: currentColor;
+  }
+</style>

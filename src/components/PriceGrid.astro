@@ -1,0 +1,297 @@
+---
+import { getCollection } from 'astro:content';
+import { booking } from '../site';
+
+/**
+ * The comparison view. The collage cards carry depth; this carries comparison,
+ * so every offering, duration, and price sits in one place with no scrolling
+ * to compare and no "contact for rates".
+ *
+ * Hierarchy, in three tiers:
+ *   1. The free consultation, first — it is where every path actually starts.
+ *   2. The three single-focus offerings, parallel because they are peers.
+ *   3. All-In-One as a band beneath them, because it is not a fourth peer —
+ *      it contains the other three, and its two durations belong inside one
+ *      offering rather than reading as two more products in the row.
+ *
+ * Booking runs on the existing Cal.com consultation: every tier begins with the
+ * same conversation, so every price leads there.
+ */
+const all = (await getCollection('offerings')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const singles = all.filter((o) => !o.data.combined);
+const combined = all.find((o) => o.data.combined);
+
+const money = (n: number) => `$${n.toLocaleString('en-US')}`;
+---
+
+<div class="prices" id="prices">
+  <!-- Tier 1 + 2 -->
+  <div class="row">
+    <a class="tile tile-free grained" href={booking.url}>
+      <span class="tile-head">
+        <span class="tile-name">Consultation</span>
+        <span class="tile-duration">{booking.duration}</span>
+      </span>
+      <span class="tile-price">Free</span>
+      <span class="tile-note">Start here. No obligation to continue.</span>
+      <span class="tile-action">Book a free consultation</span>
+    </a>
+
+    {
+      singles.map((o) => {
+        const p = o.data.prices[0];
+        return (
+          <a class:list={['tile', `reg-${o.data.register}`, 'grained']} href={booking.url}>
+            <span class="tile-head">
+              <span class="tile-name">{o.data.title}</span>
+              <span class="tile-duration">{p.label}</span>
+            </span>
+            <span class="tile-price tabular">{money(p.amount)}</span>
+            {p.note && <span class="tile-note">{p.note}</span>}
+            <span class="tile-action">Start with a consultation</span>
+          </a>
+        );
+      })
+    }
+  </div>
+
+  <!-- Tier 3 -->
+  {
+    combined && (
+      <div class:list={['band-tile', `reg-${combined.data.register}`, 'grained']}>
+        <div class="band-text">
+          <span class="tile-name">{combined.data.title}</span>
+          <span class="tile-duration">{combined.data.container}</span>
+          <p class="band-body">{combined.data.why.paragraphs[0]}</p>
+        </div>
+
+        <div class="band-prices">
+          {combined.data.prices.map((p) => (
+            <a class="band-price" href={booking.url}>
+              <span class="bp-label">{p.label}</span>
+              <span class="bp-amount tabular">{money(p.amount)}</span>
+              {p.note && <span class="bp-note">{p.note}</span>}
+              <span class="tile-action">Start with a consultation</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .prices {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+  }
+
+  @media (max-width: 900px) {
+    .row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 460px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    text-decoration: none;
+    color: var(--color-bract);
+    min-height: 13rem;
+  }
+
+  .reg-plumstone {
+    background: var(--color-plumstone);
+  }
+
+  .reg-cochineal {
+    background: var(--color-cochineal);
+  }
+
+  .reg-brick {
+    background: var(--color-brick);
+  }
+
+  .reg-clay {
+    background: var(--color-clay);
+  }
+
+  /* The only tile in Quick, and it comes first. Plumstone type on it measures
+     4.53:1; Bract would be 2.83:1, so it is never used here. */
+  .tile-free {
+    background: var(--color-quick);
+    color: var(--color-plumstone);
+  }
+
+  /* A common height for the name block so the prices line up across the row —
+     "Erotic Embodiment Education" wraps to three lines and would otherwise
+     push its own number out of line with the others, which is precisely what
+     this grid exists to prevent. */
+  .tile-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-height: 4.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .tile-head {
+      min-height: 3.9rem;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .tile-head {
+      min-height: 0;
+    }
+  }
+
+  .tile-name {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .tile-duration {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+
+  .tile-price {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    line-height: 1;
+    margin-top: 0.5rem;
+  }
+
+  .tile-note {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+
+  .tile-action {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    border-bottom: 1px solid transparent;
+    align-self: flex-start;
+  }
+
+  .tile:hover .tile-action,
+  .tile:focus-visible .tile-action,
+  .band-price:hover .tile-action,
+  .band-price:focus-visible .tile-action {
+    border-bottom-color: currentColor;
+  }
+
+  /* ---- The combined offering ---- */
+  .band-tile {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    color: var(--color-bract);
+  }
+
+  .band-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .band-body {
+    margin: 0.75rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    max-width: 34ch;
+  }
+
+  .band-prices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: rgb(238 212 203 / 0.25);
+    border: 1px solid rgb(238 212 203 / 0.25);
+  }
+
+  .band-price {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: clamp(1rem, 2vw, 1.4rem);
+    text-decoration: none;
+    color: inherit;
+    background: var(--color-clay);
+  }
+
+  .bp-label {
+    font-family: var(--font-display);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    opacity: 0.9;
+  }
+
+  .bp-amount {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.4vw, 2.3rem);
+    line-height: 1;
+    margin-top: 0.3rem;
+  }
+
+  .bp-note {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 780px) {
+    .band-tile {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .band-prices {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Focus rings flip by ground: every tile here is dark except the Quick one. */
+  .tile:focus-visible,
+  .band-price:focus-visible {
+    outline: 2px solid var(--color-bract);
+    outline-offset: -6px;
+  }
+
+  .tile-free:focus-visible {
+    outline-color: var(--color-plumstone);
+  }
+</style>

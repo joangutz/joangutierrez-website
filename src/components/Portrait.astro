@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+
+/** Portrait photography, rendered black and white. */
+interface Props {
+  src: string;
+  alt: string;
+  priority?: boolean;
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  priority = false,
+  sizes = '(max-width: 900px) 100vw, 40vw',
+  class: className = '',
+} = Astro.props;
+
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  '/assets/portraits/**/*.{jpeg,jpg,png,webp,avif}',
+  { eager: true }
+);
+
+const found = files[`/assets/portraits/${src}`];
+---
+
+{
+  found ? (
+    <Image
+      src={found.default}
+      alt={alt}
+      sizes={sizes}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding={priority ? 'sync' : 'async'}
+      class:list={['portrait', className]}
+    />
+  ) : (
+    <div
+      class:list={['portrait portrait-placeholder grained', className]}
+      role="img"
+      aria-label={`Placeholder for portrait photograph: ${alt}`}
+    >
+      <span class="portrait-note">
+        <span>{src}</span>
+        <span class="dim">awaiting photograph</span>
+      </span>
+    </div>
+  )
+}
+
+<style>
+  .portrait {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Black and white applies to photographs, not to the placeholder — which
+     was being desaturated out of the palette. */
+  img.portrait {
+    filter: grayscale(1) contrast(1.05);
+  }
+
+  .portrait-placeholder {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(160deg, #8a5f59 0%, #3a1c1e 100%);
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .portrait-note {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-bract);
+    opacity: 0.5;
+  }
+
+  .dim {
+    opacity: 0.7;
+  }
+</style>

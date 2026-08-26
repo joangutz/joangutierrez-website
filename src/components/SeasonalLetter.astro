@@ -1,0 +1,62 @@
+---
+import { contact } from '../site';
+
+/**
+ * The seasonal letter. Joan's list already lives on Substack, so this is
+ * Substack's own embed rather than a second list to maintain.
+ *
+ * An email field, inline, on the page. Never a popup. Lazy-loaded, so it
+ * costs nothing until someone scrolls to it, and there is a plain link
+ * underneath for anyone the iframe fails.
+ */
+---
+
+<div class="letter">
+  <div class="letter-frame">
+    <iframe
+      src={contact.substackEmbed}
+      title="Subscribe to the seasonal letter"
+      width="100%"
+      height="150"
+      loading="lazy"
+      frameborder="0"
+      scrolling="no"></iframe>
+  </div>
+
+  <p class="letter-fallback">
+    Or <a href={contact.substack}>subscribe on Substack</a> directly.
+  </p>
+</div>
+
+<style>
+  .letter {
+    max-width: 30rem;
+  }
+
+  .letter-frame {
+    background: var(--color-bract);
+    border: 1px solid var(--rule);
+    padding: 0.5rem;
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    color-scheme: light;
+  }
+
+  .letter-fallback {
+    margin: 0.85rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-ink-2);
+  }
+
+  .letter-fallback a {
+    text-decoration-color: var(--color-quick-ink);
+  }
+
+  .on-dark .letter-fallback {
+    color: rgb(238 212 203 / 0.8);
+  }
+</style>

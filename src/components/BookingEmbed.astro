@@ -1,0 +1,102 @@
+---
+import { booking } from '../site';
+
+/**
+ * The existing Cal.com booking, kept as-is. The embed is not in the page
+ * until someone asks for it — one click injects the iframe — so it cannot
+ * touch first paint. The direct link is always present underneath and works
+ * with no JavaScript at all.
+ */
+---
+
+<div class="booking" data-booking>
+  <button type="button" class="booking-open" data-booking-open>
+    Open the booking calendar
+  </button>
+
+  <div class="booking-slot" data-booking-slot hidden></div>
+
+  <p class="booking-alt">
+    Prefer to do it elsewhere? <a href={booking.url}>Book on cal.com</a> — {booking.duration}, free.
+  </p>
+</div>
+
+<style>
+  .booking {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .booking-open {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 0.9rem 1.4rem;
+    background: var(--color-quick);
+    color: var(--color-plumstone);
+    border: 0;
+    cursor: pointer;
+  }
+
+  .booking-open:hover {
+    background: var(--color-quick-ink);
+    color: var(--color-bract);
+  }
+
+  .booking-slot {
+    width: 100%;
+    border: 1px solid var(--rule);
+    background: var(--color-bract);
+  }
+
+  .booking-slot :global(iframe) {
+    display: block;
+    width: 100%;
+    height: min(80vh, 44rem);
+    border: 0;
+  }
+
+  .booking-alt {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--color-ink-2);
+  }
+
+  .booking-alt a {
+    text-decoration-color: var(--color-quick-ink);
+  }
+
+  .on-dark .booking-alt {
+    color: rgb(238 212 203 / 0.82);
+  }
+
+  .on-dark .booking-open:hover {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+</style>
+
+<script>
+  const url = 'https://cal.com/joan.gutierrez/20min';
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-booking]')) {
+    const btn = root.querySelector<HTMLButtonElement>('[data-booking-open]');
+    const slot = root.querySelector<HTMLElement>('[data-booking-slot]');
+    if (!btn || !slot) continue;
+
+    btn.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = url;
+      frame.title = 'Book a free consultation with Joan Gutiérrez';
+      frame.loading = 'lazy';
+      slot.replaceChildren(frame);
+      slot.hidden = false;
+      btn.hidden = true;
+      frame.focus();
+    });
+  }
+</script>

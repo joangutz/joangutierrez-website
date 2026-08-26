@@ -1,0 +1,497 @@
+---
+import Collage from './Collage.astro';
+import Aperture from './Aperture.astro';
+import type { CollectionEntry } from 'astro:content';
+
+/**
+ * An offering at rest is a collage form carrying only its title. Turning it
+ * over reveals what you get on the left and why the approach works on the
+ * right — the split that lets a three-month study and a monthly practice
+ * sit in the same frame without one starving or the other padding.
+ *
+ * Works by click, tap, and keyboard. Cross-fades instead of turning under
+ * prefers-reduced-motion. Without JavaScript both panels simply render in
+ * flow, so no copy is ever trapped behind an interaction.
+ */
+interface Props {
+  offering: CollectionEntry<'offerings'>;
+}
+
+const { offering } = Astro.props;
+const o = offering.data;
+const id = offering.id;
+
+const money = (n: number) => `$${n.toLocaleString('en-US')}`;
+const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
+---
+
+<article class="offering" data-offering data-register={o.register}>
+  <div class="card-inner" data-inner>
+    <!-- Resting face -->
+    <div class="face face-front" data-face="front">
+      {/* El Corazón's structure: ruled double frame, one image, name plate at
+          the foot. Mexican vernacular on a site whose copy names the borderland.
+          The frame and the plate are taken; not the number — four offerings
+          are not a sequence. */}
+      <div class="front-art">
+        <div class="loteria">
+          <div class="loteria-image">
+            <Collage src={o.collage} alt={o.alt} register={o.register} />
+          </div>
+          <h2 class="loteria-plate">{o.title}</h2>
+        </div>
+      </div>
+
+      <div class="front-text">
+        <span class="label">{o.container}</span>
+        <p class="front-teaser">{o.teaser}</p>
+
+        <div class="front-foot">
+          <span class="front-price tabular">{priceLine}</span>
+          <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
+            <Aperture size="18px" open={0.25} class="turn-mark" />
+            <span>What this includes</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Turned face -->
+    <div class="face face-back" data-face="back" id={`${id}-back`}>
+      <div class="back-head">
+        <div>
+          <span class="label">{o.container}</span>
+          <h2 class="back-title">{o.title}</h2>
+        </div>
+        <button type="button" class="turn turn-back" data-turn="close">
+          <span>Back</span>
+        </button>
+      </div>
+
+      <div class="panels">
+        <div class="panel panel-left">
+          <span class="panel-label">What you get</span>
+          <ul class="includes">
+            {o.includes.map((item) => <li>{item}</li>)}
+          </ul>
+
+          {
+            o.entails && (
+              <>
+                <span class="panel-label panel-label-2">What it entails</span>
+                <ul class="entails">
+                  {o.entails.map((e) => (
+                    <li>
+                      <em>{e.lead}:</em> {e.text}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
+        </div>
+
+        <div class="panel panel-right">
+          <span class="panel-label">{o.why.title}</span>
+          {o.why.paragraphs.map((p) => <p>{p}</p>)}
+
+          {
+            o.boundaries && (
+              <>
+                <span class="panel-label panel-label-2">{o.boundaries.title}</span>
+                {o.boundaries.paragraphs.map((p) => <p>{p}</p>)}
+              </>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="back-foot">
+        <span class="back-price tabular">
+          {o.prices.map((p) => `${p.label} — ${money(p.amount)}`).join(' · ')}
+        </span>
+        <a class="back-link" href="#prices">See it in the price grid</a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .offering {
+    perspective: 1800px;
+  }
+
+  .card-inner {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .face {
+    border: 1px solid var(--rule);
+    background: var(--color-bract);
+  }
+
+  /* ---- Resting face ---- */
+  .face-front {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-height: 100%;
+  }
+
+  .front-art {
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border-right: 1px solid var(--rule);
+    display: flex;
+  }
+
+  .loteria {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 3px double var(--color-cochineal);
+    padding: 5px;
+    min-height: 15rem;
+  }
+
+  .loteria-image {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    min-height: 11rem;
+  }
+
+  .loteria-image :global(.collage) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .loteria-plate {
+    font-family: var(--font-display);
+    font-size: clamp(0.62rem, 1.2vw, 0.72rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    text-align: center;
+    padding: 0.7rem 0.4rem 0.3rem;
+  }
+
+  .front-text {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .front-teaser {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    max-width: 34ch;
+  }
+
+  .front-foot {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .front-price {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+  }
+
+  /* ---- Turned face ---- */
+  .face-back {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .back-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .back-title {
+    font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+    line-height: 1.1;
+    margin-top: 0.2rem;
+  }
+
+  .panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding-block: 1.5rem;
+  }
+
+  .panel-right {
+    border-left: 1px solid var(--rule);
+    padding-left: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .panel-label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-ink-2);
+    margin-bottom: 1rem;
+  }
+
+  .panel-label-2 {
+    margin-top: 2rem;
+  }
+
+  .includes,
+  .entails {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .includes li,
+  .entails li {
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .includes li::before,
+  .entails li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-quick-ink);
+  }
+
+  .panel-right p {
+    margin: 0 0 1em;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .panel-right p:last-child {
+    margin-bottom: 0;
+  }
+
+  .back-foot {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .back-price {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+  }
+
+  .back-link {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    text-decoration-color: var(--color-quick-ink);
+  }
+
+  /* ---- The control ---- */
+  .turn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid var(--rule);
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding: 0.6rem 0.9rem;
+    cursor: pointer;
+  }
+
+  .turn:hover {
+    border-color: var(--color-quick-ink);
+  }
+
+  .turn :global(.turn-mark) {
+    transition: --open 900ms var(--ease-open);
+  }
+
+  .turn:hover :global(.turn-mark) {
+    --open: 1;
+  }
+
+  .turn-back {
+    flex: none;
+  }
+
+  /* ---- Without JS: both faces simply stack in flow ---- */
+  .face-back {
+    margin-top: -1px;
+  }
+
+  /* ---- With JS: the card turns ---- */
+  :global(.js-turn) .card-inner {
+    height: var(--card-h, auto);
+    transition: height 900ms var(--ease-open), transform 900ms var(--ease-open);
+  }
+
+  :global(.js-turn) .face {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    margin-top: 0;
+  }
+
+  :global(.js-turn) .face-back {
+    transform: rotateY(180deg);
+  }
+
+  :global(.js-turn)[data-open] .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  @media (max-width: 780px) {
+    .face-front {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .front-art {
+      border-right: 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .panels {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .panel-right {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+      padding-left: 0;
+      padding-top: 2rem;
+    }
+  }
+
+  /* Cross-fade rather than turn. */
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js-turn) .card-inner {
+      transition: none;
+      transform: none !important;
+    }
+
+    :global(.js-turn) .face {
+      backface-visibility: visible;
+      transform: none !important;
+      transition: opacity 200ms linear;
+    }
+
+    :global(.js-turn) .face-back {
+      opacity: 0;
+    }
+
+    :global(.js-turn)[data-open] .face-front {
+      opacity: 0;
+    }
+
+    :global(.js-turn)[data-open] .face-back {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  // Progressive enhancement: without this, both panels render in flow and
+  // every word is still readable.
+  const cards = document.querySelectorAll<HTMLElement>('[data-offering]');
+
+  for (const card of cards) {
+    const inner = card.querySelector<HTMLElement>('[data-inner]');
+    const front = card.querySelector<HTMLElement>('[data-face="front"]');
+    const back = card.querySelector<HTMLElement>('[data-face="back"]');
+    const openBtn = card.querySelector<HTMLButtonElement>('[data-turn="open"]');
+    const closeBtn = card.querySelector<HTMLButtonElement>('[data-turn="close"]');
+
+    if (!inner || !front || !back || !openBtn || !closeBtn) continue;
+
+    card.classList.add('js-turn');
+
+    const isOpen = () => card.hasAttribute('data-open');
+
+    const sizeToFace = () => {
+      const active = isOpen() ? back : front;
+      inner.style.setProperty('--card-h', `${active.offsetHeight}px`);
+    };
+
+    // Keep the hidden face out of the tab order and away from screen readers.
+    const syncHidden = () => {
+      const hidden = isOpen() ? front : back;
+      const shown = isOpen() ? back : front;
+      hidden.setAttribute('inert', '');
+      hidden.setAttribute('aria-hidden', 'true');
+      shown.removeAttribute('inert');
+      shown.removeAttribute('aria-hidden');
+      openBtn.setAttribute('aria-expanded', String(isOpen()));
+    };
+
+    const turn = (open: boolean) => {
+      if (open) card.setAttribute('data-open', '');
+      else card.removeAttribute('data-open');
+      syncHidden();
+      sizeToFace();
+      // Move focus to the face the reader just turned to.
+      (open ? closeBtn : openBtn).focus({ preventScroll: true });
+    };
+
+    openBtn.addEventListener('click', () => turn(true));
+    closeBtn.addEventListener('click', () => turn(false));
+
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        e.stopPropagation();
+        turn(false);
+      }
+    });
+
+    syncHidden();
+    sizeToFace();
+
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(sizeToFace);
+      ro.observe(front);
+      ro.observe(back);
+    } else {
+      window.addEventListener('resize', sizeToFace);
+    }
+
+    // Fonts landing changes face height; re-measure once they do.
+    if (document.fonts?.ready) document.fonts.ready.then(sizeToFace);
+  }
+</script>

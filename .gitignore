@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+.env
+.env.production
+.netlify/
+
+# Throwaway scripts used to render, measure, and audit the site during the
+# build — screenshots, contrast checks, the preview bundler. Not part of it.
+*.local.mjs
+preview.html
+aura.local.mjs
+clip2.local.mjs

@@ -1,0 +1,478 @@
+---
+import Base from '../layouts/Base.astro';
+import Aperture from '../components/Aperture.astro';
+import Collage from '../components/Collage.astro';
+import Portrait from '../components/Portrait.astro';
+import Realms from '../components/Realms.astro';
+import SeasonalLetter from '../components/SeasonalLetter.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { site, booking } from '../site';
+
+const entry = await getEntry('home', 'home');
+if (!entry) throw new Error('Missing /content/home/home.md');
+const h = entry.data;
+
+const offerings = (await getCollection('offerings')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
+  <!-- 1 · Hero. One collage held in silence; the line arrives at breath pace. -->
+  <section class="band hero">
+    <div class="rail hero-rail aura">
+      <Aperture size="clamp(96px, 18vw, 190px)" bloom label="A flower opening — the mark of this practice." />
+    </div>
+
+    <div class="col hero-text breath">
+      <p class="hero-eyebrow">{h.hero.eyebrow}</p>
+      <h1 class="hero-headline">{h.hero.headline}</h1>
+      <p class="hero-sub">{h.hero.sub}</p>
+    </div>
+
+    <div class="full hero-art">
+      <Collage
+        src={h.hero.collage}
+        alt={h.hero.alt}
+        register="cochineal"
+        priority
+        sizes="(max-width: 900px) 100vw, 62vw"
+      />
+    </div>
+  </section>
+
+  <!-- 2 · Who this work is for -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+    <div class="col">
+      <span class="label">{h.audience.title}</span>
+      <ul class="audience rise">
+        {h.audience.lines.map((line) => <li>{line}</li>)}
+      </ul>
+      <a class="door" href="/the-work/">{h.audience.link}</a>
+    </div>
+  </section>
+
+  <!-- 3 · The three realms -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+    <div class="wide">
+      <span class="label">The three realms</span>
+      <h2 class="section-title">{h.realms.title}</h2>
+      <div class="realms-row rise">
+        <Realms />
+        <p class="realms-body">{h.realms.body}</p>
+      </div>
+      <a class="door" href="/the-work/#realms">{h.realms.link}</a>
+    </div>
+  </section>
+
+  <!-- 4 · The four offerings, at rest -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+    <div class="wide">
+      <span class="label">Sessions</span>
+      <h2 class="section-title">{h.sessions.title}</h2>
+      <p class="lede sessions-lede">{h.sessions.body}</p>
+
+      <ul class="cards rise">
+        {
+          offerings.map((o) => (
+            <li>
+              <a class="card" href={`/sessions/#${o.id}`}>
+                <span class="card-art">
+                  <Collage
+                    src={o.data.collage}
+                    alt={o.data.alt}
+                    register={o.data.register}
+                    sizes="(max-width: 640px) 80vw, (max-width: 1000px) 40vw, 22vw"
+                  />
+                </span>
+                <span class="card-meta">
+                  <span class="card-title">{o.data.title}</span>
+                  <span class="card-container">{o.data.container}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a class="door" href="/sessions/">{h.sessions.link}</a>
+    </div>
+  </section>
+
+  <!-- 5 · One portrait, two sentences -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+    <div class="wide story rise">
+      <div class="story-portrait">
+        <Portrait src={h.story.portrait} alt={h.story.alt} sizes="(max-width: 900px) 60vw, 26vw" />
+      </div>
+      <div class="story-text">
+        <span class="label">{h.story.title}</span>
+        {h.story.paragraphs.map((p) => <p>{p}</p>)}
+        <a class="door" href="/roots/">{h.story.link}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · The seasonal letter -->
+  <section class="band section">
+    <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+    <div class="col">
+      <span class="label">{h.letter.title}</span>
+      <p class="letter-body">{h.letter.body}</p>
+      <SeasonalLetter />
+    </div>
+  </section>
+
+  <!-- 7 · Begin -->
+  <section class="band section close on-dark grained">
+    <div class="rail"><Aperture size="72px" open={0.6} bloomOnView /></div>
+    <div class="col">
+      <h2 class="section-title">{h.close.title}</h2>
+      <p class="close-body">{h.close.body}</p>
+      <a class="begin" href="/begin/">{booking.label}</a>
+    </div>
+  </section>
+
+  {/*
+    Testimonials slot. Deliberately empty until there are real testimonials —
+    a section here with invented or placeholder quotes would be worse than no
+    section. Drop them into /content/ and render them between the story and
+    the seasonal letter.
+
+    <section class="band section">
+      <div class="rail"><Aperture size="52px" open={0.28} bloomOnView /></div>
+      <div class="wide"> … </div>
+    </section>
+  */}
+
+  <script is:inline>
+    // The site this replaces was one page behind hash anchors. Those links are
+    // out in the world — in Substack posts, in messages — and the fragment
+    // never reaches the server, so the redirect has to happen here.
+    (function () {
+      var moved = {
+        '#approach': '/the-work/',
+        '#about': '/roots/',
+        '#offerings': '/sessions/',
+        '#connect': '/begin/',
+      };
+      var to = moved[window.location.hash];
+      if (to) window.location.replace(to);
+    })();
+  </script>
+</Base>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    padding-block: clamp(3rem, 9vh, 6rem) clamp(2.5rem, 6vw, 4rem);
+    row-gap: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .hero-rail {
+    --aura-size: 300%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--color-ink-2);
+    margin: 0 0 1.75rem;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.1rem, 6.2vw, 4.1rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    font-variation-settings: 'SOFT' 30, 'WONK' 0, 'opsz' 144;
+  }
+
+  .hero-sub {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    margin: 1.5rem 0 0;
+    max-width: 34ch;
+  }
+
+  .hero-art {
+    /* width:100% is load-bearing — auto inline margins on a grid item cancel
+       the default stretch, which sizes the box to its content instead. */
+    width: 100%;
+    max-width: 62rem;
+    margin-inline: auto;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .hero-art :global(.collage) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 900px) {
+    .hero-rail {
+      justify-content: flex-start;
+      padding-right: 0;
+      margin-bottom: 2rem;
+    }
+
+    .hero-art {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* The line arrives in three groups, at breath pace. Opacity only, so it is
+     readable immediately to anyone who scrolls and to anything that crawls. */
+  @media (prefers-reduced-motion: no-preference) {
+    .breath > * {
+      animation: arrive 900ms var(--ease-open) both;
+    }
+
+    .breath > *:nth-child(1) {
+      animation-delay: 340ms;
+    }
+
+    .breath > *:nth-child(2) {
+      animation-delay: 700ms;
+    }
+
+    .breath > *:nth-child(3) {
+      animation-delay: 1060ms;
+    }
+
+    @keyframes arrive {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* ---- Shared ---- */
+  .section-title {
+    font-size: clamp(1.85rem, 4.2vw, 2.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin-top: 1.25rem;
+  }
+
+  .door {
+    display: inline-block;
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-quick-ink);
+    padding-bottom: 0.3rem;
+  }
+
+  .door:hover {
+    border-bottom-color: currentColor;
+  }
+
+  /* ---- Audience ---- */
+  .audience {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .audience li {
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--rule-soft);
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    line-height: 1.5;
+  }
+
+  .audience li:last-child {
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  /* ---- Realms ---- */
+  .realms-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+
+  .realms-body {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    line-height: 1.65;
+    max-width: 32ch;
+  }
+
+  @media (max-width: 780px) {
+    .realms-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Offerings at rest ---- */
+  .sessions-lede {
+    margin: 1.25rem 0 0;
+    max-width: 44ch;
+  }
+
+  .cards {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    display: grid;
+    /* Four offerings, so four columns — auto-fit wrapped them 3 + 1. */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+  }
+
+  @media (max-width: 900px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 340px) {
+    .cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    text-decoration: none;
+  }
+
+  .card-art {
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+  }
+
+  .card-art :global(.collage) {
+    width: 100%;
+    height: 100%;
+    transition: scale 1200ms var(--ease-open);
+  }
+
+  .card:hover .card-art :global(.collage) {
+    scale: 1.03;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-art :global(.collage) {
+      transition: none;
+    }
+
+    .card:hover .card-art :global(.collage) {
+      scale: 1;
+    }
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.15;
+  }
+
+  .card-container {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-ink-2);
+  }
+
+  /* ---- Story ---- */
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(1.75rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .story-text p {
+    margin: 1.25rem 0 0;
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    line-height: 1.6;
+  }
+
+  .story-text .label {
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 780px) {
+    .story {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .story-portrait {
+      max-width: 18rem;
+    }
+  }
+
+  /* ---- Letter ---- */
+  .letter-body {
+    margin: 1rem 0 2rem;
+    max-width: 40ch;
+    color: var(--color-ink-2);
+  }
+
+  /* ---- Close ---- */
+  .close {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+    margin-top: clamp(3rem, 8vw, 6rem);
+  }
+
+  .close-body {
+    margin: 1.25rem 0 2.25rem;
+    max-width: 42ch;
+    color: rgb(238 212 203 / 0.86);
+  }
+
+  .begin {
+    display: inline-block;
+    background: var(--color-quick);
+    color: var(--color-plumstone);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 0.95rem 1.5rem;
+    text-decoration: none;
+  }
+
+  .begin:hover {
+    background: var(--color-bract);
+  }
+</style>
