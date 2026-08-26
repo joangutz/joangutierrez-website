@@ -1,0 +1,187 @@
+---
+/**
+ * The vessel — two open hands holding an illuminated egg.
+ *
+ * Built to the same rules as the aperture: one SVG, one parameter, palette
+ * tokens, and a context flip so it reads on light and deep grounds alike.
+ * Where the flower's parameter is how open it is, the vessel's is how lit the
+ * egg is — `--lit`, 0 to 1 — which drives the glow and the warmth of the shell.
+ *
+ * The hands are drawn as nested hooks rather than traced fingers. A literal
+ * hand collapses into mush below about 40px; nested strokes keep their
+ * rhythm as they shrink, the way the flower's petals do.
+ *
+ * Two forms, because one mark cannot do both jobs:
+ *   full  hands and egg — page heads, the hero, Begin
+ *   egg   the egg alone — small marks, where hands would not resolve
+ */
+interface Props {
+  /** 0 = unlit, 1 = fully lit. */
+  lit?: number;
+  size?: string;
+  /** 'full' includes the hands; 'egg' is the shell alone. */
+  form?: 'full' | 'egg';
+  /** Lights on load, at breath pace. */
+  kindle?: boolean;
+  /** Lights when scrolled into view. */
+  kindleOnView?: boolean;
+  class?: string;
+  label?: string;
+}
+
+const {
+  lit = 1,
+  size = '64px',
+  form = 'full',
+  kindle = false,
+  kindleOnView = false,
+  class: className = '',
+  label,
+} = Astro.props;
+
+const animated = kindle || kindleOnView || /\bkindle(-on-view)?\b/.test(className);
+
+/**
+ * A hand reads as a hand because of two things: fingers of graduated height,
+ * and a palm beneath them. Nested hooks gave neither and read as brackets.
+ * Four bars — pinky, ring, middle, index — over a cupping arc.
+ */
+const FINGER_TOPS = [58, 50, 46, 51];
+const FOOT = 78;
+
+const bars = FINGER_TOPS.map((top, i) => ({ x: 13 + i * 9, top }));
+
+const barPath = (b: { x: number; top: number }, mirror = false) => {
+  const x = mirror ? 100 - b.x : b.x;
+  return `M${x},${b.top} L${x},${FOOT}`;
+};
+
+/** The palm: a shallow cup the fingers stand in. */
+const palmPath = (mirror = false) => {
+  const X = (v: number) => (mirror ? 100 - v : v);
+  return `M${X(11)},${FOOT - 4} Q${X(13)},${FOOT + 13} ${X(30)},${FOOT + 14} L${X(44)},${FOOT + 14}`;
+};
+---
+
+<svg
+  class:list={['vessel', className, { kindle, 'kindle-on-view': kindleOnView }]}
+  style={`--lit-to:${lit};--size:${size}${animated ? '' : `;--lit:${lit}`}`}
+  viewBox="0 0 100 100"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  <defs>
+    <radialGradient id="vessel-glow">
+      <stop offset="0%" stop-color="var(--glow, #f0cec4)" stop-opacity="0.95"></stop>
+      <stop offset="55%" stop-color="var(--glow, #f0cec4)" stop-opacity="0.28"></stop>
+      <stop offset="100%" stop-color="var(--glow, #f0cec4)" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+
+  {/* The light the egg gives off, not a ring around it. */}
+  <circle class="glow" cx="50" cy="38" r="44" fill="url(#vessel-glow)"></circle>
+
+  <path
+    class="shell"
+    d="M50,14 C59,14 66,26 66,39 C66,52 59,62 50,62 C41,62 34,52 34,39 C34,26 41,14 50,14 Z"
+  ></path>
+
+  {
+    form === 'full' && (
+      <g class="hands">
+        {bars.map((b) => <path d={barPath(b)} />)}
+        <path d={palmPath()} />
+        {bars.map((b) => <path d={barPath(b, true)} />)}
+        <path d={palmPath(true)} />
+      </g>
+    )
+  }
+</svg>
+
+<style is:global>
+  @property --lit {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  .vessel {
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    overflow: visible;
+    flex: none;
+  }
+
+  .vessel .glow {
+    opacity: calc(var(--lit) * 0.9);
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(calc(0.45 + 0.55 * var(--lit)));
+    transition:
+      opacity 900ms var(--ease-open),
+      transform 900ms var(--ease-open);
+  }
+
+  .vessel .shell {
+    fill: var(--shell, #e0b0a8);
+    stroke: var(--shell-line, var(--color-cochineal));
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+    transition: fill 900ms var(--ease-open);
+  }
+
+  .vessel .hands path {
+    fill: none;
+    stroke: var(--hands, var(--color-cochineal));
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* On a deep ground the mark inverts: light hands, a warm shell. */
+  .on-dark .vessel {
+    --hands: var(--color-bract);
+    --shell-line: var(--color-bract);
+    --shell: var(--color-madder);
+    --glow: #eed4cb;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vessel.kindle {
+      animation: vessel-kindle 1800ms var(--ease-open) 150ms both;
+    }
+
+    .js .vessel.kindle-on-view {
+      --lit: 0.05;
+    }
+
+    .js .vessel.kindle-on-view.in-view {
+      --lit: var(--lit-to, 1);
+      transition: --lit 1400ms var(--ease-open);
+    }
+
+    @keyframes vessel-kindle {
+      from {
+        --lit: 0;
+      }
+      to {
+        --lit: 1;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vessel .glow,
+    .vessel .shell {
+      transition: none;
+    }
+
+    .vessel.kindle,
+    .vessel.kindle-on-view {
+      --lit: var(--lit-to, 1);
+    }
+  }
+</style>
