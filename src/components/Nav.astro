@@ -7,12 +7,17 @@ import { nav, site, booking, contact, withBase } from '../site';
  * The bar carries the wordmark and one control. The pages themselves live in
  * a panel that takes the whole viewport when it opens.
  *
- * Progressive enhancement, and the order matters: the inline list is the real
- * navigation and ships in the markup. Only once the .js class is present does
- * it give way to the Menu button. With scripting off, or before the script
- * runs, every page is still one ordinary link away.
+ * The bar carries the four pages inline wherever there is room for them, and
+ * collapses to a Menu button only on narrow screens — a full-screen panel is
+ * the right answer to a phone, and the wrong one to a desktop where the whole
+ * navigation already fits in the bar with room to spare.
  *
- * A full panel is also more honest about the site's shape than a bar was: For
+ * Progressive enhancement, and the order matters: the inline list is the real
+ * navigation and ships in the markup. It gives way to the button only where
+ * both the .js class and the narrow breakpoint apply, so with scripting off
+ * every page is one ordinary link away at every width.
+ *
+ * The panel is more honest about the site's shape than a collapsed bar: For
  * Clinicians and the ways to reach Joan were reachable only from inside
  * Sessions and the footer, and there is room for them here.
  */
@@ -111,7 +116,14 @@ const isCurrent = (href: string) => {
 </div>
 
 <style>
+  /* Travels with the reader. It needs an opaque ground of its own now that
+     content passes beneath it, and it sits above the chapter rail but below
+     the menu panel. */
   .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: var(--color-madder);
     border-bottom: 1px solid var(--rule-soft);
   }
 
@@ -156,17 +168,20 @@ const isCurrent = (href: string) => {
     --open: 1;
   }
 
-  /* The inline list is the navigation until scripting says otherwise. */
+  /* The four pages stay in the bar wherever they fit. Below that width, and
+     only with scripting, they move into the panel. */
   .menu-btn {
     display: none;
   }
 
-  :global(.js) .nav-inline {
-    display: none;
-  }
+  @media (max-width: 860px) {
+    :global(.js) .nav-inline {
+      display: none;
+    }
 
-  :global(.js) .menu-btn {
-    display: inline-flex;
+    :global(.js) .menu-btn {
+      display: inline-flex;
+    }
   }
 
   .nav-inline ul {
@@ -245,14 +260,21 @@ const isCurrent = (href: string) => {
   }
 
   /* ---- The panel ---- */
+  /* Exactly one screen. It used to scroll, which put the contact block below
+     the fold and left the grain — painted on the panel box, not on the
+     scrolled content — sitting still while the words moved past it, which is
+     what made the ground look like two different colours. Nothing scrolls now,
+     so nothing can come apart. 100dvh rather than 100vh: on a phone the
+     browser chrome is part of the viewport and vh does not know it. */
   .menu {
     position: fixed;
     inset: 0;
     z-index: 100;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
     background: var(--color-plumstone);
     color: var(--color-bract);
-    overflow-y: auto;
-    overscroll-behavior: contain;
   }
 
   .menu[hidden] {
@@ -260,10 +282,10 @@ const isCurrent = (href: string) => {
   }
 
   .menu-inner {
-    min-height: 100%;
+    height: 100%;
     max-width: 1240px;
     margin-inline: auto;
-    padding: 1.25rem clamp(1.25rem, 5vw, 4rem) clamp(2rem, 6vw, 4rem);
+    padding: 1.1rem clamp(1.25rem, 5vw, 2.5rem) clamp(1.25rem, 3vh, 2rem);
     display: flex;
     flex-direction: column;
   }
@@ -273,7 +295,8 @@ const isCurrent = (href: string) => {
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding-bottom: clamp(1.5rem, 5vw, 3rem);
+    flex: none;
+    padding-bottom: clamp(1rem, 3vh, 2rem);
   }
 
   .menu-brand {
@@ -318,11 +341,14 @@ const isCurrent = (href: string) => {
     translate: 0;
   }
 
+  /* min-height:0 lets this shrink inside the flex column rather than forcing
+     the panel taller than the screen, which is what pushed the foot off. */
   .menu-nav {
     flex: 1;
+    min-height: 0;
     display: flex;
     align-items: center;
-    padding-block: clamp(1rem, 4vw, 2rem);
+    padding-block: clamp(0.5rem, 2vh, 1.5rem);
   }
 
   .menu-list {
@@ -336,17 +362,20 @@ const isCurrent = (href: string) => {
     border-top: 1px solid rgb(238 212 203 / 0.16);
   }
 
+  /* The site's own display scale — page titles top out at 3.4rem, so menu
+     items have no business at 4.25. Height is bounded by the screen as well
+     as the width, or four items plus a foot cannot fit on a short phone. */
   .menu-list a {
     display: flex;
     align-items: center;
     gap: 0.7em;
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: clamp(2rem, 7vw, 4.25rem);
+    font-size: clamp(1.6rem, min(9vw, 5.5vh), 2.75rem);
     font-weight: 300;
-    line-height: 1.1;
+    line-height: 1.15;
     letter-spacing: -0.02em;
-    padding-block: clamp(0.6rem, 2vw, 1.1rem);
+    padding-block: clamp(0.5rem, 1.8vh, 1rem);
     color: rgb(238 212 203 / 0.82);
     transition: color 300ms var(--ease-open);
   }
@@ -372,11 +401,23 @@ const isCurrent = (href: string) => {
   }
 
   .menu-foot {
+    flex: none;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: clamp(1.5rem, 4vw, 3rem);
-    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: clamp(0.9rem, 2.5vh, 2rem) clamp(1.25rem, 4vw, 3rem);
+    padding-top: clamp(1rem, 2.5vh, 2rem);
     border-top: 1px solid rgb(238 212 203 / 0.16);
+    /* Small enough that "Book a free consultation" and its leaves-the-site
+       arrow stay on one line in a half-width column on a phone. */
+    font-size: 0.88rem;
+  }
+
+  /* The locations are the first thing to go on a short screen — they are on
+     every page's footer, and the panel's job is to move you, not inform you. */
+  @media (max-height: 700px) {
+    .menu-col:last-child {
+      display: none;
+    }
   }
 
   .menu-col {
@@ -401,7 +442,7 @@ const isCurrent = (href: string) => {
   }
 
   .menu-where {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: rgb(238 212 203 / 0.8);
   }
 

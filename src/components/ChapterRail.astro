@@ -2,63 +2,89 @@
 /**
  * A chapter rail, in the manner of a book's thumb index.
  *
- * One tick per section down the left margin. Hover or focus a tick and its
- * title appears; click it to go there. As you scroll, the section you are in
- * lights and names itself, so the rail doubles as a position indicator — a
- * long page stops being an undifferentiated scroll and becomes a set of
- * chapters you can see yourself moving through.
+ * One tick per section down the left margin. The section you are in lights and
+ * names itself as you scroll, so a long page stops being an undifferentiated
+ * scroll and becomes a set of chapters you can watch yourself move through.
  *
  * It builds itself from the headings already on the page rather than from a
- * list maintained by hand, so it cannot fall out of step with the prose. That
- * also means it works the same on a page written in MDX and one assembled from
- * components. Headings that arrived without an id are given one.
+ * list kept by hand, so it cannot fall out of step with the prose, and it works
+ * the same on a page written in MDX and one assembled from components.
  *
- * It renders nothing at all without JavaScript, and nothing below the width
- * where the empty margin exists to hold it — which is why it may only ever
- * carry navigation that also exists in the page itself.
+ * Three forms, because the rail costs horizontal space the prose also wants:
+ *
+ *   wide      ticks with titles, all of them revealed on hover
+ *   medium    ticks alone — the position indicator without the vocabulary
+ *   narrow    no rail at all; an "On this page" disclosure above the prose
+ *
+ * The narrow form is what nearly every site with this pattern does — MDN,
+ * Stripe, GitHub's docs, Astro's own — because a left rail on a phone takes
+ * width the words need and gives back very little.
+ *
+ * Nothing here renders without JavaScript, which is why it may only ever carry
+ * navigation that also exists in the page itself.
  */
 ---
 
 <nav class="rail" aria-label="Sections on this page" data-rail hidden></nav>
 
+<details class="rail-toc" data-rail-toc hidden>
+  <summary>On this page</summary>
+  <ol data-rail-toc-list></ol>
+</details>
+
 <style>
+  /* ---- The rail ---- */
   .rail {
     position: fixed;
-    left: clamp(0.75rem, 2.5vw, 2rem);
-    top: 50%;
-    translate: 0 -50%;
+    left: clamp(0.9rem, 2.2vw, 2rem);
+    top: 0;
     z-index: 40;
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
-    max-height: 80vh;
+    transition: opacity 240ms var(--ease-open);
   }
 
-  .rail[hidden] {
+  .rail[hidden],
+  .rail-toc[hidden] {
     display: none;
   }
 
-  /* The empty margin only exists once the centred column has stopped growing.
-     Below that the rail would sit on top of the prose. */
-  @media (max-width: 1180px) {
+  /* Below this the prose needs the whole width; the disclosure takes over. */
+  @media (max-width: 899px) {
     .rail {
       display: none;
     }
   }
 
+  @media (min-width: 900px) {
+    .rail-toc {
+      display: none;
+    }
+  }
+
+  /* Every item is exactly one slot tall whatever its title's length, which is
+     the only way the ticks come out evenly spaced — in normal flow a title
+     that wrapped to two lines made its own tick sit further from its
+     neighbours than the rest. The title is taken out of the flow entirely and
+     held to a single line. */
   .rail :global(a) {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    padding-block: 0.42rem;
+    position: relative;
+    display: block;
+    /* Compact on purpose. The Work carries sixteen sections, and the rail has
+       to fit between the sticky bar and the footer on a laptop screen or it
+       cannot come to rest above the dark ground — which is its whole job at
+       the end of a page. A book's thumb index is fine-grained too. */
+    height: 1.25rem;
     text-decoration: none;
     color: var(--color-ink-2);
   }
 
-  /* The tick is the whole rail at rest. */
   .rail :global(.rail-tick) {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    translate: 0 -50%;
     display: block;
-    flex: none;
     width: 1.15rem;
     height: 1px;
     background: currentColor;
@@ -69,21 +95,35 @@
   }
 
   .rail :global(.rail-name) {
+    position: absolute;
+    left: 2.6rem;
+    top: 50%;
+    width: max-content;
+    max-width: 10.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-family: var(--font-display);
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    line-height: 1.3;
-    max-width: 11rem;
+    letter-spacing: 0.12em;
     opacity: 0;
-    translate: -0.35rem 0;
+    translate: -0.35rem -50%;
     transition:
       opacity 320ms var(--ease-open),
       translate 320ms var(--ease-open);
   }
 
-  /* The section you are in names itself without being asked. */
+  /* Between 900 and 1280 there is room for the ticks but not for words beside
+     them — on an iPad the titles ran straight over the prose. The rail keeps
+     its whole job as a position indicator without them. */
+  @media (max-width: 1279px) {
+    .rail :global(.rail-name) {
+      display: none;
+    }
+  }
+
   .rail :global(a[aria-current='true'] .rail-tick) {
     width: 2rem;
     opacity: 1;
@@ -92,16 +132,16 @@
 
   .rail :global(a[aria-current='true'] .rail-name) {
     opacity: 1;
-    translate: 0 0;
+    translate: 0 -50%;
     color: var(--color-cochineal);
   }
 
-  /* Pointing at the rail opens all of it, so the whole contents are readable
-     at once rather than one title at a time. */
+  /* Pointing at the rail opens all of it, so the contents are readable at once
+     rather than one title at a time. */
   .rail:hover :global(.rail-name),
   .rail:focus-within :global(.rail-name) {
     opacity: 1;
-    translate: 0 0;
+    translate: 0 -50%;
   }
 
   .rail:hover :global(.rail-tick),
@@ -120,24 +160,124 @@
     color: var(--color-cochineal);
   }
 
+  /* ---- The narrow-screen disclosure ---- */
+  .rail-toc {
+    margin: 0 auto clamp(1.5rem, 5vw, 2.5rem);
+    max-width: 62rem;
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
+    width: 100%;
+  }
+
+  .rail-toc summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    list-style: none;
+    padding-block: 0.75rem;
+    border-block: 1px solid var(--rule-soft);
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-ink-2);
+  }
+
+  .rail-toc summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The chevron is drawn rather than typed so it turns with the disclosure. */
+  .rail-toc summary::after {
+    content: '';
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    rotate: 45deg;
+    translate: 0 -0.12rem;
+    transition: rotate 260ms var(--ease-open);
+  }
+
+  .rail-toc[open] summary::after {
+    rotate: -135deg;
+    translate: 0 0.1rem;
+  }
+
+  .rail-toc :global(ol) {
+    list-style: none;
+    margin: 0;
+    padding: 0.9rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .rail-toc :global(a) {
+    display: block;
+    padding-block: 0.5rem;
+    text-decoration: none;
+    font-size: 0.97rem;
+    line-height: 1.4;
+    color: var(--color-ink-2);
+  }
+
+  .rail-toc :global(a[aria-current='true']) {
+    color: var(--color-cochineal);
+    font-weight: 500;
+  }
+
+  .rail-toc :global(a[aria-current='true'])::before {
+    content: '';
+    display: inline-block;
+    width: 0.9rem;
+    height: 1px;
+    margin-right: 0.5rem;
+    vertical-align: 0.28em;
+    background: var(--color-quick);
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .rail,
     .rail :global(.rail-tick),
-    .rail :global(.rail-name) {
+    .rail :global(.rail-name),
+    .rail-toc summary::after {
       transition: none;
+    }
+  }
+</style>
+
+<style is:global>
+  /* The rail lives in the left margin, so that margin is reserved before the
+     centred column gets its share. The column then centres inside what is
+     left, which biases the whole page right — deliberately. Without this the
+     ticks simply sat on top of the prose at laptop and tablet widths, where
+     there is no spare margin at all. */
+  @media (min-width: 900px) {
+    .has-rail main {
+      padding-left: 5.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .has-rail main {
+      padding-left: 14rem;
     }
   }
 </style>
 
 <script>
   const rail = document.querySelector<HTMLElement>('[data-rail]');
-  const main = document.querySelector('main');
+  const toc = document.querySelector<HTMLElement>('[data-rail-toc]');
+  const tocList = document.querySelector<HTMLElement>('[data-rail-toc-list]');
+  const main = document.querySelector<HTMLElement>('main');
 
-  if (rail && main) {
+  if (rail && toc && tocList && main) {
     /**
      * Section headings only. A card's own title is a heading too, and on
      * Sessions each offering carries one on both of its faces — indexing those
-     * would give the rail eight entries for four cards, half of them pointing
-     * at copy that is turned away.
+     * would give four cards eight entries, half pointing at copy turned away.
      */
     const headings = [...main.querySelectorAll<HTMLElement>('h2')].filter(
       (h) => !h.closest('[data-offering], [data-menu]')
@@ -153,7 +293,8 @@
 
     // Two or three ticks are not a chapter index, they are clutter.
     if (headings.length >= 4) {
-      const links: HTMLAnchorElement[] = [];
+      const railLinks: HTMLAnchorElement[] = [];
+      const tocLinks: HTMLAnchorElement[] = [];
 
       for (const h of headings) {
         if (!h.id) {
@@ -163,47 +304,106 @@
           while (document.getElementById(id)) id = `${base}-${n++}`;
           h.id = id;
         }
-        // Landing flush against the viewport top reads as having overshot.
-        h.style.scrollMarginTop = '5rem';
+        // Clear the sticky bar, and then some — landing flush under it reads
+        // as having overshot.
+        h.style.scrollMarginTop = '6rem';
+
+        // A closing line can be a whole sentence, which is right on the page
+        // and far too long for a tick. data-rail-label names it briefly.
+        const label = h.dataset.railLabel ?? (h.textContent ?? '').trim();
 
         const a = document.createElement('a');
         a.href = `#${h.id}`;
         a.innerHTML = '<span class="rail-tick"></span>';
         const name = document.createElement('span');
         name.className = 'rail-name';
-        // A closing line can be a whole sentence, which is right on the page
-        // and far too long for a tick. data-rail-label names it briefly.
-        name.textContent = h.dataset.railLabel ?? (h.textContent ?? '').trim();
+        name.textContent = label;
         a.append(name);
         rail.append(a);
-        links.push(a);
+        railLinks.push(a);
+
+        const li = document.createElement('li');
+        const ta = document.createElement('a');
+        ta.href = `#${h.id}`;
+        ta.textContent = label;
+        li.append(ta);
+        tocList.append(li);
+        tocLinks.push(ta);
       }
 
       rail.hidden = false;
+      toc.hidden = false;
+      document.documentElement.classList.add('has-rail');
+
+      // Above the prose but below the page title, where a reader looks for it.
+      const firstSection = main.querySelector('section');
+      if (firstSection) firstSection.after(toc);
+
+      // Tapping a destination on a phone should close the list behind you.
+      for (const ta of tocLinks) {
+        ta.addEventListener('click', () => toc.removeAttribute('open'));
+      }
 
       /**
        * Which section am I in: the last heading whose top has passed the
-       * reading line. Deriving it from scroll position rather than from
-       * intersection events means a heading that is scrolled past quickly, or
-       * one taller than the viewport, still resolves correctly — the earlier
-       * observer-only version could leave nothing marked at all.
+       * reading line. Scroll position rather than intersection events, so a
+       * heading scrolled past quickly, or one taller than the viewport, still
+       * resolves correctly.
        */
-      const line = () => window.innerHeight * 0.3;
-
       const mark = () => {
+        const line = window.innerHeight * 0.3;
         let active = 0;
         headings.forEach((h, i) => {
-          if (h.getBoundingClientRect().top <= line()) active = i;
+          if (h.getBoundingClientRect().top <= line) active = i;
         });
-        // Past the end of the page the final section is the honest answer.
         const atBottom =
           window.innerHeight + window.scrollY >= document.body.offsetHeight - 4;
         if (atBottom) active = headings.length - 1;
 
-        links.forEach((a, i) => {
-          if (i === active) a.setAttribute('aria-current', 'true');
-          else a.removeAttribute('aria-current');
-        });
+        [railLinks, tocLinks].forEach((set) =>
+          set.forEach((a, i) => {
+            if (i === active) a.setAttribute('aria-current', 'true');
+            else a.removeAttribute('aria-current');
+          })
+        );
+      };
+
+      const navBar = document.querySelector<HTMLElement>('.nav-bar');
+      const footer = document.querySelector('footer');
+      const FOOT_GAP = 32;
+
+      /**
+       * Vertically centred, but never under the sticky bar and never over the
+       * footer. As the footer rises the rail is pushed up with it, so it comes
+       * to rest above the dark ground rather than scrolling across it.
+       */
+      const place = () => {
+        const railH = rail.offsetHeight;
+        const barBottom = navBar ? navBar.getBoundingClientRect().bottom : 0;
+        // Two thresholds: the air it would like under the bar, and the least
+        // it will accept. Given the choice between crowding the bar and
+        // running onto the footer, crowding the bar is the lesser fault.
+        const wantTop = barBottom + 40;
+        const minTop = barBottom + 12;
+
+        let top = Math.max(wantTop, (window.innerHeight - railH) / 2);
+
+        if (footer) {
+          const footTop = footer.getBoundingClientRect().top;
+          // As the footer rises the rail is pushed up with it, which holds it
+          // still against the page rather than sliding across the dark ground.
+          top = Math.min(top, footTop - railH - FOOT_GAP);
+          top = Math.max(minTop, top);
+
+          // Only when even that cannot clear the footer does it step aside.
+          const collides = top + railH + 8 > footTop;
+          rail.style.opacity = collides ? '0' : '1';
+          rail.style.pointerEvents = collides ? 'none' : '';
+        } else {
+          top = Math.max(minTop, top);
+        }
+
+        rail.style.top = `${top}px`;
       };
 
       let ticking = false;
@@ -212,6 +412,7 @@
         ticking = true;
         requestAnimationFrame(() => {
           mark();
+          place();
           ticking = false;
         });
       };
@@ -219,6 +420,9 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll, { passive: true });
       mark();
+      place();
+      // Web fonts landing changes every heading's position.
+      if (document.fonts?.ready) document.fonts.ready.then(() => { mark(); place(); });
     }
   }
 </script>
