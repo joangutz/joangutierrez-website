@@ -6,6 +6,7 @@ import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import KitSignup from '../components/KitSignup.astro';
+import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { site, booking, withBase } from '../site';
 
@@ -129,14 +130,22 @@ const movedAnchors = {
     </div>
   </section>
 
-  <!-- 6 · The Red Rose Meditation — the low-commitment rung of the ladder -->
+  {/* Between the story and the ask: someone who has just read who Joan is
+      meets other people's experience of her before being asked for anything. */}
+  <section class="band section">
+    <div class="wide">
+      <Testimonials />
+    </div>
+  </section>
+
+  <!-- 7 · The Red Rose Meditation — the low-commitment rung of the ladder -->
   <section class="band section">
     <div class="col">
       <KitSignup heading={h.freebie.title} body={h.freebie.body} />
     </div>
   </section>
 
-  <!-- 7 · Begin -->
+  <!-- 8 · Begin -->
   <section class="band section close on-dark grained">
     <div class="col">
       <h2 class="section-title">{h.close.title}</h2>
@@ -144,17 +153,6 @@ const movedAnchors = {
       <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
     </div>
   </section>
-
-  {/*
-    Testimonials slot. Deliberately empty until there are real testimonials —
-    a section here with invented or placeholder quotes would be worse than no
-    section. Drop them into /content/ and render them between the story and
-    the seasonal letter.
-
-    <section class="band section">
-      <div class="wide"> … </div>
-    </section>
-  */}
 
   <script define:vars={{ movedAnchors }}>
     var to = movedAnchors[window.location.hash];

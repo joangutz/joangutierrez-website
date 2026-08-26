@@ -6,6 +6,7 @@ import OfferingCard from '../components/OfferingCard.astro';
 import PriceGrid from '../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
 import KitSignup from '../components/KitSignup.astro';
+import Testimonials from '../components/Testimonials.astro';
 import { withBase, contact, booking } from '../site';
 
 const entry = await getEntry('sessionsPage', 'sessions');
@@ -79,6 +80,11 @@ const motifs = [
         Certified in Somatic Sexological Bodywork · practicing under the
         <Link href={contact.ethics}>ACSB code of ethics</Link> · an educator, not a therapist.
       </p>
+
+      {/* Other people's experience, at the moment a price has just been read. */}
+      <div class="after-prices">
+        <Testimonials />
+      </div>
 
       <div class="not-ready">
         <KitSignup
@@ -343,6 +349,7 @@ const motifs = [
     color: var(--color-ink-2);
   }
 
+  .after-prices,
   .not-ready {
     margin-top: clamp(2.5rem, 6vw, 4rem);
   }

@@ -61,6 +61,29 @@ const territories = defineCollection({
   }),
 });
 
+/**
+ * What clients say. Empty by design until Joan has real quotes with real
+ * permission — invented or placeholder praise on a page like this would be
+ * worse than no section at all, and the component renders nothing while the
+ * folder is empty.
+ */
+const testimonials = defineCollection({
+  // The folder's own instructions live beside the entries, so they have to be
+  // excluded by name or the loader tries to parse the README as a testimonial.
+  loader: glob({
+    base: './content/testimonials',
+    pattern: ['**/*.md', '!**/README.md'],
+  }),
+  schema: z.object({
+    quote: z.string(),
+    /** How the client wants to be named. A first name and initial is plenty. */
+    attribution: z.string(),
+    /** Optional: which offering, or how long they worked together. */
+    context: z.string().optional(),
+    order: z.number().optional(),
+  }),
+});
+
 const pages = defineCollection({
   loader: glob({ base: './content/pages', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
@@ -180,6 +203,7 @@ const rootsPage = defineCollection({
 
 export const collections = {
   offerings,
+  testimonials,
   territories,
   pages,
   home,

@@ -1,0 +1,271 @@
+---
+import { getCollection } from 'astro:content';
+
+/**
+ * What clients say, one at a time, moved only by the reader.
+ *
+ * No auto-advance. A quote that slides away on a timer takes the words out
+ * from under someone mid-sentence, and this is the one section where a
+ * visitor is deciding whether to trust a stranger with something private —
+ * the wrong moment to take control away from them.
+ *
+ * Renders nothing at all until there are real testimonials in
+ * /content/testimonials/. Placeholder praise would be worse than none.
+ *
+ * Every quote is in the markup at once. The control hides the others rather
+ * than fetching them, so with scripting off the section is simply a list of
+ * everything clients have said, which is a perfectly good fallback.
+ */
+const items = (await getCollection('testimonials')).sort(
+  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
+);
+---
+
+{
+  items.length > 0 && (
+    <section class="quotes" data-quotes aria-roledescription="carousel" aria-label="What clients say">
+      <div class="quotes-head">
+        <span class="label">What clients say</span>
+
+        {items.length > 1 && (
+          <div class="quotes-controls" data-quotes-controls hidden>
+            <button type="button" class="q-btn" data-quotes-prev aria-label="Previous testimonial">
+              <span class="q-arrow q-arrow-prev" aria-hidden="true"></span>
+              <span>Prev</span>
+            </button>
+            <span class="q-count" data-quotes-count aria-hidden="true" />
+            <button type="button" class="q-btn" data-quotes-next aria-label="Next testimonial">
+              <span>Next</span>
+              <span class="q-arrow" aria-hidden="true"></span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div class="quotes-track" data-quotes-track aria-live="polite">
+        {items.map((t, i) => (
+          <figure class="quote" data-quote data-index={i}>
+            <blockquote>
+              <p>{t.data.quote}</p>
+            </blockquote>
+            <figcaption>
+              {t.data.attribution}
+              {t.data.context && <span class="q-context">{t.data.context}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .quotes-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .quotes-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .quotes-controls[hidden] {
+    display: none;
+  }
+
+  .q-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 0;
+    color: var(--color-ink-2);
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding: 0.4rem 0;
+    cursor: pointer;
+  }
+
+  .q-btn:hover {
+    color: var(--color-cochineal);
+  }
+
+  .on-dark .q-btn {
+    color: rgb(238 212 203 / 0.75);
+  }
+
+  .on-dark .q-btn:hover {
+    color: var(--color-bract);
+  }
+
+  .q-arrow {
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: currentColor;
+    position: relative;
+    transition: width 300ms var(--ease-open);
+  }
+
+  .q-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    border-top: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+    rotate: 45deg;
+  }
+
+  .q-arrow-prev {
+    rotate: 180deg;
+  }
+
+  .q-btn:hover .q-arrow {
+    width: 2rem;
+  }
+
+  .q-count {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .q-count {
+    color: rgb(238 212 203 / 0.6);
+  }
+
+  .quote {
+    margin: 0;
+    max-width: 46ch;
+  }
+
+  /* Without scripting every quote simply stacks, so the words are all there. */
+  .quote + .quote {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .quote blockquote {
+    margin: 0;
+  }
+
+  .quote p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.8vw, 2rem);
+    font-weight: 300;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .quote figcaption {
+    margin-top: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .quote figcaption {
+    color: rgb(238 212 203 / 0.7);
+  }
+
+  .q-context {
+    display: block;
+    margin-top: 0.4rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.9rem;
+  }
+
+  /* With scripting the track shows one at a time. Set by the script so the
+     no-JS stack is never hidden by a rule that arrives before it. */
+  :global(.js) .quotes-track[data-single] .quote + .quote {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  :global(.js) .quotes-track[data-single] .quote[hidden] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .quotes-track[data-single] .quote:not([hidden]) {
+      animation: quote-in 420ms var(--ease-open) both;
+    }
+
+    @keyframes quote-in {
+      from {
+        opacity: 0;
+        translate: 0 0.5rem;
+      }
+      to {
+        opacity: 1;
+        translate: 0;
+      }
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-quotes]')) {
+    const track = root.querySelector<HTMLElement>('[data-quotes-track]');
+    const quotes = [...root.querySelectorAll<HTMLElement>('[data-quote]')];
+    const controls = root.querySelector<HTMLElement>('[data-quotes-controls]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-quotes-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-quotes-next]');
+    const count = root.querySelector<HTMLElement>('[data-quotes-count]');
+
+    if (!track || quotes.length < 2 || !controls || !prev || !next) continue;
+
+    track.setAttribute('data-single', '');
+    controls.hidden = false;
+
+    let i = 0;
+
+    const show = (n: number) => {
+      // Wrap, so neither end is a dead button.
+      i = (n + quotes.length) % quotes.length;
+      quotes.forEach((q, idx) => {
+        q.hidden = idx !== i;
+      });
+      if (count) count.textContent = `${i + 1} / ${quotes.length}`;
+    };
+
+    prev.addEventListener('click', () => show(i - 1));
+    next.addEventListener('click', () => show(i + 1));
+
+    // Left and right arrows move the quotes while the section has focus.
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        show(i - 1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        show(i + 1);
+      }
+    });
+
+    show(0);
+  }
+</script>
