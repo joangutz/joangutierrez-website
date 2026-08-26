@@ -1,0 +1,224 @@
+---
+/**
+ * A chapter rail, in the manner of a book's thumb index.
+ *
+ * One tick per section down the left margin. Hover or focus a tick and its
+ * title appears; click it to go there. As you scroll, the section you are in
+ * lights and names itself, so the rail doubles as a position indicator — a
+ * long page stops being an undifferentiated scroll and becomes a set of
+ * chapters you can see yourself moving through.
+ *
+ * It builds itself from the headings already on the page rather than from a
+ * list maintained by hand, so it cannot fall out of step with the prose. That
+ * also means it works the same on a page written in MDX and one assembled from
+ * components. Headings that arrived without an id are given one.
+ *
+ * It renders nothing at all without JavaScript, and nothing below the width
+ * where the empty margin exists to hold it — which is why it may only ever
+ * carry navigation that also exists in the page itself.
+ */
+---
+
+<nav class="rail" aria-label="Sections on this page" data-rail hidden></nav>
+
+<style>
+  .rail {
+    position: fixed;
+    left: clamp(0.75rem, 2.5vw, 2rem);
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    max-height: 80vh;
+  }
+
+  .rail[hidden] {
+    display: none;
+  }
+
+  /* The empty margin only exists once the centred column has stopped growing.
+     Below that the rail would sit on top of the prose. */
+  @media (max-width: 1180px) {
+    .rail {
+      display: none;
+    }
+  }
+
+  .rail :global(a) {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding-block: 0.42rem;
+    text-decoration: none;
+    color: var(--color-ink-2);
+  }
+
+  /* The tick is the whole rail at rest. */
+  .rail :global(.rail-tick) {
+    display: block;
+    flex: none;
+    width: 1.15rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.42;
+    transition:
+      width 320ms var(--ease-open),
+      opacity 320ms var(--ease-open);
+  }
+
+  .rail :global(.rail-name) {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    max-width: 11rem;
+    opacity: 0;
+    translate: -0.35rem 0;
+    transition:
+      opacity 320ms var(--ease-open),
+      translate 320ms var(--ease-open);
+  }
+
+  /* The section you are in names itself without being asked. */
+  .rail :global(a[aria-current='true'] .rail-tick) {
+    width: 2rem;
+    opacity: 1;
+    background: var(--color-quick);
+  }
+
+  .rail :global(a[aria-current='true'] .rail-name) {
+    opacity: 1;
+    translate: 0 0;
+    color: var(--color-cochineal);
+  }
+
+  /* Pointing at the rail opens all of it, so the whole contents are readable
+     at once rather than one title at a time. */
+  .rail:hover :global(.rail-name),
+  .rail:focus-within :global(.rail-name) {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .rail:hover :global(.rail-tick),
+  .rail:focus-within :global(.rail-tick) {
+    opacity: 0.7;
+  }
+
+  .rail :global(a:hover .rail-tick),
+  .rail :global(a:focus-visible .rail-tick) {
+    width: 2rem;
+    opacity: 1;
+  }
+
+  .rail :global(a:hover .rail-name),
+  .rail :global(a:focus-visible .rail-name) {
+    color: var(--color-cochineal);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rail :global(.rail-tick),
+    .rail :global(.rail-name) {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const rail = document.querySelector<HTMLElement>('[data-rail]');
+  const main = document.querySelector('main');
+
+  if (rail && main) {
+    /**
+     * Section headings only. A card's own title is a heading too, and on
+     * Sessions each offering carries one on both of its faces — indexing those
+     * would give the rail eight entries for four cards, half of them pointing
+     * at copy that is turned away.
+     */
+    const headings = [...main.querySelectorAll<HTMLElement>('h2')].filter(
+      (h) => !h.closest('[data-offering], [data-menu]')
+    );
+
+    const slug = (text: string) =>
+      text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .slice(0, 40);
+
+    // Two or three ticks are not a chapter index, they are clutter.
+    if (headings.length >= 4) {
+      const links: HTMLAnchorElement[] = [];
+
+      for (const h of headings) {
+        if (!h.id) {
+          const base = slug(h.textContent ?? '') || 'section';
+          let id = base;
+          let n = 2;
+          while (document.getElementById(id)) id = `${base}-${n++}`;
+          h.id = id;
+        }
+        // Landing flush against the viewport top reads as having overshot.
+        h.style.scrollMarginTop = '5rem';
+
+        const a = document.createElement('a');
+        a.href = `#${h.id}`;
+        a.innerHTML = '<span class="rail-tick"></span>';
+        const name = document.createElement('span');
+        name.className = 'rail-name';
+        // A closing line can be a whole sentence, which is right on the page
+        // and far too long for a tick. data-rail-label names it briefly.
+        name.textContent = h.dataset.railLabel ?? (h.textContent ?? '').trim();
+        a.append(name);
+        rail.append(a);
+        links.push(a);
+      }
+
+      rail.hidden = false;
+
+      /**
+       * Which section am I in: the last heading whose top has passed the
+       * reading line. Deriving it from scroll position rather than from
+       * intersection events means a heading that is scrolled past quickly, or
+       * one taller than the viewport, still resolves correctly — the earlier
+       * observer-only version could leave nothing marked at all.
+       */
+      const line = () => window.innerHeight * 0.3;
+
+      const mark = () => {
+        let active = 0;
+        headings.forEach((h, i) => {
+          if (h.getBoundingClientRect().top <= line()) active = i;
+        });
+        // Past the end of the page the final section is the honest answer.
+        const atBottom =
+          window.innerHeight + window.scrollY >= document.body.offsetHeight - 4;
+        if (atBottom) active = headings.length - 1;
+
+        links.forEach((a, i) => {
+          if (i === active) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      };
+
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          mark();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      mark();
+    }
+  }
+</script>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ChapterRail from '../components/ChapterRail.astro';
 import Link from '../components/Link.astro';
 import { getEntry, render } from 'astro:content';
 import { booking, withBase } from '../site';
@@ -11,6 +12,8 @@ const p = entry.data;
 ---
 
 <Base title={p.title} description={p.description}>
+  <ChapterRail />
+
   <section class="band section intro">
     <div class="col">
       <span class="label">{p.eyebrow}</span>
@@ -26,7 +29,7 @@ const p = entry.data;
 
   <section class="band section close on-dark grained">
     <div class="col">
-      <h2 class="close-title">The invitation is simple: watch, learn, practice, and savor.</h2>
+      <h2 class="close-title" data-rail-label="Begin">The invitation is simple: watch, learn, practice, and savor.</h2>
       <div class="close-links">
         <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
         <Link variant="door" href={withBase('/sessions/')}>See the four offerings</Link>

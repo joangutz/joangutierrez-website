@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ChapterRail from '../components/ChapterRail.astro';
 import Link from '../components/Link.astro';
 import Portrait from '../components/Portrait.astro';
 import { getCollection, getEntry, render } from 'astro:content';
@@ -19,6 +20,8 @@ const rendered = await Promise.all(
 ---
 
 <Base title={r.title} description={r.description}>
+  <ChapterRail />
+
   <section class="band section intro">
     <div class="col">
       <span class="label">{r.eyebrow}</span>
@@ -36,7 +39,7 @@ const rendered = await Promise.all(
         {data.torn && <hr class="territory-rule" />}
         <section class="band section territory">
           <div class="col">
-            <span class="territory-title">{data.title}</span>
+            <h2 class="territory-title">{data.title}</h2>
           </div>
           <div class="col prose">
             <Content />
@@ -50,7 +53,7 @@ const rendered = await Promise.all(
   <section class="land grained">
     <div class="band section">
       <div class="col">
-        <span class="label">{r.land.title}</span>
+        <h2 class="label section-heading">{r.land.title}</h2>
         {r.land.paragraphs.map((p) => <p class="land-text">{p}</p>)}
       </div>
     </div>
@@ -69,13 +72,13 @@ const rendered = await Promise.all(
   <!-- Credentials: complete, verifiable, and quiet. -->
   <section class="band section credentials">
     <div class="wide">
-      <span class="label">{r.credentials.title}</span>
+      <h2 class="label section-heading">{r.credentials.title}</h2>
       <p class="cred-note">{r.credentials.note}</p>
 
       {
         r.credentials.groups.map((g) => (
           <div class="cred-group">
-            <h2 class="cred-heading">{g.heading}</h2>
+            <h3 class="cred-heading">{g.heading}</h3>
             <ul>
               {g.items.map((item) => (
                 <li>
@@ -123,6 +126,12 @@ const rendered = await Promise.all(
 
   .territory {
     padding-block: clamp(2.5rem, 7vw, 5rem);
+  }
+
+  /* A heading now, but it keeps the small letterspaced treatment it had as a
+     span — the territories are named quietly, not announced. */
+  .section-heading {
+    font-weight: 600;
   }
 
   .territory-title {

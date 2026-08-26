@@ -292,12 +292,26 @@ const isCurrent = (href: string) => {
     color: var(--color-bract);
   }
 
+  /* A cross, not a chevron. The two rules have to sit on top of each other
+     before they are rotated — left stacked with a gap between them, they meet
+     at one end and read as a sideways V. */
+  .menu-rules-x {
+    position: relative;
+  }
+
+  .menu-rules-x i {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+  }
+
   .menu-rules-x i:first-child {
-    rotate: 20deg;
+    rotate: 45deg;
   }
 
   .menu-rules-x i:last-child {
-    rotate: -20deg;
+    rotate: -45deg;
   }
 
   .menu-btn.menu-close:hover .menu-rules i {

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ChapterRail from '../components/ChapterRail.astro';
 import Link from '../components/Link.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, booking } from '../site';
@@ -11,6 +12,8 @@ const p = entry.data;
 ---
 
 <Base title={p.title} description={p.description}>
+  <ChapterRail />
+
   <section class="band section intro">
     <div class="col">
       <span class="label">{p.eyebrow}</span>
