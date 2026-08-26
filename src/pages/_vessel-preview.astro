@@ -1,54 +1,48 @@
 ---
-// Specimen sheet for the vessel mark — sizes, lit values, and both grounds.
-// Underscore-prefixed so Astro does not route it: this is a workbench, not a
-// page of the site, and it would otherwise ship as a public URL.
-// To view it, rename without the underscore, run the build, then rename back.
+// Workbench. Underscore-prefixed so Astro does not route it.
 import Base from '../layouts/Base.astro';
 import Vessel from '../components/Vessel.astro';
 import Aperture from '../components/Aperture.astro';
 ---
 <Base title="Vessel" description="Logo exploration">
   <section class="band section">
-    <div class="col">
-      <span class="label">Sizes — does it survive shrinking?</span>
-    </div>
+    <div class="col"><span class="label">Cradle — two arcs</span></div>
     <div class="wide row">
-      {[["250px","full"],["110px","full"],["64px","full"],["40px","full"],["24px","full"],["12px","full"]].map(([sz,f]) => (
-        <div class="cell"><Vessel size={sz} form={f as 'full'} /><span class="cap">{sz} full</span></div>
+      {["190px","110px","64px","40px","24px","12px"].map((sz) => (
+        <div class="cell"><Vessel size={sz} hands="cradle" /><span class="cap">{sz}</span></div>
       ))}
     </div>
+    <div class="col"><span class="label">Cupped — four arcs</span></div>
+    <div class="wide row">
+      {["190px","110px","64px","40px","24px","12px"].map((sz) => (
+        <div class="cell"><Vessel size={sz} hands="cupped" /><span class="cap">{sz}</span></div>
+      ))}
+    </div>
+    <div class="col"><span class="label">Egg alone, solid</span></div>
     <div class="wide row">
       {["64px","40px","24px","12px","8px"].map((sz) => (
-        <div class="cell"><Vessel size={sz} form="egg" /><span class="cap">{sz} egg</span></div>
+        <div class="cell"><Vessel size={sz} form="egg" /><span class="cap">{sz}</span></div>
       ))}
     </div>
-
-    <div class="col"><span class="label">Lit values</span></div>
+    <div class="col"><span class="label">Beside the flower</span></div>
     <div class="wide row">
-      {[0,0.25,0.5,0.75,1].map((l) => (
-        <div class="cell"><Vessel size="90px" lit={l} /><span class="cap">lit {l}</span></div>
-      ))}
-    </div>
-
-    <div class="col"><span class="label">Beside the flower, same size</span></div>
-    <div class="wide row">
-      <div class="cell"><Aperture size="110px" open={1} /><span class="cap">aperture</span></div>
-      <div class="cell"><Vessel size="110px" /><span class="cap">vessel</span></div>
+      <div class="cell"><Aperture size="120px" open={1} /><span class="cap">aperture</span></div>
+      <div class="cell"><Vessel size="120px" hands="cradle" /><span class="cap">cradle</span></div>
+      <div class="cell"><Vessel size="120px" hands="cupped" /><span class="cap">cupped</span></div>
     </div>
   </section>
-
   <section class="band section on-dark grained dark">
     <div class="col"><span class="label">On a deep ground</span></div>
     <div class="wide row">
-      <div class="cell"><Vessel size="110px" /><span class="cap">vessel</span></div>
-      <div class="cell"><Vessel size="48px" form="egg" /><span class="cap">egg</span></div>
-      <div class="cell"><Aperture size="110px" open={1} /><span class="cap">aperture</span></div>
+      <div class="cell"><Vessel size="120px" hands="cradle" /><span class="cap">cradle</span></div>
+      <div class="cell"><Vessel size="120px" hands="cupped" /><span class="cap">cupped</span></div>
+      <div class="cell"><Vessel size="44px" form="egg" /><span class="cap">egg</span></div>
     </div>
   </section>
 </Base>
 <style>
-  .row { display:flex; align-items:flex-end; gap:2.5rem; flex-wrap:wrap; margin:1.5rem 0 3.5rem; }
-  .cell { display:flex; flex-direction:column; align-items:center; gap:.75rem; }
+  .row { display:flex; align-items:flex-end; gap:2.5rem; flex-wrap:wrap; margin:1.5rem 0 3rem; }
+  .cell { display:flex; flex-direction:column; align-items:center; gap:.7rem; }
   .cap { font-family:var(--font-display); font-size:.6rem; text-transform:uppercase; letter-spacing:.14em; color:var(--color-ink-2); }
   .dark { background:var(--color-plumstone); color:var(--color-bract); }
   .dark .cap { color:rgb(238 212 203 / .7); }

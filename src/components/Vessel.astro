@@ -21,6 +21,8 @@ interface Props {
   size?: string;
   /** 'full' includes the hands; 'egg' is the shell alone. */
   form?: 'full' | 'egg';
+  /** How literal the hands are: 'cradle' is two arcs, 'cupped' is four. */
+  hands?: 'cradle' | 'cupped';
   /** Lights on load, at breath pace. */
   kindle?: boolean;
   /** Lights when scrolled into view. */
@@ -33,6 +35,7 @@ const {
   lit = 1,
   size = '64px',
   form = 'full',
+  hands = 'cupped',
   kindle = false,
   kindleOnView = false,
   class: className = '',
@@ -42,25 +45,26 @@ const {
 const animated = kindle || kindleOnView || /\bkindle(-on-view)?\b/.test(className);
 
 /**
- * A hand reads as a hand because of two things: fingers of graduated height,
- * and a palm beneath them. Nested hooks gave neither and read as brackets.
- * Four bars — pinky, ring, middle, index — over a cupping arc.
+ * Abstracted rather than traced. Counting fingers made the mark a diagram of
+ * a hand; two or four sweeping arcs read as hands holding something without
+ * anyone stopping to count. The same move the aperture makes with petals.
+ *
+ * cradle  one arc per hand — the most reduced form
+ * cupped  two per hand, an outer sweep and an inner — suggests fingers
+ *         without enumerating them
  */
-const FINGER_TOPS = [58, 50, 46, 51];
-const FOOT = 78;
-
-const bars = FINGER_TOPS.map((top, i) => ({ x: 13 + i * 9, top }));
-
-const barPath = (b: { x: number; top: number }, mirror = false) => {
-  const x = mirror ? 100 - b.x : b.x;
-  return `M${x},${b.top} L${x},${FOOT}`;
+const ARCS = {
+  outer: 'M16,44 C16,72 28,85 44,85',
+  inner: 'M29,53 C29,73 35,79 43,79',
 };
 
-/** The palm: a shallow cup the fingers stand in. */
-const palmPath = (mirror = false) => {
-  const X = (v: number) => (mirror ? 100 - v : v);
-  return `M${X(11)},${FOOT - 4} Q${X(13)},${FOOT + 13} ${X(30)},${FOOT + 14} L${X(44)},${FOOT + 14}`;
-};
+/* The hands stop short of each other. Ends that nearly touch weld into a
+   blob at small sizes; the gap is where the cradle opens. */
+
+const mirror = (d: string) =>
+  d.replace(/([ML]|C\s?)?(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)/g, (_m, cmd, x, y) =>
+    `${cmd ?? ''}${100 - parseFloat(x)},${y}`
+  );
 ---
 
 <svg
@@ -91,10 +95,16 @@ const palmPath = (mirror = false) => {
   {
     form === 'full' && (
       <g class="hands">
-        {bars.map((b) => <path d={barPath(b)} />)}
-        <path d={palmPath()} />
-        {bars.map((b) => <path d={barPath(b, true)} />)}
-        <path d={palmPath(true)} />
+        <path d={ARCS.outer} />
+        <path d={mirror(ARCS.outer)} />
+        {
+          hands === 'cupped' && (
+            <>
+              <path d={ARCS.inner} />
+              <path d={mirror(ARCS.inner)} />
+            </>
+          )
+        }
       </g>
     )
   }
@@ -125,18 +135,18 @@ const palmPath = (mirror = false) => {
       transform 900ms var(--ease-open);
   }
 
+  /* A sheet of colour rather than an outline. It survives shrinking — an
+     outlined egg fills in and becomes a blob — and reads as the lit thing
+     being held rather than a drawing of one. */
   .vessel .shell {
-    fill: var(--shell, #e0b0a8);
-    stroke: var(--shell-line, var(--color-cochineal));
-    stroke-width: 2.5;
-    vector-effect: non-scaling-stroke;
+    fill: var(--shell, #f2d6cb);
     transition: fill 900ms var(--ease-open);
   }
 
   .vessel .hands path {
     fill: none;
     stroke: var(--hands, var(--color-cochineal));
-    stroke-width: 5;
+    stroke-width: 7;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -144,8 +154,7 @@ const palmPath = (mirror = false) => {
   /* On a deep ground the mark inverts: light hands, a warm shell. */
   .on-dark .vessel {
     --hands: var(--color-bract);
-    --shell-line: var(--color-bract);
-    --shell: var(--color-madder);
+    --shell: #f6e2d8;
     --glow: #eed4cb;
   }
 
