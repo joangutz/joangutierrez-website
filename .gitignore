@@ -11,7 +11,3 @@ dist/
 # build — screenshots, contrast checks, the preview bundler. Not part of it.
 *.local.mjs
 preview.html
-aura.local.mjs
-clip2.local.mjs
-basecheck.local.mjs
-look.local.mjs
