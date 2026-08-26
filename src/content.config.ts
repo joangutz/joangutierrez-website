@@ -20,6 +20,12 @@ const offerings = defineCollection({
     alt: z.string(),
     /** One line, shown on the resting face of the card. */
     teaser: z.string(),
+    /**
+     * True for the offering that combines the others. It is a different kind of
+     * thing from the single-focus offerings, so it gets its own hierarchy in
+     * the price grid rather than sitting in the row as a fourth peer.
+     */
+    combined: z.boolean().default(false),
     prices: z.array(
       z.object({
         label: z.string(),

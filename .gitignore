@@ -11,3 +11,4 @@ dist/
 # build — screenshots, contrast checks, the preview bundler. Not part of it.
 *.local.mjs
 preview.html
+pgshot.local.mjs

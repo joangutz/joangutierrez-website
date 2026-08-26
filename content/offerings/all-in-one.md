@@ -3,6 +3,7 @@ title: All-In-One
 container: Monthly / 3-month program
 order: 4
 register: clay
+combined: true
 collage: all-in-one.jpg
 alt: 'TODO-ALT: describe the collage for All-In-One.'
 teaser: The whole ecosystem, re-weighed each month to meet what actually reveals itself.
