@@ -11,7 +11,7 @@ import { site, contact, booking } from '../site';
 >
   <!-- One action. The aperture is fully open here — this is where it opens to. -->
   <section class="band begin-hero">
-    <div class="rail">
+    <div class="rail aura">
       <Aperture size="clamp(120px, 24vw, 250px)" bloom />
     </div>
     <div class="col">
@@ -63,6 +63,10 @@ import { site, contact, booking } from '../site';
 </Base>
 
 <style>
+  .begin-hero .rail {
+    --aura-size: 280%;
+  }
+
   .begin-hero {
     padding-block: clamp(3rem, 10vh, 6rem) clamp(2rem, 5vw, 3rem);
     row-gap: 2.5rem;

@@ -20,7 +20,7 @@ const offerings = (await getCollection('offerings')).sort(
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
   <!-- 1 · Hero. One collage held in silence; the line arrives at breath pace. -->
   <section class="band hero">
-    <div class="rail hero-rail">
+    <div class="rail hero-rail aura">
       <Aperture size="clamp(96px, 18vw, 190px)" bloom label="A flower opening — the mark of this practice." />
     </div>
 
@@ -174,6 +174,7 @@ const offerings = (await getCollection('offerings')).sort(
   }
 
   .hero-rail {
+    --aura-size: 300%;
     display: flex;
     justify-content: flex-end;
     padding-right: clamp(0.5rem, 2vw, 1.5rem);
