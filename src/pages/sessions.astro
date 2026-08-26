@@ -4,6 +4,7 @@ import Aperture from '../components/Aperture.astro';
 import OfferingCard from '../components/OfferingCard.astro';
 import PriceGrid from '../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
+import { withBase } from '../site';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
@@ -127,7 +128,7 @@ const motifs = [
 
       <p class="clinicians">
         {s.clinicians.body}
-        <a href="/for-clinicians/">{s.clinicians.link}</a>
+        <a href={withBase('/for-clinicians/')}>{s.clinicians.link}</a>
       </p>
     </div>
   </section>

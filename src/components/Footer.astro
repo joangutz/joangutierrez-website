@@ -1,6 +1,6 @@
 ---
 import Aperture from './Aperture.astro';
-import { site, contact, booking } from '../site';
+import { site, contact, booking, withBase } from '../site';
 
 const year = new Date().getFullYear();
 ---
@@ -32,7 +32,7 @@ const year = new Date().getFullYear();
       <div class="footer-col">
         <span class="label">More</span>
         <ul class="plain">
-          <li><a href="/for-clinicians/">For clinicians</a></li>
+          <li><a href={withBase('/for-clinicians/')}>For clinicians</a></li>
           <li><a href={contact.art}>Art practice</a></li>
           <li><a href={contact.ethics}>Code of ethics</a></li>
         </ul>

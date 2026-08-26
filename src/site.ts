@@ -2,6 +2,20 @@
  * Site-wide facts. Kept out of components so they change in one place.
  */
 
+/**
+ * Prefix an internal path with the deploy base.
+ *
+ * Astro does NOT rewrite hardcoded absolute hrefs when `base` is set, so every
+ * internal link has to go through this or the whole site 404s on a project
+ * page like joangutz.github.io/joangutierrez-website. Returns the path
+ * unchanged when the base is "/".
+ */
+export const withBase = (path: string): string => {
+  if (!path.startsWith('/')) return path;
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  return `${base}${path}`;
+};
+
 export const site = {
   name: 'Joan Gutiérrez',
   tagline: 'Intimacy, embodiment, and nervous system education',

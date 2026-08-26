@@ -6,7 +6,7 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import SeasonalLetter from '../components/SeasonalLetter.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, booking } from '../site';
+import { site, booking, withBase } from '../site';
 
 const entry = await getEntry('home', 'home');
 if (!entry) throw new Error('Missing /content/home/home.md');
@@ -15,6 +15,18 @@ const h = entry.data;
 const offerings = (await getCollection('offerings')).sort(
   (a, b) => a.data.order - b.data.order
 );
+
+/**
+ * The site this replaces was one page behind hash anchors. Those links are out
+ * in the world, and a fragment never reaches the server, so the redirect has to
+ * happen in the browser — with the deploy base baked in.
+ */
+const movedAnchors = {
+  '#approach': withBase('/the-work/'),
+  '#about': withBase('/roots/'),
+  '#offerings': withBase('/sessions/'),
+  '#connect': withBase('/begin/'),
+};
 ---
 
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
@@ -49,7 +61,7 @@ const offerings = (await getCollection('offerings')).sort(
       <ul class="audience rise">
         {h.audience.lines.map((line) => <li>{line}</li>)}
       </ul>
-      <a class="door" href="/the-work/">{h.audience.link}</a>
+      <a class="door" href={withBase('/the-work/')}>{h.audience.link}</a>
     </div>
   </section>
 
@@ -63,7 +75,7 @@ const offerings = (await getCollection('offerings')).sort(
         <Realms />
         <p class="realms-body">{h.realms.body}</p>
       </div>
-      <a class="door" href="/the-work/#realms">{h.realms.link}</a>
+      <a class="door" href={withBase('/the-work/#realms')}>{h.realms.link}</a>
     </div>
   </section>
 
@@ -79,7 +91,7 @@ const offerings = (await getCollection('offerings')).sort(
         {
           offerings.map((o) => (
             <li>
-              <a class="card" href={`/sessions/#${o.id}`}>
+              <a class="card" href={withBase(`/sessions/#${o.id}`)}>
                 <span class="card-art">
                   <Collage
                     src={o.data.collage}
@@ -98,7 +110,7 @@ const offerings = (await getCollection('offerings')).sort(
         }
       </ul>
 
-      <a class="door" href="/sessions/">{h.sessions.link}</a>
+      <a class="door" href={withBase('/sessions/')}>{h.sessions.link}</a>
     </div>
   </section>
 
@@ -112,7 +124,7 @@ const offerings = (await getCollection('offerings')).sort(
       <div class="story-text">
         <span class="label">{h.story.title}</span>
         {h.story.paragraphs.map((p) => <p>{p}</p>)}
-        <a class="door" href="/roots/">{h.story.link}</a>
+        <a class="door" href={withBase('/roots/')}>{h.story.link}</a>
       </div>
     </div>
   </section>
@@ -133,7 +145,7 @@ const offerings = (await getCollection('offerings')).sort(
     <div class="col">
       <h2 class="section-title">{h.close.title}</h2>
       <p class="close-body">{h.close.body}</p>
-      <a class="begin" href="/begin/">{booking.label}</a>
+      <a class="begin" href={withBase('/begin/')}>{booking.label}</a>
     </div>
   </section>
 
@@ -149,20 +161,9 @@ const offerings = (await getCollection('offerings')).sort(
     </section>
   */}
 
-  <script is:inline>
-    // The site this replaces was one page behind hash anchors. Those links are
-    // out in the world — in Substack posts, in messages — and the fragment
-    // never reaches the server, so the redirect has to happen here.
-    (function () {
-      var moved = {
-        '#approach': '/the-work/',
-        '#about': '/roots/',
-        '#offerings': '/sessions/',
-        '#connect': '/begin/',
-      };
-      var to = moved[window.location.hash];
-      if (to) window.location.replace(to);
-    })();
+  <script define:vars={{ movedAnchors }}>
+    var to = movedAnchors[window.location.hash];
+    if (to) window.location.replace(to);
   </script>
 </Base>
 

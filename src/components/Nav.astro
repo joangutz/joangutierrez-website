@@ -1,14 +1,18 @@
 ---
 import Aperture from './Aperture.astro';
-import { nav, site } from '../site';
+import { nav, site, withBase } from '../site';
 
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => path === href || path === href.replace(/\/$/, '');
+// Compare against the based href — pathname includes the base in production.
+const isCurrent = (href: string) => {
+  const target = withBase(href);
+  return path === target || path === target.replace(/\/$/, '');
+};
 ---
 
 <header class="nav-bar">
   <div class="nav-inner">
-    <a class="brand" href="/">
+    <a class="brand" href={withBase('/')}>
       <Aperture size="26px" open={0.45} class="brand-mark" />
       <span class="brand-name">{site.name}</span>
     </a>
@@ -18,7 +22,7 @@ const isCurrent = (href: string) => path === href || path === href.replace(/\/$/
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
             </li>

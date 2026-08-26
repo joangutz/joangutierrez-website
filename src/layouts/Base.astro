@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../site';
+import { site, withBase } from '../site';
 
 interface Props {
   title: string;
@@ -29,7 +29,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
     <script is:inline>
       // Reveals hide themselves only once we know something is here to reveal
       // them. Without this class every .rise block stays at opacity 0 forever
