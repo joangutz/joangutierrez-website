@@ -56,14 +56,14 @@ const ROOT_Y = 74;
  * reveals anything. The gap between them is what the opening is for.
  */
 const PETALS = [
-  { a: -122, len: 31 },
-  { a: -94, len: 38 },
-  { a: -66, len: 44 },
-  { a: -38, len: 48 },
-  { a: 38, len: 48 },
-  { a: 66, len: 44 },
-  { a: 94, len: 38 },
-  { a: 122, len: 31 },
+  { a: -122, len: 31, tier: 3 },
+  { a: 122, len: 31, tier: 3 },
+  { a: -94, len: 38, tier: 2 },
+  { a: 94, len: 38, tier: 2 },
+  { a: -66, len: 44, tier: 1 },
+  { a: 66, len: 44, tier: 1 },
+  { a: -38, len: 48, tier: 0 },
+  { a: 38, len: 48, tier: 0 },
 ];
 
 /** A teardrop rooted at the base, pointing up, of a given length. */
@@ -97,16 +97,22 @@ const petal = (len: number) => {
   </defs>
 
   {/* The light the egg gives off. It grows as the petals open. */}
-  <circle class="glow" cx="50" cy="45" r="42" fill="url(#vessel-glow)"></circle>
+  <circle class="glow" cx="50" cy="50" r="44" fill="url(#vessel-glow)"></circle>
 
-  {/* Behind the petals, so closing them hides it and opening reveals it. */}
-  <ellipse class="egg" cx="50" cy="45" rx="11.5" ry="14.5"></ellipse>
+  {/* Behind the petals, so closing them hides it and opening reveals it.
+      It reaches all the way down to the root the petals turn about, so the
+      opening cradle has no hollow left under it — and the shape is a true
+      egg, narrow at the top and broad at the base, rather than an ellipse. */}
+  <path
+    class="egg"
+    d="M50,26 C58.5,26 64.5,39 64.5,53 C64.5,66 58,74.5 50,74.5 C42,74.5 35.5,66 35.5,53 C35.5,39 41.5,26 50,26 Z"
+  ></path>
 
   {
     form === 'full' && (
       <g class="petals">
         {PETALS.map((p) => (
-          <path style={`--a:${p.a}deg`} d={petal(p.len)} />
+          <path class={`t${p.tier}`} style={`--a:${p.a}deg`} d={petal(p.len)} />
         ))}
       </g>
     )
@@ -131,6 +137,9 @@ const petal = (len: number) => {
   /* Rotation happens about the shared root, not each petal's own box —
      transform-box: view-box is what lets transform-origin mean a point in
      the drawing rather than the centre of the path. */
+  /* Ordered outermost-first so the inner petals sit in front, and shaded by
+     tier so the layers read as depth rather than one flat silhouette — the
+     same trick the aperture plays with its inner ring. */
   .vessel .petals path {
     fill: var(--petal, var(--color-cochineal));
     transform-box: view-box;
@@ -139,9 +148,25 @@ const petal = (len: number) => {
     transition: transform 900ms var(--ease-open);
   }
 
+  .vessel.shaded .t0 { fill: var(--petal-0, #8e2f2a); }
+  .vessel.shaded .t1 { fill: var(--petal-1, #75231f); }
+  .vessel.shaded .t2 { fill: var(--petal-2, #5a121c); }
+  .vessel.shaded .t3 { fill: var(--petal-3, #3d0e15); }
+
+  /* On a deep ground the petals drop to mid tones rather than going as light
+     as the egg. Bract petals and a near-white egg merge into one pale mass and
+     the egg stops being the light, which is the whole point of the mark. */
+  .on-dark .vessel.shaded .t0 { fill: #e3b6ac; }
+  .on-dark .vessel.shaded .t1 { fill: #d6a09b; }
+  .on-dark .vessel.shaded .t2 { fill: #b8837c; }
+  .on-dark .vessel.shaded .t3 { fill: #97655f; }
+
+  /* The egg stays largely opaque and is revealed by the petals moving, not by
+     fading in. A semi-transparent light shape over a deep ground reads grey,
+     which made the egg look dull at mid-values instead of lit. */
   .vessel .egg {
     fill: var(--shell, #f4dcd2);
-    opacity: calc(0.12 + 0.88 * var(--open));
+    opacity: calc(0.5 + 0.5 * var(--open));
     transition: opacity 900ms var(--ease-open);
   }
 
@@ -157,7 +182,7 @@ const petal = (len: number) => {
 
   /* On a deep ground the mark inverts: light petals, the egg still the light. */
   .on-dark .vessel {
-    --petal: var(--color-bract);
+    --petal: var(--color-madder);
     --shell: #fbeee7;
     --glow: #eed4cb;
   }

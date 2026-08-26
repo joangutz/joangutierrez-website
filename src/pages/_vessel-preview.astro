@@ -1,45 +1,39 @@
 ---
 import Base from '../layouts/Base.astro';
 import Vessel from '../components/Vessel.astro';
-import Aperture from '../components/Aperture.astro';
 ---
 <Base title="Vessel" description="Logo exploration">
   <section class="band section">
-    <div class="col"><span class="label">Opening — closed bud to open cradle</span></div>
+    <div class="col"><span class="label">Flat — the egg now fills the cradle</span></div>
     <div class="wide row">
       {[0,0.2,0.4,0.6,0.8,1].map((o) => (
-        <div class="cell"><Vessel size="150px" open={o} /><span class="cap">open {o}</span></div>
+        <div class="cell"><Vessel size="140px" open={o} /><span class="cap">{o}</span></div>
       ))}
     </div>
-    <div class="col"><span class="label">Sizes, fully open</span></div>
+    <div class="col"><span class="label">Shaded — petals tiered for depth</span></div>
     <div class="wide row">
-      {["190px","110px","64px","40px","24px","12px"].map((sz) => (
-        <div class="cell"><Vessel size={sz} /><span class="cap">{sz}</span></div>
+      {[0,0.2,0.4,0.6,0.8,1].map((o) => (
+        <div class="cell"><Vessel size="140px" open={o} class="shaded" /><span class="cap">{o}</span></div>
       ))}
     </div>
-    <div class="col"><span class="label">Egg alone</span></div>
+    <div class="col"><span class="label">Sizes — shaded, fully open</span></div>
     <div class="wide row">
-      {["48px","24px","12px","8px"].map((sz) => (
-        <div class="cell"><Vessel size={sz} form="egg" /><span class="cap">{sz}</span></div>
+      {["190px","110px","64px","40px","24px"].map((sz) => (
+        <div class="cell"><Vessel size={sz} class="shaded" /><span class="cap">{sz}</span></div>
       ))}
-    </div>
-    <div class="col"><span class="label">Beside the flower</span></div>
-    <div class="wide row">
-      <div class="cell"><Aperture size="130px" open={1} /><span class="cap">aperture</span></div>
-      <div class="cell"><Vessel size="130px" /><span class="cap">vessel</span></div>
     </div>
   </section>
   <section class="band section on-dark grained dark">
     <div class="col"><span class="label">On a deep ground</span></div>
     <div class="wide row">
-      <div class="cell"><Vessel size="130px" open={0.15} /><span class="cap">closed</span></div>
-      <div class="cell"><Vessel size="130px" /><span class="cap">open</span></div>
-      <div class="cell"><Vessel size="44px" form="egg" /><span class="cap">egg</span></div>
+      <div class="cell"><Vessel size="140px" open={0.6} /><span class="cap">flat 0.6</span></div>
+      <div class="cell"><Vessel size="140px" open={0.6} class="shaded" /><span class="cap">shaded 0.6</span></div>
+      <div class="cell"><Vessel size="140px" class="shaded" /><span class="cap">shaded open</span></div>
     </div>
   </section>
 </Base>
 <style>
-  .row { display:flex; align-items:flex-end; gap:2.2rem; flex-wrap:wrap; margin:1.5rem 0 3rem; }
+  .row { display:flex; align-items:flex-end; gap:1.8rem; flex-wrap:wrap; margin:1.5rem 0 3rem; }
   .cell { display:flex; flex-direction:column; align-items:center; gap:.7rem; }
   .cap { font-family:var(--font-display); font-size:.6rem; text-transform:uppercase; letter-spacing:.14em; color:var(--color-ink-2); }
   .dark { background:var(--color-plumstone); color:var(--color-bract); }
