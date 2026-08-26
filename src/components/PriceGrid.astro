@@ -30,7 +30,7 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
 <div class="prices" id="prices">
   <!-- Tier 1 + 2 -->
   <div class="row">
-    <a class="tile tile-free grained" href={booking.url}>
+    <a class="tile tile-free grained" href={booking.url} target="_blank" rel="noopener noreferrer">
       <span class="tile-head">
         <span class="tile-name">Consultation</span>
         <span class="tile-duration">{booking.duration}</span>
@@ -44,7 +44,7 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
       singles.map((o) => {
         const p = o.data.prices[0];
         return (
-          <a class:list={['tile', `reg-${o.data.register}`, 'grained']} href={booking.url}>
+          <a class:list={['tile', `reg-${o.data.register}`, 'grained']} href={booking.url} target="_blank" rel="noopener noreferrer">
             <span class="tile-head">
               <span class="tile-name">{o.data.title}</span>
               <span class="tile-duration">{p.label}</span>
@@ -52,6 +52,7 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
             <span class="tile-price tabular">{money(p.amount)}</span>
             {p.note && <span class="tile-note">{p.note}</span>}
             <span class="tile-action">Start with a consultation</span>
+            <span class="visually-hidden">(opens cal.com in a new tab)</span>
           </a>
         );
       })
@@ -70,11 +71,12 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
 
         <div class="band-prices">
           {combined.data.prices.map((p) => (
-            <a class="band-price" href={booking.url}>
+            <a class="band-price" href={booking.url} target="_blank" rel="noopener noreferrer">
               <span class="bp-label">{p.label}</span>
               <span class="bp-amount tabular">{money(p.amount)}</span>
               {p.note && <span class="bp-note">{p.note}</span>}
               <span class="tile-action">Start with a consultation</span>
+            <span class="visually-hidden">(opens cal.com in a new tab)</span>
             </a>
           ))}
         </div>
@@ -190,6 +192,20 @@ const money = (n: number) => `$${n.toLocaleString('en-US')}`;
     font-size: 0.85rem;
     line-height: 1.45;
     opacity: 0.8;
+  }
+
+  /* Every tile leaves for cal.com, so each action line carries the mark. */
+  .tile-action::after {
+    content: '';
+    display: inline-block;
+    width: 0.62em;
+    height: 0.62em;
+    margin-left: 0.35em;
+    vertical-align: 0.02em;
+    background: currentColor;
+    opacity: 0.75;
+    -webkit-mask: var(--lnk-arrow) center / contain no-repeat;
+    mask: var(--lnk-arrow) center / contain no-repeat;
   }
 
   .tile-action {

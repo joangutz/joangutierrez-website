@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Link from '../components/Link.astro';
 import Aperture from '../components/Aperture.astro';
 import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
@@ -60,7 +61,7 @@ const movedAnchors = {
       <ul class="audience rise">
         {h.audience.lines.map((line) => <li>{line}</li>)}
       </ul>
-      <a class="door" href={withBase('/the-work/')}>{h.audience.link}</a>
+      <Link variant="door" href={withBase('/the-work/')}>{h.audience.link}</Link>
     </div>
   </section>
 
@@ -73,7 +74,7 @@ const movedAnchors = {
         <Realms />
         <p class="realms-body">{h.realms.body}</p>
       </div>
-      <a class="door" href={withBase('/the-work/#realms')}>{h.realms.link}</a>
+      <Link variant="door" href={withBase('/the-work/#realms')}>{h.realms.link}</Link>
     </div>
   </section>
 
@@ -107,7 +108,7 @@ const movedAnchors = {
         }
       </ul>
 
-      <a class="door" href={withBase('/sessions/')}>{h.sessions.link}</a>
+      <Link variant="door" href={withBase('/sessions/')}>{h.sessions.link}</Link>
     </div>
   </section>
 
@@ -120,7 +121,7 @@ const movedAnchors = {
       <div class="story-text">
         <span class="label">{h.story.title}</span>
         {h.story.paragraphs.map((p) => <p>{p}</p>)}
-        <a class="door" href={withBase('/roots/')}>{h.story.link}</a>
+        <Link variant="door" href={withBase('/roots/')}>{h.story.link}</Link>
       </div>
     </div>
   </section>
@@ -139,7 +140,7 @@ const movedAnchors = {
     <div class="col">
       <h2 class="section-title">{h.close.title}</h2>
       <p class="close-body">{h.close.body}</p>
-      <a class="begin" href={withBase('/begin/')}>{booking.label}</a>
+      <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
     </div>
   </section>
 
@@ -255,22 +256,6 @@ const movedAnchors = {
     margin-top: 1.25rem;
   }
 
-  .door {
-    display: inline-block;
-    margin-top: 2rem;
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-quick);
-    padding-bottom: 0.3rem;
-  }
-
-  .door:hover {
-    border-bottom-color: currentColor;
-  }
 
   /* ---- Audience ---- */
   .audience {
@@ -444,20 +429,4 @@ const movedAnchors = {
     color: rgb(238 212 203 / 0.86);
   }
 
-  .begin {
-    display: inline-block;
-    background: var(--color-quick);
-    color: var(--color-bract);
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    padding: 0.95rem 1.5rem;
-    text-decoration: none;
-  }
-
-  .begin:hover {
-    background: var(--color-bract);
-  }
 </style>

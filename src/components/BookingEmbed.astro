@@ -1,5 +1,6 @@
 ---
 import { booking } from '../site';
+import Link from './Link.astro';
 
 /**
  * The existing Cal.com booking, kept as-is. The embed is not in the page
@@ -17,7 +18,7 @@ import { booking } from '../site';
   <div class="booking-slot" data-booking-slot hidden></div>
 
   <p class="booking-alt">
-    Prefer to do it elsewhere? <a href={booking.url}>Book on cal.com</a> — {booking.duration}, free.
+    Prefer to do it elsewhere? <Link href={booking.url}>Book on cal.com</Link> — {booking.duration}, free.
   </p>
 </div>
 
@@ -64,10 +65,6 @@ import { booking } from '../site';
     margin: 0;
     font-size: 0.92rem;
     color: var(--color-ink-2);
-  }
-
-  .booking-alt a {
-    text-decoration-color: var(--color-quick);
   }
 
   .on-dark .booking-alt {

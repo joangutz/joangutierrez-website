@@ -1,5 +1,6 @@
 ---
 import Aperture from './Aperture.astro';
+import Link from './Link.astro';
 import { site, contact, booking, withBase } from '../site';
 
 const year = new Date().getFullYear();
@@ -22,19 +23,19 @@ const year = new Date().getFullYear();
       <div class="footer-col">
         <span class="label">Reach me</span>
         <ul class="plain">
-          <li><a href={booking.url}>{booking.label}</a></li>
-          <li><a href={contact.smsHref}>Text {contact.smsDisplay}</a></li>
-          {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
-          <li><a href={contact.substack}>The seasonal letter</a></li>
+          <li><Link href={booking.url}>{booking.label}</Link></li>
+          <li><Link href={contact.smsHref}>Text {contact.smsDisplay}</Link></li>
+          {contact.email && <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>}
+          <li><Link href={contact.substack}>The seasonal letter</Link></li>
         </ul>
       </div>
 
       <div class="footer-col">
         <span class="label">More</span>
         <ul class="plain">
-          <li><a href={withBase('/for-clinicians/')}>For clinicians</a></li>
-          <li><a href={contact.art}>Art practice</a></li>
-          <li><a href={contact.ethics}>Code of ethics</a></li>
+          <li><Link href={withBase('/for-clinicians/')}>For clinicians</Link></li>
+          <li><Link href={contact.art}>Art practice</Link></li>
+          <li><Link href={contact.ethics}>Code of ethics</Link></li>
         </ul>
       </div>
     </div>
@@ -77,13 +78,7 @@ const year = new Date().getFullYear();
     line-height: 1.5;
   }
 
-  .plain a {
-    text-decoration-color: rgb(238 212 203 / 0.4);
-  }
 
-  .plain a:hover {
-    text-decoration-color: var(--color-quick);
-  }
 
   .footer-base {
     margin-top: clamp(2.5rem, 6vw, 4rem);

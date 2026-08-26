@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Link from '../components/Link.astro';
 import Aperture from '../components/Aperture.astro';
 import { getEntry, render } from 'astro:content';
 import { booking, withBase } from '../site';
@@ -31,8 +32,8 @@ const p = entry.data;
     <div class="col">
       <h2 class="close-title">The invitation is simple: watch, learn, practice, and savor.</h2>
       <div class="close-links">
-        <a class="begin" href={withBase('/begin/')}>{booking.label}</a>
-        <a class="door" href={withBase('/sessions/')}>See the four offerings</a>
+        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+        <Link variant="door" href={withBase('/sessions/')}>See the four offerings</Link>
       </div>
     </div>
   </section>
@@ -93,35 +94,5 @@ const p = entry.data;
     margin-top: 2.25rem;
   }
 
-  .begin {
-    display: inline-block;
-    background: var(--color-quick);
-    color: var(--color-bract);
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    padding: 0.95rem 1.5rem;
-    text-decoration: none;
-  }
 
-  .begin:hover {
-    background: var(--color-bract);
-  }
-
-  .door {
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-quick);
-    padding-bottom: 0.3rem;
-  }
-
-  .door:hover {
-    border-bottom-color: currentColor;
-  }
 </style>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Link from '../components/Link.astro';
 import Aperture from '../components/Aperture.astro';
 import OfferingCard from '../components/OfferingCard.astro';
 import PriceGrid from '../components/PriceGrid.astro';
@@ -121,7 +122,7 @@ const motifs = [
 
       <p class="clinicians">
         {s.clinicians.body}
-        <a href={withBase('/for-clinicians/')}>{s.clinicians.link}</a>
+        <Link href={withBase('/for-clinicians/')}>{s.clinicians.link}</Link>
       </p>
     </div>
   </section>

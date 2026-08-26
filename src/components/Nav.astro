@@ -12,7 +12,10 @@ const isCurrent = (href: string) => {
 
 <header class="nav-bar">
   <div class="nav-inner">
-    <a class="brand" href={withBase('/')}>
+    {/* Home is reached through the wordmark rather than a nav item, so the
+        wordmark carries the current-page state — otherwise landing on Home
+        leaves nothing in the nav marked and the reader has no anchor. */}
+    <a class="brand" href={withBase('/')} aria-current={isCurrent('/') ? 'page' : undefined}>
       <Aperture size="26px" open={0.45} class="brand-mark" />
       <span class="brand-name">{site.name}</span>
     </a>
@@ -62,6 +65,12 @@ const isCurrent = (href: string) => {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .brand[aria-current='page'] .brand-name {
+    border-bottom-color: var(--color-quick);
   }
 
   .brand :global(.brand-mark) {
@@ -88,6 +97,9 @@ const isCurrent = (href: string) => {
     flex-wrap: wrap;
   }
 
+  /* Where am I: the current page is the only item in full ink, and the only
+     one carrying a solid rule. Hover is a lighter, dashed hint, so hovering
+     never impersonates the page you are on. */
   nav a {
     font-family: var(--font-display);
     font-size: 0.72rem;
@@ -96,15 +108,18 @@ const isCurrent = (href: string) => {
     letter-spacing: 0.2em;
     text-decoration: none;
     padding-block: 0.25rem;
-    border-bottom: 1px solid transparent;
+    border-bottom: 2px solid transparent;
+    color: var(--color-ink-2);
     white-space: nowrap;
   }
 
   nav a:hover {
-    border-bottom-color: var(--color-quick);
+    color: var(--color-cochineal);
+    border-bottom-color: rgb(142 36 31 / 0.35);
   }
 
   nav a[aria-current='page'] {
+    color: var(--color-cochineal);
     border-bottom-color: var(--color-quick);
   }
 

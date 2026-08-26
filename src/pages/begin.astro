@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Link from '../components/Link.astro';
 import Aperture from '../components/Aperture.astro';
 import BookingEmbed from '../components/BookingEmbed.astro';
 import { site, contact, booking, withBase } from '../site';
@@ -35,9 +36,9 @@ import { site, contact, booking, withBase } from '../site';
       <div>
         <span class="label">Another way</span>
         <ul class="plain">
-          <li><a href={contact.smsHref}>Text {contact.smsDisplay}</a></li>
-          {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
-          <li><a href={contact.substack}>The seasonal letter</a></li>
+          <li><Link href={contact.smsHref}>Text {contact.smsDisplay}</Link></li>
+          {contact.email && <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>}
+          <li><Link href={contact.substack}>The seasonal letter</Link></li>
         </ul>
         <p class="curiosity">Curiosity is welcomed. Collaborations are too.</p>
       </div>
@@ -53,7 +54,7 @@ import { site, contact, booking, withBase } from '../site';
         <span class="label">If you're a clinician</span>
         <p class="clin">
           There is a page written for therapists and pelvic floor physical therapists.
-          <a href={withBase('/for-clinicians/')}>Read it here</a>.
+          <Link href={withBase('/for-clinicians/')}>Read it here</Link>.
         </p>
       </div>
     </div>

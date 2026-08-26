@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Link from '../components/Link.astro';
 import Aperture from '../components/Aperture.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, booking } from '../site';
@@ -31,9 +32,9 @@ const p = entry.data;
     <div class="col">
       <h2 class="refer-title">Refer a client</h2>
       <ul class="refer-list">
-        <li><a href={booking.url}>{booking.label}</a> — {booking.duration}, no obligation</li>
-        <li><a href={contact.smsHref}>Text {contact.smsDisplay}</a></li>
-        {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
+        <li><Link href={booking.url}>{booking.label}</Link> — {booking.duration}, no obligation</li>
+        <li><Link href={contact.smsHref}>Text {contact.smsDisplay}</Link></li>
+        {contact.email && <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>}
       </ul>
     </div>
   </section>

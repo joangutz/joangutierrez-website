@@ -1,0 +1,65 @@
+---
+/**
+ * Every link on the site goes through here, so a reader can tell what a link
+ * will do before clicking it.
+ *
+ * Two questions, answered separately:
+ *
+ *   What kind of link is this?   variant — inline, door, or action
+ *   Where does it take me?       inferred from the href
+ *
+ * Destinations fall into three kinds:
+ *   internal  another page of this site        no mark, same tab
+ *   external  another site entirely            ↗, new tab, announced
+ *   handoff   hands off to a device app        ↗, same tab, announced
+ *
+ * The mark is never decoration: it appears only when the link leaves the
+ * site, and it always comes with text a screen reader can read.
+ */
+interface Props {
+  href: string;
+  /** inline — in running prose · door — to another page · action — the one thing to do */
+  variant?: 'inline' | 'door' | 'action';
+  class?: string;
+  'aria-current'?: 'page' | undefined;
+}
+
+const { href, variant = 'inline', class: className = '', ...rest } = Astro.props;
+
+const kind = /^(https?:)?\/\//.test(href)
+  ? 'external'
+  : /^(mailto|sms|tel):/.test(href)
+    ? 'handoff'
+    : 'internal';
+
+const leaves = kind !== 'internal';
+
+const announce =
+  kind === 'external'
+    ? 'opens in a new tab'
+    : href.startsWith('mailto:')
+      ? 'opens your mail app'
+      : href.startsWith('sms:')
+        ? 'opens your messages app'
+        : href.startsWith('tel:')
+          ? 'starts a call'
+          : '';
+---
+
+<a
+  href={href}
+  class:list={[`lnk lnk-${variant}`, { 'lnk-leaves': leaves }, className]}
+  target={kind === 'external' ? '_blank' : undefined}
+  rel={kind === 'external' ? 'noopener noreferrer' : undefined}
+  {...rest}
+>
+  <span class="lnk-label"><slot /></span>{
+    leaves && (
+      <>
+        <svg class="lnk-mark" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+          <path d="M2.5,7.5 L7.5,2.5 M3.6,2.5 L7.5,2.5 L7.5,6.4" />
+        </svg>
+        <span class="visually-hidden">({announce})</span>
+      </>
+    )
+  }</a>
