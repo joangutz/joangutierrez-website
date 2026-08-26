@@ -21,25 +21,21 @@ const { offering } = Astro.props;
 const o = offering.data;
 const id = offering.id;
 
-const money = (n: number) => `$${n.toLocaleString('en-US')}`;
-const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
 ---
 
 <article class="offering" data-offering data-register={o.register}>
   <div class="card-inner" data-inner>
     <!-- Resting face -->
     <div class="face face-front" data-face="front">
-      {/* El Corazón's structure: ruled double frame, one image, name plate at
-          the foot. Mexican vernacular on a site whose copy names the
-          borderland. The frame and the plate are taken; not the number —
-          four offerings are not a sequence. */}
+      {/* A paint chip: the image edge to edge, its name on a swatch of the
+          offering's own register directly beneath. The lotería double frame is
+          gone — between it, the card border and the column divider, an image
+          arrived behind three separate rules. */}
       <div class="front-art">
-        <div class="loteria">
-          <div class="loteria-image">
-            <Collage src={o.collage} alt={o.alt} register={o.register} />
-          </div>
-          <h2 class="loteria-plate">{o.title}</h2>
+        <div class="chip-image">
+          <Collage src={o.collage} alt={o.alt} register={o.register} />
         </div>
+        <h2 class="chip-name">{o.title}</h2>
       </div>
 
       <div class="front-text">
@@ -47,7 +43,6 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
         <p class="front-teaser">{o.teaser}</p>
 
         <div class="front-foot">
-          <span class="front-price tabular">{priceLine}</span>
           <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
             <Vessel size="20px" form="egg" class="turn-mark" />
             <span>What this includes</span>
@@ -106,11 +101,10 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
         </div>
       </div>
 
+      {/* Every number lives in "What it costs" — one place to compare, so a
+          card never has to be turned to learn a price. */}
       <div class="back-foot">
-        <span class="back-price tabular">
-          {o.prices.map((p) => `${p.label} — ${money(p.amount)}`).join(' · ')}
-        </span>
-        <a class="back-link" href="#prices">See it in the price grid</a>
+        <a class="back-link" href="#prices">See what it costs</a>
       </div>
     </div>
   </div>
@@ -135,49 +129,54 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   }
 
   /* ---- Resting face ---- */
+  /* No min-height here. It used to be 100%, which resolves against the height
+     the script sets on .card-inner — and the script sets that FROM this face's
+     height. Once the taller back face raised it, the front inflated to match
+     and could never measure smaller again, so a card that had been turned
+     stayed at the back's height forever. */
   .face-front {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    min-height: 100%;
   }
 
   .front-art {
-    padding: clamp(1rem, 2vw, 1.5rem);
-    border-right: 1px solid var(--rule);
-    display: flex;
-  }
-
-  .loteria {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    border: 3px double var(--color-cochineal);
-    padding: 5px;
-    min-height: 15rem;
   }
 
-  .loteria-image {
+  .chip-image {
     position: relative;
     flex: 1;
     overflow: hidden;
-    min-height: 11rem;
+    min-height: 13rem;
   }
 
-  .loteria-image :global(.collage) {
+  .chip-image :global(.collage) {
     position: absolute;
     inset: 0;
   }
 
-  .loteria-plate {
+  /* The swatch. Each offering's register carries its own name, which is the
+     same key the range strip and the price grid use. */
+  .chip-name {
     font-family: var(--font-display);
     font-size: clamp(0.62rem, 1.2vw, 0.72rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.18em;
     line-height: 1.4;
-    text-align: center;
-    padding: 0.7rem 0.4rem 0.3rem;
+    color: var(--color-bract);
+    padding: 0.85rem 0.9rem;
+    /* A lit top edge so the swatch reads as its own band whatever sits above
+       it — including a placeholder tinted in the same register, which would
+       otherwise merge with it into one dark block. */
+    box-shadow: inset 0 1px 0 rgb(238 212 203 / 0.22);
   }
+
+  [data-register='plumstone'] .chip-name { background: var(--color-plumstone); }
+  [data-register='cochineal'] .chip-name { background: var(--color-cochineal); }
+  [data-register='brick'] .chip-name { background: var(--color-brick); }
+  [data-register='clay'] .chip-name { background: var(--color-clay); }
 
   .front-text {
     padding: clamp(1.5rem, 3vw, 2.25rem);
@@ -199,14 +198,8 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
     padding-top: 1.5rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-  }
-
-  .front-price {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
   }
 
   /* ---- Turned face ---- */
@@ -299,16 +292,6 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
   .back-foot {
     border-top: 1px solid var(--rule);
     padding-top: 1.25rem;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .back-price {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
   }
 
   .back-link {
@@ -385,9 +368,9 @@ const priceLine = o.prices.map((p) => money(p.amount)).join(' / ');
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .front-art {
-      border-right: 0;
-      border-bottom: 1px solid var(--rule);
+    .chip-image {
+      min-height: 11rem;
+      aspect-ratio: 3 / 2;
     }
 
     .panels {
