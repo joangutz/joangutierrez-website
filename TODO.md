@@ -74,6 +74,41 @@ Change the numbers in `content/offerings/*.md` or confirm they stand.
 - The vessel mark in the nav at 34px, on your own devices.
 - The new favicon in a real browser tab.
 
+## 9 · Testimonials — the section is built and empty
+
+Drop one `.md` per quote into `content/testimonials/` (that folder's README
+has the format) and they appear on Home and under the price grid on
+Sessions, with a Prev/Next control. Nothing renders until then.
+
+Two things worth holding to: get permission in writing, and let the client
+choose how they are named — a first initial and a city is plenty, and for
+this work it is often the most anyone will want.
+
+## 10 · A decision on the display face
+
+The lowercase f you disliked was a real bug, now fixed: the site was
+loading a weight-only cut of Fraunces, so every optical-size and softness
+setting in the stylesheet was being discarded and headings rendered at the
+text optical size. Compare the live pages now before deciding anything.
+
+If you still want to move, the closest free faces to Lovelace Text are
+Petrona (warm, slightly condensed — my pick), Faustina, and Literata. All
+three are installed and one line in `src/styles/global.css` switches the
+site over. Say which and I'll do it.
+
+## 11 · Photography and video — the biggest remaining gap
+
+Everything about "gradient and photo-forward headers, a place to rest"
+waits on real images. There is nowhere to put them yet because there are
+none; the slots exist and render labelled placeholders.
+
+- Hero and page headers: the photo-forward treatment needs its photographs
+  first. Send them and the headers get built around them.
+- The looping video you mentioned — Oaxaca hand-crafting — same. An mp4
+  plus a poster frame, and it goes in the Home hero or Roots.
+- Everything in item 6 below (collages, portraits, alt text) is the same
+  blocker wearing a different hat.
+
 ## Later / watch-list
 
 - First offering card pre-turned if turn rates prove low (needs analytics
@@ -81,3 +116,26 @@ Change the numbers in `content/offerings/*.md` or confirm they stand.
 - A light table of contents on The Work if it still reads long.
 - Substack stays a separate thing: the letter link remains in the footer
   as content; the site's captures all feed Kit.
+- Check the Cal.com booking on Begin. It now asks for Cal's dark theme and
+  the site's reds, which is the only styling reachable across an iframe
+  boundary. Cal is unreachable from the build environment, so this has
+  never been seen rendered. If it still fights the page, the embed becomes
+  a link and that is a five-minute change.
+- Verify the four outbound links resolve — see item 12.
+
+## 12 · The outbound links, and which to check
+
+All four came from the original site's own content file rather than from
+guesswork, and none can be reached from the build environment, so none is
+verified:
+
+| Link | Where it goes | Used on |
+| --- | --- | --- |
+| `joangutz.com` | the art practice | footer, every page |
+| `eroticbecoming.substack.com` | the seasonal letter | footer, every page |
+| `sexologicalbodyworkers.org/ethics` | ACSB code of ethics | footer + Sessions trust line |
+| `cal.com/joan.gutierrez/20min` | the booking | Begin, every price tile |
+
+Open each once. The art site is the one you flagged; if the address is
+wrong, it is one line in `src/site.ts` (`contact.art`) and it updates
+everywhere.
