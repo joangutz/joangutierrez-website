@@ -30,10 +30,14 @@ import Link from './Link.astro';
     align-items: flex-start;
   }
 
+  /* Cal.com is a cross-origin iframe, so its interior cannot be styled from
+     here — only asked, through URL parameters, to render in its own dark
+     theme on our red. The panel behind it matches, so the seam does not read
+     as a white slab dropped into the page. */
   .booking-slot {
     width: 100%;
     border: 1px solid var(--rule);
-    background: var(--color-bract);
+    background: var(--color-plumstone);
   }
 
   .booking-slot :global(iframe) {
@@ -56,7 +60,10 @@ import Link from './Link.astro';
 </style>
 
 <script>
-  const url = 'https://cal.com/joan.gutierrez/20min';
+  /* theme=dark and brandColor are Cal's own embed parameters. They are the
+     only styling reachable across the origin boundary. */
+  const url =
+    'https://cal.com/joan.gutierrez/20min?theme=dark&brandColor=%238E241F&darkBrandColor=%23D6A09B';
 
   const inject = (slot: HTMLElement) => {
     const frame = document.createElement('iframe');

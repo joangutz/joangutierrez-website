@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 
-@import '@fontsource-variable/fraunces';
+/* The full-axis build. The default package ships a wght-only subset, so every
+   'SOFT', 'WONK' and 'opsz' setting in this file was being silently discarded —
+   display headings were rendering at the text optical size, which is what made
+   large type look slightly clumsy. */
+@import '@fontsource-variable/fraunces/full.css';
 @import '@fontsource-variable/newsreader';
 
 /* ------------------------------------------------------------------
@@ -44,6 +48,11 @@
     --focus: var(--color-plumstone);
 
     --measure: 63ch;
+
+    /* The air between a section's content and the door that follows it.
+       Matched to the section rhythm rather than chosen per-page, which is
+       how the doors ended up crammed against the text above them. */
+    --gap-door: clamp(2rem, 4.5vw, 3.25rem);
 
     /* The leaves-the-site arrow, shared by Link and the price tiles. */
     --lnk-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.5,7.5 L7.5,2.5 M3.6,2.5 L7.5,2.5 L7.5,6.4' fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -165,6 +174,14 @@
 
   .section {
     padding-block: clamp(3.5rem, 9vw, 7rem);
+  }
+
+  /* A door that closes out a block gets the same air wherever it appears.
+     Actions are excluded: they follow a close-body paragraph that already
+     carries its own bottom margin, and inline-level boxes do not collapse
+     margins, so both would apply and the gap would double. */
+  :is(.col, .wide) > :is(.lnk-door, .doors) {
+    margin-top: var(--gap-door);
   }
 
   /* ----------------------------------------------------------------

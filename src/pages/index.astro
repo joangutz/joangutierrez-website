@@ -34,7 +34,7 @@ const movedAnchors = {
   <!-- 1 · Hero. One collage held in silence; the line arrives at breath pace. -->
   <section class="band hero">
     <div class="mark hero-rail">
-      <Vessel size="clamp(96px, 18vw, 190px)" bloom label="Petals opening to reveal a lit egg — the mark of this practice." />
+      <Vessel size="clamp(120px, 24vw, 250px)" bloom label="Petals opening to reveal a lit egg — the mark of this practice." />
     </div>
 
     <div class="col hero-text breath">
@@ -398,6 +398,12 @@ const movedAnchors = {
 
   .story-text .label {
     margin-bottom: 0.5rem;
+  }
+
+  /* Nested inside the story block rather than a direct child of the column,
+     so it needs the door gap named explicitly. */
+  .story-text :global(.lnk-door) {
+    margin-top: var(--gap-door);
   }
 
   @media (max-width: 780px) {
