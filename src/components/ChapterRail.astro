@@ -84,11 +84,10 @@
     position: relative;
     display: block;
     width: 100%;
-    /* Compact on purpose. The Work carries sixteen sections, and the rail has
-       to fit between the sticky bar and the footer on a laptop screen or it
-       cannot come to rest above the dark ground — which is its whole job at
-       the end of a page. A book's thumb index is fine-grained too. */
-    height: 1.25rem;
+    /* Set from the viewport at runtime: the height each marker can claim while
+       all of them still fit between the sticky bar and the footer. Fixed at one
+       line the rail threw away titles on screens with height to spare. */
+    height: var(--rail-slot, 1.25rem);
     text-decoration: none;
     color: var(--color-ink-2);
   }
@@ -117,14 +116,25 @@
        the page had ample room for — at 1440 the gap between the prose and the
        rail measures 458px. */
     max-width: clamp(9rem, 14vw, 16rem);
-    white-space: nowrap;
+    /* Wraps to however many lines its slot can hold, and is clipped only past
+       that. Because the title is out of the flow, wrapping cannot disturb the
+       spacing of the ticks — the slot height alone decides that. */
+    white-space: normal;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--rail-lines, 1);
+    line-clamp: var(--rail-lines, 1);
     overflow: hidden;
-    text-overflow: ellipsis;
     font-family: var(--font-display);
     font-size: 0.66rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
+    /* Set explicitly: inherited, a label was taking the body's reading
+       line-height of 1.75, so every line of it cost 18.5px and a rail with
+       room for two lines could only afford one. */
+    line-height: 1.25;
     opacity: 0;
     /* Drifts in from the right, the direction it belongs to now. */
     translate: 0.35rem -50%;
@@ -392,6 +402,52 @@
       const navBar = document.querySelector<HTMLElement>('.nav-bar');
       const footer = document.querySelector('footer');
       const FOOT_GAP = 32;
+      const MIN_SLOT = 20;
+      const MAX_LINES = 3;
+
+      /**
+       * How tall each marker's slot may be, and therefore how many lines of
+       * title it can hold.
+       *
+       * The budget is the tightest position the rail will ever be asked to
+       * hold: resting above the footer at the very end of the page. Sizing to
+       * that once means the rail never changes size while you scroll — it just
+       * knows, from the start, how much room the screen is going to give it.
+       *
+       * So a page of four sections on a tall screen wraps its titles over
+       * three lines, and The Work's sixteen on a short one stay at one. The
+       * count and the screen decide together.
+       */
+      const size = () => {
+        const first = rail.querySelector<HTMLElement>('.rail-name');
+        if (!first) return;
+
+        const cs = getComputedStyle(first);
+        const lineH = parseFloat(cs.lineHeight) || 14;
+
+        // With titles hidden there is nothing to wrap, so slots stay tight.
+        if (cs.display === 'none') {
+          rail.style.setProperty('--rail-slot', `${MIN_SLOT}px`);
+          rail.style.setProperty('--rail-lines', '1');
+          return;
+        }
+
+        const barBottom = navBar ? navBar.getBoundingClientRect().bottom : 0;
+        const footH = footer ? footer.getBoundingClientRect().height : 0;
+        const budget = window.innerHeight - footH - (barBottom + 12) - FOOT_GAP;
+
+        const per = budget / headings.length;
+        // 6px of breathing room inside the slot, so wrapped titles do not
+        // touch their neighbours when the whole rail is revealed at once.
+        const lines = Math.max(
+          1,
+          Math.min(MAX_LINES, Math.floor((per - 6) / lineH))
+        );
+        const slot = Math.max(MIN_SLOT, Math.min(per, lines * lineH + 6));
+
+        rail.style.setProperty('--rail-slot', `${slot}px`);
+        rail.style.setProperty('--rail-lines', String(lines));
+      };
 
       /**
        * Vertically centred, but never under the sticky bar and never over the
@@ -438,12 +494,20 @@
         });
       };
 
+      // Sizing is deliberately not part of the scroll handler: the rail must
+      // not change shape underneath a reader who is only moving down the page.
+      const onResize = () => {
+        size();
+        mark();
+        place();
+      };
+
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      mark();
-      place();
-      // Web fonts landing changes every heading's position.
-      if (document.fonts?.ready) document.fonts.ready.then(() => { mark(); place(); });
+      window.addEventListener('resize', onResize, { passive: true });
+      onResize();
+      // Web fonts landing changes both the line height and every heading's
+      // position, so everything is measured again once they arrive.
+      if (document.fonts?.ready) document.fonts.ready.then(onResize);
     }
   }
 </script>
