@@ -50,7 +50,7 @@
        positioned and so contributes nothing to its size. Left to size itself
        the rail measured zero pixels across, which left the tick — eighteen
        pixels of it — as the only thing you could put a cursor on. */
-    width: 2.2rem;
+    width: var(--rail-w, 2.2rem);
     z-index: 40;
     display: flex;
     flex-direction: column;
@@ -112,10 +112,11 @@
     right: 2.6rem;
     top: 50%;
     width: max-content;
-    /* Grows with the margin it sits in. Fixed at 9rem it truncated titles that
-       the page had ample room for — at 1440 the gap between the prose and the
-       rail measures 458px. */
-    max-width: clamp(9rem, 14vw, 16rem);
+    /* Measured, not guessed. A viewport-proportional cap left 147 to 221px of
+       margin unused while titles were being clipped inside it — and on a short
+       screen that cap was the whole reason five of The Work's sixteen had to
+       truncate, since they fit on one line at the width actually available. */
+    max-width: var(--rail-label-w, 9rem);
     /* Wraps to however many lines its slot can hold, and is clipped only past
        that. Because the title is out of the flow, wrapping cannot disturb the
        spacing of the ticks — the slot height alone decides that. */
@@ -152,11 +153,11 @@
     }
   }
 
-  /* Wide enough to hold the titles, and to be pointed at. */
-  @media (min-width: 1024px) {
-    .rail {
-      width: clamp(11.6rem, 16.5vw, 18.6rem);
-    }
+  /* Not enough room beside the prose for words, so the rail keeps only its
+     ticks. Set from measurement rather than a breakpoint, because how much
+     margin there is depends on the page as much as the window. */
+  .rail[data-ticks-only] :global(.rail-name) {
+    display: none;
   }
 
   .rail :global(a[aria-current='true'] .rail-tick) {
@@ -403,7 +404,49 @@
       const footer = document.querySelector('footer');
       const FOOT_GAP = 32;
       const MIN_SLOT = 20;
-      const MAX_LINES = 3;
+      const MAX_LINES = 4;
+      /** Tick plus the space between it and the title. */
+      const TICK_ZONE = 42;
+      /** Air between the last of the prose and the first of the rail. */
+      const CLEAR = 40;
+      /** Below this a title is too cramped to be worth showing. */
+      const MIN_LABEL = 110;
+      /** Beyond this the rail is merely sprawling. */
+      const MAX_LABEL = 360;
+
+      /**
+       * How wide a title may be: everything between the widest thing on the
+       * page and the rail's own right edge. Measured, because how much margin
+       * a page has depends on that page — Sessions' grids reach further right
+       * than The Work's prose does — and because guessing it from the viewport
+       * left a fifth of the screen empty while clipping the words inside it.
+       */
+      const sizeWidth = () => {
+        const first = rail.querySelector<HTMLElement>('.rail-name');
+        if (!first) return;
+
+        let contentRight = 0;
+        main
+          .querySelectorAll<HTMLElement>('.band > .col, .band > .wide')
+          .forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.width > 0) contentRight = Math.max(contentRight, r.right);
+          });
+
+        const offset = parseFloat(getComputedStyle(rail).right) || 24;
+        const available = window.innerWidth - offset - contentRight - CLEAR;
+        const labelW = Math.min(MAX_LABEL, available - TICK_ZONE);
+
+        if (labelW < MIN_LABEL) {
+          rail.setAttribute('data-ticks-only', '');
+          rail.style.setProperty('--rail-w', '2.2rem');
+          return;
+        }
+
+        rail.removeAttribute('data-ticks-only');
+        rail.style.setProperty('--rail-label-w', `${Math.floor(labelW)}px`);
+        rail.style.setProperty('--rail-w', `${Math.floor(labelW + TICK_ZONE)}px`);
+      };
 
       /**
        * How tall each marker's slot may be, and therefore how many lines of
@@ -417,6 +460,17 @@
        * So a page of four sections on a tall screen wraps its titles over
        * three lines, and The Work's sixteen on a short one stay at one. The
        * count and the screen decide together.
+       */
+      /**
+       * How many lines each title needs, and therefore how tall a slot must
+       * be — the fewest that shows every title in full, never more.
+       *
+       * Asking for the most lines that fit was the wrong question. It spent
+       * height the rail did not need, which pushed it past the room above the
+       * footer and made it step aside at the end of pages where one line would
+       * have done. Asking what the titles actually require keeps the rail
+       * compact wherever the words are short, and only grows it where they
+       * are not.
        */
       const size = () => {
         const first = rail.querySelector<HTMLElement>('.rail-name');
@@ -432,18 +486,18 @@
           return;
         }
 
-        const barBottom = navBar ? navBar.getBoundingClientRect().bottom : 0;
-        const footH = footer ? footer.getBoundingClientRect().height : 0;
-        const budget = window.innerHeight - footH - (barBottom + 12) - FOOT_GAP;
+        // Let them lay out unclamped for a moment to see their true depth.
+        // They are absolutely positioned, so nothing on the page moves.
+        rail.style.setProperty('--rail-lines', '99');
+        let needed = 1;
+        rail.querySelectorAll<HTMLElement>('.rail-name').forEach((n) => {
+          needed = Math.max(needed, Math.round(n.scrollHeight / lineH));
+        });
 
-        const per = budget / headings.length;
+        const lines = Math.min(MAX_LINES, needed);
         // 6px of breathing room inside the slot, so wrapped titles do not
         // touch their neighbours when the whole rail is revealed at once.
-        const lines = Math.max(
-          1,
-          Math.min(MAX_LINES, Math.floor((per - 6) / lineH))
-        );
-        const slot = Math.max(MIN_SLOT, Math.min(per, lines * lineH + 6));
+        const slot = Math.max(MIN_SLOT, lines * lineH + 6);
 
         rail.style.setProperty('--rail-slot', `${slot}px`);
         rail.style.setProperty('--rail-lines', String(lines));
@@ -496,7 +550,34 @@
 
       // Sizing is deliberately not part of the scroll handler: the rail must
       // not change shape underneath a reader who is only moving down the page.
+      /**
+       * Mobile browsers grow and shrink the viewport as their toolbars hide
+       * and show, and they do it while you are merely scrolling — which fires
+       * resize. Re-measuring on that made the rail change shape mid-scroll on
+       * an iPad, and change back again when you scrolled the other way. Only a
+       * change of width, or a change of height far larger than any toolbar,
+       * counts as a real resize; everything else just repositions.
+       */
+      const TOOLBAR_SLACK = 160;
+      let lastW = 0;
+      let lastH = 0;
+
       const onResize = () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        if (w === lastW && Math.abs(h - lastH) < TOOLBAR_SLACK) {
+          place();
+          return;
+        }
+
+        lastW = w;
+        lastH = h;
+
+        // Width first: how many lines a title needs depends on how wide it is
+        // allowed to be, so the horizontal budget is settled before the
+        // vertical one is spent.
+        sizeWidth();
         size();
         mark();
         place();
