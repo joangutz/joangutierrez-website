@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
-import BookingEmbed from '../components/BookingEmbed.astro';
 import KitSignup from '../components/KitSignup.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import { site, contact, booking, withBase } from '../site';
@@ -15,7 +14,7 @@ import { site, contact, booking, withBase } from '../site';
   <section class="begin-hero on-dark has-ground">
     <PhotoGround src="begin.jpg" from="bottom" />
     <div class="band section">
-      <div class="col pane">
+      <div class="col">
         <span class="label">Begin</span>
         <h1 class="page-title">Twenty minutes, free, no obligation.</h1>
         <p class="lede begin-lede">
@@ -26,9 +25,18 @@ import { site, contact, booking, withBase } from '../site';
     </div>
   </section>
 
+  {/* A link rather than an embed. Cal.com renders in its own white, which
+      cannot be reached across an origin boundary and read as a hole cut in
+      the page — asking it for a dark theme helped and did not fix it. A
+      button that leaves is honest about where you are going, weighs nothing,
+      and loads no third-party script on a page most people only pass
+      through. */}
   <section class="band section">
     <div class="col">
-      <BookingEmbed />
+      <Link variant="action" href={booking.url}>{booking.label}</Link>
+      <p class="booking-note">
+        Opens cal.com — {booking.duration}, free, no obligation.
+      </p>
     </div>
   </section>
 
@@ -85,6 +93,12 @@ import { site, contact, booking, withBase } from '../site';
     color: var(--color-bract);
     padding-block: clamp(3rem, 10vh, 6rem) clamp(2rem, 5vw, 3rem);
     row-gap: 2.5rem;
+  }
+
+  .booking-note {
+    margin: 1.25rem 0 0;
+    font-size: 0.92rem;
+    color: var(--color-ink-2);
   }
 
   .begin-lede {

@@ -1,37 +1,45 @@
 /**
- * The collage is greyscale figures with cut fruit, but it was photographed
- * under a cool light: neutral areas measure B−G of +13 to +19, so the paper
- * and the bodies all carry a blue wash.
+ * The collage is greyscale figures with cut fruit, photographed under a cool
+ * light. Two things have to happen, and the order matters more than either.
  *
- * Hue-selective desaturation fixes both problems at once. Keep chroma only
- * where the fruit is — orange through green — and drive everything else to
- * zero saturation, which is neutral grey *by definition*. The cast cannot
- * survive that, because a pixel with no saturation has no cast to carry.
+ * FIRST the white balance, THEN the hue-selective desaturation.
  *
- * Luminance is left exactly alone. Only chroma is touched, so every value in
- * the artwork stays where the camera put it.
+ * Doing it the other way round — which is what the first two attempts did —
+ * cannot work, and the reason is worth writing down. Under a blue cast every
+ * hue is dragged toward blue: a green rind lands around 180-210 degrees,
+ * sitting on top of the blue paper, which the cast has also made genuinely
+ * saturated. Measured on six of these images, 85% of all high-chroma pixels
+ * fell between 195 and 225 degrees, and almost none read as green at all. So
+ * any hue window drawn in that space either cuts the greens or keeps the
+ * paper. There is no setting that separates them, because in cast space they
+ * are the same colour.
+ *
+ * Neutralise first and the problem dissolves: the paper falls to near-zero
+ * saturation, the greens return to green, and a wide window over the fruit
+ * hues catches all of it without touching the figure.
+ *
+ * Luminance is preserved throughout. Only chroma moves.
  */
 import sharp from 'sharp';
 import { existsSync } from 'node:fs';
 
 /**
- * Tuned by measurement, not by eye. The first pass set the saturation gate at
- * [0.16, 0.34] and lost 28% of the fruit's pixels — the melons' mid-tones and
- * shadows fell under the threshold and went grey with everything else.
+ * Everything from watermelon pink through deep green, once balanced.
  *
- * The gate could be relaxed this far because it was never what removed the
- * cast. The cast is blue, around 200-240°, which the HUE gate excludes
- * outright; measured across four settings, the figure stays neutral at about
- * 0.01 saturation whatever the saturation gate does. So the gate only has to
- * ignore the faintest tints, and the fruit keeps its shadows.
- *
- * At these values the fruit ends up with 112% of its original chroma-bearing
- * pixels at 1.05x the chroma: as photographed, with the cast lifted off.
+ * The window is measured on a hue axis rotated so that red sits in the
+ * middle rather than at the seam. Pink-red flesh lands around 350-360, and
+ * a window starting at 4 cut all of it — the rinds came back green and the
+ * watermelon's inside went grey. Hue is circular; a range written as two
+ * plain numbers is not.
  */
-const HUE_IN = [5, 17];      // ramps up across this range (reds -> orange)
-const HUE_OUT = [151, 174];  // ramps down across this (green -> cyan)
-const SAT_IN = [0.12, 0.26]; // only the faintest tints read as cast
-const BOOST = 1.1;
+const HUE_IN = [-26, -8];
+const HUE_OUT = [168, 190];
+
+/** Put the seam behind us: 350 becomes -10, so red is a continuous range. */
+const unwrap = (h) => (h > 300 ? h - 360 : h);
+/** Only the faintest tints read as cast; the hue gate does the real work. */
+const SAT_IN = [0.10, 0.22];
+const BOOST = 1.12;
 
 const smooth = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -66,32 +74,60 @@ function hslToRgb(h, s, l) {
   return [f(h + 1 / 3), f(h), f(h - 1 / 3)].map((v) => Math.round(v * 255));
 }
 
+/**
+ * Channel gains taken from what should have been grey. The paper and the
+ * bodies are the overwhelming majority of these frames, so the near-neutral
+ * population is a fair reference — this is grey-world balancing restricted to
+ * pixels that were nearly grey already, rather than over the whole image,
+ * which the fruit would skew.
+ */
+function balance(data, ch) {
+  let n = 0, sr = 0, sg = 0, sb = 0;
+  for (let i = 0; i < data.length; i += ch) {
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    if (mx < 25 || mx > 245) continue;          // no signal in clipped pixels
+    if ((mx - mn) / mx > 0.34) continue;        // that is fruit, not paper
+    n++; sr += r; sg += g; sb += b;
+  }
+  if (!n) return [1, 1, 1];
+  const mr = sr / n, mg = sg / n, mb = sb / n;
+  const target = (mr + mg + mb) / 3;
+  return [target / mr, target / mg, target / mb];
+}
+
 export async function correct(src, dest, width = 1200) {
   const img = sharp(src).rotate().resize({ width, withoutEnlargement: true });
   const { data, info } = await img.raw().toBuffer({ resolveWithObject: true });
   const ch = info.channels;
 
+  const [gr, gg, gb] = balance(data, ch);
+
   for (let i = 0; i < data.length; i += ch) {
-    const [h, s, l] = rgbToHsl(data[i], data[i + 1], data[i + 2]);
-    // how much this pixel looks like fruit rather than cast
+    const r = Math.min(255, data[i] * gr);
+    const g = Math.min(255, data[i + 1] * gg);
+    const b = Math.min(255, data[i + 2] * gb);
+
+    const [h, s, l] = rgbToHsl(r, g, b);
+    const hu = unwrap(h);
     const keep =
-      smooth(HUE_IN[0], HUE_IN[1], h) *
-      (1 - smooth(HUE_OUT[0], HUE_OUT[1], h)) *
+      smooth(HUE_IN[0], HUE_IN[1], hu) *
+      (1 - smooth(HUE_OUT[0], HUE_OUT[1], hu)) *
       smooth(SAT_IN[0], SAT_IN[1], s);
     const ns = Math.min(1, s * keep * BOOST);
-    const [r, g, b] = hslToRgb(h, ns, l);
-    data[i] = r; data[i + 1] = g; data[i + 2] = b;
+    const [nr, ng, nb] = hslToRgb(h, ns, l);
+    data[i] = nr; data[i + 1] = ng; data[i + 2] = nb;
   }
 
   await sharp(data, { raw: { width: info.width, height: info.height, channels: ch } })
     .jpeg({ quality: 84, mozjpeg: true })
     .toFile(dest);
-  return dest;
+  return { gains: [gr, gg, gb] };
 }
 
 if (process.argv[2]) {
   const [, , src, dest, w] = process.argv;
   if (!existsSync(src)) throw new Error('no such file: ' + src);
-  await correct(src, dest, w ? Number(w) : 1200);
-  console.log('wrote', dest);
+  const { gains } = await correct(src, dest, w ? Number(w) : 1200);
+  console.log('wrote', dest, 'gains', gains.map((g) => g.toFixed(3)).join(' '));
 }

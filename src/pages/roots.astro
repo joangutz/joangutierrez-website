@@ -20,6 +20,14 @@ const territories = (await getCollection('territories')).sort(
 const rendered = await Promise.all(
   territories.map(async (t) => ({ data: t.data, Content: (await render(t)).Content }))
 );
+
+/**
+ * Where the picture sits in the run of territories. Computed here rather
+ * than in the template: a slash inside a template expression is read by the
+ * parser as the start of a closing tag, and `rendered.length / 3` failed the
+ * build with "Expected > but found src".
+ */
+const breakAfter = Math.floor(rendered.length / 3);
 ---
 
 <Base title={r.title} description={r.description}>
@@ -35,9 +43,12 @@ const rendered = await Promise.all(
     </div>
   </section>
 
-  <!-- Named territories, not chronology. -->
+  {/* Named territories, not chronology. The picture sits inside the run
+      rather than after it: placed at the end, it landed at 45% of the page
+      with the fire at 51% and the epigraph at 58% — three moments inside
+      thirteen percent of the scroll, and nothing in the half above them. */}
   {
-    rendered.map(({ data, Content }) => (
+    rendered.map(({ data, Content }, i) => (
       <>
         {data.torn && <hr class="territory-rule" />}
         <section class="band section territory">
@@ -48,13 +59,12 @@ const rendered = await Promise.all(
             <Content />
           </div>
         </section>
+        {i === breakAfter && <Interlude src="roots-territories.jpg" />}
       </>
     ))
   }
 
   <!-- The land, given a section rather than a footer line. -->
-  <Interlude src="roots-practice.jpg" tinted />
-
   {/* The fire is the ground here rather than a picture set into a panel of
       adobe. The panel was the brightest thing on the page and the photograph
       was the smallest — this inverts both, and the words sit on glass. */}
@@ -74,8 +84,10 @@ const rendered = await Promise.all(
   </section>
 
   <!-- The epigraph gets a page to itself, or near enough. -->
-  <section class="band epigraph on-dark has-ground">
-    <PhotoGround src="epigraph.jpg" from="bottom" />
+  {/* Deep ground, no photograph. The fire is immediately above it, and two
+      full pictures in a row is one too many — the quote carries this on its
+      own. */}
+  <section class="band epigraph on-dark">
     <div class="full epigraph-inner">
       <blockquote>
         <p>{r.epigraph.quote}</p>
@@ -215,6 +227,7 @@ const rendered = await Promise.all(
 
   /* ---- Epigraph ---- */
   .epigraph {
+    background: var(--color-plumstone);
     padding-block: clamp(4rem, 14vw, 9rem);
   }
 
