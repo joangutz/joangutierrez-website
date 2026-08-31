@@ -51,18 +51,19 @@ const rendered = await Promise.all(
   }
 
   <!-- The land, given a section rather than a footer line. -->
-  <section class="land grained">
+  {/* The fire is the ground here rather than a picture set into a panel of
+      adobe. The panel was the brightest thing on the page and the photograph
+      was the smallest — this inverts both, and the words sit on glass. */}
+  <section class="land on-dark">
+    <div class="land-bg">
+      <Collage src={r.land.image} alt={r.land.alt} register="clay" sizes="100vw" />
+    </div>
+
     <div class="band section">
       <div class="col">
-        <h2 class="label section-heading">{r.land.title}</h2>
-        {r.land.paragraphs.map((p) => <p class="land-text">{p}</p>)}
-      </div>
-
-      {/* The land photograph had a field in the schema and a row in the
-          manifest but no slot on the page — it could never have appeared. */}
-      <div class="wide land-art">
-        <div class="land-frame">
-          <Collage src={r.land.image} alt={r.land.alt} register="clay" sizes="(max-width: 700px) 90vw, 30rem" />
+        <div class="pane land-pane">
+          <h2 class="label section-heading">{r.land.title}</h2>
+          {r.land.paragraphs.map((p) => <p class="land-text">{p}</p>)}
         </div>
       </div>
     </div>
@@ -155,36 +156,44 @@ const rendered = await Promise.all(
     margin-bottom: 1.5rem;
   }
 
-  /* ---- The land ----
-     Warm adobe rather than near-black: the board's earth is lit plaster, not
-     shadow. Barro takes dark type only. */
+  /* ---- The land ---- */
   .land {
-    background: var(--color-barro);
-    color: var(--color-plumstone);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-plumstone);
+    color: var(--color-bract);
     margin-block: clamp(2rem, 6vw, 4rem);
   }
 
-  .land :global(.label) {
-    color: var(--color-cochineal);
+  .land-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
   }
 
-  .land-art {
-    margin-top: clamp(2rem, 5vw, 3.5rem);
-  }
-
-  /* The fire stands upright, so its frame does too — a landscape crop took the
-     flame off at both ends. The width lives on an inner element: put on
-     .land-art it lost to `.band > .wide`, which is equally specific and sets
-     max-width to 100%, and the photograph filled the page. */
-  .land-frame {
-    max-width: 30rem;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-  }
-
-  .land-frame :global(.collage) {
+  .land-bg :global(.collage) {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+  }
+
+  /* Enough to hold type anywhere over it, since the flame moves around as the
+     section reflows. */
+  .land-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      rgb(44 11 18 / 0.82) 0%,
+      rgb(44 11 18 / 0.6) 55%,
+      rgb(44 11 18 / 0.34) 100%
+    );
+  }
+
+  .land :global(.label) {
+    color: rgb(238 212 203 / 0.8);
   }
 
   .land-text {

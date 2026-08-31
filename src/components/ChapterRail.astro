@@ -196,6 +196,22 @@
     color: var(--color-cochineal);
   }
 
+  /* The rail is fixed, so it crosses whatever the page puts under it — and
+     the page now puts photographs and deep grounds there. Its ink follows. */
+  .rail[data-over-dark] :global(a) {
+    color: rgb(238 212 203 / 0.85);
+  }
+
+  .rail[data-over-dark] :global(a[aria-current='true'] .rail-tick) {
+    background: var(--color-madder);
+  }
+
+  .rail[data-over-dark] :global(a[aria-current='true'] .rail-name),
+  .rail[data-over-dark] :global(a:hover .rail-name),
+  .rail[data-over-dark] :global(a:focus-visible .rail-name) {
+    color: var(--color-bract);
+  }
+
   /* ---- The narrow-screen disclosure ---- */
   .rail-toc {
     margin: 0 auto clamp(1.5rem, 5vw, 2.5rem);
@@ -537,6 +553,27 @@
         rail.style.top = `${top}px`;
       };
 
+      /**
+       * What is under the rail right now. It is fixed, so it travels across
+       * every section the page has — including the deep grounds and the
+       * photographs, where its own ink is nearly invisible.
+       *
+       * elementsFromPoint rather than elementFromPoint: the rail is on top at
+       * its own coordinates, so the top hit is always itself.
+       */
+      const shade = () => {
+        const r = rail.getBoundingClientRect();
+        const x = Math.min(window.innerWidth - 2, r.right - 3);
+        const dark = [r.top + 3, (r.top + r.bottom) / 2, r.bottom - 3].some((y) => {
+          if (y < 0 || y > window.innerHeight) return false;
+          const under = document
+            .elementsFromPoint(x, y)
+            .find((el) => !rail.contains(el));
+          return !!under?.closest('.on-dark');
+        });
+        rail.toggleAttribute('data-over-dark', dark);
+      };
+
       let ticking = false;
       const onScroll = () => {
         if (ticking) return;
@@ -544,6 +581,7 @@
         requestAnimationFrame(() => {
           mark();
           place();
+          shade();
           ticking = false;
         });
       };
@@ -581,6 +619,7 @@
         size();
         mark();
         place();
+        shade();
       };
 
       window.addEventListener('scroll', onScroll, { passive: true });

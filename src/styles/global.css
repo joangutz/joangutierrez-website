@@ -274,6 +274,58 @@
     color: var(--color-plumstone);
   }
 
+  /* ----------------------------------------------------------------
+     A lifted panel, made of the ground rather than laid on top of it.
+
+     A solid fill had to be light enough to separate from the rose, which
+     made it a bright slab — the brightest thing on a page whose whole
+     palette is deep. A wash plus a blur separates just as clearly at a
+     fraction of the contrast, and over a photograph it takes the picture's
+     own colour, so the panel belongs to whatever it sits on.
+
+     Three grounds are covered: the blur where it is supported, a slightly
+     stronger wash where it is not, and a solid fill for anyone who has
+     asked their system to reduce transparency.
+     ---------------------------------------------------------------- */
+  .pane {
+    position: relative;
+    border: 1px solid var(--rule);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    background: rgb(238 212 203 / 0.42);
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .pane {
+      background: rgb(238 212 203 / 0.26);
+      -webkit-backdrop-filter: blur(16px) saturate(1.15);
+      backdrop-filter: blur(16px) saturate(1.15);
+    }
+  }
+
+  .on-dark .pane {
+    background: rgb(44 11 18 / 0.68);
+    border-color: rgb(238 212 203 / 0.24);
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .on-dark .pane {
+      background: rgb(44 11 18 / 0.52);
+    }
+  }
+
+  /* Transparency is a preference the system can withdraw. */
+  @media (prefers-reduced-transparency: reduce) {
+    .pane {
+      background: var(--color-bract);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .on-dark .pane {
+      background: var(--color-plumstone);
+    }
+  }
+
   .visually-hidden {
     position: absolute;
     width: 1px;

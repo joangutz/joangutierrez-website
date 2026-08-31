@@ -149,7 +149,7 @@ const motifs = [
   <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
   <section class="band section">
     <div class="col">
-      <div class="note">
+      <div class="note pane">
         <span class="label">{s.note.title}</span>
         {s.note.paragraphs.map((p) => <p>{p}</p>)}
       </div>
@@ -323,10 +323,9 @@ const motifs = [
   }
 
   /* ---- Note on all plans ---- */
+  /* Fill, border and padding all come from .pane now. */
   .note {
-    background: var(--color-bract);
-    border: 1px solid var(--rule);
-    padding: clamp(1.75rem, 4vw, 2.75rem);
+    max-width: var(--measure);
   }
 
   .note .label {
