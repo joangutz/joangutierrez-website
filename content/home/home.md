@@ -12,7 +12,7 @@ hero:
   headline: Most people can tolerate almost anything and ask for almost nothing.
   sub: The capacity to voice choice, to want out loud, is a learnable skill.
   collage: hero.jpg
-  alt: 'TODO-ALT: describe the hero collage.'
+  alt: Sunlight through a green canopy, one leaf lit from behind so its veins show.
 
 audience:
   title: Who this work is for

@@ -4,7 +4,7 @@ container: Three-month study
 order: 1
 register: plumstone
 collage: erotic-embodiment.jpg
-alt: 'TODO-ALT: describe the collage for Erotic Embodiment Education.'
+alt: A close study of skin — the curve of a shoulder and side in low, warm light.
 teaser: The full study. Three months, six hours a month, a practice map that changes as you do.
 prices:
   - label: Three-month study

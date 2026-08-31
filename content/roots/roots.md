@@ -6,7 +6,7 @@ description: Joan Gutiérrez — the Ciudad Juárez–El Paso borderland, Butoh 
 
 portrait:
   src: joan-roots.jpg
-  alt: 'TODO-ALT: describe the portrait of Joan for the Roots page.'
+  alt: Joan sitting above clear water in a wide straw hat, writing in a notebook, mountains behind her.
 
 land:
   title: The ground I work from
@@ -14,7 +14,7 @@ land:
     - I currently work between Chicago and Brooklyn and remain open to travel.
     - The desert taught me first. Everything since has been learning to listen the way that place required.
   image: land.jpg
-  alt: 'TODO-ALT: describe the borderland photograph.'
+  alt: A ceremonial fire burning low in a ring of wood, with bougainvillea, herbs and a melon left beside it.
 
 epigraph:
   quote: When we begin to live from within outward, in touch with the power of the erotic within ourselves, and allowing that power to inform and illuminate our actions upon the world around us, then we begin to be responsible to ourselves in the deepest sense.

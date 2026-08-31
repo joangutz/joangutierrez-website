@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import ChapterRail from '../components/ChapterRail.astro';
 import Link from '../components/Link.astro';
 import Portrait from '../components/Portrait.astro';
+import Collage from '../components/Collage.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { contact, booking, withBase } from '../site';
 
@@ -55,6 +56,12 @@ const rendered = await Promise.all(
       <div class="col">
         <h2 class="label section-heading">{r.land.title}</h2>
         {r.land.paragraphs.map((p) => <p class="land-text">{p}</p>)}
+      </div>
+
+      {/* The land photograph had a field in the schema and a row in the
+          manifest but no slot on the page — it could never have appeared. */}
+      <div class="wide land-art">
+        <Collage src={r.land.image} alt={r.land.alt} register="clay" sizes="(max-width: 900px) 100vw, 62vw" />
       </div>
     </div>
   </section>
@@ -157,6 +164,17 @@ const rendered = await Promise.all(
 
   .land :global(.label) {
     color: var(--color-cochineal);
+  }
+
+  .land-art {
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .land-art :global(.collage) {
+    width: 100%;
+    height: 100%;
   }
 
   .land-text {

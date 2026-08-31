@@ -4,7 +4,7 @@ container: Monthly study
 order: 2
 register: cochineal
 collage: desire-mapping.jpg
-alt: 'TODO-ALT: describe the collage for Desire & Pleasure Mapping.'
+alt: Two hands cupping a small terracotta sculpture of a vulva.
 teaser: A month of finding out where your pleasure actually lives, and what pulls you away from it.
 prices:
   - label: Monthly study

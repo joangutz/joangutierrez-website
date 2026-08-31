@@ -1,5 +1,32 @@
 # Image Manifest
 
+## Assigned, awaiting upload
+
+Five photographs are spoken for. Their alt text is already written and their
+slots are wired — each needs only the file, at the name given.
+
+| Photograph | Goes to | Note |
+|---|---|---|
+| Forest canopy, one leaf lit from behind | `collage/hero.jpg` | Home hero. Attention itself, and safe as a stranger's first impression of the site. |
+| Hands cupping the terracotta vulva | `collage/desire-mapping.jpg` | Sessions card 2. Anatomy held rather than displayed; the clay is almost exactly the site's own red. |
+| Close study of skin, low warm light | `collage/erotic-embodiment.jpg` | Sessions card 1. Sensation. Deliberately not on Home. |
+| The ceremonial fire | `collage/land.jpg` | Roots, full width. |
+| Reading by the sea, straw hat | `portraits/joan-roots.jpg` | Roots. Renders black and white as things stand — see below. |
+
+Still needed: `collage/scar-tissue.jpg`, `collage/all-in-one.jpg`,
+`portraits/joan-home.jpg`, `share.jpg`.
+
+Two things worth deciding rather than defaulting:
+
+- **Photographs are not collage.** The brief treated the image slots as Joan's
+  original collage work, and the footer credits them as such: "Collage artwork by
+  Joan Gutiérrez." If the site carries photographs instead, that line wants
+  rewording, and the credit should say who took them.
+- **Portraits render black and white.** That was a deliberate rule, but the sea
+  photograph's turquoise is most of what it has. The rule can become a per-image
+  choice.
+
+
 Every image slot the site expects. Until a real file exists at the path, the component
 renders a grain-and-gradient placeholder in that slot's register — the layout is final either
 way, so adding art is a filename swap with no component changes.
