@@ -58,8 +58,17 @@
     --lnk-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.5,7.5 L7.5,2.5 M3.6,2.5 L7.5,2.5 L7.5,6.4' fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   }
 
-  /* Any dark ground re-points the context-dependent tokens. */
+  /* Any dark ground re-points the context-dependent tokens — the ink most of
+     all.
+
+     This used to set the rules and the focus ring but not the colour, so every
+     dark section had to remember to set its own. Four of them forgot, and the
+     failure is invisible in the worst way: the type renders in Cochineal at
+     almost exactly the luminance of the ground behind it, measuring 1.00:1.
+     It looks like a blank panel, not like broken text. Four identical bugs is
+     the token being wrong, not four sections being careless. */
   .on-dark {
+    color: var(--color-bract);
     --focus: var(--color-bract);
     --rule: rgb(238 212 203 / 0.3);
     --rule-soft: rgb(238 212 203 / 0.16);

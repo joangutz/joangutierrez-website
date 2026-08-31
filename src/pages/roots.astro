@@ -4,6 +4,7 @@ import ChapterRail from '../components/ChapterRail.astro';
 import Link from '../components/Link.astro';
 import Portrait from '../components/Portrait.astro';
 import Collage from '../components/Collage.astro';
+import PhotoGround from '../components/PhotoGround.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { contact, booking, withBase } from '../site';
 
@@ -70,7 +71,8 @@ const rendered = await Promise.all(
   </section>
 
   <!-- The epigraph gets a page to itself, or near enough. -->
-  <section class="band epigraph">
+  <section class="band epigraph on-dark has-ground">
+    <PhotoGround src="epigraph.jpg" from="bottom" />
     <div class="full epigraph-inner">
       <blockquote>
         <p>{r.epigraph.quote}</p>
@@ -247,7 +249,10 @@ const rendered = await Promise.all(
     font-style: normal;
     text-transform: uppercase;
     letter-spacing: 0.22em;
-    color: var(--color-ink-2);
+    /* Secondary ink is a colour for the rose ground. On the epigraph's dark
+       one it is the only thing here that still overrides what .on-dark now
+       hands down, so it names its own pair. */
+    color: rgb(238 212 203 / 0.82);
   }
 
   /* ---- Credentials ---- */

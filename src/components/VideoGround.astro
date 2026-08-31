@@ -1,0 +1,166 @@
+---
+import Collage from './Collage.astro';
+
+/**
+ * A looping video as the ground of a section, with a still behind it.
+ *
+ * The poster is not a fallback, it is the floor. It paints first and stays
+ * visible until the video has decoded, it is what a reader on a metered
+ * connection or a saved-data setting gets instead, and it is what anyone who
+ * has asked for reduced motion gets permanently. A section that depends on
+ * video to look finished is a section that looks broken for a good number of
+ * the people who arrive at it.
+ *
+ * Nothing is fetched until the file exists, so this can ship ahead of the
+ * footage without a broken request in the network panel.
+ *
+ * Sized for the web, not the camera: see assets/video/README.md.
+ */
+interface Props {
+  /** Filename in /assets/video/. Omit to show only the still. */
+  src?: string;
+  /** Filename in /assets/photos/ or /assets/collage/ — the first frame. */
+  poster: string;
+  alt?: string;
+  from?: 'left' | 'bottom';
+}
+
+const { src, poster, alt, from = 'left' } = Astro.props;
+
+const files = import.meta.glob<{ default: string }>(
+  '/assets/video/**/*.{mp4,webm}',
+  { eager: true, query: '?url', import: 'default' }
+);
+
+const mp4 = src ? files[`/assets/video/${src}`] : undefined;
+const webm = src ? files[`/assets/video/${src.replace(/\.mp4$/, '.webm')}`] : undefined;
+---
+
+<div class:list={['ground', `ground-${from}`]} aria-hidden={alt ? undefined : 'true'}>
+  <div class="ground-still">
+    <Collage src={poster} alt={alt ?? ''} register="cochineal" sizes="100vw" />
+  </div>
+
+  {
+    (mp4 || webm) && (
+      <video
+        class="ground-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="none"
+        tabindex="-1"
+        data-video-ground
+      >
+        {webm && <source src={webm} type="video/webm" />}
+        {mp4 && <source src={mp4} type="video/mp4" />}
+      </video>
+    )
+  }
+</div>
+
+<style>
+  .ground {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .ground-still,
+  .ground-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ground-video {
+    opacity: 0;
+    transition: opacity 900ms var(--ease-open);
+  }
+
+  /* Only once it is actually playing — a video element that has not decoded
+     yet is a transparent hole, and fading to it early shows the page behind. */
+  .ground-video[data-playing] {
+    opacity: 1;
+  }
+
+  .ground :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ground::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .ground-left::after {
+    background: linear-gradient(
+      102deg,
+      rgb(44 11 18 / 0.94) 0%,
+      rgb(44 11 18 / 0.86) 45%,
+      rgb(44 11 18 / 0.6) 76%,
+      rgb(44 11 18 / 0.4) 100%
+    );
+  }
+
+  .ground-bottom::after {
+    background: linear-gradient(
+      to top,
+      rgb(44 11 18 / 0.94) 0%,
+      rgb(44 11 18 / 0.86) 45%,
+      rgb(44 11 18 / 0.72) 100%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ground-video {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const grounds = document.querySelectorAll<HTMLVideoElement>('[data-video-ground]');
+
+  if (grounds.length) {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Save-Data is a request not to spend the reader's money on decoration.
+    const conn = (navigator as any).connection;
+    const frugal = Boolean(conn?.saveData);
+
+    for (const v of grounds) {
+      if (still || frugal) {
+        v.remove();
+        continue;
+      }
+
+      v.addEventListener('playing', () => v.setAttribute('data-playing', ''));
+
+      // Load only when the section is near, and stop when it is not — an
+      // offscreen video decoding is battery spent on something nobody sees.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              if (v.preload === 'none') v.preload = 'auto';
+              v.play().catch(() => {
+                /* autoplay refused; the still is already correct */
+              });
+            } else {
+              v.pause();
+            }
+          }
+        },
+        { rootMargin: '200px 0px' }
+      );
+
+      io.observe(v.parentElement ?? v);
+    }
+  }
+</script>
