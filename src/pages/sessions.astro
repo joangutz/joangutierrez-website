@@ -160,16 +160,18 @@ const motifs = [
 
   <!-- The buying page ends the way every page ends: with a door in, not a
        sideways exit. The clinicians line is real but demoted to small type. -->
-  <section class="band section close on-dark has-ground">
+  <section class="close on-dark has-ground">
     <PhotoGround src="close-sessions.jpg" />
-    <div class="col">
-      <h2 class="section-title">{s.close.title}</h2>
-      <p class="close-body">{s.close.body}</p>
-      <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
-      <p class="clinicians">
-        {s.clinicians.body}
-        <Link href={withBase('/for-clinicians/')}>{s.clinicians.link}</Link>
-      </p>
+    <div class="band section">
+      <div class="col">
+        <h2 class="section-title">{s.close.title}</h2>
+        <p class="close-body">{s.close.body}</p>
+        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+        <p class="clinicians">
+          {s.clinicians.body}
+          <Link href={withBase('/for-clinicians/')}>{s.clinicians.link}</Link>
+        </p>
+      </div>
     </div>
   </section>
 </Base>

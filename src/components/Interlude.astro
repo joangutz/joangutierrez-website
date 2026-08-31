@@ -23,14 +23,20 @@ interface Props {
   /** A short line laid over it, when the pause wants naming. */
   caption?: string;
   height?: string;
+  /** For pictures whose own colour fights the palette. */
+  tinted?: boolean;
 }
 
-const { src, alt, caption, height = 'clamp(18rem, 52vh, 34rem)' } = Astro.props;
+const { src, alt, caption, tinted = false, height = 'clamp(18rem, 52vh, 34rem)' } = Astro.props;
 ---
 
 <figure class="interlude" style={`--interlude-h:${height}`}>
-  <div class="interlude-art" aria-hidden={alt ? undefined : 'true'}>
+  <div
+    class:list={['interlude-art', { 'interlude-tinted': tinted }]}
+    aria-hidden={alt ? undefined : 'true'}
+  >
     <Collage src={src} alt={alt ?? ''} register="cochineal" sizes="100vw" />
+    {tinted && <span class="tone" />}
   </div>
   {caption && <figcaption class="interlude-caption">{caption}</figcaption>}
 </figure>
@@ -63,6 +69,26 @@ const { src, alt, caption, height = 'clamp(18rem, 52vh, 34rem)' } = Astro.props;
 
   /* Only enough to keep the picture from ending in a hard edge against the
      rose, and to hold a caption if there is one. */
+
+  /* A photograph whose colour has nothing to do with this palette — green
+     leaves, blue sea — joins it by giving up its own hue. The picture goes
+     monochrome and a wash of Cochineal is blended back in as colour only, so
+     the light and shade survive intact while the hue becomes the site's. A
+     scrim alone could not do this: it darkens a green, it does not stop it
+     being green. */
+  .ground-tinted :global(.collage),
+  .interlude-tinted :global(.collage) {
+    filter: grayscale(1) contrast(1.06);
+  }
+
+  .tone {
+    position: absolute;
+    inset: 0;
+    background: var(--color-cochineal);
+    mix-blend-mode: color;
+    pointer-events: none;
+  }
+
   .interlude-art::after {
     content: '';
     position: absolute;

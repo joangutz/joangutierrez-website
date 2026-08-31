@@ -5,6 +5,7 @@ import Link from '../components/Link.astro';
 import Portrait from '../components/Portrait.astro';
 import Collage from '../components/Collage.astro';
 import PhotoGround from '../components/PhotoGround.astro';
+import Interlude from '../components/Interlude.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { contact, booking, withBase } from '../site';
 
@@ -52,6 +53,8 @@ const rendered = await Promise.all(
   }
 
   <!-- The land, given a section rather than a footer line. -->
+  <Interlude src="roots-practice.jpg" tinted />
+
   {/* The fire is the ground here rather than a picture set into a panel of
       adobe. The panel was the brightest thing on the page and the photograph
       was the smallest — this inverts both, and the words sit on glass. */}

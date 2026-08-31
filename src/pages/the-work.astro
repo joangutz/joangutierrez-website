@@ -28,13 +28,15 @@ const p = entry.data;
     </div>
   </section>
 
-  <section class="band section close on-dark has-ground">
+  <section class="close on-dark has-ground">
     <PhotoGround src="close-work.jpg" />
-    <div class="col">
-      <h2 class="close-title" data-rail-label="Begin">The invitation is simple: watch, learn, practice, and savor.</h2>
-      <div class="close-links">
-        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
-        <Link variant="door" href={withBase('/sessions/')}>See the four offerings</Link>
+    <div class="band section">
+      <div class="col">
+        <h2 class="close-title" data-rail-label="Begin">The invitation is simple: watch, learn, practice, and savor.</h2>
+        <div class="close-links">
+          <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+          <Link variant="door" href={withBase('/sessions/')}>See the four offerings</Link>
+        </div>
       </div>
     </div>
   </section>

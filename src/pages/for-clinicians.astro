@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ChapterRail from '../components/ChapterRail.astro';
+import PhotoGround from '../components/PhotoGround.astro';
 import Link from '../components/Link.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, booking } from '../site';
@@ -14,10 +15,13 @@ const p = entry.data;
 <Base title={p.title} description={p.description}>
   <ChapterRail />
 
-  <section class="band section intro">
-    <div class="col">
-      <span class="label">{p.eyebrow}</span>
-      <h1 class="page-title">{p.lede}</h1>
+  <section class="intro on-dark has-ground">
+    <PhotoGround src="clinicians.jpg" tinted from="bottom" />
+    <div class="band section">
+      <div class="col">
+        <span class="label">{p.eyebrow}</span>
+        <h1 class="page-title">{p.lede}</h1>
+      </div>
     </div>
   </section>
 

@@ -171,12 +171,14 @@ const movedAnchors = {
   }
 
   <!-- 8 · Begin -->
-  <section class="band section close on-dark has-ground">
+  <section class="close on-dark has-ground">
     <PhotoGround src="close-home.jpg" />
-    <div class="col">
-      <h2 class="section-title">{h.close.title}</h2>
-      <p class="close-body">{h.close.body}</p>
-      <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+    <div class="band section">
+      <div class="col">
+        <h2 class="section-title">{h.close.title}</h2>
+        <p class="close-body">{h.close.body}</p>
+        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+      </div>
     </div>
   </section>
 
