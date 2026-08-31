@@ -326,6 +326,15 @@
     }
   }
 
+  /* Holds a PhotoGround: the picture is absolutely placed, and isolation
+     keeps its negative z-index inside this section rather than behind the
+     page. */
+  .has-ground {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
   .visually-hidden {
     position: absolute;
     width: 1px;

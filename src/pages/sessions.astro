@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ChapterRail from '../components/ChapterRail.astro';
+import PhotoGround from '../components/PhotoGround.astro';
 import Link from '../components/Link.astro';
 import OfferingCard from '../components/OfferingCard.astro';
 import PriceGrid from '../components/PriceGrid.astro';
@@ -159,7 +160,8 @@ const motifs = [
 
   <!-- The buying page ends the way every page ends: with a door in, not a
        sideways exit. The clinicians line is real but demoted to small type. -->
-  <section class="band section close on-dark grained">
+  <section class="band section close on-dark has-ground">
+    <PhotoGround src="close-sessions.jpg" />
     <div class="col">
       <h2 class="section-title">{s.close.title}</h2>
       <p class="close-body">{s.close.body}</p>
@@ -378,13 +380,14 @@ const motifs = [
   .close-body {
     margin: 1.25rem 0 2.25rem;
     max-width: 42ch;
-    color: rgb(238 212 203 / 0.86);
+    color: var(--color-bract);
   }
 
   .clinicians {
     margin: 3rem 0 0;
     font-size: 0.85rem;
-    color: rgb(238 212 203 / 0.65);
+    /* Deliberately quiet, but not so quiet it fails over a photograph. */
+    color: rgb(238 212 203 / 0.88);
     max-width: 52ch;
   }
 

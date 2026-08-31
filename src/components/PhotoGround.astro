@@ -1,0 +1,71 @@
+---
+import Collage from './Collage.astro';
+
+/**
+ * A photograph as the ground of a section, with a scrim over it.
+ *
+ * The scrim does two jobs, and both matter: it carries type over a picture
+ * that was never composed to hold any, and it pulls the picture's colour
+ * toward the site's, so a photograph joins the palette rather than arguing
+ * with it.
+ *
+ * Decorative by default. A photograph behind a heading is atmosphere — the
+ * words carry the meaning — so it is hidden from screen readers unless it is
+ * given alt text, which makes it content instead.
+ *
+ * The section that holds this needs `has-ground`, which supplies the
+ * positioning and the clip.
+ */
+interface Props {
+  src: string;
+  /** Supply only when the photograph is content rather than atmosphere. */
+  alt?: string;
+  /** Which corner the words sit in, so the scrim is deepest under them. */
+  from?: 'left' | 'bottom';
+}
+
+const { src, alt, from = 'left' } = Astro.props;
+---
+
+<div class:list={['ground', `ground-${from}`]} aria-hidden={alt ? undefined : 'true'}>
+  <Collage src={src} alt={alt ?? ''} register="cochineal" sizes="100vw" />
+</div>
+
+<style>
+  .ground {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .ground :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ground::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .ground-left::after {
+    background: linear-gradient(
+      102deg,
+      rgb(44 11 18 / 0.94) 0%,
+      rgb(44 11 18 / 0.86) 45%,
+      rgb(44 11 18 / 0.6) 76%,
+      rgb(44 11 18 / 0.4) 100%
+    );
+  }
+
+  .ground-bottom::after {
+    background: linear-gradient(
+      to top,
+      rgb(44 11 18 / 0.94) 0%,
+      rgb(44 11 18 / 0.86) 45%,
+      rgb(44 11 18 / 0.72) 100%
+    );
+  }
+</style>

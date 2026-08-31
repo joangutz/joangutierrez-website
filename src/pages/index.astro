@@ -7,8 +7,9 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import KitSignup from '../components/KitSignup.astro';
 import Testimonials from '../components/Testimonials.astro';
+import PhotoGround from '../components/PhotoGround.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, booking, withBase } from '../site';
+import { site, booking, kit, withBase } from '../site';
 
 const entry = await getEntry('home', 'home');
 if (!entry) throw new Error('Missing /content/home/home.md');
@@ -17,6 +18,15 @@ const h = entry.data;
 const offerings = (await getCollection('offerings')).sort(
   (a, b) => a.data.order - b.data.order
 );
+
+/**
+ * Both of these render nothing until Joan supplies what they need — but a
+ * section that renders nothing still keeps its padding, and the two of them
+ * were leaving 448px of blank page between the story and the close. The
+ * wrapper has to go when its contents do.
+ */
+const hasQuotes = (await getCollection('testimonials')).length > 0;
+const hasSignup = Boolean(kit.formAction);
 
 /**
  * The site this replaces was one page behind hash anchors. Those links are out
@@ -139,21 +149,30 @@ const movedAnchors = {
 
   {/* Between the story and the ask: someone who has just read who Joan is
       meets other people's experience of her before being asked for anything. */}
-  <section class="band section">
-    <div class="wide">
-      <Testimonials />
-    </div>
-  </section>
+  {
+    hasQuotes && (
+      <section class="band section">
+        <div class="wide">
+          <Testimonials />
+        </div>
+      </section>
+    )
+  }
 
-  <!-- 7 · The Red Rose Meditation — the low-commitment rung of the ladder -->
-  <section class="band section">
-    <div class="col">
-      <KitSignup heading={h.freebie.title} body={h.freebie.body} />
-    </div>
-  </section>
+  {/* 7 · The Red Rose Meditation — the low-commitment rung of the ladder */}
+  {
+    hasSignup && (
+      <section class="band section">
+        <div class="col">
+          <KitSignup heading={h.freebie.title} body={h.freebie.body} />
+        </div>
+      </section>
+    )
+  }
 
   <!-- 8 · Begin -->
-  <section class="band section close on-dark grained">
+  <section class="band section close on-dark has-ground">
+    <PhotoGround src="close-home.jpg" />
     <div class="col">
       <h2 class="section-title">{h.close.title}</h2>
       <p class="close-body">{h.close.body}</p>
@@ -479,7 +498,7 @@ const movedAnchors = {
   .close-body {
     margin: 1.25rem 0 2.25rem;
     max-width: 42ch;
-    color: rgb(238 212 203 / 0.86);
+    color: var(--color-bract);
   }
 
 </style>
