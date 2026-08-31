@@ -6,7 +6,7 @@ description: Joan Gutiérrez — the Ciudad Juárez–El Paso borderland, Butoh 
 
 portrait:
   src: joan-roots.jpg
-  alt: Joan sitting above clear water in a wide straw hat, writing in a notebook, mountains behind her.
+  alt: Joan seated and laughing, one arm resting over the back of a chair.
 
 land:
   title: The ground I work from

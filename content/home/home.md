@@ -39,7 +39,7 @@ story:
     - I was raised in the Ciudad Juárez–El Paso desert borderland, a place where categories blur and contradictions are ordinary.
     - I move between body-based art and somatic education. These are not separate for me.
   portrait: joan-home.jpg
-  alt: 'TODO-ALT: describe the portrait of Joan.'
+  alt: Joan looking directly at the camera, a flower tucked behind one ear.
   link: Read the roots
 
 freebie:

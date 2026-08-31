@@ -5,7 +5,7 @@ order: 4
 register: clay
 combined: true
 collage: all-in-one.jpg
-alt: 'TODO-ALT: describe the collage for All-In-One.'
+alt: Collage — a seated figure in grey with a halved watermelon and melon laid across the body.
 teaser: The whole ecosystem, re-weighed each month to meet what actually reveals itself.
 prices:
   - label: Monthly

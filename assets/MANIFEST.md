@@ -1,20 +1,24 @@
 # Image Manifest
 
-## Assigned, awaiting upload
+## What is placed
 
-Five photographs are spoken for. Their alt text is already written and their
-slots are wired — each needs only the file, at the name given.
-
-| Photograph | Goes to | Note |
+| Slot | File | Picture |
 |---|---|---|
-| Forest canopy, one leaf lit from behind | `collage/hero.jpg` | Home hero. Attention itself, and safe as a stranger's first impression of the site. |
-| Hands cupping the terracotta vulva | `collage/desire-mapping.jpg` | Sessions card 2. Anatomy held rather than displayed; the clay is almost exactly the site's own red. |
-| Close study of skin, low warm light | `collage/erotic-embodiment.jpg` | Sessions card 1. Sensation. Deliberately not on Home. |
-| The ceremonial fire | `collage/land.jpg` | Roots, full width. |
-| Reading by the sea, straw hat | `portraits/joan-roots.jpg` | Roots. Renders black and white as things stand — see below. |
+| Home hero | `photos/hero.jpg` | Canopy, one leaf lit from behind |
+| Sessions 1 · Erotic Embodiment | `collage/erotic-embodiment.jpg` | Profile and cantaloupe |
+| Sessions 2 · Desire & Pleasure Mapping | `collage/desire-mapping.jpg` | Reclining figure, melons along the body |
+| Sessions 3 · Scar Tissue Care | `collage/scar-tissue.jpg` | Arms and open hands — the gentlest of the set |
+| Sessions 4 · All-In-One | `collage/all-in-one.jpg` | Seated figure, watermelon and melon |
+| Roots · the land | `photos/land.jpg` | The ceremonial fire |
+| Home · story | `portraits/joan-home.jpg` | Direct gaze, flower behind the ear |
+| Roots | `portraits/joan-roots.jpg` | Seated and laughing |
 
-Still needed: `collage/scar-tissue.jpg`, `collage/all-in-one.jpg`,
-`portraits/joan-home.jpg`, `share.jpg`.
+Every upload is kept in `library/`. To swap one, copy it over the slot name —
+`cp library/collage/DSCF2519.jpg collage/all-in-one.jpg` — and change the alt
+text in `/content/` to match. Nothing else moves.
+
+Still unplaced: `share.jpg`, the 1200×630 image that appears when someone texts
+or posts a link. There is none, so links currently preview blank.
 
 Two things worth deciding rather than defaulting:
 

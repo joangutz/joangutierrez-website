@@ -61,7 +61,9 @@ const rendered = await Promise.all(
       {/* The land photograph had a field in the schema and a row in the
           manifest but no slot on the page — it could never have appeared. */}
       <div class="wide land-art">
-        <Collage src={r.land.image} alt={r.land.alt} register="clay" sizes="(max-width: 900px) 100vw, 62vw" />
+        <div class="land-frame">
+          <Collage src={r.land.image} alt={r.land.alt} register="clay" sizes="(max-width: 700px) 90vw, 30rem" />
+        </div>
       </div>
     </div>
   </section>
@@ -168,11 +170,19 @@ const rendered = await Promise.all(
 
   .land-art {
     margin-top: clamp(2rem, 5vw, 3.5rem);
-    aspect-ratio: 3 / 2;
+  }
+
+  /* The fire stands upright, so its frame does too — a landscape crop took the
+     flame off at both ends. The width lives on an inner element: put on
+     .land-art it lost to `.band > .wide`, which is equally specific and sets
+     max-width to 100%, and the photograph filled the page. */
+  .land-frame {
+    max-width: 30rem;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
   }
 
-  .land-art :global(.collage) {
+  .land-frame :global(.collage) {
     width: 100%;
     height: 100%;
   }
