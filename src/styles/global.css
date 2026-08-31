@@ -522,3 +522,20 @@
     background-size: 200px 200px;
   }
 }
+
+/* ------------------------------------------------------------------
+   Deliberately outside @layer.
+
+   Astro's component styles are unlayered, and an unlayered rule beats
+   anything in a layer no matter how specific — so this could not live in
+   @layer components: Footer's own `.footer { margin-top }` won there
+   every time, however the selector was written.
+
+   A page that ends on a dark section meets the footer directly. Both are
+   Plumstone, so the rose band between them read as a seam across two
+   things that are the same colour. A page that ends on the rose keeps its
+   gap, because there the change of ground is the point.
+   ------------------------------------------------------------------ */
+main:has(> section:last-of-type.on-dark) + .footer {
+  margin-top: 0;
+}
