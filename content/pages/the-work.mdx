@@ -9,7 +9,7 @@ import Realms from '../../src/components/Realms.astro';
 import Link from '../../src/components/Link.astro';
 import KitSignup from '../../src/components/KitSignup.astro';
 import Interlude from '../../src/components/Interlude.astro';
-import { withBase } from '../../src/site';
+import { withBase, kit } from '../../src/site';
 
 {/* The doors and the capture below are structural inserts between Joan's
     sections — none of her prose is altered. They exist because this page
@@ -140,7 +140,7 @@ Sensation returns.
 
 <Interlude src="work-1.jpg" />
 
-<div class="work-capture"><KitSignup body="If this section named something you recognise, begin here: a guided audio meditation, free, alone, at your own pace. It arrives in your inbox." /></div>
+{kit.formAction && <div class="work-capture"><KitSignup body="If this section named something you recognise, begin here: a guided audio meditation, free, alone, at your own pace. It arrives in your inbox." /></div>}
 
 ## Tolerating bliss
 
