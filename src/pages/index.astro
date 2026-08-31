@@ -32,26 +32,33 @@ const movedAnchors = {
 ---
 
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
-  <!-- 1 · Hero. One collage held in silence; the line arrives at breath pace. -->
-  <section class="band hero">
-    <div class="mark hero-rail">
-      <Vessel size="clamp(120px, 24vw, 250px)" bloom label="Petals opening to reveal a lit egg — the mark of this practice." />
-    </div>
-
-    <div class="col hero-text breath">
-      <p class="hero-eyebrow">{h.hero.eyebrow}</p>
-      <h1 class="hero-headline">{h.hero.headline}</h1>
-      <p class="hero-sub">{h.hero.sub}</p>
-    </div>
-
-    <div class="full hero-art">
+  {/* 1 · Hero. The photograph is the ground rather than a block beneath the
+      words, and the mark stands beside the line rather than above it. A scrim
+      in Plumstone does two jobs: it makes the type readable over a photograph,
+      and it pulls the picture's own colour toward the site's. */}
+  <section class="hero on-dark">
+    <div class="hero-bg">
       <Collage
         src={h.hero.collage}
         alt={h.hero.alt}
         register="cochineal"
         priority
-        sizes="(max-width: 900px) 100vw, 62vw"
+        sizes="100vw"
       />
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-head">
+        <div class="hero-mark">
+          <Vessel size="clamp(84px, 13vw, 190px)" bloom label="Petals opening to reveal a lit egg — the mark of this practice." />
+        </div>
+
+        <div class="hero-text breath">
+          <p class="hero-eyebrow">{h.hero.eyebrow}</p>
+          <h1 class="hero-headline">{h.hero.headline}</h1>
+          <p class="hero-sub">{h.hero.sub}</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -163,12 +170,72 @@ const movedAnchors = {
 <style>
   /* ---- Hero ---- */
   .hero {
-    padding-block: clamp(3rem, 9vh, 6rem) clamp(2.5rem, 6vw, 4rem);
-    row-gap: clamp(2.5rem, 6vw, 4rem);
+    position: relative;
+    isolation: isolate;
+    min-height: min(90svh, 920px);
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+    background: var(--color-plumstone);
+    /* .on-dark re-points the focus and rule tokens but not the ink, so the
+       headline inherited Cochineal and all but vanished into the photograph.
+       Every dark section on the site sets this for itself. */
+    color: var(--color-bract);
   }
 
-  .hero-rail {
-    --aura-size: 220%;
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero-bg :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Two scrims. The horizontal one carries the words; the vertical one keeps
+     the photograph from ending in a hard line against the section below. */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        100deg,
+        rgb(44 11 18 / 0.88) 0%,
+        rgb(44 11 18 / 0.74) 40%,
+        rgb(44 11 18 / 0.42) 72%,
+        rgb(44 11 18 / 0.26) 100%
+      ),
+      linear-gradient(to top, rgb(44 11 18 / 0.9) 0%, rgb(44 11 18 / 0.72) 34%, transparent 72%);
+  }
+
+  .hero-inner {
+    max-width: 62rem;
+    width: 100%;
+    margin-inline: auto;
+    padding: clamp(4rem, 12vh, 8rem) clamp(1.25rem, 5vw, 3rem) clamp(3rem, 8vh, 5rem);
+  }
+
+  /* The mark stands beside the line, not above it. */
+  .hero-head {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .hero-mark {
+    flex: none;
+  }
+
+  @media (max-width: 700px) {
+    .hero-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
   }
 
   .hero-eyebrow {
@@ -177,8 +244,11 @@ const movedAnchors = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.22em;
-    color: var(--color-ink-2);
-    margin: 0 0 1.75rem;
+    /* Full strength, not 82%. It is the smallest type in the hero and sits
+       highest, where the photograph is brightest — it needs every point of
+       contrast it can get. */
+    color: var(--color-bract);
+    margin: 0 0 1.5rem;
   }
 
   .hero-headline {
@@ -190,32 +260,11 @@ const movedAnchors = {
   }
 
   .hero-sub {
-    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    font-size: clamp(1.1rem, 1.9vw, 1.35rem);
     line-height: 1.5;
-    color: var(--color-ink-2);
+    color: rgb(238 212 203 / 0.88);
     margin: 1.5rem 0 0;
     max-width: 34ch;
-  }
-
-  .hero-art {
-    /* width:100% is load-bearing — auto inline margins on a grid item cancel
-       the default stretch, which sizes the box to its content instead. */
-    width: 100%;
-    max-width: 62rem;
-    margin-inline: auto;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-  }
-
-  .hero-art :global(.collage) {
-    width: 100%;
-    height: 100%;
-  }
-
-  @media (max-width: 900px) {
-    .hero-art {
-      aspect-ratio: 4 / 3;
-    }
   }
 
   /* The line arrives in three groups, at breath pace. Opacity only, so it is

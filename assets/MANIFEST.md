@@ -4,7 +4,7 @@
 
 | Slot | File | Picture |
 |---|---|---|
-| Home hero | `photos/hero.jpg` | Canopy, one leaf lit from behind |
+| Home hero | `photos/hero.jpg` | Body in low warm light — full-bleed behind the title |
 | Sessions 1 · Erotic Embodiment | `collage/erotic-embodiment.jpg` | Profile and cantaloupe |
 | Sessions 2 · Desire & Pleasure Mapping | `collage/desire-mapping.jpg` | Reclining figure, melons along the body |
 | Sessions 3 · Scar Tissue Care | `collage/scar-tissue.jpg` | Arms and open hands — the gentlest of the set |
