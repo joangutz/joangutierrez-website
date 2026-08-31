@@ -29,12 +29,22 @@ const {
   class: className = '',
 } = Astro.props;
 
-const files = import.meta.glob<{ default: ImageMetadata }>(
+/**
+ * Two folders, one slot. Joan's collage is original artwork and photography is
+ * not, and the site credits them differently — but a slot does not care which
+ * it is handed, so the filename decides the slot and the folder decides what
+ * kind of picture it is. Collage wins a name collision, being the rarer thing.
+ */
+const art = import.meta.glob<{ default: ImageMetadata }>(
   '/assets/collage/**/*.{jpeg,jpg,png,webp,avif}',
   { eager: true }
 );
+const photos = import.meta.glob<{ default: ImageMetadata }>(
+  '/assets/photos/**/*.{jpeg,jpg,png,webp,avif}',
+  { eager: true }
+);
 
-const found = files[`/assets/collage/${src}`];
+const found = art[`/assets/collage/${src}`] ?? photos[`/assets/photos/${src}`];
 ---
 
 {

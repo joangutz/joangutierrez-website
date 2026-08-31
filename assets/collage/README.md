@@ -1,4 +1,7 @@
-# Drop collage / photography here
+# Joan's collage artwork
+
+Photographs go in `../photos/` instead — the site credits the two differently.
+A slot takes either; the filename decides the slot.
 
 Filenames matter — each one is already wired to a slot. Upload with these exact
 names and the image appears with no code change. Anything not yet here renders a
