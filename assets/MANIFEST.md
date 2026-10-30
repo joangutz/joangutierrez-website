@@ -5,7 +5,6 @@
 | Slot | File | Picture |
 |---|---|---|
 | Home hero | `photos/hero.jpg` | Body in low warm light — full-bleed behind the wordmark |
-| Home · the question | `photos/close-home.jpg` | Tinted, behind the one-line question |
 | Home · founder | `portraits/joan-home.jpg` | Direct gaze, flower behind the ear — **in colour** |
 | Home · close | `photos/close-sessions.jpg` | |
 | About banner | `photos/about.jpg` | A person seated by the water, in a landscape |
@@ -14,7 +13,8 @@
 | This Very Body banner | `photos/this-very-body.jpg` | |
 | Happenings banner | `photos/happenings.jpg` | The ceremonial fire — a gathering |
 | Resource banner | `photos/resource.jpg` | Leaves in light, tinted into the palette |
-| Gift banner | `photos/gift.jpg` | Tinted |
+| Home · gift, Gift banner, Resource card | `photos/rose.jpg` | The red rose, cropped above the lettering from Joan's Red Rose Visualization artwork |
+| About · close | `photos/about-close.jpg` | Soft body curve |
 | Inspiration banner | `photos/inspiration.jpg` | A ceramic vulva held in two hands |
 | Library banner | `photos/library.jpg` | |
 | Begin banner | `photos/begin.jpg` | |

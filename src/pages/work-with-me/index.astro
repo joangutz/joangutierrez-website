@@ -10,11 +10,13 @@ import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
 import KitSignup from '../../components/KitSignup.astro';
 import Testimonials from '../../components/Testimonials.astro';
-import { withBase, contact, booking, beginHere } from '../../site';
+import { withBase, contact, booking, beginHere, kit } from '../../site';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
 const s = entry.data;
+
+const hasQuotes = (await getCollection('testimonials')).length > 0;
 
 const offerings = (await getCollection('offerings')).sort(
   (a, b) => a.data.order - b.data.order
@@ -79,16 +81,23 @@ const motifs = [
       </p>
 
       {/* Other people's experience, at the moment a price has just been read. */}
-      <div class="after-prices">
-        <Testimonials />
-      </div>
+      {/* Both of these render nothing until their content exists, and an
+          empty wrapper still keeps its margin — together they were 128px of
+          blank under the price grid. The wrapper goes when the contents do. */}
+      {hasQuotes && (
+        <div class="after-prices">
+          <Testimonials />
+        </div>
+      )}
 
-      <div class="not-ready">
-        <KitSignup
-          heading="Not ready?"
-          body="Begin with the Red Rose Meditation instead — alone, free, at your own pace. It arrives in your inbox."
-        />
-      </div>
+      {kit.formAction && (
+        <div class="not-ready">
+          <KitSignup
+            heading="Not ready?"
+            body="Begin with the Red Rose Visualization instead — alone, free, at your own pace. It arrives in your inbox."
+          />
+        </div>
+      )}
     </div>
   </section>
 

@@ -63,8 +63,16 @@ const year = new Date().getFullYear();
   .footer {
     background: var(--color-plumstone);
     color: var(--color-bract);
-    padding-block: clamp(3rem, 7vw, 5rem);
-    margin-top: clamp(4rem, 10vw, 8rem);
+    /* No top margin. The last section's own padding is the air above the
+       footer; a margin on top of it doubled that into a 320px blank at the
+       end of every page that finished on the light ground.
+
+       The bottom carries the bar's height as well, because the bar is fixed
+       over the foot of the window. Padding the footer rather than the body
+       means the space beneath the last line is the footer's own colour, not
+       a strip of the page ground showing below it. */
+    padding-block: clamp(3rem, 7vw, 5rem)
+      calc(clamp(3rem, 7vw, 5rem) + var(--bar-h) + env(safe-area-inset-bottom, 0px));
   }
 
   .footer-grid {

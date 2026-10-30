@@ -174,9 +174,6 @@
     font-size: clamp(1.0625rem, 0.35vw + 1rem, 1.1875rem);
     line-height: 1.75;
     margin: 0;
-    /* The bar is fixed to the foot of the window, so the last line of the
-       footer needs this much room or it sits permanently underneath it. */
-    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -265,8 +262,12 @@
     margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
   }
 
+  /* The rhythm between sections. Two of these meet at every boundary, so
+     the visible gap is twice this — at 7rem it was 224px of air between
+     consecutive blocks on the same ground, which read as left over rather
+     than as a pause. */
   .section {
-    padding-block: clamp(3.5rem, 9vw, 7rem);
+    padding-block: clamp(3rem, 7vw, 5.5rem);
   }
 
   /* A door that closes out a block gets the same air wherever it appears.
@@ -604,21 +605,4 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 200px 200px;
   }
-}
-
-/* ------------------------------------------------------------------
-   Deliberately outside @layer.
-
-   Astro's component styles are unlayered, and an unlayered rule beats
-   anything in a layer no matter how specific — so this could not live in
-   @layer components: Footer's own `.footer { margin-top }` won there
-   every time, however the selector was written.
-
-   A page that ends on a dark section meets the footer directly. Both are
-   Plumstone, so the rose band between them read as a seam across two
-   things that are the same colour. A page that ends on the rose keeps its
-   gap, because there the change of ground is the point.
-   ------------------------------------------------------------------ */
-main:has(> section:last-of-type.on-dark) + .footer {
-  margin-top: 0;
 }

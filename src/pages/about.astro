@@ -4,6 +4,7 @@ import PageBanner from '../components/PageBanner.astro';
 import ChapterRail from '../components/ChapterRail.astro';
 import Portrait from '../components/Portrait.astro';
 import Link from '../components/Link.astro';
+import PhotoGround from '../components/PhotoGround.astro';
 import { getEntry, render } from 'astro:content';
 import { booking, contact, withBase } from '../site';
 
@@ -44,7 +45,8 @@ const p = entry.data;
     </div>
   </section>
 
-  <section class="close on-dark grained">
+  <section class="close on-dark has-ground">
+    <PhotoGround src="about-close.jpg" />
     <div class="band section">
       <div class="col">
         <h2 class="close-title">Allow me to accompany you.</h2>

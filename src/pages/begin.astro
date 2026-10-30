@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import KitSignup from '../components/KitSignup.astro';
 import PageBanner from '../components/PageBanner.astro';
-import { site, contact, booking, withBase } from '../site';
+import { contact, booking, kit, withBase } from '../site';
 ---
 
 <Base
@@ -15,33 +15,29 @@ import { site, contact, booking, withBase } from '../site';
     title="Twenty minutes, free, no obligation."
     lede="We talk about where you are, what you're longing for, and whether this work is the right fit. If it isn't, I'll say so."
     image="begin.jpg"
-  />
+  >
+    {/* A link rather than an embed. Cal.com renders in its own white, which
+        cannot be reached across an origin boundary and read as a hole cut in
+        the page. A button that leaves is honest about where you are going and
+        loads no third-party script on a page most people only pass through. */}
+    <Link variant="action" href={booking.url}>{booking.label}</Link>
+    <p class="booking-note">Opens cal.com — {booking.duration}, free, no obligation.</p>
+  </PageBanner>
 
-  {/* A link rather than an embed. Cal.com renders in its own white, which
-      cannot be reached across an origin boundary and read as a hole cut in
-      the page — asking it for a dark theme helped and did not fix it. A
-      button that leaves is honest about where you are going, weighs nothing,
-      and loads no third-party script on a page most people only pass
-      through. */}
-  <section class="band section">
-    <div class="col">
-      <Link variant="action" href={booking.url}>{booking.label}</Link>
-      <p class="booking-note">
-        Opens cal.com — {booking.duration}, free, no obligation.
-      </p>
-    </div>
-  </section>
-
-  {/* The not-yet fallback: most first visits to this page end without a
-      booking, and until now they ended with nothing. */}
-  <section class="band section">
-    <div class="col">
-      <KitSignup
-        heading="Not ready to book?"
-        body="Begin alone instead. The Red Rose Visualization is a guided audio practice — free, private, at your own pace. It arrives in your inbox."
-      />
-    </div>
-  </section>
+  {/* The not-yet fallback. Renders nothing until the Kit form exists, so the
+      section has to go with it — left in, it was 224px of empty page. */}
+  {
+    kit.formAction && (
+      <section class="band section">
+        <div class="col">
+          <KitSignup
+            heading="Not ready to book?"
+            body="Begin alone instead. The Red Rose Visualization is a guided audio practice — free, private, at your own pace. It arrives in your inbox."
+          />
+        </div>
+      </section>
+    )
+  }
 
   <section class="band section other">
     <div class="wide other-grid">
@@ -55,13 +51,8 @@ import { site, contact, booking, withBase } from '../site';
         <p class="curiosity">Curiosity is welcomed. Collaborations are too.</p>
       </div>
 
-      <div>
-        <span class="label">Where we can work</span>
-        <ul class="plain">
-          {site.locations.map((l) => <li>{l.mode ? `${l.place} — ${l.mode.toLowerCase()}` : l.place}</li>)}
-        </ul>
-      </div>
-
+      {/* No "where we can work" column: the footer, one scroll below, says
+          exactly the same three lines. */}
       <div>
         <span class="label">If you're a clinician</span>
         <p class="clin">
@@ -75,13 +66,9 @@ import { site, contact, booking, withBase } from '../site';
 
 <style>
   .booking-note {
-    margin: 1.25rem 0 0;
+    margin: 1rem 0 0;
     font-size: 0.92rem;
-    color: var(--color-ink-2);
-  }
-
-  .other {
-    border-top: 1px solid var(--rule-soft);
+    color: rgb(238 212 203 / 0.78);
   }
 
   .other-grid {

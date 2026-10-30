@@ -75,9 +75,23 @@ const movedAnchors = {
     </div>
   </section>
 
-  {/* 2 · One question, held on a photograph and nothing else. */}
-  <section class="question on-dark has-ground">
-    <PhotoGround src={h.question.image} from="bottom" tinted />
+  {/*
+    Every section on Home stands on its own ground, so moving from one to the
+    next is felt as well as read. The sequence alternates by lightness as
+    much as by colour, so no two neighbours are alike:
+
+      hero      photograph, deep
+      question  blush, lit from within — light
+      realms    the salmon ground — mid
+      founder   plumstone — deep
+      begin     paper — light
+      gift      the rose — saturated red
+      close     photograph, deep
+  */}
+
+  {/* 2 · One question, on a ground lit from the centre like the flower
+      photographs Joan pointed to: pale warmth, dark red words. */}
+  <section class="ground-blush">
     <div class="band section">
       <div class="wide">
         <p class="question-text">{h.question.text}</p>
@@ -104,7 +118,8 @@ const movedAnchors = {
   {/* 4 · Founder & educator. The portrait keeps its colour here — grey reads
       as a record, and this is the one place on the site where a reader is
       meeting a person. */}
-  <section class="band section">
+  <section class="ground-deep on-dark grained">
+    <div class="band section">
     <div class="wide story rise">
       <div class="story-portrait">
         <Portrait
@@ -120,10 +135,12 @@ const movedAnchors = {
         <Link variant="door" href={withBase('/about/')}>{h.founder.link}</Link>
       </div>
     </div>
+    </div>
   </section>
 
   {/* 5 · Begin here — the five ways in, at rest. */}
-  <section class="band section" id="begin-here">
+  <section class="ground-paper" id="begin-here">
+    <div class="band section">
     <div class="wide">
       <span class="label">{h.beginHere.label}</span>
       <h2 class="section-title">{h.beginHere.title}</h2>
@@ -154,6 +171,7 @@ const movedAnchors = {
 
       <Link variant="door" href={withBase('/work-with-me/')}>{h.beginHere.link}</Link>
     </div>
+    </div>
   </section>
 
   {
@@ -169,14 +187,17 @@ const movedAnchors = {
   {/* 6 · A gift — the low-commitment rung of the ladder. */}
   {
     hasSignup && (
-      <section class="band section">
-        <div class="col">
-          <KitSignup heading={kit.freebie} body={kit.freebieBody} />
-          <p class="gift-more">
-            <Link variant="door" href={withBase('/resource/gift/')}>
-              About the visualization
-            </Link>
-          </p>
+      <section class="gift on-dark has-ground">
+        <PhotoGround src="rose.jpg" vivid />
+        <div class="band section">
+          <div class="col">
+            <KitSignup heading={kit.freebie} body={kit.freebieBody} />
+            <p class="gift-more">
+              <Link variant="door" href={withBase('/resource/gift/')}>
+                About the visualization
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
     )
@@ -184,12 +205,16 @@ const movedAnchors = {
 
   {
     !hasSignup && (
-      <section class="band section">
-        <div class="col">
-          <span class="label">A gift</span>
-          <h2 class="section-title">{kit.freebie}</h2>
-          <p class="gift-body">{kit.freebieBody}</p>
-          <Link variant="door" href={withBase('/resource/gift/')}>Receive it</Link>
+      <section class="gift on-dark has-ground">
+        <PhotoGround src="rose.jpg" vivid />
+        <div class="band section">
+          <div class="col">
+            <span class="label">A gift</span>
+            <h2 class="section-title">{kit.freebie}</h2>
+            <p class="gift-sub">{kit.freebieSub}</p>
+            <p class="gift-body">{kit.freebieBody}</p>
+            <Link variant="door" href={withBase('/resource/gift/')}>Receive it</Link>
+          </div>
         </div>
       </section>
     )
@@ -197,7 +222,7 @@ const movedAnchors = {
 
   <!-- 7 · Begin -->
   <section class="close on-dark has-ground">
-    <PhotoGround src="close-sessions.jpg" />
+    <PhotoGround src="close-home.jpg" />
     <div class="band section">
       <div class="col">
         <h2 class="section-title">{h.close.title}</h2>
@@ -342,17 +367,66 @@ const movedAnchors = {
     }
   }
 
-  /* ---- The question ---- */
-  .question {
-    background: var(--color-plumstone);
-    color: var(--color-bract);
+  /* ---- Grounds ---- */
+  /* Lit from the centre, falling off to the salmon at the edges — the
+     light in the flower photographs, without a photograph. */
+  /* The held height is for wide screens, where one line of type in a
+     short band would look like a strip. On a phone the question already
+     fills the width in four lines, and the same height left a third of a
+     screen of empty blush above and below it. */
+  .ground-blush {
     display: grid;
     align-items: center;
     min-height: min(62svh, 560px);
+    background:
+      radial-gradient(ellipse 70% 85% at 50% 45%, #f4dccf 0%, #ecc6b2 45%, var(--color-madder) 100%);
+  }
+
+  @media (max-width: 760px) {
+    .ground-blush {
+      min-height: 0;
+    }
+
+    .ground-blush > .band {
+      padding-block: clamp(4.5rem, 18vw, 6rem);
+    }
+  }
+
+  .ground-deep {
+    background: var(--color-plumstone);
+  }
+
+  .ground-paper {
+    background: var(--color-bract);
+  }
+
+  /* The rose is the brightest red on the site. The scrim keeps it the
+     rose while bringing the words to 7:1 or better. */
+  .gift {
+    background: var(--color-cochineal);
+  }
+
+  .gift-sub {
+    margin: 0.6rem 0 0;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-bract);
+  }
+
+  /* The rose's window on a phone: the scrim is light across the top of the
+     section, so the section opens with that much rose before the words. */
+  @media (max-width: 760px) {
+    .gift > .band {
+      padding-top: clamp(10rem, 48vw, 13rem);
+    }
   }
 
   .question-text {
     margin: 0;
+    color: var(--color-cochineal);
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 4.4vw, 3.1rem);
     font-weight: 300;
@@ -413,21 +487,23 @@ const movedAnchors = {
     gap: clamp(0.85rem, 2vw, 1.5rem);
   }
 
-  @media (max-width: 1000px) {
-    .cards {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
+  /* Five never divides evenly into rows, so the grid never asks it to.
+     Five across holds down to an iPad held upright; three across left two
+     orphans on the second row, and two across left Spine Society alone on
+     a row of its own. On a phone the first card runs the full width above a
+     clean two-by-two — which also happens to put 1:1 Sessions, the main way
+     in, first and largest. */
   @media (max-width: 680px) {
     .cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
 
-  @media (max-width: 340px) {
-    .cards {
-      grid-template-columns: minmax(0, 1fr);
+    .cards > li:first-child {
+      grid-column: 1 / -1;
+    }
+
+    .cards > li:first-child .card-art {
+      aspect-ratio: 16 / 10;
     }
   }
 
@@ -523,6 +599,7 @@ const movedAnchors = {
   .gift-body {
     margin: 1.25rem 0 0;
     max-width: 46ch;
+    color: var(--color-bract);
   }
 
   .gift-more {
@@ -530,10 +607,12 @@ const movedAnchors = {
   }
 
   /* ---- Close ---- */
+  /* No top margin: each section now carries its own ground, and a margin
+     here would open a strip of the page colour between the rose and the
+     close. */
   .close {
     background: var(--color-plumstone);
     color: var(--color-bract);
-    margin-top: clamp(3rem, 8vw, 6rem);
   }
 
   .close-body {

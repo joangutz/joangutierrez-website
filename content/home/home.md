@@ -14,7 +14,6 @@ hero:
 
 question:
   text: What if the reason you're here isn't simply to accomplish something with your life but to experience being alive?
-  image: close-home.jpg
 
 realms:
   label: The sacred process of embodiment

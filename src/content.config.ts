@@ -111,7 +111,7 @@ const home = defineCollection({
       collage: z.string(),
       alt: z.string(),
     }),
-    question: z.object({ text: z.string(), image: z.string() }),
+    question: z.object({ text: z.string() }),
     realms: z.object({
       label: z.string(),
       title: z.string(),
