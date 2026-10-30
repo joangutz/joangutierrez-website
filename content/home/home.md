@@ -6,7 +6,7 @@ hero:
   # The wordmark splits across the full width of the window: one word at each
   # margin, the whole first screen held open between them.
   markLeft: Ma
-  markRight: Somatix
+  markRight: Somatrix
   tagline: Somatic education delivered with artistry for vibrant health
   place: Chicago and beyond
   collage: hero.jpg

@@ -25,7 +25,7 @@ export default defineConfig({
   base: '/joangutierrez-website',
   integrations: [mdx()],
   /**
-   * The pages that moved in the Ma Somatix rebuild. Astro writes a
+   * The pages that moved in the Ma Somatrix rebuild. Astro writes a
    * meta-refresh page at each old path on a static build, so links already
    * out in the world — and anything indexed — still land somewhere.
    */

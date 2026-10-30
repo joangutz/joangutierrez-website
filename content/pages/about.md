@@ -2,7 +2,7 @@
 eyebrow: About
 title: My name is Joan
 lede: Somatic educator, artist, and founder of Ma Somatrix
-description: Joan Gutiérrez — somatic educator and artist, founder of Ma Somatix. Training in somatic education and sexology, Butoh, Zen Shiatsu, and the body as a matrix of wisdom.
+description: Joan Gutiérrez — somatic educator and artist, founder of Ma Somatrix. Training in somatic education and sexology, Butoh, Zen Shiatsu, and the body as a matrix of wisdom.
 ---
 
 I received my training in somatic education and sexology from Pacific Center of Somatic Sexology, with continued mentorship from Ellen Heed, PhD, and Zen Shiatsu Chicago.

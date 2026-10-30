@@ -52,7 +52,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
   >
     {/* Tells the receiving end which offering this is, without asking the
         applicant to repeat something the page already knows. */}
-    <input type="hidden" name="_subject" value={`Ma Somatix — ${subject}`} />
+    <input type="hidden" name="_subject" value={`Ma Somatrix — ${subject}`} />
     <input type="hidden" name="applying_for" value={subject} />
 
     <div class="app-grid">
@@ -250,7 +250,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 
         const href =
           `mailto:${to}` +
-          `?subject=${encodeURIComponent(`Ma Somatix — ${subject}`)}` +
+          `?subject=${encodeURIComponent(`Ma Somatrix — ${subject}`)}` +
           `&body=${encodeURIComponent(lines.join('\n'))}`;
 
         status.textContent = 'Opening your email app — press send there and it reaches Joan.';

@@ -8,7 +8,14 @@ The first four are the ones that change what a visitor can actually do.
 
 ---
 
-## 1 · The domain — masomatix.com
+## 1 · The domain — masomatix.com, or masomatrix.com?
+
+**Decide this first.** The name is now Ma Somatrix everywhere, but the
+domain you gave me is `masomatix.com` — without the R. I have not changed
+it, because a domain is something you buy, not something I can rename. If
+you own `masomatrix.com` (or can get it), use that and the name and address
+match; if you keep `masomatix.com`, people will type the R and miss you.
+Whichever you settle on, it's one value: `site.domain` in `src/site.ts`.
 
 The name is changed everywhere in the site. The **deploy** is not, and it
 cannot be until DNS points somewhere, or the current preview URL goes dark
@@ -97,23 +104,13 @@ Each of these has a page built and waiting, marked `TODO-JOAN` in the file:
 Every one of those pages says truthfully that the thing is coming rather
 than standing empty or carrying words I made up for you.
 
-## 6 · Two names that disagree
+## 6 · The name — settled
 
-You wrote **Ma Somatix** for the site, the menu and the domain — that is
-what is live. Your own bio text says **Ma Somatrix** twice ("founder of Ma
-Somatrix Vibrant Health Education", "This is Ma Somatrix"), and Stu's piece
-calls the concept **Ma Soma Matrix**.
+**Ma Somatrix** everywhere: the title card, the bar, the menu, page titles,
+descriptions, the application form's subject line. The one place it is not
+yet is the domain — see item 1.
 
-I left your writing exactly as you wrote it rather than silently correcting
-you, because the three might be deliberate — the practice, the entity, the
-concept. If they aren't, say which one wins and it's a find-and-replace.
-
-## 7 · The wordmark's order
-
-The hero currently reads **MA** at the far left and **SOMATIX** at the far
-right, because that is reading order. Your note said *MA (top far right)*
-and *SOMATIX (top far left)*, which would read "Somatix Ma". I assumed a
-slip; if it was deliberate, it's one line in `src/pages/index.astro`.
+## 7 · (Settled) The wordmark reads MA at the left, SOMATRIX at the right
 
 ## 8 · FAQ answers — four questions need your words
 

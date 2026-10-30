@@ -2,7 +2,7 @@
 eyebrow: Resource
 title: Library
 lede: What to read, watch and practise between sessions.
-description: Books, papers and practices recommended by Ma Somatix — reading for body literacy, pelvic care, somatic sexology and embodiment.
+description: Books, papers and practices recommended by Ma Somatrix — reading for body literacy, pelvic care, somatic sexology and embodiment.
 ---
 
 <!--

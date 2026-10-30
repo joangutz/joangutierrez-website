@@ -6,7 +6,7 @@
 eyebrow: Work with me
 title: Five ways in, each with a shape
 lede: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
-description: Ma Somatix — the five ways into this work, what each includes, why the approach works, and what it costs. Chicago, online, and open to travel.
+description: Ma Somatrix — the five ways into this work, what each includes, why the approach works, and what it costs. Chicago, online, and open to travel.
 
 cards:
   title: The offerings

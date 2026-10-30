@@ -23,6 +23,11 @@ const h = entry.data;
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 const hasSignup = Boolean(kit.formAction);
 
+const subWords = h.hero.tagline.split(' ');
+const subHalf = Math.ceil(subWords.length / 2);
+const subFirst = subWords.slice(0, subHalf).join(' ');
+const subSecond = subWords.slice(subHalf).join(' ');
+
 /**
  * The site this replaces was one page behind hash anchors, and the one before
  * that had a Roots page and a Sessions page. Those links are out in the world,
@@ -38,9 +43,10 @@ const movedAnchors = {
 ---
 
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
-  {/* 1 · The wordmark holds the first screen open: one half at each margin,
-      the photograph between them, and the mark and its two lines resting on
-      the floor of the frame. */}
+  {/* 1 · The title card. The name runs margin to margin, and the line under
+      it is set to exactly the same length — justified across the full width,
+      so name and subtitle read as one engraved block rather than a heading
+      and a caption. The mark rests at the foot of the frame. */}
   <section class="hero on-dark">
     <div class="hero-bg">
       <Collage
@@ -53,10 +59,20 @@ const movedAnchors = {
     </div>
 
     <div class="hero-inner">
-      <h1 class="wordmark">
-        <span class="wm-a">{h.hero.markLeft}</span>
-        <span class="wm-b">{h.hero.markRight}</span>
-      </h1>
+      <div class="title-card">
+        <h1 class="wordmark">
+          <span class="wm-a">{h.hero.markLeft}</span>
+          <span class="wm-b">{h.hero.markRight}</span>
+        </h1>
+        {/* Split in half by word count, with a break that exists only on
+            narrow screens. Left to wrap on its own, a phone broke it after
+            three words of eight, and justifying three words across the full
+            width opened gaps a word wide; halves give both lines the same
+            number of gaps. */}
+        <p class="subtitle">
+          {subFirst}<br class="sub-break" /> {subSecond}
+        </p>
+      </div>
 
       <div class="hero-foot breath">
         <div class="hero-mark">
@@ -66,32 +82,29 @@ const movedAnchors = {
             label="Petals opening to reveal a lit egg — the mark of this practice."
           />
         </div>
-
-        <div class="hero-lines">
-          <p class="hero-tagline">{h.hero.tagline}</p>
-          <p class="hero-place">{h.hero.place}</p>
-        </div>
+        <p class="hero-place">{h.hero.place}</p>
       </div>
     </div>
   </section>
 
   {/*
-    Every section on Home stands on its own ground, so moving from one to the
-    next is felt as well as read. The sequence alternates by lightness as
-    much as by colour, so no two neighbours are alike:
+    Between the two photographs, one continuous ground. The sections are told
+    apart by what they hold and by soft swells of tone — never by a hard edge
+    or a change of colour family. The first pass gave each section its own
+    ground and read as a stack of separate pages; this reads as one place.
 
-      hero      photograph, deep
-      question  blush, lit from within — light
-      realms    the salmon ground — mid
-      founder   plumstone — deep
-      begin     paper — light
-      gift      the rose — saturated red
-      close     photograph, deep
+      hero      photograph — the opening frame
+      question  the ground, with a pool of light behind the words
+      realms    the ground
+      founder   a swell a shade deeper, portrait in colour
+      begin     the ground
+      gift      a swell a shade deeper, the rose as a picture
+      close     photograph — the closing frame
   */}
 
-  {/* 2 · One question, on a ground lit from the centre like the flower
-      photographs Joan pointed to: pale warmth, dark red words. */}
-  <section class="ground-blush">
+  {/* 2 · One question, in a pool of light that dissolves into the ground
+      on every side, like the light in the flower photographs. */}
+  <section class="glow">
     <div class="band section">
       <div class="wide">
         <p class="question-text">{h.question.text}</p>
@@ -118,7 +131,7 @@ const movedAnchors = {
   {/* 4 · Founder & educator. The portrait keeps its colour here — grey reads
       as a record, and this is the one place on the site where a reader is
       meeting a person. */}
-  <section class="ground-deep on-dark grained">
+  <section class="swell">
     <div class="band section">
     <div class="wide story rise">
       <div class="story-portrait">
@@ -139,7 +152,7 @@ const movedAnchors = {
   </section>
 
   {/* 5 · Begin here — the five ways in, at rest. */}
-  <section class="ground-paper" id="begin-here">
+  <section id="begin-here">
     <div class="band section">
     <div class="wide">
       <span class="label">{h.beginHere.label}</span>
@@ -184,41 +197,40 @@ const movedAnchors = {
     )
   }
 
-  {/* 6 · A gift — the low-commitment rung of the ladder. */}
-  {
-    hasSignup && (
-      <section class="gift on-dark has-ground">
-        <PhotoGround src="rose.jpg" vivid />
-        <div class="band section">
-          <div class="col">
-            <KitSignup heading={kit.freebie} body={kit.freebieBody} />
-            <p class="gift-more">
-              <Link variant="door" href={withBase('/resource/gift/')}>
-                About the visualization
-              </Link>
-            </p>
-          </div>
+  {/* 6 · A gift. The rose is a picture here, framed like the portrait and
+      the cards, rather than a ground the words sit on — so the section
+      belongs to the page instead of interrupting it. */}
+  <section class="swell">
+    <div class="band section">
+      <div class="wide gift-row rise">
+        <div class="gift-text">
+          {
+            hasSignup ? (
+              <>
+                <KitSignup heading={kit.freebie} body={kit.freebieBody} />
+                <p class="gift-more">
+                  <Link variant="door" href={withBase('/resource/gift/')}>
+                    About the visualization
+                  </Link>
+                </p>
+              </>
+            ) : (
+              <>
+                <span class="label">A gift</span>
+                <h2 class="section-title">{kit.freebie}</h2>
+                <p class="gift-sub">{kit.freebieSub}</p>
+                <p class="gift-body">{kit.freebieBody}</p>
+                <Link variant="door" href={withBase('/resource/gift/')}>Receive it</Link>
+              </>
+            )
+          }
         </div>
-      </section>
-    )
-  }
-
-  {
-    !hasSignup && (
-      <section class="gift on-dark has-ground">
-        <PhotoGround src="rose.jpg" vivid />
-        <div class="band section">
-          <div class="col">
-            <span class="label">A gift</span>
-            <h2 class="section-title">{kit.freebie}</h2>
-            <p class="gift-sub">{kit.freebieSub}</p>
-            <p class="gift-body">{kit.freebieBody}</p>
-            <Link variant="door" href={withBase('/resource/gift/')}>Receive it</Link>
-          </div>
-        </div>
-      </section>
-    )
-  }
+        <a class="gift-art" href={withBase('/resource/gift/')} tabindex="-1" aria-hidden="true">
+          <Collage src="rose.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 34rem" />
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- 7 · Begin -->
   <section class="close on-dark has-ground">
@@ -265,16 +277,24 @@ const movedAnchors = {
     object-fit: cover;
   }
 
-  /* Two scrims. The top one carries the wordmark; the bottom one carries the
-     mark and its lines, and keeps the photograph from ending in a hard edge
-     against the section below. */
+  /* The old hero's light, restored: a deep wash across from the left keeps
+     the forms soft and abstract rather than literal, and a fall-off at the
+     foot carries the mark. A third, short band across the top holds the
+     title card, which the old hero did not have. */
   .hero-bg::after {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(to bottom, rgb(44 11 18 / 0.72) 0%, rgb(44 11 18 / 0.2) 34%, transparent 58%),
-      linear-gradient(to top, rgb(44 11 18 / 0.92) 0%, rgb(44 11 18 / 0.7) 32%, transparent 68%);
+      linear-gradient(to bottom, rgb(44 11 18 / 0.7) 0%, rgb(44 11 18 / 0.42) 26%, transparent 46%),
+      linear-gradient(
+        100deg,
+        rgb(44 11 18 / 0.88) 0%,
+        rgb(44 11 18 / 0.74) 40%,
+        rgb(44 11 18 / 0.42) 72%,
+        rgb(44 11 18 / 0.26) 100%
+      ),
+      linear-gradient(to top, rgb(44 11 18 / 0.9) 0%, rgb(44 11 18 / 0.72) 26%, transparent 60%);
   }
 
   .hero-inner {
@@ -298,11 +318,53 @@ const movedAnchors = {
        every width — the spread between them is the point, and the
        letterspacing the narrower face needed would only crowd it. */
     font-family: var(--font-wordmark);
-    font-size: clamp(1.6rem, 6.4vw, 5.2rem);
+    font-size: clamp(1.2rem, 6.4vw, 5.2rem);
     font-weight: 300;
     line-height: 1;
     letter-spacing: 0.02em;
     text-transform: uppercase;
+  }
+
+  .title-card {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.9rem, 1.8vw, 1.5rem);
+  }
+
+  /* One string, justified edge to edge so it runs exactly the length of the
+     name above it. Sized to the window so that on a wide screen it very
+     nearly fills the line by itself and justification only evens out the
+     last few pixels; on a phone it takes two lines, both full width. */
+  .subtitle {
+    margin: 0;
+    padding-top: clamp(0.9rem, 1.8vw, 1.5rem);
+    border-top: 1px solid rgb(238 212 203 / 0.38);
+    font-family: var(--font-label);
+    font-size: clamp(0.66rem, 1.42vw, 1.1rem);
+    font-weight: 500;
+    line-height: 1.7;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-align: justify;
+    text-align-last: justify;
+    color: var(--color-bract);
+  }
+
+  .sub-break {
+    display: none;
+  }
+
+  /* Two lines below 720px. Any narrower and the single line has to shrink
+     past the point of being read; any wider and two lines leave gaps. */
+  @media (max-width: 720px) {
+    .sub-break {
+      display: inline;
+    }
+
+    .subtitle {
+      font-size: clamp(0.6rem, 3.1vw, 1.05rem);
+      letter-spacing: 0.16em;
+    }
   }
 
   .hero-foot {
@@ -315,34 +377,14 @@ const movedAnchors = {
     flex: none;
   }
 
-  .hero-tagline {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 2.4vw, 1.7rem);
-    line-height: 1.25;
-    font-weight: 300;
-    /* Wide enough for the line to fall into two even halves, and balanced
-       so it does — at 22ch "health" was left alone on a third line. */
-    max-width: 30ch;
-    text-wrap: balance;
-  }
-
   .hero-place {
-    margin: 0.75rem 0 0;
+    margin: 0;
     font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.82);
-  }
-
-  @media (max-width: 560px) {
-    .hero-foot {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1.5rem;
-    }
+    color: rgb(238 212 203 / 0.86);
   }
 
   /* The line arrives at breath pace. Opacity only, so it is readable
@@ -370,61 +412,50 @@ const movedAnchors = {
     }
   }
 
-  /* ---- Grounds ---- */
-  /* Lit from the centre, falling off to the salmon at the edges — the
-     light in the flower photographs, without a photograph. */
-  /* The held height is for wide screens, where one line of type in a
-     short band would look like a strip. On a phone the question already
-     fills the width in four lines, and the same height left a third of a
-     screen of empty blush above and below it. */
-  .ground-blush {
+  /* ---- The ground and its swells ---- */
+  /* A pool of light, not a band: the ellipse is small enough that it has
+     fallen all the way back to the ground colour before it reaches any
+     edge, so there is no line where the section begins or ends. */
+  .glow {
     display: grid;
     align-items: center;
-    min-height: min(62svh, 560px);
-    background:
-      radial-gradient(ellipse 70% 85% at 50% 45%, #f4dccf 0%, #ecc6b2 45%, var(--color-madder) 100%);
+    min-height: min(56svh, 520px);
+    background: radial-gradient(
+      ellipse 52% 46% at 50% 50%,
+      #f2d6c6 0%,
+      #e9bea7 48%,
+      var(--color-madder) 100%
+    );
   }
 
   @media (max-width: 760px) {
-    .ground-blush {
+    .glow {
       min-height: 0;
+      background: radial-gradient(
+        ellipse 90% 44% at 50% 50%,
+        #f2d6c6 0%,
+        #e9bea7 50%,
+        var(--color-madder) 100%
+      );
     }
 
-    .ground-blush > .band {
+    .glow > .band {
       padding-block: clamp(4.5rem, 18vw, 6rem);
     }
   }
 
-  .ground-deep {
-    background: var(--color-plumstone);
-  }
-
-  .ground-paper {
-    background: var(--color-bract);
-  }
-
-  /* The rose is the brightest red on the site. The scrim keeps it the
-     rose while bringing the words to 7:1 or better. */
-  .gift {
-    background: var(--color-cochineal);
-  }
-
-  .gift-sub {
-    margin: 0.6rem 0 0;
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-bract);
-  }
-
-  /* The rose's window on a phone: the scrim is light across the top of the
-     section, so the section opens with that much rose before the words. */
-  @media (max-width: 760px) {
-    .gift > .band {
-      padding-top: clamp(10rem, 48vw, 13rem);
-    }
+  /* A shade deeper, eased in and out over the section's own padding so the
+     change is felt as a swell rather than seen as an edge. #d4977a keeps
+     Cochineal at 5.53:1 and the secondary ink at 4.73:1. */
+  .swell {
+    --swell: #d4977a;
+    background: linear-gradient(
+      to bottom,
+      var(--color-madder) 0%,
+      var(--swell) 22%,
+      var(--swell) 78%,
+      var(--color-madder) 100%
+    );
   }
 
   .question-text {
@@ -599,10 +630,71 @@ const movedAnchors = {
   }
 
   /* ---- The gift ---- */
+  /* The mirror of the founder row: words first, picture second, so the two
+     image-and-text sections answer each other down the page. */
+  .gift-row {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(1.75rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .gift-art {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+  }
+
+  .gift-art :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 1400ms var(--ease-open);
+  }
+
+  .gift-art:hover :global(.collage) {
+    scale: 1.03;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gift-art :global(.collage) {
+      transition: none;
+    }
+
+    .gift-art:hover :global(.collage) {
+      scale: 1;
+    }
+  }
+
+  @media (max-width: 780px) {
+    .gift-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* The picture leads on a phone, as the portrait does above. */
+    .gift-art {
+      order: -1;
+    }
+  }
+
+  .gift-sub {
+    margin: 0.6rem 0 0;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+  }
+
   .gift-body {
     margin: 1.25rem 0 0;
     max-width: 46ch;
-    color: var(--color-bract);
+  }
+
+  .gift-text :global(.lnk-door) {
+    margin-top: var(--gap-door);
   }
 
   .gift-more {
@@ -610,9 +702,8 @@ const movedAnchors = {
   }
 
   /* ---- Close ---- */
-  /* No top margin: each section now carries its own ground, and a margin
-     here would open a strip of the page colour between the rose and the
-     close. */
+  /* No top margin: the swell above eases back to the ground colour, and
+     the photograph begins where it ends. */
   .close {
     background: var(--color-plumstone);
     color: var(--color-bract);

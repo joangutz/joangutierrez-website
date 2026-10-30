@@ -17,14 +17,14 @@ export const withBase = (path: string): string => {
 };
 
 export const site = {
-  name: 'Ma Somatix',
+  name: 'Ma Somatrix',
   domain: 'masomatix.com',
   /** The practitioner, still named wherever the writing is hers. */
   person: 'Joan Gutiérrez',
   tagline: 'Somatic education delivered with artistry for vibrant health',
   place: 'Chicago and beyond',
   description:
-    'Ma Somatix — somatic education delivered with artistry for vibrant health. In person in Chicago, online internationally, open to travel.',
+    'Ma Somatrix — somatic education delivered with artistry for vibrant health. In person in Chicago, online internationally, open to travel.',
   locations: [
     { place: 'Chicago, IL', mode: 'In person' },
     { place: 'Internationally', mode: 'Online' },
@@ -66,7 +66,7 @@ export const kit = {
  * receive the submission and forward it. Formspree is the closest thing to
  * "a Google Form that lands in my inbox" and needs no code:
  *   1. formspree.io → sign up with joankgutz@gmail.com
- *   2. New Form → name it "Ma Somatix application"
+ *   2. New Form → name it "Ma Somatrix application"
  *   3. copy the endpoint it gives you (https://formspree.io/f/xxxxxxxx)
  *   4. paste it below
  * Until then the form falls back to opening a prefilled email to the address

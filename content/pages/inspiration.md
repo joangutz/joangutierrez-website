@@ -2,7 +2,7 @@
 eyebrow: Resource
 title: Inspiration
 lede: Where this work comes from — the teachers, lineages and ideas it stands on.
-description: The teachers, lineages and ideas behind Ma Somatix — Butoh, Zen Shiatsu, somatic sexology, and the people who shaped the practice.
+description: The teachers, lineages and ideas behind Ma Somatrix — Butoh, Zen Shiatsu, somatic sexology, and the people who shaped the practice.
 ---
 
 <!--

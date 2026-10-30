@@ -22,21 +22,16 @@ interface Props {
   alt?: string;
   /** Which corner the words sit in, so the scrim is deepest under them. */
   from?: 'left' | 'bottom';
-  /**
-   * For a picture whose colour is the point — the rose. The scrim still
-   * carries the words on the left, but lifts off the far side so the
-   * picture reads as itself rather than as a dark ground with a hint.
-   */
-  vivid?: boolean;
+
   /** For pictures whose own colour fights the palette. */
   tinted?: boolean;
 }
 
-const { src, alt, from = 'left', tinted = false, vivid = false } = Astro.props;
+const { src, alt, from = 'left', tinted = false } = Astro.props;
 ---
 
 <div
-  class:list={['ground', vivid ? 'ground-vivid' : `ground-${from}`, { 'ground-tinted': tinted }]}
+  class:list={['ground', `ground-${from}`, { 'ground-tinted': tinted }]}
   aria-hidden={alt ? undefined : 'true'}
 >
   <Collage src={src} alt={alt ?? ''} register="cochineal" sizes="100vw" />
@@ -90,34 +85,6 @@ const { src, alt, from = 'left', tinted = false, vivid = false } = Astro.props;
       rgb(44 11 18 / 0.6) 76%,
       rgb(44 11 18 / 0.4) 100%
     );
-  }
-
-  /* Deep under the words, lifting off only past them. The first version
-     lifted from 38% across and measured 3.3:1 on the small type — the
-     words have to stay readable before the picture gets its colour back. */
-  .ground-vivid::after {
-    background: linear-gradient(
-      100deg,
-      rgb(44 11 18 / 0.92) 0%,
-      rgb(44 11 18 / 0.86) 48%,
-      rgb(44 11 18 / 0.3) 74%,
-      rgb(44 11 18 / 0.05) 100%
-    );
-  }
-
-  /* On a phone the words run the full width, so there is no far side to
-     lift. The picture gets the top of the section instead — the section
-     gives it room there — and the words sit on the deep part below. */
-  @media (max-width: 760px) {
-    .ground-vivid::after {
-      background: linear-gradient(
-        to bottom,
-        rgb(44 11 18 / 0.1) 0%,
-        rgb(44 11 18 / 0.35) 18%,
-        rgb(44 11 18 / 0.88) 38%,
-        rgb(44 11 18 / 0.92) 100%
-      );
-    }
   }
 
   .ground-bottom::after {
