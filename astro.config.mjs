@@ -30,10 +30,10 @@ export default defineConfig({
    * out in the world — and anything indexed — still land somewhere.
    */
   redirects: {
+    // One entry each: Astro treats '/roots' and '/roots/' as the same route
+    // and warns that listing both will become a hard error.
     '/sessions': '/work-with-me/',
-    '/sessions/': '/work-with-me/',
     '/roots': '/about/',
-    '/roots/': '/about/',
   },
   vite: {
     plugins: [tailwindcss()],

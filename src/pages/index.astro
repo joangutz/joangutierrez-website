@@ -268,13 +268,16 @@ const movedAnchors = {
     align-items: baseline;
     gap: 1rem;
     margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(2.1rem, 9vw, 7rem);
+    /* Sprat's wide cut. It is drawn about twice as broad as the regular
+       width, so the size comes down to keep both words on one line at
+       every width — the spread between them is the point, and the
+       letterspacing the narrower face needed would only crowd it. */
+    font-family: var(--font-wordmark);
+    font-size: clamp(1.6rem, 6.4vw, 5.2rem);
     font-weight: 300;
     line-height: 1;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
-    font-variation-settings: 'SOFT' 30, 'WONK' 0, 'opsz' 144;
   }
 
   .hero-foot {
@@ -298,11 +301,11 @@ const movedAnchors = {
 
   .hero-place {
     margin: 0.75rem 0 0;
-    font-family: var(--font-display);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.14em;
     color: rgb(238 212 203 / 0.82);
   }
 
@@ -475,10 +478,10 @@ const movedAnchors = {
   }
 
   .card-container {
-    font-family: var(--font-display);
+    font-family: var(--font-label);
     font-size: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     color: var(--color-ink-2);
   }
 

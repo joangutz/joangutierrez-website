@@ -169,15 +169,11 @@ missing:
 - More body photographs, if you have them — the banners currently reuse one
   image in two places.
 
-## 13 · A decision on the display face
+## 13 · Typefaces — decided
 
-The lowercase *f* you disliked was a real bug, now fixed: the site was
-loading a weight-only cut of Fraunces, so every optical-size and softness
-setting was being discarded. Compare the live pages now before deciding.
-
-If you still want to move, the closest free faces to Lovelace Text are
-Petrona (my pick), Faustina, and Literata. All three are installed and one
-line in `src/styles/global.css` switches the site over.
+Sprat (display) and Ronzino (labels) from Collletttivo, with Newsreader kept
+for reading. Done; nothing needed. Both are SIL Open Font License, and the
+licence files ship with the site in `public/fonts/`.
 
 ## 14 · The outbound links
 

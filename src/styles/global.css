@@ -1,11 +1,78 @@
 @import 'tailwindcss';
 
-/* The full-axis build. The default package ships a wght-only subset, so every
-   'SOFT', 'WONK' and 'opsz' setting in this file was being silently discarded —
-   display headings were rendering at the text optical size, which is what made
-   large type look slightly clumsy. */
-@import '@fontsource-variable/fraunces/full.css';
 @import '@fontsource-variable/newsreader';
+
+/* ------------------------------------------------------------------
+   Sprat for display, Ronzino for the small letterspaced labels — both
+   from Collletttivo, both SIL Open Font License 1.1 (the licence ships
+   beside the files, in ./fonts/ and /public/fonts/). Newsreader stays as
+   the reading face: the long passages are where a text serif earns its
+   place, and Sprat is drawn for size, not for paragraphs.
+
+   Static cuts rather than Sprat's variable file. The variable one is
+   lighter on the wire, but its weight axis runs 10–200 instead of CSS's
+   100–900, so `font-weight: 300` would select nothing sensible and every
+   heading would need its own font-variation-settings. Each cut below
+   claims a range, so whatever weight a rule asks for lands on the nearest
+   real drawing instead of a synthesised one.
+   ------------------------------------------------------------------ */
+@font-face {
+  font-family: 'Sprat';
+  src: url('./fonts/Sprat-Light.woff2') format('woff2');
+  font-weight: 100 350;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sprat';
+  src: url('./fonts/Sprat-Regular.woff2') format('woff2');
+  font-weight: 351 450;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sprat';
+  src: url('./fonts/Sprat-Medium.woff2') format('woff2');
+  font-weight: 451 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sprat';
+  src: url('./fonts/Sprat-Bold.woff2') format('woff2');
+  font-weight: 601 900;
+  font-display: swap;
+}
+
+/* The wide cut, for the wordmark alone. Its own family name so nothing
+   else can ask for it by accident. */
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('./fonts/Sprat-ExtendedLight.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ronzino';
+  src: url('./fonts/Ronzino-Regular.woff2') format('woff2');
+  font-weight: 100 450;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ronzino';
+  src: url('./fonts/Ronzino-Medium.woff2') format('woff2');
+  font-weight: 451 550;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ronzino';
+  src: url('./fonts/Ronzino-Bold.woff2') format('woff2');
+  font-weight: 551 900;
+  font-display: swap;
+}
 
 /* ------------------------------------------------------------------
    Tokens. Five named colours, plus the register tints derived from
@@ -38,8 +105,11 @@
      Bract fails at 2.07:1 and Quick does not read as a mark on it. */
   --color-barro: #c68a5e;
 
-  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-display: 'Sprat', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  /* The small uppercase letterspaced voice — labels, nav, doors, buttons. */
+  --font-label: 'Ronzino', 'Helvetica Neue', Arial, sans-serif;
+  --font-wordmark: 'Sprat Extended', 'Sprat', Georgia, serif;
 
   --ease-open: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -129,7 +199,6 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 30, 'WONK' 0;
     font-weight: 400;
     text-wrap: balance;
     margin: 0;
@@ -258,11 +327,11 @@
   .lnk-door {
     display: inline-flex;
     align-items: baseline;
-    font-family: var(--font-display);
+    font-family: var(--font-label);
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.14em;
     border-bottom: 1px solid var(--color-quick);
     padding-bottom: 0.3rem;
   }
@@ -281,11 +350,11 @@
     align-items: baseline;
     background: var(--color-quick);
     color: var(--color-bract);
-    font-family: var(--font-display);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.14em;
     padding: 0.95rem 1.5rem;
   }
 
@@ -373,11 +442,11 @@
 
   .label {
     display: block;
-    font-family: var(--font-display);
+    font-family: var(--font-label);
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.14em;
     color: var(--color-ink-2);
   }
 
@@ -389,7 +458,6 @@
      slightly different clamps, which read as sloppiness, not hierarchy. */
   .page-title {
     font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 30, 'WONK' 0;
     font-size: clamp(2rem, 5.2vw, 3.4rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
