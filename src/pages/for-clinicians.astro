@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ChapterRail from '../components/ChapterRail.astro';
-import PhotoGround from '../components/PhotoGround.astro';
+import PageBanner from '../components/PageBanner.astro';
 import Link from '../components/Link.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, booking } from '../site';
@@ -15,15 +15,7 @@ const p = entry.data;
 <Base title={p.title} description={p.description}>
   <ChapterRail />
 
-  <section class="intro on-dark has-ground">
-    <PhotoGround src="clinicians.jpg" tinted from="bottom" />
-    <div class="band section">
-      <div class="col">
-        <span class="label">{p.eyebrow}</span>
-        <h1 class="page-title">{p.lede}</h1>
-      </div>
-    </div>
-  </section>
+  <PageBanner eyebrow={p.eyebrow} title={p.lede} image="clinicians.jpg" tinted />
 
   <section class="band body">
     <div class="col prose">
@@ -37,31 +29,15 @@ const p = entry.data;
       <ul class="refer-list">
         <li><Link href={booking.url}>{booking.label}</Link> — {booking.duration}, no obligation</li>
         <li><Link href={contact.smsHref}>Text {contact.smsDisplay}</Link></li>
-        {contact.email && <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>}
+        <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
       </ul>
     </div>
   </section>
 </Base>
 
 <style>
-  .intro {
-    padding-bottom: clamp(1rem, 3vw, 2rem);
-  }
-
   .body {
     padding-bottom: clamp(3rem, 8vw, 6rem);
-  }
-
-  .rail-mark {
-    position: sticky;
-    top: 3rem;
-  }
-
-  @media (max-width: 900px) {
-    .rail-mark {
-      position: static;
-      margin-bottom: 1.5rem;
-    }
   }
 
   /* The scope-of-practice paragraphs arrive italic from the source. Set them

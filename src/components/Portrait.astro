@@ -7,6 +7,13 @@ interface Props {
   alt: string;
   priority?: boolean;
   sizes?: string;
+  /**
+   * Black and white is the house rule, but it is a rule about atmosphere, not
+   * a rule about people: the portrait that introduces Joan on Home reads as a
+   * record when it is grey and as a person when it is not. Set this and the
+   * photograph keeps its own colour.
+   */
+  colour?: boolean;
   class?: string;
 }
 
@@ -15,6 +22,7 @@ const {
   alt,
   priority = false,
   sizes = '(max-width: 900px) 100vw, 40vw',
+  colour = false,
   class: className = '',
 } = Astro.props;
 
@@ -34,7 +42,7 @@ const found = files[`/assets/portraits/${src}`];
       sizes={sizes}
       loading={priority ? 'eager' : 'lazy'}
       decoding={priority ? 'sync' : 'async'}
-      class:list={['portrait', className]}
+      class:list={['portrait', { 'portrait-colour': colour }, className]}
     />
   ) : (
     <div
@@ -61,6 +69,10 @@ const found = files[`/assets/portraits/${src}`];
      was being desaturated out of the palette. */
   img.portrait {
     filter: grayscale(1) contrast(1.05);
+  }
+
+  img.portrait-colour {
+    filter: none;
   }
 
   .portrait-placeholder {

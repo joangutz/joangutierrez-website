@@ -2,81 +2,81 @@
 import { realms } from '../site';
 
 /**
- * Mosher's three realms as a plain triangle. No icons, no illustration —
- * a shape asserting that three things are one thing.
+ * Ma. Soma. Matrix — the sacred process of embodiment, as a triangle of three
+ * lit bubbles.
  *
- * The triangle is exactly equilateral: every side is 304 units, verified by
- * computation rather than by eye — the first version was 332 wide and only
- * 252 tall, a squashed isoceles that read as an accident.
+ * Each bubble has two faces. At rest it shows the word and its one-line
+ * reading — Matrix, The Source. Hover it, focus it, or tap it and the face
+ * turns over to the etymology and the fuller definition; take the pointer
+ * away and it returns to the word. Nothing stays flipped by accident.
  *
- * Every side is drawn from GAP to 1-GAP of its length, so all three drawn
- * segments are the same length by construction and the lines stop short of
- * the corners. Each label sits centred on its own vertex, so a line emerges
- * from the vertical middle of that label's blush rather than floating above
- * it — and the words sit in real gaps instead of masking the lines with
- * background patches.
+ * The control is a real <button>, not a hover-only div, for the plain reason
+ * that a phone has no hover: without it the second face would be unreachable
+ * on exactly the devices most people are reading this on. aria-expanded says
+ * which face is showing. With scripting off, hover and focus-within still
+ * turn the face, so a keyboard alone is enough.
  *
- * The label type is sized in container units, which is what makes the
- * clearance between line-end and word hold at every width. Sized in rem it
- * did not: the figure scales with the page while rem type does not, so the
- * words grew proportionally larger as the figure shrank and eventually
- * collided with the lines.
+ * The three sit on the triangle apex-down-left-right, which is reading order
+ * as well as the order of the process, so the DOM and the eye agree.
  *
- * The words are real HTML at the vertices — selectable, translatable, and
- * read in order by a screen reader.
+ * Type is sized in container units against the figure, not the root: sized in
+ * rem the words grew proportionally larger as the figure shrank and ran out
+ * of their circles.
  */
 interface Props {
-  /** The Work shows each realm's detail line; Home shows only the words. */
+  /** Kept for the pages that pass it; both faces are present either way. */
   detailed?: boolean;
   class?: string;
 }
 
-const { detailed = false, class: className = '' } = Astro.props;
+const { class: className = '' } = Astro.props;
 
-/** Apex, lower right, lower left of the 400×420 viewBox. */
-const A = [200, 70];
-const B = [352, 333.3];
-const C = [48, 333.3];
-
-/**
- * How much of each side is left undrawn at each end. One value for all three
- * sides is what keeps the figure symmetric — the drawn segments cannot drift
- * out of step because they are computed from the same number.
- */
-const GAP = 0.26;
-
-const side = ([px, py]: number[], [qx, qy]: number[]) => {
-  const at = (t: number) => [px + t * (qx - px), py + t * (qy - py)];
-  const [sx, sy] = at(GAP);
-  const [ex, ey] = at(1 - GAP);
-  return `M${sx.toFixed(1)},${sy.toFixed(1)} L${ex.toFixed(1)},${ey.toFixed(1)}`;
-};
-
-const SIDES = [side(A, B), side(B, C), side(C, A)];
-
-/** Vertex centres as percentages of the viewBox — glow and label alike. */
-const V = [
-  { x: 50, y: 16.7 },
-  { x: 12, y: 79.4 },
-  { x: 88, y: 79.4 },
+/** Apex, lower left, lower right, as percentages of the figure. */
+const AT = [
+  { x: 50, y: 0 },
+  { x: 0, y: 100 },
+  { x: 100, y: 100 },
 ];
 ---
 
-<figure class:list={['triad', { detailed }, className]}>
+<figure class:list={['triad', className]}>
   <div class="triad-shape">
-    <svg viewBox="0 0 400 420" aria-hidden="true" focusable="false" class="triad-lines">
-      {SIDES.map((d) => <path d={d} />)}
+    {/* Full edges, corner to corner, drawn behind the bubbles. Each bubble
+        carries an opaque disc in the page's own ground colour, so a line
+        simply disappears where a circle begins — which is the look that
+        trimming the paths was trying and failing to achieve, since the two
+        diagonals and the base are different lengths and no single trim
+        fraction suits all three. preserveAspectRatio="none" lets the
+        triangle follow the box; non-scaling-stroke keeps the hairline a
+        hairline while it does. */}
+    <svg
+      class="triad-lines"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M50,0 L0,100 L100,100 Z" />
     </svg>
 
-    {
-      realms.map((realm, i) => (
-        <div class="vertex" style={`--vx:${V[i].x}%;--vy:${V[i].y}%`}>
-          <span class="v-name">{realm.name}</span>
-          <span class="v-gloss">{realm.gloss}</span>
-          {detailed && <span class="v-detail">{realm.detail}</span>}
-        </div>
-      ))
-    }
+    <ol class="triad-list">
+      {
+        realms.map((r, i) => (
+          <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%`}>
+            <button class="orb" type="button" data-orb aria-expanded="false">
+              <span class="orb-face orb-rest">
+                <span class="orb-name">{r.name}</span>
+                <span class="orb-gloss">{r.gloss}</span>
+              </span>
+              <span class="orb-face orb-open">
+                <span class="orb-origin">{r.origin}</span>
+                <span class="orb-detail">{r.detail}</span>
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </figure>
 
@@ -84,117 +84,315 @@ const V = [
   .triad {
     margin: 0 auto;
     width: 100%;
-    max-width: 30rem;
-    /* The corner labels are centred on their vertices, so half of each hangs
-       outside the shape box. This is the room they hang into. */
-    padding-inline: clamp(1rem, 5%, 2.5rem);
-    /* The vertices sit at 79.4% of the shape, so the box already carries room
-       below the base for the labels that hang into it. Only the top needs air. */
-    padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
+    max-width: 46rem;
+    padding: 0;
   }
 
   .triad-shape {
     position: relative;
-    aspect-ratio: 400 / 420;
-    width: 100%;
-    /* Label type is sized against this box, not the root, so the figure keeps
-       its proportions — and its line-to-word clearance — at every width. */
+    /* Room for the full circle at every vertex: the slots are centred on the
+       triangle's corners, so half of each hangs outside it. */
+    padding: calc(var(--orb) / 2) calc(var(--orb) / 2) calc(var(--orb) / 2);
+    aspect-ratio: 1 / 0.86;
     container-type: inline-size;
+    --orb: clamp(9rem, 31cqw, 16.5rem);
+    --orb-ground: var(--color-madder);
   }
 
   .triad-lines {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    z-index: 0;
+    inset: calc(var(--orb) / 2);
+    width: calc(100% - var(--orb));
+    height: calc(100% - var(--orb));
     overflow: visible;
   }
 
   .triad-lines path {
     fill: none;
     stroke: var(--color-quick);
-    stroke-width: 1.25;
+    stroke-width: 1;
     stroke-linecap: round;
+    opacity: 0.55;
     vector-effect: non-scaling-stroke;
   }
 
-  /* Every label centres on its vertex — one rule, three corners, so the
-     figure stays symmetric and each line emerges from the middle of a blush. */
-  .vertex {
-    position: absolute;
-    left: var(--vx);
-    top: var(--vy);
-    translate: -50% -50%;
-    isolation: isolate;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    text-align: center;
-    /* max-content, or a label near the right edge computes its width from the
-       sliver of containing block beside it and wraps into a column while its
-       left-hand twin doesn't — asymmetric wrapping for free. */
-    width: max-content;
-    max-width: 30cqw;
-  }
-
-  /* The blush is the label's own halo rather than a circle fixed at the
-     vertex, so it centres on the words at every width and in both modes. */
-  .vertex::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    translate: -50% -50%;
-    width: calc(100% + 12cqw);
-    height: calc(100% + 10cqw);
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(
-      closest-side,
-      var(--triad-glow, rgb(242 214 203 / 0.85)) 0%,
-      var(--triad-glow-mid, rgb(242 214 203 / 0.3)) 58%,
-      transparent 100%
-    );
-  }
-
-  .v-name {
-    font-family: var(--font-display);
-    font-size: clamp(0.72rem, 3.6cqw, 0.95rem);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-  }
-
-  .v-gloss {
-    font-size: clamp(0.7rem, 3.3cqw, 0.88rem);
-    font-style: italic;
-    color: var(--color-ink-2);
-    line-height: 1.35;
-  }
-
-  /* Two lines' worth whether the sentence needs them or not. Centring each
-     label on its vertex aligns the blushes, but a one-line detail next to a
-     two-line one still lands its NAME half a line higher than its neighbour's,
-     which reads as the figure being crooked. Equal heights align both. */
-  .v-detail {
-    font-size: clamp(0.68rem, 3.1cqw, 0.82rem);
-    line-height: 1.45;
-    min-height: calc(2 * 1.45em);
-    color: var(--color-ink-2);
-    margin-top: 0.2rem;
-  }
-
-  .on-dark .v-gloss,
-  .on-dark .v-detail {
-    color: rgb(238 212 203 / 0.8);
-  }
-
   .on-dark .triad-lines path {
-    stroke: var(--color-madder);
+    stroke: var(--color-bract);
+    opacity: 0.4;
   }
 
   .on-dark .triad-shape {
-    --triad-glow: rgb(238 212 203 / 0.3);
-    --triad-glow-mid: rgb(238 212 203 / 0.1);
+    --orb-ground: var(--color-plumstone);
+  }
+
+  .triad-list {
+    position: absolute;
+    z-index: 1;
+    inset: calc(var(--orb) / 2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .orb-slot {
+    position: absolute;
+    left: var(--ox);
+    top: var(--oy);
+    translate: -50% -50%;
+  }
+
+  /* The bubble. A lit sphere rather than a flat disc: the highlight sits
+     off-centre, which is what makes it read as rounded rather than as a
+     circle of colour. */
+  .orb {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--orb);
+    height: var(--orb);
+    /* A circle's usable box is its inscribed square, about 0.71 of the
+       diameter — pad any less and the longest line of the open face runs out
+       through the corners. */
+    padding: calc(var(--orb) * 0.155);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    /* Two layers on the element itself rather than a pseudo-element behind
+       it: the lit dome over an opaque disc in the page's own ground colour,
+       which is what hides the line ends. It has to be a background layer,
+       because `scale` and `filter` on hover make this element a stacking
+       context, and inside one a negative-z-index child paints *over* the
+       element's background — which flattened the bubble the moment a pointer
+       touched it. */
+    background:
+      radial-gradient(
+        circle at 36% 30%,
+        var(--orb-hi, rgb(255 244 238 / 0.95)) 0%,
+        var(--orb-core, rgb(240 206 193 / 0.8)) 38%,
+        var(--orb-edge, rgb(219 161 132 / 0.42)) 72%,
+        transparent 100%
+      ),
+      radial-gradient(circle closest-side, var(--orb-ground) 0%, var(--orb-ground) 100%);
+    box-shadow: inset 0 0 calc(var(--orb) * 0.14) rgb(255 246 240 / 0.5);
+    transition:
+      scale 520ms var(--ease-open),
+      filter 520ms var(--ease-open);
+  }
+
+  .on-dark .orb {
+    --orb-hi: rgb(255 240 232 / 0.5);
+    --orb-core: rgb(238 212 203 / 0.26);
+    --orb-edge: rgb(238 212 203 / 0.1);
+  }
+
+  .orb:hover,
+  .orb[aria-expanded='true'] {
+    scale: 1.025;
+    filter: brightness(1.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb {
+      transition: none;
+    }
+
+    .orb:hover,
+    .orb[aria-expanded='true'] {
+      scale: 1;
+    }
+  }
+
+  /* Both faces occupy the same cell, so the bubble never changes size as it
+     turns over and the figure never reflows under the reader's pointer. */
+  .orb-face {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+    max-width: 100%;
+    transition: opacity 320ms var(--ease-open);
+  }
+
+  .orb-open {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Hover and focus-within turn the face with no script at all; the script
+     adds aria-expanded, which is what turns it on a touch screen. */
+  .orb:hover .orb-rest,
+  .orb:focus-visible .orb-rest,
+  .orb[aria-expanded='true'] .orb-rest {
+    opacity: 0;
+  }
+
+  .orb:hover .orb-open,
+  .orb:focus-visible .orb-open,
+  .orb[aria-expanded='true'] .orb-open {
+    opacity: 1;
+  }
+
+  .orb-name {
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 4.4cqw, 1.5rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    line-height: 1.1;
+    color: var(--color-cochineal);
+  }
+
+  .orb-gloss {
+    font-size: clamp(0.72rem, 3cqw, 1rem);
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--color-ink-2);
+  }
+
+  .orb-origin {
+    font-family: var(--font-display);
+    font-size: clamp(0.54rem, 1.9cqw, 0.68rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.25;
+    color: var(--color-quick);
+  }
+
+  .orb-detail {
+    font-size: clamp(0.6rem, 2.1cqw, 0.78rem);
+    line-height: 1.35;
+    text-wrap: balance;
+    color: var(--color-cochineal);
+  }
+
+  /* The bubble is pale on both grounds, so its type stays dark on a dark
+     page — a Bract word inside a Bract-lit sphere would vanish. */
+  .on-dark .orb-name,
+  .on-dark .orb-detail {
+    color: var(--color-bract);
+  }
+
+  .on-dark .orb-gloss {
+    color: rgb(238 212 203 / 0.82);
+  }
+
+  .on-dark .orb-origin {
+    color: rgb(238 212 203 / 0.72);
+  }
+
+  /* Narrow: the triangle becomes the chain the process actually is, which is
+     also how Joan drew it — Matrix above Ma above Soma. */
+  @media (max-width: 620px) {
+    .triad-shape {
+      aspect-ratio: auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(0.9rem, 4vw, 1.5rem);
+      --orb: min(16rem, 68vw);
+    }
+
+    .triad-lines {
+      display: none;
+    }
+
+    .triad-list {
+      position: static;
+      inset: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1.4rem, 6vw, 2.2rem);
+      width: 100%;
+    }
+
+    /* The arrow between one bubble and the next, drawn in CSS so the stack
+       still reads as a sequence rather than three loose circles. */
+    .orb-slot {
+      position: relative;
+      left: auto;
+      top: auto;
+      translate: none;
+    }
+
+    .orb-slot + .orb-slot::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 0.35rem);
+      translate: -50% 0;
+      width: 1px;
+      height: clamp(0.7rem, 3vw, 1.2rem);
+      background: var(--color-quick);
+      opacity: 0.55;
+    }
+
+    .on-dark .orb-slot + .orb-slot::before {
+      background: var(--color-bract);
+      opacity: 0.4;
+    }
+
+    .orb-detail {
+      font-size: 0.8rem;
+    }
+
+    .orb-name {
+      font-size: 1.3rem;
+    }
+
+    .orb-gloss {
+      font-size: 0.95rem;
+    }
+
+    .orb-origin {
+      font-size: 0.66rem;
+    }
   }
 </style>
+
+<script>
+  /**
+   * Hover does the work on a desktop; this is for everything else.
+   *
+   * A tap opens the bubble it lands on and closes any other, so two faces are
+   * never turned at once. A pointer leaving the bubble closes it again, which
+   * is what makes a mouse behave exactly as asked: show the definition while
+   * the pointer is on it, and go back to the word when it leaves.
+   */
+  const orbs = [...document.querySelectorAll<HTMLButtonElement>('[data-orb]')];
+
+  const closeAll = (except?: HTMLElement) => {
+    for (const o of orbs) if (o !== except) o.setAttribute('aria-expanded', 'false');
+  };
+
+  for (const orb of orbs) {
+    orb.addEventListener('click', () => {
+      const open = orb.getAttribute('aria-expanded') === 'true';
+      closeAll(orb);
+      orb.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Only a mouse or pen closes on leave. A touch "pointerleave" fires the
+    // instant the finger lifts, which would shut the bubble before it had
+    // been read.
+    orb.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'touch') return;
+      orb.setAttribute('aria-expanded', 'false');
+    });
+
+    orb.addEventListener('blur', () => orb.setAttribute('aria-expanded', 'false'));
+  }
+
+  // Tapping anywhere else puts the words back.
+  document.addEventListener('pointerdown', (e) => {
+    if (!(e.target as HTMLElement)?.closest('[data-orb]')) closeAll();
+  });
+</script>

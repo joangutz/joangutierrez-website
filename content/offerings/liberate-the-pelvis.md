@@ -1,7 +1,7 @@
 ---
-title: Scar Tissue Care
+title: Liberate the Pelvis
 container: Monthly practice
-order: 3
+order: 2
 register: brick
 collage: scar-tissue.jpg
 alt: Collage — pale arms and open hands reaching across a grey ground, holding something small and lit.

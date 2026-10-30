@@ -103,31 +103,34 @@ const home = defineCollection({
   loader: glob({ base: './content/home', pattern: '**/*.md' }),
   schema: z.object({
     hero: z.object({
-      eyebrow: z.string(),
-      headline: z.string(),
-      sub: z.string(),
+      /** The wordmark splits in two, one half at each margin. */
+      markLeft: z.string(),
+      markRight: z.string(),
+      tagline: z.string(),
+      place: z.string(),
       collage: z.string(),
       alt: z.string(),
     }),
-    audience: z.object({
-      title: z.string(),
-      lines: z.array(z.string()),
-      link: z.string(),
-    }),
+    question: z.object({ text: z.string(), image: z.string() }),
     realms: z.object({
+      label: z.string(),
       title: z.string(),
       body: z.string(),
-      link: z.string(),
+      coda: z.string(),
     }),
-    sessions: z.object({ title: z.string(), body: z.string(), link: z.string() }),
-    story: z.object({
-      title: z.string(),
+    founder: z.object({
+      label: z.string(),
       paragraphs: z.array(z.string()),
       portrait: z.string(),
       alt: z.string(),
       link: z.string(),
     }),
-    freebie: z.object({ title: z.string(), body: z.string() }),
+    beginHere: z.object({
+      label: z.string(),
+      title: z.string(),
+      body: z.string(),
+      link: z.string(),
+    }),
     close: z.object({ title: z.string(), body: z.string() }),
   }),
 });
@@ -164,43 +167,6 @@ const sessionsPage = defineCollection({
   }),
 });
 
-/** Roots: the land, the epigraph, and the credentials kept complete but quiet. */
-const rootsPage = defineCollection({
-  loader: glob({ base: './content/roots', pattern: '**/*.md' }),
-  schema: z.object({
-    eyebrow: z.string(),
-    title: z.string(),
-    lede: z.string(),
-    description: z.string(),
-    portrait: z.object({ src: z.string(), alt: z.string() }),
-    land: z.object({
-      title: z.string(),
-      paragraphs: z.array(z.string()),
-      image: z.string(),
-      alt: z.string(),
-    }),
-    epigraph: z.object({ quote: z.string(), source: z.string() }),
-    credentials: z.object({
-      title: z.string(),
-      note: z.string(),
-      groups: z.array(
-        z.object({
-          heading: z.string(),
-          items: z.array(
-            z.object({
-              name: z.string(),
-              detail: z.string().optional(),
-              where: z.string().optional(),
-              when: z.string().optional(),
-            })
-          ),
-        })
-      ),
-      ethics: z.string(),
-    }),
-  }),
-});
-
 export const collections = {
   offerings,
   testimonials,
@@ -208,5 +174,4 @@ export const collections = {
   pages,
   home,
   sessionsPage,
-  rootsPage,
 };

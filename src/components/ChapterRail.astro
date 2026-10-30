@@ -85,7 +85,7 @@
     display: block;
     width: 100%;
     /* Set from the viewport at runtime: the height each marker can claim while
-       all of them still fit between the sticky bar and the footer. Fixed at one
+       all of them still fit between the top of the window and the bar. Fixed at one
        line the rail threw away titles on screens with height to spare. */
     height: var(--rail-slot, 1.25rem);
     text-decoration: none;
@@ -520,35 +520,32 @@
       };
 
       /**
-       * Vertically centred, but never under the sticky bar and never over the
-       * footer. As the footer rises the rail is pushed up with it, so it comes
-       * to rest above the dark ground rather than scrolling across it.
+       * Vertically centred, but never over the footer and never under the
+       * bar — which now sits at the foot of the window rather than the head
+       * of it, so it is a floor for the rail instead of a ceiling. As the
+       * footer rises the rail is pushed up with it, which holds it still
+       * against the page rather than letting it scroll across the dark
+       * ground.
        */
       const place = () => {
         const railH = rail.offsetHeight;
-        const barBottom = navBar ? navBar.getBoundingClientRect().bottom : 0;
-        // Two thresholds: the air it would like under the bar, and the least
-        // it will accept. Given the choice between crowding the bar and
-        // running onto the footer, crowding the bar is the lesser fault.
-        const wantTop = barBottom + 40;
-        const minTop = barBottom + 12;
+        const barTop = navBar
+          ? navBar.getBoundingClientRect().top
+          : window.innerHeight;
 
-        let top = Math.max(wantTop, (window.innerHeight - railH) / 2);
+        // Whatever comes first from below — the bar, or the footer arriving.
+        let floor = barTop - FOOT_GAP;
+        if (footer) floor = Math.min(floor, footer.getBoundingClientRect().top - FOOT_GAP);
 
-        if (footer) {
-          const footTop = footer.getBoundingClientRect().top;
-          // As the footer rises the rail is pushed up with it, which holds it
-          // still against the page rather than sliding across the dark ground.
-          top = Math.min(top, footTop - railH - FOOT_GAP);
-          top = Math.max(minTop, top);
+        const minTop = 12;
+        let top = Math.max(minTop, (window.innerHeight - railH) / 2);
+        top = Math.min(top, floor - railH);
+        top = Math.max(minTop, top);
 
-          // Only when even that cannot clear the footer does it step aside.
-          const collides = top + railH + 8 > footTop;
-          rail.style.opacity = collides ? '0' : '1';
-          rail.style.pointerEvents = collides ? 'none' : '';
-        } else {
-          top = Math.max(minTop, top);
-        }
+        // Only when even that cannot clear what is below does it step aside.
+        const collides = top + railH + 8 > floor + FOOT_GAP;
+        rail.style.opacity = collides ? '0' : '1';
+        rail.style.pointerEvents = collides ? 'none' : '';
 
         rail.style.top = `${top}px`;
       };

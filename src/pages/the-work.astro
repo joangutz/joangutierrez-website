@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ChapterRail from '../components/ChapterRail.astro';
 import PhotoGround from '../components/PhotoGround.astro';
+import PageBanner from '../components/PageBanner.astro';
 import Link from '../components/Link.astro';
 import { getEntry, render } from 'astro:content';
 import { booking, withBase } from '../site';
@@ -15,12 +16,7 @@ const p = entry.data;
 <Base title={p.title} description={p.description}>
   <ChapterRail />
 
-  <section class="band section intro">
-    <div class="col">
-      <span class="label">{p.eyebrow}</span>
-      <h1 class="page-title">{p.lede}</h1>
-    </div>
-  </section>
+  <PageBanner eyebrow={p.eyebrow} title={p.lede} image="close-work.jpg" />
 
   <section class="band body">
     <div class="col prose">
@@ -35,7 +31,7 @@ const p = entry.data;
         <h2 class="close-title" data-rail-label="Begin">The invitation is simple: watch, learn, practice, and savor.</h2>
         <div class="close-links">
           <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
-          <Link variant="door" href={withBase('/sessions/')}>See the four offerings</Link>
+          <Link variant="door" href={withBase('/work-with-me/')}>See the five ways in</Link>
         </div>
       </div>
     </div>
@@ -43,10 +39,6 @@ const p = entry.data;
 </Base>
 
 <style>
-  .intro {
-    padding-bottom: clamp(1rem, 3vw, 2rem);
-  }
-
   .body {
     padding-bottom: clamp(3rem, 8vw, 6rem);
   }

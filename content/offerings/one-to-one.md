@@ -1,5 +1,5 @@
 ---
-title: Erotic Embodiment Education
+title: 1:1 Sessions
 container: Three-month study
 order: 1
 register: plumstone

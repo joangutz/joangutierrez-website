@@ -9,43 +9,38 @@ import KitSignup from '../components/KitSignup.astro';
 import Testimonials from '../components/Testimonials.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, booking, kit, withBase } from '../site';
+import { site, booking, kit, beginHere, withBase } from '../site';
 
 const entry = await getEntry('home', 'home');
 if (!entry) throw new Error('Missing /content/home/home.md');
 const h = entry.data;
 
-const offerings = (await getCollection('offerings')).sort(
-  (a, b) => a.data.order - b.data.order
-);
-
 /**
- * Both of these render nothing until Joan supplies what they need — but a
- * section that renders nothing still keeps its padding, and the two of them
- * were leaving 448px of blank page between the story and the close. The
- * wrapper has to go when its contents do.
+ * A section that renders nothing still keeps its padding — two of them once
+ * left 448px of blank page between the story and the close. The wrapper has
+ * to go when its contents do.
  */
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 const hasSignup = Boolean(kit.formAction);
 
 /**
- * The site this replaces was one page behind hash anchors. Those links are out
- * in the world, and a fragment never reaches the server, so the redirect has to
- * happen in the browser — with the deploy base baked in.
+ * The site this replaces was one page behind hash anchors, and the one before
+ * that had a Roots page and a Sessions page. Those links are out in the world,
+ * and a fragment never reaches the server, so the redirect has to happen in
+ * the browser — with the deploy base baked in.
  */
 const movedAnchors = {
   '#approach': withBase('/the-work/'),
-  '#about': withBase('/roots/'),
-  '#offerings': withBase('/sessions/'),
+  '#about': withBase('/about/'),
+  '#offerings': withBase('/work-with-me/'),
   '#connect': withBase('/begin/'),
 };
 ---
 
 <Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
-  {/* 1 · Hero. The photograph is the ground rather than a block beneath the
-      words, and the mark stands beside the line rather than above it. A scrim
-      in Plumstone does two jobs: it makes the type readable over a photograph,
-      and it pulls the picture's own colour toward the site's. */}
+  {/* 1 · The wordmark holds the first screen open: one half at each margin,
+      the photograph between them, and the mark and its two lines resting on
+      the floor of the frame. */}
   <section class="hero on-dark">
     <div class="hero-bg">
       <Collage
@@ -58,67 +53,98 @@ const movedAnchors = {
     </div>
 
     <div class="hero-inner">
-      <div class="hero-head">
+      <h1 class="wordmark">
+        <span class="wm-a">{h.hero.markLeft}</span>
+        <span class="wm-b">{h.hero.markRight}</span>
+      </h1>
+
+      <div class="hero-foot breath">
         <div class="hero-mark">
-          <Vessel size="clamp(84px, 13vw, 190px)" bloom label="Petals opening to reveal a lit egg — the mark of this practice." />
+          <Vessel
+            size="clamp(104px, 16vw, 230px)"
+            bloom
+            label="Petals opening to reveal a lit egg — the mark of this practice."
+          />
         </div>
 
-        <div class="hero-text breath">
-          <p class="hero-eyebrow">{h.hero.eyebrow}</p>
-          <h1 class="hero-headline">{h.hero.headline}</h1>
-          <p class="hero-sub">{h.hero.sub}</p>
+        <div class="hero-lines">
+          <p class="hero-tagline">{h.hero.tagline}</p>
+          <p class="hero-place">{h.hero.place}</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 2 · Who this work is for -->
-  <section class="band section">
-    <div class="col">
-      <span class="label">{h.audience.title}</span>
-      <ul class="audience rise">
-        {h.audience.lines.map((line) => <li>{line}</li>)}
-      </ul>
-      <Link variant="door" href={withBase('/the-work/')}>{h.audience.link}</Link>
+  {/* 2 · One question, held on a photograph and nothing else. */}
+  <section class="question on-dark has-ground">
+    <PhotoGround src={h.question.image} from="bottom" tinted />
+    <div class="band section">
+      <div class="wide">
+        <p class="question-text">{h.question.text}</p>
+      </div>
     </div>
   </section>
 
-  <!-- 3 · The three realms -->
+  {/* 3 · Ma. Soma. Matrix. */}
   <section class="band section">
     <div class="wide">
-      <span class="label">The three realms</span>
+      <span class="label">{h.realms.label}</span>
       <h2 class="section-title">{h.realms.title}</h2>
+
       <div class="realms-row rise">
         <Realms />
-        <p class="realms-body">{h.realms.body}</p>
+        <div class="realms-body">
+          <p>{h.realms.body}</p>
+          <p class="realms-coda">{h.realms.coda}</p>
+        </div>
       </div>
-      <Link variant="door" href={withBase('/the-work/#realms')}>{h.realms.link}</Link>
     </div>
   </section>
 
-  <!-- 4 · The four offerings, at rest -->
+  {/* 4 · Founder & educator. The portrait keeps its colour here — grey reads
+      as a record, and this is the one place on the site where a reader is
+      meeting a person. */}
   <section class="band section">
+    <div class="wide story rise">
+      <div class="story-portrait">
+        <Portrait
+          src={h.founder.portrait}
+          alt={h.founder.alt}
+          colour
+          sizes="(max-width: 900px) 60vw, 26vw"
+        />
+      </div>
+      <div class="story-text">
+        <span class="label">{h.founder.label}</span>
+        {h.founder.paragraphs.map((p) => <p>{p}</p>)}
+        <Link variant="door" href={withBase('/about/')}>{h.founder.link}</Link>
+      </div>
+    </div>
+  </section>
+
+  {/* 5 · Begin here — the five ways in, at rest. */}
+  <section class="band section" id="begin-here">
     <div class="wide">
-      <span class="label">Sessions</span>
-      <h2 class="section-title">{h.sessions.title}</h2>
-      <p class="lede sessions-lede">{h.sessions.body}</p>
+      <span class="label">{h.beginHere.label}</span>
+      <h2 class="section-title">{h.beginHere.title}</h2>
+      <p class="lede sessions-lede">{h.beginHere.body}</p>
 
       <ul class="cards rise">
         {
-          offerings.map((o) => (
+          beginHere.map((o) => (
             <li>
-              <a class="card" href={withBase(`/sessions/#${o.id}`)}>
+              <a class="card" href={withBase(o.href)}>
                 <span class="card-art">
                   <Collage
-                    src={o.data.collage}
-                    alt={o.data.alt}
-                    register={o.data.register}
-                    sizes="(max-width: 640px) 80vw, (max-width: 1000px) 40vw, 22vw"
+                    src={o.collage}
+                    alt=""
+                    register={o.register}
+                    sizes="(max-width: 640px) 80vw, (max-width: 1000px) 40vw, 19vw"
                   />
                 </span>
                 <span class="card-meta">
-                  <span class="card-title">{o.data.title}</span>
-                  <span class="card-container">{o.data.container}</span>
+                  <span class="card-title">{o.title}</span>
+                  <span class="card-container">{o.note}</span>
                 </span>
               </a>
             </li>
@@ -126,29 +152,10 @@ const movedAnchors = {
         }
       </ul>
 
-      <div class="doors">
-        <Link variant="door" href={withBase('/sessions/')}>{h.sessions.link}</Link>
-        <Link variant="door" href={withBase('/sessions/#arc')}>See what a practice session looks like</Link>
-      </div>
+      <Link variant="door" href={withBase('/work-with-me/')}>{h.beginHere.link}</Link>
     </div>
   </section>
 
-  <!-- 5 · One portrait, two sentences -->
-  <section class="band section">
-    <div class="wide story rise">
-      <div class="story-portrait">
-        <Portrait src={h.story.portrait} alt={h.story.alt} sizes="(max-width: 900px) 60vw, 26vw" />
-      </div>
-      <div class="story-text">
-        <span class="label">{h.story.title}</span>
-        {h.story.paragraphs.map((p) => <p>{p}</p>)}
-        <Link variant="door" href={withBase('/roots/')}>{h.story.link}</Link>
-      </div>
-    </div>
-  </section>
-
-  {/* Between the story and the ask: someone who has just read who Joan is
-      meets other people's experience of her before being asked for anything. */}
   {
     hasQuotes && (
       <section class="band section">
@@ -159,20 +166,38 @@ const movedAnchors = {
     )
   }
 
-  {/* 7 · The Red Rose Meditation — the low-commitment rung of the ladder */}
+  {/* 6 · A gift — the low-commitment rung of the ladder. */}
   {
     hasSignup && (
       <section class="band section">
         <div class="col">
-          <KitSignup heading={h.freebie.title} body={h.freebie.body} />
+          <KitSignup heading={kit.freebie} body={kit.freebieBody} />
+          <p class="gift-more">
+            <Link variant="door" href={withBase('/resource/gift/')}>
+              About the visualization
+            </Link>
+          </p>
         </div>
       </section>
     )
   }
 
-  <!-- 8 · Begin -->
+  {
+    !hasSignup && (
+      <section class="band section">
+        <div class="col">
+          <span class="label">A gift</span>
+          <h2 class="section-title">{kit.freebie}</h2>
+          <p class="gift-body">{kit.freebieBody}</p>
+          <Link variant="door" href={withBase('/resource/gift/')}>Receive it</Link>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 7 · Begin -->
   <section class="close on-dark has-ground">
-    <PhotoGround src="close-home.jpg" />
+    <PhotoGround src="close-sessions.jpg" />
     <div class="band section">
       <div class="col">
         <h2 class="section-title">{h.close.title}</h2>
@@ -193,14 +218,13 @@ const movedAnchors = {
   .hero {
     position: relative;
     isolation: isolate;
-    min-height: min(90svh, 920px);
+    min-height: min(92svh, 940px);
     display: grid;
-    align-items: end;
     overflow: hidden;
     background: var(--color-plumstone);
-    /* .on-dark re-points the focus and rule tokens but not the ink, so the
-       headline inherited Cochineal and all but vanished into the photograph.
-       Every dark section on the site sets this for itself. */
+    /* .on-dark re-points the focus and rule tokens; the ink is set at the
+       token now, but the ground is named here because this section's
+       background is a photograph rather than a colour. */
     color: var(--color-bract);
   }
 
@@ -216,32 +240,44 @@ const movedAnchors = {
     object-fit: cover;
   }
 
-  /* Two scrims. The horizontal one carries the words; the vertical one keeps
-     the photograph from ending in a hard line against the section below. */
+  /* Two scrims. The top one carries the wordmark; the bottom one carries the
+     mark and its lines, and keeps the photograph from ending in a hard edge
+     against the section below. */
   .hero-bg::after {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(
-        100deg,
-        rgb(44 11 18 / 0.88) 0%,
-        rgb(44 11 18 / 0.74) 40%,
-        rgb(44 11 18 / 0.42) 72%,
-        rgb(44 11 18 / 0.26) 100%
-      ),
-      linear-gradient(to top, rgb(44 11 18 / 0.9) 0%, rgb(44 11 18 / 0.72) 34%, transparent 72%);
+      linear-gradient(to bottom, rgb(44 11 18 / 0.72) 0%, rgb(44 11 18 / 0.2) 34%, transparent 58%),
+      linear-gradient(to top, rgb(44 11 18 / 0.92) 0%, rgb(44 11 18 / 0.7) 32%, transparent 68%);
   }
 
   .hero-inner {
-    max-width: 62rem;
     width: 100%;
-    margin-inline: auto;
-    padding: clamp(4rem, 12vh, 8rem) clamp(1.25rem, 5vw, 3rem) clamp(3rem, 8vh, 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(3rem, 12vh, 7rem);
+    padding: clamp(2rem, 6vh, 4rem) clamp(1.25rem, 5vw, 3rem) clamp(2.5rem, 7vh, 4.5rem);
   }
 
-  /* The mark stands beside the line, not above it. */
-  .hero-head {
+  /* One name, pushed to both margins, with the whole window between. */
+  .wordmark {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.1rem, 9vw, 7rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-variation-settings: 'SOFT' 30, 'WONK' 0, 'opsz' 144;
+  }
+
+  .hero-foot {
     display: flex;
     align-items: center;
     gap: clamp(1.25rem, 4vw, 3rem);
@@ -251,45 +287,35 @@ const movedAnchors = {
     flex: none;
   }
 
-  @media (max-width: 700px) {
-    .hero-head {
+  .hero-tagline {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.4vw, 1.7rem);
+    line-height: 1.25;
+    font-weight: 300;
+    max-width: 22ch;
+  }
+
+  .hero-place {
+    margin: 0.75rem 0 0;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: rgb(238 212 203 / 0.82);
+  }
+
+  @media (max-width: 560px) {
+    .hero-foot {
       flex-direction: column;
       align-items: flex-start;
       gap: 1.5rem;
     }
   }
 
-  .hero-eyebrow {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    /* Full strength, not 82%. It is the smallest type in the hero and sits
-       highest, where the photograph is brightest — it needs every point of
-       contrast it can get. */
-    color: var(--color-bract);
-    margin: 0 0 1.5rem;
-  }
-
-  .hero-headline {
-    font-size: clamp(2.1rem, 6.2vw, 4.1rem);
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    font-weight: 300;
-    font-variation-settings: 'SOFT' 30, 'WONK' 0, 'opsz' 144;
-  }
-
-  .hero-sub {
-    font-size: clamp(1.1rem, 1.9vw, 1.35rem);
-    line-height: 1.5;
-    color: rgb(238 212 203 / 0.88);
-    margin: 1.5rem 0 0;
-    max-width: 34ch;
-  }
-
-  /* The line arrives in three groups, at breath pace. Opacity only, so it is
-     readable immediately to anyone who scrolls and to anything that crawls. */
+  /* The line arrives at breath pace. Opacity only, so it is readable
+     immediately to anyone who scrolls and to anything that crawls. */
   @media (prefers-reduced-motion: no-preference) {
     .breath > * {
       animation: arrive 900ms var(--ease-open) both;
@@ -303,10 +329,6 @@ const movedAnchors = {
       animation-delay: 700ms;
     }
 
-    .breath > *:nth-child(3) {
-      animation-delay: 1060ms;
-    }
-
     @keyframes arrive {
       from {
         opacity: 0;
@@ -317,6 +339,26 @@ const movedAnchors = {
     }
   }
 
+  /* ---- The question ---- */
+  .question {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+    display: grid;
+    align-items: center;
+    min-height: min(62svh, 560px);
+  }
+
+  .question-text {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4.4vw, 3.1rem);
+    font-weight: 300;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    max-width: 24ch;
+  }
+
   /* ---- Shared ---- */
   .section-title {
     font-size: clamp(1.85rem, 4.2vw, 2.9rem);
@@ -325,50 +367,34 @@ const movedAnchors = {
     margin-top: 1.25rem;
   }
 
-
-  /* ---- Audience ---- */
-  .audience {
-    list-style: none;
-    margin: 1.5rem 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .audience li {
-    padding: 1.1rem 0;
-    border-top: 1px solid var(--rule-soft);
-    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-    line-height: 1.5;
-  }
-
-  .audience li:last-child {
-    border-bottom: 1px solid var(--rule-soft);
-  }
-
   /* ---- Realms ---- */
   .realms-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 8fr) minmax(0, 5fr);
     gap: clamp(2.5rem, 6vw, 5rem);
     align-items: center;
     margin-top: clamp(2.5rem, 6vw, 4rem);
   }
 
-  .realms-body {
+  .realms-body p {
     margin: 0;
-    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
     line-height: 1.65;
-    max-width: 32ch;
+    max-width: 34ch;
   }
 
-  @media (max-width: 780px) {
+  .realms-coda {
+    margin-top: 1.25rem !important;
+    color: var(--color-ink-2);
+  }
+
+  @media (max-width: 880px) {
     .realms-row {
       grid-template-columns: minmax(0, 1fr);
     }
   }
 
-  /* ---- Offerings at rest ---- */
+  /* ---- Begin here ---- */
   .sessions-lede {
     margin: 1.25rem 0 0;
     max-width: 44ch;
@@ -379,12 +405,18 @@ const movedAnchors = {
     margin: 2.5rem 0 0;
     padding: 0;
     display: grid;
-    /* Four offerings, so four columns — auto-fit wrapped them 3 + 1. */
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(1rem, 2.5vw, 1.75rem);
+    /* Five, so five columns — auto-fit wrapped them 4 + 1. */
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.85rem, 2vw, 1.5rem);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
     .cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -438,19 +470,19 @@ const movedAnchors = {
 
   .card-title {
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     line-height: 1.15;
   }
 
   .card-container {
     font-family: var(--font-display);
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--color-ink-2);
   }
 
-  /* ---- Story ---- */
+  /* ---- Founder ---- */
   .story {
     display: grid;
     grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
@@ -484,10 +516,14 @@ const movedAnchors = {
     }
   }
 
-  .doors {
-    display: flex;
-    gap: 1rem 2.5rem;
-    flex-wrap: wrap;
+  /* ---- The gift ---- */
+  .gift-body {
+    margin: 1.25rem 0 0;
+    max-width: 46ch;
+  }
+
+  .gift-more {
+    margin: 1.5rem 0 0;
   }
 
   /* ---- Close ---- */
@@ -502,5 +538,4 @@ const movedAnchors = {
     max-width: 42ch;
     color: var(--color-bract);
   }
-
 </style>

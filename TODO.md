@@ -1,40 +1,124 @@
 # What the site needs from Joan
 
 Everything the build is waiting on, in one place. Each item names exactly
-where it goes. Grep-able markers: `TODO-KIT`, `TODO-EMAIL`, `TODO-ALT`,
-`todo: true`.
+where it goes. Grep-able markers: `TODO-KIT`, `TODO-FORM`, `TODO-SOUND`,
+`TODO-DOMAIN`, `TODO-JOAN`, `todo: true`.
 
-## 1 · Kit — activates five signup blocks with one line
+The first four are the ones that change what a visitor can actually do.
 
-The whole Red Rose Meditation funnel is built and invisible. It turns on
-everywhere at once when one value is set.
+---
 
-1. In Kit, create a **form** for the Red Rose Meditation.
+## 1 · The domain — masomatix.com
+
+The name is changed everywhere in the site. The **deploy** is not, and it
+cannot be until DNS points somewhere, or the current preview URL goes dark
+with nothing in its place. Three steps, in this order:
+
+1. Point DNS at GitHub Pages — four `A` records on the apex
+   (`185.199.108/109/110/111.153`), or a `CNAME` for `www` →
+   `joangutz.github.io`. Then set the custom domain under the repository's
+   **Settings → Pages**.
+2. Add a file `public/CNAME` containing exactly one line: `masomatix.com`
+3. In `astro.config.mjs` change `site` to `'https://masomatix.com'` and
+   `base` to `'/'`.
+
+Step 3 is two words. Every internal link already routes through `withBase()`,
+so nothing else moves. Say the word once DNS is live and I'll do 2 and 3.
+
+## 2 · Kit — activates every signup on the site with one line
+
+The Red Rose Visualization funnel is built and invisible. One value turns it
+on everywhere at once.
+
+1. In Kit, create a **form** for the Red Rose Visualization.
 2. Give it an **incentive email** that delivers the audio (Kit hosts the
-   file or links it — no page needed on this site).
-3. From the form's HTML embed, copy the **action URL** — it looks like
+   file — no page on this site needs to).
+3. From the form's HTML embed, copy the **action URL**: it looks like
    `https://app.kit.com/forms/1234567/subscriptions`.
-4. Paste it into `src/site.ts` at the `TODO-KIT` marker
-   (`kit.formAction`). Commit. Done — all five placements go live:
-   - mid-way through The Work (after "The numbness nobody talks about")
-   - Sessions, after the price grid ("Not ready?")
-   - Begin, below the booking ("Not ready to book?")
-   - Home, section six
+4. Paste it into `src/site.ts` at `TODO-KIT` (`kit.formAction`). Done — all
+   of these go live at once:
+   - Home, the gift section (currently a link to the gift page instead)
+   - `/resource/gift/`, which currently falls back to an email link
+   - Work with me, after the price grid
+   - Begin, below the booking
    - the footer of every page, compact
 5. One check: the site's forms submit the field `email_address`, Kit's
-   standard. Confirm your form's embed uses the same name; if it differs,
-   change it in `src/components/KitSignup.astro`.
+   standard. If your embed uses a different name, change it in
+   `src/components/KitSignup.astro`.
 
-## 2 · The Red Rose Meditation audio
+## 3 · The application form — where submissions land
 
-Record/finalise the mp3 and attach it to the Kit incentive email above.
-Nothing on the site hosts it.
+You asked for something like a Google Form that drops into
+`joankgutz@gmail.com`. A static site cannot send mail by itself, so one
+service has to receive the submission and forward it. **Formspree** is the
+closest thing, free at this volume, and needs no code:
 
-## 3 · FAQ answers — four questions need your words
+1. formspree.io → sign up with `joankgutz@gmail.com`
+2. New Form → name it *Ma Somatix application*
+3. copy the endpoint (`https://formspree.io/f/xxxxxxxx`)
+4. paste it into `src/site.ts` at `TODO-FORM` (`form.endpoint`)
 
-`content/sessions/sessions.md` renders four answers assembled from your
-existing copy, and holds four more marked `todo: true` that will not
-render until you write them:
+**Until then the form still works.** It gathers the answers into a prefilled
+email addressed to you, and the page says so plainly. That works everywhere,
+but it asks more of the applicant and loses anyone whose device has no mail
+app set up — so this one is worth ten minutes.
+
+The form appears on **Work with me** (for 1:1) and on **This Very Body**
+(for the waitlist). The questions are in one array at the top of
+`src/components/ApplicationForm.astro` — change them freely.
+
+## 4 · The soundscape
+
+Stu's loop goes in `/public/audio/` and `sound.file` in `src/site.ts` names
+it. No control appears anywhere until it does. Full spec in
+`public/audio/README.md`; the short version is: mp3, 60–180 seconds, loops
+seamlessly, quiet, under 3 MB.
+
+It never autoplays — browsers block that, and a site that asks people to
+settle shouldn't make noise at a stranger. The control sits in the bottom
+bar, off by default, fades in and out, and remembers the choice.
+
+---
+
+## 5 · The writing you listed as yours
+
+Each of these has a page built and waiting, marked `TODO-JOAN` in the file:
+
+| What | Where it goes |
+| --- | --- |
+| **This Very Body** — the programme description | `src/pages/work-with-me/this-very-body.astro` |
+| **Relational Integrity Labs** — description, dates | `src/pages/work-with-me/happenings.astro` |
+| **Spine Society** — description, dates | same file, second block |
+| **Erotic Embodiment weekly class** | not placed yet — tell me where it belongs and I'll build it |
+| **1:1 sessions**: who it's for / what to expect / what may be explored, short–medium–long | `content/offerings/one-to-one.md` — the long form is already there; the short and medium are not |
+| **Inspiration** list | `content/pages/inspiration.md` — plain markdown, example shape in the comment |
+| **Library** list | `content/pages/library.md` — same |
+
+Every one of those pages says truthfully that the thing is coming rather
+than standing empty or carrying words I made up for you.
+
+## 6 · Two names that disagree
+
+You wrote **Ma Somatix** for the site, the menu and the domain — that is
+what is live. Your own bio text says **Ma Somatrix** twice ("founder of Ma
+Somatrix Vibrant Health Education", "This is Ma Somatrix"), and Stu's piece
+calls the concept **Ma Soma Matrix**.
+
+I left your writing exactly as you wrote it rather than silently correcting
+you, because the three might be deliberate — the practice, the entity, the
+concept. If they aren't, say which one wins and it's a find-and-replace.
+
+## 7 · The wordmark's order
+
+The hero currently reads **MA** at the far left and **SOMATIX** at the far
+right, because that is reading order. Your note said *MA (top far right)*
+and *SOMATIX (top far left)*, which would read "Somatix Ma". I assumed a
+slip; if it was deliberate, it's one line in `src/pages/index.astro`.
+
+## 8 · FAQ answers — four questions need your words
+
+`content/sessions/sessions.md` holds four answers marked `todo: true` that
+will not render until you write them:
 
 - What do I wear? Do I undress?
 - Is what happens in sessions confidential?
@@ -43,99 +127,78 @@ render until you write them:
 
 Replace each `a:` and delete its `todo: true` line.
 
-## 4 · For Clinicians — approve or rewrite
+## 9 · For Clinicians — approve or rewrite
 
-`content/pages/for-clinicians.md` is the one page not in your words, and
-it makes scope-of-practice statements publicly. Read it; edit freely; then
+`content/pages/for-clinicians.md` is the one page not in your words, and it
+makes scope-of-practice statements publicly. Read it; edit freely; then
 delete the DRAFT comment at the top.
 
-## 5 · Email address
+## 10 · Two offerings I archived rather than deleted
 
-`src/site.ts`, `TODO-EMAIL` marker. Until set, contact falls back to SMS
-and the consultation. One line.
+Your new list of five replaced the old four, and two of the old ones had no
+home in it: **Desire & Pleasure Mapping** and **All-In-One**. Their full
+text and pricing is kept in `content/_source/archived-*.md`. Say the word and
+either comes back in a minute; otherwise it stays safely out of the way.
 
-## 6 · Images and alt text
+Note also that **This Very Body** replaced Desire & Pleasure Mapping's slot
+but not its content — the old copy would have been mislabelled, so the new
+page is a waitlist, not a rewrite.
 
-Drop files into `/assets/collage/` and `/assets/portraits/` at the names
-in `assets/MANIFEST.md` — they appear with no code changes. Then replace
-every `TODO-ALT` string in `/content/` with real descriptions
-(`grep -rn "TODO-ALT" content/`).
-
-## 7 · Two pricing decisions (currently rendered exactly as written)
-
-- Desire & Pleasure Mapping and All-In-One are both **$780/month**.
-- All-In-One's 3 months ($1,700) is **cheaper** than Erotic Embodiment's
-  3 months ($1,800), which it contains.
-
-Change the numbers in `content/offerings/*.md` or confirm they stand.
-
-## 8 · Two judgement calls only your eyes can make
-
-- The vessel mark in the nav at 34px, on your own devices.
-- The new favicon in a real browser tab.
-
-## 9 · Testimonials — the section is built and empty
+## 11 · Testimonials — built and empty
 
 Drop one `.md` per quote into `content/testimonials/` (that folder's README
-has the format) and they appear on Home and under the price grid on
-Sessions, with a Prev/Next control. Nothing renders until then.
+has the format) and they appear on Home and under the price grid, with a
+Prev/Next control. Nothing renders until then.
 
 Two things worth holding to: get permission in writing, and let the client
 choose how they are named — a first initial and a city is plenty, and for
 this work it is often the most anyone will want.
 
-## 10 · A decision on the display face
+## 12 · Photographs and video
 
-The lowercase f you disliked was a real bug, now fixed: the site was
+Every page now opens with a photograph, drawn from what you uploaded. Eight
+library photographs are placed; nothing is left unused. What is still
+missing:
+
+- **`share.jpg`** — 1200×630. Without it, every link you text or post
+  previews blank. This is the cheapest high-value item on the list.
+- **Video.** The spec is in `assets/video/README.md`: under 5 MB, 6–12
+  seconds, silent, 1280px, H.264. The clay-kneading clip is earmarked for
+  the Founder section. I have no ffmpeg here, so compression has to happen
+  on your side before upload.
+- More body photographs, if you have them — the banners currently reuse one
+  image in two places.
+
+## 13 · A decision on the display face
+
+The lowercase *f* you disliked was a real bug, now fixed: the site was
 loading a weight-only cut of Fraunces, so every optical-size and softness
-setting in the stylesheet was being discarded and headings rendered at the
-text optical size. Compare the live pages now before deciding anything.
+setting was being discarded. Compare the live pages now before deciding.
 
 If you still want to move, the closest free faces to Lovelace Text are
-Petrona (warm, slightly condensed — my pick), Faustina, and Literata. All
-three are installed and one line in `src/styles/global.css` switches the
-site over. Say which and I'll do it.
+Petrona (my pick), Faustina, and Literata. All three are installed and one
+line in `src/styles/global.css` switches the site over.
 
-## 11 · Photography and video — the biggest remaining gap
+## 14 · The outbound links
 
-Everything about "gradient and photo-forward headers, a place to rest"
-waits on real images. There is nowhere to put them yet because there are
-none; the slots exist and render labelled placeholders.
-
-- Hero and page headers: the photo-forward treatment needs its photographs
-  first. Send them and the headers get built around them.
-- The looping video you mentioned — Oaxaca hand-crafting — same. An mp4
-  plus a poster frame, and it goes in the Home hero or Roots.
-- Everything in item 6 below (collages, portraits, alt text) is the same
-  blocker wearing a different hat.
-
-## Later / watch-list
-
-- First offering card pre-turned if turn rates prove low (needs analytics
-  first — none installed, by design).
-- A light table of contents on The Work if it still reads long.
-- Substack stays a separate thing: the letter link remains in the footer
-  as content; the site's captures all feed Kit.
-- Check the Cal.com booking on Begin. It now asks for Cal's dark theme and
-  the site's reds, which is the only styling reachable across an iframe
-  boundary. Cal is unreachable from the build environment, so this has
-  never been seen rendered. If it still fights the page, the embed becomes
-  a link and that is a five-minute change.
-- Verify the four outbound links resolve — see item 12.
-
-## 12 · The outbound links, and which to check
-
-All four came from the original site's own content file rather than from
-guesswork, and none can be reached from the build environment, so none is
-verified:
+None can be reached from the build environment, so none is verified. Open
+each once:
 
 | Link | Where it goes | Used on |
 | --- | --- | --- |
 | `joangutz.com` | the art practice | footer, every page |
 | `eroticbecoming.substack.com` | the seasonal letter | footer, every page |
-| `sexologicalbodyworkers.org/ethics` | ACSB code of ethics | footer + Sessions trust line |
-| `cal.com/joan.gutierrez/20min` | the booking | Begin, every price tile |
+| `sexologicalbodyworkers.org/ethics` | ACSB code of ethics | footer + trust line |
+| `cal.com/joan.gutierrez/20min` | the booking | Begin |
 
-Open each once. The art site is the one you flagged; if the address is
-wrong, it is one line in `src/site.ts` (`contact.art`) and it updates
-everywhere.
+If the art address is wrong it is one line in `src/site.ts`
+(`contact.art`), and it updates everywhere.
+
+## 15 · Two pricing numbers to confirm
+
+Both survive from the old offerings and now sit under new names:
+
+- **1:1 Sessions** (was Erotic Embodiment Education): $1,800 / three months
+- **Liberate the Pelvis** (was Scar Tissue Care): $580 / month
+
+Confirm they stand, or change them in `content/offerings/*.md`.

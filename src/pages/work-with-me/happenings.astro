@@ -1,0 +1,137 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import Link from '../../components/Link.astro';
+import PhotoGround from '../../components/PhotoGround.astro';
+import { booking, contact, withBase } from '../../site';
+
+/**
+ * The two things that happen in a room with other people: Relational
+ * Integrity Labs, and Spine Society.
+ *
+ * Both descriptions are Joan's to write. Each block below says plainly that
+ * it is coming and gives the one action that is real today — write to me —
+ * rather than standing empty or carrying words I made up for her.
+ */
+const happenings = [
+  {
+    id: 'relational-integrity-labs',
+    name: 'Relational Integrity Labs',
+    note: 'In a group',
+    line: 'Relational work, practised with other people in the room rather than described.',
+  },
+  {
+    id: 'spine-society',
+    name: 'Spine Society',
+    note: 'Free · monthly',
+    line: 'A free monthly gathering. Open to anyone, no experience assumed.',
+  },
+];
+---
+
+<Base
+  title="Happenings: Relational"
+  description="Relational Integrity Labs and Spine Society — the work that happens with other people in the room. Chicago and beyond."
+>
+  <PageBanner
+    eyebrow="Work with me"
+    title="Happenings: Relational"
+    lede="Some of this work only happens between people. These are the rooms where it does."
+    image="happenings.jpg"
+  />
+
+  <section class="band section">
+    <div class="wide">
+      <ul class="happenings">
+        {
+          happenings.map((h) => (
+            <li class="happening" id={h.id}>
+              <span class="label">{h.note}</span>
+              <h2 class="happening-name">{h.name}</h2>
+              <p class="happening-line">{h.line}</p>
+
+              {/* TODO-JOAN: the full description of this happening goes
+                  here — what it is, how long, who it is for, what it costs
+                  if anything. */}
+
+              <p class="happening-hold">
+                Dates and the full description are being set. Write to me and I'll tell
+                you when the next one is announced.
+              </p>
+
+              <Link variant="door" href={`mailto:${contact.email}?subject=${encodeURIComponent(h.name)}`}>
+                Ask about {h.name}
+              </Link>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="close on-dark has-ground">
+    <PhotoGround src="close-work.jpg" />
+    <div class="band section">
+      <div class="col">
+        <h2 class="close-title">Rather begin one to one?</h2>
+        <p class="close-body">
+          Twenty minutes, free. We talk about where you are and whether this work is the
+          right fit.
+        </p>
+        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .happenings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .happening {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+  }
+
+  .happening-name {
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    line-height: 1.12;
+    margin-top: 0.9rem;
+  }
+
+  .happening-line {
+    margin: 1.1rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 38ch;
+  }
+
+  .happening-hold {
+    margin: 1.1rem 0 var(--gap-door);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    max-width: 38ch;
+  }
+
+  .close {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .close-title {
+    font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .close-body {
+    margin: 1.25rem 0 2.25rem;
+    max-width: 42ch;
+  }
+</style>

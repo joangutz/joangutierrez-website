@@ -12,7 +12,12 @@
    them. Contrast is measured, not assumed — see reference/design-plan.md.
    ------------------------------------------------------------------ */
 @theme {
-  --color-madder: #d6a09b;
+  /* The ground. Burnt salmon rather than the rose it was: same family, hue
+     pulled from 5° round to 20° and the saturation dropped toward sepia. The
+     swap is free — every ink measures at or above where it sat on the rose
+     (Cochineal 6.14:1, Ink-2 5.25:1, Quick 3.90:1), so nothing on the site
+     lost contrast in the move. */
+  --color-madder: #dba184;
   --color-cochineal: #5a121c;
   --color-plumstone: #2c0b12;
   --color-bract: #eed4cb;
@@ -49,6 +54,11 @@
 
     --measure: 63ch;
 
+    /* The height of the fixed bar at the foot of the window. Named once so
+       the body's bottom padding, the chapter rail's lower bound and the
+       scroll offset for an anchor all come from the same number. */
+    --bar-h: 3.6rem;
+
     /* The air between a section's content and the door that follows it.
        Matched to the section rhythm rather than chosen per-page, which is
        how the doors ended up crammed against the text above them. */
@@ -77,6 +87,8 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* An anchor lands above the bar rather than behind it. */
+    scroll-padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px) + 1rem);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -92,6 +104,9 @@
     font-size: clamp(1.0625rem, 0.35vw + 1rem, 1.1875rem);
     line-height: 1.75;
     margin: 0;
+    /* The bar is fixed to the foot of the window, so the last line of the
+       footer needs this much room or it sits permanently underneath it. */
+    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }

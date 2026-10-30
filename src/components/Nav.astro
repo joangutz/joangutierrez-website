@@ -1,22 +1,26 @@
 ---
 import Vessel from './Vessel.astro';
 import Link from './Link.astro';
+import Soundscape from './Soundscape.astro';
 import { nav, site, booking, contact, withBase } from '../site';
 
 /**
- * The bar carries the four pages inline wherever there is room for them, and
- * collapses to a Menu button only on narrow screens — a full-screen panel is
- * the right answer to a phone, and the wrong one to a desktop where the whole
- * navigation already fits in the bar with room to spare.
+ * The bar lives at the foot of the window, not the head of it.
  *
- * Progressive enhancement, and the order matters: the inline list is the real
- * navigation and ships in the markup. It gives way to the button only where
- * both the .js class and the narrow breakpoint apply, so with scripting off
- * every page is one ordinary link away at every width.
+ * Two things follow from that, and both were the point of moving it. It is
+ * under the thumb on a phone rather than at the far end of a reach; and it is
+ * a floor the page sits on rather than a lid the page slides under — which is
+ * what made the top bar read as content scrolling *through* the navigation.
+ * It is fully opaque, it carries its own top rule and a short shadow, and the
+ * body is padded by exactly its height so nothing is ever trapped beneath it.
  *
- * The panel is more honest about the site's shape than a collapsed bar: For
- * Clinicians and the ways to reach Joan were reachable only from inside
- * Sessions and the footer, and there is room for them here.
+ * Two tabs open a short list. Each parent is a real page first and a
+ * disclosure second, so the list is an accelerator rather than the only way
+ * in — tapping straight through lands on a hub that says the same thing. The
+ * lists open on hover and focus-within, in CSS, so they work with scripting
+ * off; they open upward, because down is the window's edge.
+ *
+ * Below 860px the inline bar gives way to a Menu button and a full panel.
  */
 const path = Astro.url.pathname;
 // Compare against the based href — pathname includes the base in production.
@@ -24,6 +28,15 @@ const isCurrent = (href: string) => {
   const target = withBase(href);
   return path === target || path === target.replace(/\/$/, '');
 };
+
+/**
+ * A parent tab is marked when the reader is somewhere inside its section but
+ * not on the tab's own page — being on the page itself is a stronger state
+ * with its own solid rule, and letting both apply would leave the dotted
+ * section rule winning on specificity.
+ */
+const inSection = (item: (typeof nav)[number]) =>
+  !isCurrent(item.href) && (item.children ?? []).some((c) => isCurrent(c.href));
 ---
 
 <header class="nav-bar">
@@ -32,7 +45,7 @@ const isCurrent = (href: string) => {
         wordmark carries the current-page state — otherwise landing on Home
         leaves nothing in the nav marked and the reader has no anchor. */}
     <a class="brand" href={withBase('/')} aria-current={isCurrent('/') ? 'page' : undefined}>
-      <Vessel size="34px" open={0.7} class="brand-mark" />
+      <Vessel size="30px" open={0.7} class="brand-mark" />
       <span class="brand-name">{site.name}</span>
     </a>
 
@@ -40,26 +53,50 @@ const isCurrent = (href: string) => {
       <ul>
         {
           nav.map((item) => (
-            <li>
-              <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            <li class:list={['nav-item', { 'has-sub': item.children }]}>
+              <a
+                href={withBase(item.href)}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class:list={[{ 'in-section': inSection(item) }]}
+              >
                 {item.label}
+                {item.children && <span class="caret" aria-hidden="true" />}
               </a>
+
+              {item.children && (
+                <ul class="sub">
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={withBase(child.href)}
+                        aria-current={isCurrent(child.href) ? 'page' : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))
         }
       </ul>
     </nav>
 
-    <button
-      class="menu-btn"
-      type="button"
-      data-menu-open
-      aria-expanded="false"
-      aria-controls="site-menu"
-    >
-      <span class="menu-rules" aria-hidden="true"><i></i><i></i></span>
-      <span>Menu</span>
-    </button>
+    <div class="nav-end">
+      <Soundscape />
+
+      <button
+        class="menu-btn"
+        type="button"
+        data-menu-open
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        <span class="menu-rules" aria-hidden="true"><i></i><i></i></span>
+        <span>Menu</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -67,7 +104,7 @@ const isCurrent = (href: string) => {
   <div class="menu-inner">
     <div class="menu-top">
       <a class="menu-brand" href={withBase('/')}>
-        <Vessel size="30px" open={0.7} />
+        <Vessel size="26px" open={0.7} />
         <span>{site.name}</span>
       </a>
       <button class="menu-btn menu-close" type="button" data-menu-close>
@@ -85,9 +122,24 @@ const isCurrent = (href: string) => {
                 href={withBase(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
               >
-                <Vessel size="0.62em" form="egg" class="menu-egg" />
+                <Vessel size="0.6em" form="egg" class="menu-egg" />
                 <span>{item.label}</span>
               </a>
+
+              {item.children && (
+                <ul class="menu-sub">
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={withBase(child.href)}
+                        aria-current={isCurrent(child.href) ? 'page' : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))
         }
@@ -96,62 +148,65 @@ const isCurrent = (href: string) => {
 
     <div class="menu-foot">
       <div class="menu-col">
-        <span class="menu-label">Also</span>
-        <a class="menu-link" href={withBase('/for-clinicians/')}>For clinicians</a>
-      </div>
-      <div class="menu-col">
         <span class="menu-label">Reach me</span>
         <Link href={booking.url}>Book a free consultation</Link>
-        <Link href={contact.smsHref}>Text {contact.smsDisplay}</Link>
+        <Link href={`mailto:${contact.email}`}>{contact.email}</Link>
       </div>
       <div class="menu-col">
         <span class="menu-label">Where</span>
-        {site.locations.map((l) => <span class="menu-where">{l.place} — {l.mode.toLowerCase()}</span>)}
+        {site.locations.map((l) => (
+          <span class="menu-where">{l.mode ? `${l.place} — ${l.mode.toLowerCase()}` : l.place}</span>
+        ))}
       </div>
     </div>
   </div>
 </div>
 
 <style>
-  /* Travels with the reader. It needs an opaque ground of its own now that
-     content passes beneath it, and it sits above the chapter rail but below
-     the menu panel. */
+  /* A floor, not a lid. Opaque, with its own rule and a short shadow so the
+     page visibly ends at it rather than sliding under it. */
   .nav-bar {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    inset: auto 0 0;
     z-index: 60;
     background: var(--color-madder);
-    border-bottom: 1px solid var(--rule-soft);
+    border-top: 1px solid var(--rule);
+    box-shadow: 0 -10px 24px rgb(44 11 18 / 0.1);
+    /* Phones with a home indicator put a strip of unusable glass below the
+       viewport; the bar's contents sit above it. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Same box as a .band, so the wordmark sits directly above the first
+  /* Same box as a .band, so the wordmark sits directly below the first
      character of the page's own text rather than out on its own margin. */
   .nav-inner {
     max-width: 62rem;
     margin-inline: auto;
-    padding: 1.25rem clamp(1.25rem, 5vw, 3rem);
+    min-height: var(--bar-h);
+    padding: 0.5rem clamp(1.25rem, 5vw, 3rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem 2rem;
-    flex-wrap: wrap;
+    gap: 1rem 2rem;
   }
 
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     text-decoration: none;
+    flex: none;
   }
 
   .brand-name {
     font-family: var(--font-display);
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     padding-block: 0.25rem;
     border-bottom: 2px solid transparent;
+    white-space: nowrap;
   }
 
   .brand[aria-current='page'] .brand-name {
@@ -167,7 +222,14 @@ const isCurrent = (href: string) => {
     --open: 1;
   }
 
-  /* The four pages stay in the bar wherever they fit. Below that width, and
+  .nav-end {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 1.75rem);
+    flex: none;
+  }
+
+  /* The four tabs stay in the bar wherever they fit. Below that width, and
      only with scripting, they move into the panel. */
   .menu-btn {
     display: none;
@@ -183,26 +245,32 @@ const isCurrent = (href: string) => {
     }
   }
 
-  .nav-inline ul {
+  .nav-inline > ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: clamp(1rem, 3vw, 2.25rem);
-    flex-wrap: wrap;
+    gap: clamp(0.9rem, 2.6vw, 2rem);
   }
 
-  /* Where am I: the current page is the only item in full ink, and the only
-     one carrying a solid rule. Hover is a lighter hint, so hovering never
-     impersonates the page you are on. */
+  .nav-item {
+    position: relative;
+  }
+
+  /* Where am I: the current page is the only item in full ink with a solid
+     rule; a parent whose section you are inside takes the ink but a dotted
+     rule, so a tab never impersonates the page you are actually on. */
   .nav-inline a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
     font-family: var(--font-display);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-decoration: none;
-    padding-block: 0.25rem;
+    padding-block: 0.3rem;
     border-bottom: 2px solid transparent;
     color: var(--color-ink-2);
     white-space: nowrap;
@@ -213,23 +281,107 @@ const isCurrent = (href: string) => {
     border-bottom-color: rgb(142 36 31 / 0.35);
   }
 
+  .nav-inline > ul > li > a.in-section {
+    color: var(--color-cochineal);
+    border-bottom-style: dotted;
+    border-bottom-color: var(--color-quick);
+  }
+
   .nav-inline a[aria-current='page'] {
     color: var(--color-cochineal);
+    border-bottom-style: solid;
     border-bottom-color: var(--color-quick);
+  }
+
+  .caret {
+    width: 0;
+    height: 0;
+    border-inline: 3px solid transparent;
+    /* Points up, because that is where the list opens. */
+    border-bottom: 4px solid currentColor;
+    opacity: 0.6;
+    transition: opacity 250ms var(--ease-open);
+  }
+
+  .has-sub:hover .caret,
+  .has-sub:focus-within .caret {
+    opacity: 1;
+  }
+
+  /* ---- The lists ---- */
+  /* Upward, because down is the edge of the window. Hover and focus-within
+     only — no script, so this works with scripting off. */
+  .sub {
+    position: absolute;
+    bottom: calc(100% + 0.65rem);
+    left: -0.9rem;
+    z-index: 2;
+    list-style: none;
+    margin: 0;
+    padding: 0.6rem 0;
+    min-width: max-content;
+    background: var(--color-plumstone);
+    border: 1px solid rgb(238 212 203 / 0.18);
+    box-shadow: 0 10px 30px rgb(44 11 18 / 0.3);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 0.4rem;
+    transition:
+      opacity 220ms var(--ease-open),
+      translate 220ms var(--ease-open),
+      visibility 220ms;
+  }
+
+  /* The gap between tab and list would break a hover on the way up, so the
+     tab's own hit area is extended to meet it. */
+  .has-sub::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 100% 0;
+    height: 0.75rem;
+  }
+
+  .has-sub:hover .sub,
+  .has-sub:focus-within .sub {
+    opacity: 1;
+    visibility: visible;
+    translate: 0;
+  }
+
+  .sub a {
+    display: block;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    color: rgb(238 212 203 / 0.82);
+    border-bottom: 0;
+  }
+
+  .sub a:hover,
+  .sub a[aria-current='page'] {
+    color: var(--color-bract);
+    background: rgb(238 212 203 / 0.08);
+    border-bottom: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sub {
+      transition: none;
+    }
   }
 
   /* ---- The control ---- */
   .menu-btn {
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.6rem;
     background: none;
     border: 0;
     color: var(--color-cochineal);
     font-family: var(--font-display);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     padding: 0.35rem 0;
     cursor: pointer;
   }
@@ -239,7 +391,7 @@ const isCurrent = (href: string) => {
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    width: 22px;
+    width: 20px;
     height: 12px;
   }
 
@@ -259,12 +411,8 @@ const isCurrent = (href: string) => {
   }
 
   /* ---- The panel ---- */
-  /* Exactly one screen. It used to scroll, which put the contact block below
-     the fold and left the grain — painted on the panel box, not on the
-     scrolled content — sitting still while the words moved past it, which is
-     what made the ground look like two different colours. Nothing scrolls now,
-     so nothing can come apart. 100dvh rather than 100vh: on a phone the
-     browser chrome is part of the viewport and vh does not know it. */
+  /* Exactly one screen, nothing scrolls. 100dvh rather than 100vh: on a phone
+     the browser chrome is part of the viewport and vh does not know it. */
   .menu {
     position: fixed;
     inset: 0;
@@ -284,7 +432,7 @@ const isCurrent = (href: string) => {
     height: 100%;
     max-width: 1240px;
     margin-inline: auto;
-    padding: 1.1rem clamp(1.25rem, 5vw, 2.5rem) clamp(1.25rem, 3vh, 2rem);
+    padding: 1.1rem clamp(1.25rem, 5vw, 2.5rem) calc(1.25rem + env(safe-area-inset-bottom, 0px));
     display: flex;
     flex-direction: column;
   }
@@ -295,16 +443,16 @@ const isCurrent = (href: string) => {
     justify-content: space-between;
     gap: 1.5rem;
     flex: none;
-    padding-bottom: clamp(1rem, 3vh, 2rem);
+    padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
 
   .menu-brand {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -347,7 +495,7 @@ const isCurrent = (href: string) => {
     min-height: 0;
     display: flex;
     align-items: center;
-    padding-block: clamp(0.5rem, 2vh, 1.5rem);
+    padding-block: clamp(0.25rem, 1.5vh, 1rem);
   }
 
   .menu-list {
@@ -357,30 +505,54 @@ const isCurrent = (href: string) => {
     width: 100%;
   }
 
-  .menu-list li + li {
+  .menu-list > li + li {
     border-top: 1px solid rgb(238 212 203 / 0.16);
   }
 
-  /* The site's own display scale — page titles top out at 3.4rem, so menu
-     items have no business at 4.25. Height is bounded by the screen as well
-     as the width, or four items plus a foot cannot fit on a short phone. */
-  .menu-list a {
+  /* The panel now carries nine destinations rather than four, so the type is
+     bounded by the screen's height as well as its width — nine lines plus a
+     foot have to fit on a short phone without a scrollbar. */
+  .menu-list > li > a {
     display: flex;
     align-items: center;
     gap: 0.7em;
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: clamp(1.6rem, min(9vw, 5.5vh), 2.75rem);
+    font-size: clamp(1.25rem, min(7vw, 4vh), 2rem);
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    padding-block: clamp(0.5rem, 1.8vh, 1rem);
+    padding-block: clamp(0.35rem, 1.2vh, 0.7rem);
     color: rgb(238 212 203 / 0.82);
     transition: color 300ms var(--ease-open);
   }
 
-  .menu-list a:hover,
-  .menu-list a[aria-current='page'] {
+  .menu-list > li > a:hover,
+  .menu-list > li > a[aria-current='page'] {
+    color: var(--color-bract);
+  }
+
+  /* Children sit under their parent as a quiet indented row rather than a
+     second level of display type — nine big lines would not fit, and the
+     hierarchy is the information anyway. */
+  .menu-sub {
+    list-style: none;
+    margin: 0 0 clamp(0.4rem, 1.4vh, 0.9rem);
+    padding: 0 0 0 1.7em;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.3rem, 1vh, 0.55rem);
+  }
+
+  .menu-sub a {
+    text-decoration: none;
+    font-size: clamp(0.82rem, 2.6vh, 0.95rem);
+    line-height: 1.3;
+    color: rgb(238 212 203 / 0.62);
+  }
+
+  .menu-sub a:hover,
+  .menu-sub a[aria-current='page'] {
     color: var(--color-bract);
   }
 
@@ -393,9 +565,9 @@ const isCurrent = (href: string) => {
       --open 700ms var(--ease-open);
   }
 
-  .menu-list a:hover :global(.menu-egg),
-  .menu-list a:focus-visible :global(.menu-egg),
-  .menu-list a[aria-current='page'] :global(.menu-egg) {
+  .menu-list > li > a:hover :global(.menu-egg),
+  .menu-list > li > a:focus-visible :global(.menu-egg),
+  .menu-list > li > a[aria-current='page'] :global(.menu-egg) {
     opacity: 1;
   }
 
@@ -403,12 +575,10 @@ const isCurrent = (href: string) => {
     flex: none;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    gap: clamp(0.9rem, 2.5vh, 2rem) clamp(1.25rem, 4vw, 3rem);
-    padding-top: clamp(1rem, 2.5vh, 2rem);
+    gap: clamp(0.75rem, 2vh, 1.5rem) clamp(1.25rem, 4vw, 3rem);
+    padding-top: clamp(0.75rem, 2vh, 1.5rem);
     border-top: 1px solid rgb(238 212 203 / 0.16);
-    /* Small enough that "Book a free consultation" and its leaves-the-site
-       arrow stay on one line in a half-width column on a phone. */
-    font-size: 0.88rem;
+    font-size: 0.86rem;
   }
 
   /* The locations are the first thing to go on a short screen — they are on
@@ -422,38 +592,33 @@ const isCurrent = (href: string) => {
   .menu-col {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.5rem;
     align-items: flex-start;
   }
 
   .menu-label {
     font-family: var(--font-display);
-    font-size: 0.64rem;
+    font-size: 0.62rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: rgb(238 212 203 / 0.6);
   }
 
-  .menu-link {
-    text-decoration-color: var(--color-madder);
-    text-underline-offset: 3px;
-  }
-
   .menu-where {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: rgb(238 212 203 / 0.8);
   }
 
-  /* The panel arrives rather than snapping. Opacity and a short rise only —
-     nothing that moves far enough to be felt as motion sickness. */
+  /* The panel arrives from the foot of the screen, which is where the button
+     that opened it lives. Opacity and a short rise only. */
   @media (prefers-reduced-motion: no-preference) {
     .menu {
       opacity: 0;
       transition:
         opacity 320ms var(--ease-open),
         translate 320ms var(--ease-open);
-      translate: 0 -0.75rem;
+      translate: 0 0.9rem;
     }
 
     .menu.is-open {
@@ -461,14 +626,14 @@ const isCurrent = (href: string) => {
       translate: 0;
     }
 
-    .menu.is-open .menu-list li {
+    .menu.is-open .menu-list > li {
       animation: menu-item 520ms var(--ease-open) both;
     }
 
-    .menu-list li:nth-child(1) { animation-delay: 60ms; }
-    .menu-list li:nth-child(2) { animation-delay: 120ms; }
-    .menu-list li:nth-child(3) { animation-delay: 180ms; }
-    .menu-list li:nth-child(4) { animation-delay: 240ms; }
+    .menu-list > li:nth-child(1) { animation-delay: 60ms; }
+    .menu-list > li:nth-child(2) { animation-delay: 120ms; }
+    .menu-list > li:nth-child(3) { animation-delay: 180ms; }
+    .menu-list > li:nth-child(4) { animation-delay: 240ms; }
 
     @keyframes menu-item {
       from {
@@ -493,15 +658,12 @@ const isCurrent = (href: string) => {
 
   @media (max-width: 430px) {
     .nav-inner {
-      gap: 0.85rem;
+      gap: 0.75rem;
+      padding-inline: 1.1rem;
     }
 
-    .nav-inline ul {
-      gap: 1rem;
-    }
-
-    .nav-inline a {
-      font-size: 0.68rem;
+    .brand-name {
+      font-size: 0.66rem;
       letter-spacing: 0.16em;
     }
   }
@@ -564,4 +726,12 @@ const isCurrent = (href: string) => {
       }
     });
   }
+
+  // Escape closes an open desktop list too. Hover-and-focus CSS has no state
+  // to clear, so blurring the tab is what closes it.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = document.activeElement?.closest<HTMLElement>('.has-sub');
+    if (open) open.querySelector<HTMLElement>('a')?.blur();
+  });
 </script>

@@ -4,14 +4,29 @@
 
 | Slot | File | Picture |
 |---|---|---|
-| Home hero | `photos/hero.jpg` | Body in low warm light — full-bleed behind the title |
-| Sessions 1 · Erotic Embodiment | `collage/erotic-embodiment.jpg` | Profile and cantaloupe |
-| Sessions 2 · Desire & Pleasure Mapping | `collage/desire-mapping.jpg` | Reclining figure, melons along the body |
-| Sessions 3 · Scar Tissue Care | `collage/scar-tissue.jpg` | Arms and open hands — the gentlest of the set |
-| Sessions 4 · All-In-One | `collage/all-in-one.jpg` | Seated figure, watermelon and melon |
-| Roots · the land | `photos/land.jpg` | The ceremonial fire |
-| Home · story | `portraits/joan-home.jpg` | Direct gaze, flower behind the ear |
-| Roots | `portraits/joan-roots.jpg` | Seated and laughing |
+| Home hero | `photos/hero.jpg` | Body in low warm light — full-bleed behind the wordmark |
+| Home · the question | `photos/close-home.jpg` | Tinted, behind the one-line question |
+| Home · founder | `portraits/joan-home.jpg` | Direct gaze, flower behind the ear — **in colour** |
+| Home · close | `photos/close-sessions.jpg` | |
+| About banner | `photos/about.jpg` | A person seated by the water, in a landscape |
+| About portrait | `portraits/joan-roots.jpg` | Seated and laughing — **in colour** |
+| Work with me banner | `photos/work-with-me.jpg` | Body curve in warm light |
+| This Very Body banner | `photos/this-very-body.jpg` | |
+| Happenings banner | `photos/happenings.jpg` | The ceremonial fire — a gathering |
+| Resource banner | `photos/resource.jpg` | Leaves in light, tinted into the palette |
+| Gift banner | `photos/gift.jpg` | Tinted |
+| Inspiration banner | `photos/inspiration.jpg` | A ceramic vulva held in two hands |
+| Library banner | `photos/library.jpg` | |
+| Begin banner | `photos/begin.jpg` | |
+| The Work banner / close | `photos/close-work.jpg` | |
+| For Clinicians banner | `photos/clinicians.jpg` | Tinted |
+| 1:1 Sessions card | `collage/erotic-embodiment.jpg` | Profile and cantaloupe |
+| This Very Body card | `collage/desire-mapping.jpg` | Reclining figure, melons along the body |
+| Liberate the Pelvis card | `collage/scar-tissue.jpg` | Arms and open hands |
+| Relational Integrity Labs card | `collage/all-in-one.jpg` | Seated figure, watermelon and melon |
+| Spine Society card | `collage/roots-territories.jpg` | |
+
+All eight library photographs are now placed; nothing is sitting unused.
 
 Every upload is kept in `library/`. To swap one, copy it over the slot name —
 `cp library/collage/DSCF2519.jpg collage/all-in-one.jpg` — and change the alt
@@ -26,9 +41,10 @@ Two things worth deciding rather than defaulting:
   original collage work, and the footer credits them as such: "Collage artwork by
   Joan Gutiérrez." If the site carries photographs instead, that line wants
   rewording, and the credit should say who took them.
-- **Portraits render black and white.** That was a deliberate rule, but the sea
-  photograph's turquoise is most of what it has. The rule can become a per-image
-  choice.
+- **Portraits render black and white by default**, but it is now a per-image
+  choice: pass `colour` to the Portrait component. Both portraits of Joan carry
+  it, because grey reads as a record and these are the two places a reader is
+  meeting a person.
 
 
 Every image slot the site expects. Until a real file exists at the path, the component

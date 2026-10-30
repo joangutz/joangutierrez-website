@@ -1,14 +1,16 @@
 ---
-import Base from '../layouts/Base.astro';
-import ChapterRail from '../components/ChapterRail.astro';
-import PhotoGround from '../components/PhotoGround.astro';
-import Link from '../components/Link.astro';
-import OfferingCard from '../components/OfferingCard.astro';
-import PriceGrid from '../components/PriceGrid.astro';
+import Base from '../../layouts/Base.astro';
+import ChapterRail from '../../components/ChapterRail.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import ApplicationForm from '../../components/ApplicationForm.astro';
+import PhotoGround from '../../components/PhotoGround.astro';
+import Link from '../../components/Link.astro';
+import OfferingCard from '../../components/OfferingCard.astro';
+import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
-import KitSignup from '../components/KitSignup.astro';
-import Testimonials from '../components/Testimonials.astro';
-import { withBase, contact, booking } from '../site';
+import KitSignup from '../../components/KitSignup.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import { withBase, contact, booking, beginHere } from '../../site';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
@@ -39,13 +41,7 @@ const motifs = [
 <Base title={s.title} description={s.description}>
   <ChapterRail />
 
-  <section class="band section intro">
-    <div class="col">
-      <span class="label">{s.eyebrow}</span>
-      <h1 class="page-title">{s.title}</h1>
-      <p class="lede intro-lede">{s.lede}</p>
-    </div>
-  </section>
+  <PageBanner eyebrow={s.eyebrow} title={s.title} lede={s.lede} image="work-with-me.jpg" />
 
   <!-- The cards carry depth. -->
   <section class="band section">
@@ -55,11 +51,11 @@ const motifs = [
 
       {/* The four registers read as one range — until now they only ever
           appeared separately, one per offering. Doubles as a key. */}
-      <ol class="range" aria-label="The four offerings, by register">
+      <ol class="range" aria-label="The five ways in">
         {
-          offerings.map((o) => (
-            <li class={`range-step reg-${o.data.register}`}>
-              <span class="range-name">{o.data.title}</span>
+          beginHere.map((o) => (
+            <li class={`range-step reg-${o.register}`}>
+              <a class="range-name" href={withBase(o.href)}>{o.title}</a>
             </li>
           ))
         }
@@ -158,6 +154,18 @@ const motifs = [
     </div>
   </section>
 
+  {/* The way in. Everything above describes the work; this is the one place
+      on the page where someone can put their hand up for it. */}
+  <section class="band section apply" id="apply">
+    <div class="col">
+      <ApplicationForm
+        subject="1:1 Sessions"
+        heading="Apply"
+        body="For 1:1 work. Tell me as much or as little as you like — what you write comes with you into the free consultation. I read every one of these myself."
+      />
+    </div>
+  </section>
+
   <!-- The buying page ends the way every page ends: with a door in, not a
        sideways exit. The clinicians line is real but demoted to small type. -->
   <section class="close on-dark has-ground">
@@ -177,13 +185,8 @@ const motifs = [
 </Base>
 
 <style>
-  .intro {
-    padding-bottom: clamp(1.5rem, 4vw, 3rem);
-  }
-
-  .intro-lede {
-    margin: 1.75rem 0 0;
-    max-width: 40ch;
+  .apply {
+    border-top: 1px solid var(--rule-soft);
   }
 
   .section-title {
@@ -203,7 +206,7 @@ const motifs = [
     margin: 0 0 clamp(2rem, 5vw, 3rem);
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 1px;
     background: var(--rule);
     border: 1px solid var(--rule);

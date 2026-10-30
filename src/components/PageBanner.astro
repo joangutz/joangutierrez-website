@@ -1,0 +1,76 @@
+---
+import PhotoGround from './PhotoGround.astro';
+
+/**
+ * How every page opens: a photograph running the full width of the window,
+ * with the page's own name and title resting on it.
+ *
+ * One component rather than five hand-built headers, so the banner is the
+ * same height, the same scrim and the same type on every page — a reader
+ * arriving on any of them lands somewhere they recognise. It is also the
+ * place to rest Joan asked for before the reading starts.
+ *
+ * The photograph is atmosphere, not content, so it carries no alt text and
+ * is hidden from screen readers; the heading says where you are.
+ */
+interface Props {
+  /** The page's name, in the small letterspaced form. */
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  /** A filename in /assets/photos/ or /assets/collage/. */
+  image: string;
+  /** For a photograph whose own colour fights the palette. */
+  tinted?: boolean;
+  /** Where the words sit, so the scrim is deepest under them. */
+  from?: 'left' | 'bottom';
+  /** Home runs taller; inner pages run shorter. */
+  tall?: boolean;
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  image,
+  tinted = false,
+  from = 'bottom',
+  tall = false,
+} = Astro.props;
+---
+
+<section class:list={['banner on-dark has-ground', { 'banner-tall': tall }]}>
+  <PhotoGround src={image} from={from} tinted={tinted} />
+  <div class="band">
+    <div class="col banner-text">
+      <span class="label">{eyebrow}</span>
+      <h1 class="page-title">{title}</h1>
+      {lede && <p class="lede banner-lede">{lede}</p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* .on-dark re-points the focus and rule tokens; the ink comes from the
+     token now, but the ground is set here because a banner is the one
+     section whose background is a picture rather than a colour. */
+  .banner {
+    display: grid;
+    align-items: end;
+    min-height: min(48svh, 440px);
+    background: var(--color-plumstone);
+  }
+
+  .banner-tall {
+    min-height: min(68svh, 680px);
+  }
+
+  .band {
+    padding-block: clamp(2.5rem, 7vh, 4.5rem);
+  }
+
+  .banner-lede {
+    margin: 1.5rem 0 0;
+    max-width: 42ch;
+  }
+</style>

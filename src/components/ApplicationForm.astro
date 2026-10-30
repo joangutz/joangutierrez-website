@@ -1,0 +1,291 @@
+---
+import { form } from '../site';
+
+/**
+ * The application, for 1:1 work and for the This Very Body waitlist.
+ *
+ * A static site cannot send mail by itself — something has to receive the
+ * submission and forward it — so this posts to whatever endpoint site.ts
+ * names (TODO-FORM there; Formspree is the closest thing to "a Google Form
+ * that lands in my inbox"). Until that exists the form still works: the
+ * script gathers the answers into a prefilled email to Joan's address, which
+ * needs no account and no third party, and the page says plainly that this
+ * is what will happen.
+ *
+ * The questions are hers to change — they live in the `fields` array below
+ * and nowhere else.
+ */
+interface Props {
+  /** Which thing is being applied for; travels with the submission. */
+  subject: string;
+  heading?: string;
+  body?: string;
+}
+
+const { subject, heading = 'Apply', body } = Astro.props;
+
+const fields = [
+  { name: 'name', label: 'Your name', type: 'text', required: true, autocomplete: 'name' },
+  { name: 'email', label: 'Email', type: 'email', required: true, autocomplete: 'email' },
+  { name: 'pronouns', label: 'Pronouns', type: 'text', required: false, autocomplete: 'off' },
+  { name: 'location', label: 'Where you are', type: 'text', required: false, autocomplete: 'address-level2' },
+];
+
+const questions = [
+  { name: 'why_now', label: 'Why this, why now?', required: true },
+  { name: 'hoping', label: 'What are you hoping for?', required: true },
+  { name: 'anything', label: 'Anything you want me to know before we speak?', required: false },
+];
+
+const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="app" data-app data-subject={subject} data-to={form.to}>
+  <span class="label">{heading}</span>
+  {body && <p class="app-body">{body}</p>}
+
+  <form
+    class="app-form"
+    method="post"
+    action={form.endpoint ?? undefined}
+    data-endpoint={form.endpoint ?? ''}
+  >
+    {/* Tells the receiving end which offering this is, without asking the
+        applicant to repeat something the page already knows. */}
+    <input type="hidden" name="_subject" value={`Ma Somatix — ${subject}`} />
+    <input type="hidden" name="applying_for" value={subject} />
+
+    <div class="app-grid">
+      {
+        fields.map((f) => (
+          <p class="app-field">
+            <label for={`${uid}-${f.name}`}>
+              {f.label}
+              {!f.required && <span class="app-opt"> — optional</span>}
+            </label>
+            <input
+              id={`${uid}-${f.name}`}
+              name={f.name}
+              type={f.type}
+              autocomplete={f.autocomplete}
+              required={f.required}
+            />
+          </p>
+        ))
+      }
+    </div>
+
+    {
+      questions.map((q) => (
+        <p class="app-field">
+          <label for={`${uid}-${q.name}`}>
+            {q.label}
+            {!q.required && <span class="app-opt"> — optional</span>}
+          </label>
+          <textarea id={`${uid}-${q.name}`} name={q.name} rows="4" required={q.required} />
+        </p>
+      ))
+    }
+
+    <button class="app-submit" type="submit">Send this</button>
+
+    <p class="app-note" data-app-note>
+      {
+        form.endpoint
+          ? 'Goes straight to Joan. You will hear back within a few days.'
+          : `Opens your email app with the answers filled in, addressed to ${form.to}.`
+      }
+    </p>
+
+    <p class="app-status" data-app-status role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<style>
+  .app {
+    max-width: 40rem;
+  }
+
+  .app-body {
+    margin: 1rem 0 2rem;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-ink-2);
+    max-width: 46ch;
+  }
+
+  .on-dark .app-body {
+    color: rgb(238 212 203 / 0.85);
+  }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 0 1.5rem;
+  }
+
+  .app-field {
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .app-field label {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .app-field label {
+    color: rgb(238 212 203 / 0.82);
+  }
+
+  .app-opt {
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    opacity: 0.75;
+  }
+
+  .app-field input,
+  .app-field textarea {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-cochineal);
+    background: rgb(238 212 203 / 0.3);
+    border: 1px solid var(--rule);
+    padding: 0.7rem 0.8rem;
+    width: 100%;
+  }
+
+  .on-dark .app-field input,
+  .on-dark .app-field textarea {
+    color: var(--color-bract);
+    background: rgb(44 11 18 / 0.45);
+  }
+
+  .app-field textarea {
+    resize: vertical;
+  }
+
+  /* The site's focus ring, kept — a field whose focus is only a change of
+     border colour leaves a keyboard with nothing to follow. */
+  .app-field :is(input, textarea):focus-visible {
+    border-color: var(--color-quick);
+  }
+
+  .app-submit {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-bract);
+    background: var(--color-quick);
+    border: 0;
+    padding: 0.95rem 1.5rem;
+    cursor: pointer;
+  }
+
+  .app-submit:hover {
+    background: var(--color-plumstone);
+  }
+
+  .on-dark .app-submit:hover {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+
+  .app-note {
+    margin: 1rem 0 0;
+    font-size: 0.88rem;
+    color: var(--color-ink-2);
+  }
+
+  .on-dark .app-note {
+    color: rgb(238 212 203 / 0.72);
+  }
+
+  .app-status:empty {
+    display: none;
+  }
+
+  .app-status {
+    margin: 1rem 0 0;
+    font-size: 0.95rem;
+    border-left: 2px solid var(--color-quick);
+    padding-left: 1rem;
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-app]')) {
+    const el = root.querySelector<HTMLFormElement>('.app-form');
+    const status = root.querySelector<HTMLElement>('[data-app-status]');
+    if (!el || !status) continue;
+
+    const endpoint = el.dataset.endpoint ?? '';
+    const to = root.dataset.to ?? '';
+    const subject = root.dataset.subject ?? 'Application';
+
+    el.addEventListener('submit', (e) => {
+      // No endpoint: hand the answers to the reader's own mail app. The form
+      // has no action, so letting the default run would reload the page and
+      // silently lose everything they typed.
+      if (!endpoint) {
+        e.preventDefault();
+        if (!el.reportValidity()) return;
+
+        const data = new FormData(el);
+        const lines: string[] = [];
+        for (const [k, v] of data.entries()) {
+          if (k.startsWith('_') || typeof v !== 'string' || !v.trim()) continue;
+          lines.push(`${k.replace(/_/g, ' ')}:\n${v.trim()}\n`);
+        }
+
+        const href =
+          `mailto:${to}` +
+          `?subject=${encodeURIComponent(`Ma Somatix — ${subject}`)}` +
+          `&body=${encodeURIComponent(lines.join('\n'))}`;
+
+        status.textContent = 'Opening your email app — press send there and it reaches Joan.';
+        window.location.href = href;
+        return;
+      }
+
+      // With an endpoint, post in the background so the reader is never
+      // thrown to a third party's thank-you page.
+      e.preventDefault();
+      if (!el.reportValidity()) return;
+
+      const btn = el.querySelector<HTMLButtonElement>('.app-submit');
+      if (btn) btn.disabled = true;
+      status.textContent = 'Sending…';
+
+      fetch(endpoint, {
+        method: 'POST',
+        body: new FormData(el),
+        headers: { Accept: 'application/json' },
+      })
+        .then((r) => {
+          if (!r.ok) throw new Error(String(r.status));
+          el.reset();
+          status.textContent = 'Received. Joan will write back within a few days.';
+        })
+        .catch(() => {
+          // Never a dead end: the fallback that works without any of this is
+          // still right there.
+          status.innerHTML =
+            `That didn't send. Please email <a href="mailto:${to}">${to}</a> instead.`;
+        })
+        .finally(() => {
+          if (btn) btn.disabled = false;
+        });
+    });
+  }
+</script>

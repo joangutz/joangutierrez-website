@@ -1,50 +1,41 @@
 ---
-# Every line of Joan's writing below is carried across unaltered from
-# /content/_source/. Connective copy — link text, section titles — is the only
-# thing written for the site.
-#
-# Positioning: the hero names the state, not the job. Both sentences are Joan's
-# own, consecutive, from the embodied-consent passage in Erotic Embodiment
-# Education. The first names the condition; the second opens the door.
+# Joan's own words throughout. Connective copy — link text, section labels —
+# is the only thing written for the site.
 
 hero:
-  eyebrow: Intimacy, embodiment & nervous system education
-  headline: Most people can tolerate almost anything and ask for almost nothing.
-  sub: The capacity to voice choice, to want out loud, is a learnable skill.
+  # The wordmark splits across the full width of the window: one word at each
+  # margin, the whole first screen held open between them.
+  markLeft: Ma
+  markRight: Somatix
+  tagline: Somatic education delivered with artistry
+  place: Chicago and beyond
   collage: hero.jpg
   alt: A body in low warm light, the curve of a hip and thigh with a band of sun falling across it.
 
-audience:
-  title: Who this work is for
-  lines:
-    - People who feel disconnected from their bodies, their desire, or their pleasure
-    - People whose solo or partnered sex has gone flat, habitual, or numb
-    - People recovering their eroticism after loss, transition, shame, or long neglect
-    - People who are curious what's possible — who sense there's more aliveness available and want a skilled, ethical guide to help them find it
-  link: Read what this work is
+question:
+  text: What if the reason you're here isn't simply to accomplish something with your life but to experience being alive?
+  image: close-home.jpg
 
 realms:
-  title: Feel. Connect. Play.
-  body: Most of us live in one realm and feel awkward, or lost, in the others. Sexual wellbeing is fluency in all three.
-  link: Read about the three realms
+  label: The sacred process of embodiment
+  title: Ma. Soma. Matrix.
+  body: Life emerges and returns to the unmanifested womb of potential, entering between the breathing room of conscious space and light, to manifest as a living, breathing presence in the world as Soma.
+  coda: Your physical body — Soma — is the crystallization of light, Ma, born directly from the ultimate source of all creation, Matrix. You are a living doorway where the universe is actively making new meaning.
 
-sessions:
-  title: Four ways in
-  body: Each one is a container with a shape — what you get, why it runs as long as it runs, and what it costs.
-  link: See all four offerings
-
-story:
-  title: Roots
+founder:
+  label: Founder & educator
   paragraphs:
-    - I was raised in the Ciudad Juárez–El Paso desert borderland, a place where categories blur and contradictions are ordinary.
-    - I move between body-based art and somatic education. These are not separate for me.
+    - In this very body, I have touched an archive of meaning where reality is composed and decomposed. I crossed innumerable borders to remember the ancestral truths I carry in my pelvic root. I practice not confusing the map with the territory.
+    - My name is Joan, a devoted amateur, full of love and dignity. I draw on my wounds and strengths to point you back to the pulse of life that already lives in you. This is Ma Somatrix.
   portrait: joan-home.jpg
   alt: Joan looking directly at the camera, a flower tucked behind one ear.
-  link: Read the roots
+  link: Learn more
 
-freebie:
-  title: The Red Rose Meditation
-  body: Try a small piece of this work before ever talking to anyone — alone, free, at your own pace.
+beginHere:
+  label: Begin here
+  title: Five ways in.
+  body: Each one is a container with a shape — what you get, why it runs as long as it runs, and what it asks of you.
+  link: See the whole range
 
 close:
   title: Begin with a conversation

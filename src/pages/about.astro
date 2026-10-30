@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro';
+import PageBanner from '../components/PageBanner.astro';
+import ChapterRail from '../components/ChapterRail.astro';
+import Portrait from '../components/Portrait.astro';
+import Link from '../components/Link.astro';
+import { getEntry, render } from 'astro:content';
+import { booking, contact, withBase } from '../site';
+
+/**
+ * One page about Joan, and only that.
+ *
+ * What was here before was Roots: a long page ending in a complete
+ * credential list, groups and dates and all. The list is gone — the two
+ * trainings that matter are named in the first line of her own writing, and
+ * a CV on a page like this asks a reader to assess rather than to meet
+ * someone.
+ */
+const entry = await getEntry('pages', 'about');
+if (!entry) throw new Error('Missing /content/pages/about.md');
+const { Content } = await render(entry);
+const p = entry.data;
+---
+
+<Base title={p.title} description={p.description}>
+  <ChapterRail />
+
+  <PageBanner eyebrow={p.eyebrow} title={p.title} lede={p.lede} image="about.jpg" />
+
+  <section class="band section">
+    <div class="wide about-grid">
+      <div class="about-portrait">
+        <Portrait
+          src="joan-roots.jpg"
+          alt="Joan seated and laughing, one arm resting over the back of a chair."
+          colour
+          sizes="(max-width: 900px) 70vw, 30vw"
+        />
+      </div>
+
+      <div class="col prose about-prose">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <section class="close on-dark grained">
+    <div class="band section">
+      <div class="col">
+        <h2 class="close-title">Allow me to accompany you.</h2>
+        <p class="close-body">
+          Twenty minutes, free. We talk about where you are, what you're longing for, and
+          whether this work is the right fit.
+        </p>
+        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
+        <p class="close-alt">
+          Or write to me: <Link href={`mailto:${contact.email}`}>{contact.email}</Link>
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* The portrait sits beside the opening of the writing rather than above
+     it, and leaves the column once the measure is the only thing that
+     matters. */
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.75rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+
+  .about-portrait {
+    position: sticky;
+    top: clamp(2rem, 6vh, 4rem);
+  }
+
+  @media (max-width: 860px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .about-portrait {
+      position: static;
+      max-width: 18rem;
+    }
+  }
+
+  .about-prose :global(blockquote) {
+    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+    line-height: 1.5;
+  }
+
+  .close {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .close-title {
+    font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .close-body {
+    margin: 1.25rem 0 2.25rem;
+    max-width: 42ch;
+  }
+
+  .close-alt {
+    margin: 1.5rem 0 0;
+    font-size: 0.95rem;
+    color: rgb(238 212 203 / 0.8);
+  }
+
+  .close-alt a {
+    text-decoration-color: var(--color-quick);
+  }
+</style>

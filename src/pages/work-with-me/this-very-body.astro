@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import ApplicationForm from '../../components/ApplicationForm.astro';
+import Link from '../../components/Link.astro';
+import { withBase } from '../../site';
+
+/**
+ * The waitlist. The programme's own description is Joan's to write — until it
+ * arrives, this page says what it can say truthfully and still does the one
+ * job a waitlist page has, which is to take a name.
+ *
+ * Saying "details coming" out loud is the honest version. An invented
+ * description would be worse than a gap, and a page with no way to put your
+ * hand up would waste the only visit most people make to it.
+ */
+---
+
+<Base
+  title="This Very Body — waitlist"
+  description="A programme in development at Ma Somatix. Join the waitlist to hear first when dates, shape and price are set."
+>
+  <PageBanner
+    eyebrow="Work with me"
+    title="This Very Body"
+    lede="A programme taking shape. The waitlist hears first."
+    image="this-very-body.jpg"
+  />
+
+  <section class="band section">
+    <div class="col">
+      <p class="lede">
+        This Very Body is being written now — its shape, its dates, and what it asks of
+        the people in it. When it opens, the waitlist is told before anyone else, and
+        places go in the order people joined.
+      </p>
+
+      {/* TODO-JOAN: the programme description goes here — what it is, who it
+          is for, how long it runs, what it costs. Everything else on this
+          page is ready for it. */}
+
+      <p class="note-hold">
+        If you want to be in the first group, the form below is the whole of it. Tell me
+        as much or as little as you like; what you write comes with you into the
+        conversation when the programme opens.
+      </p>
+    </div>
+  </section>
+
+  <section class="band section apply">
+    <div class="col">
+      <ApplicationForm
+        subject="This Very Body — waitlist"
+        heading="Join the waitlist"
+        body="Nothing is owed on either side. I read every one of these myself."
+      />
+    </div>
+  </section>
+
+  <section class="band section elsewhere">
+    <div class="col">
+      <span class="label">In the meantime</span>
+      <ul class="plain">
+        <li><Link href={withBase('/work-with-me/#one-to-one')}>1:1 Sessions</Link> — open now</li>
+        <li><Link href={withBase('/work-with-me/happenings/')}>Happenings</Link> — relational work, in a group</li>
+        <li><Link href={withBase('/resource/gift/')}>The Red Rose Visualization</Link> — begin alone, free</li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .note-hold {
+    margin-top: 2rem;
+    max-width: 46ch;
+    color: var(--color-ink-2);
+  }
+
+  .apply {
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .elsewhere {
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .plain {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    font-size: 1rem;
+  }
+
+  .plain a {
+    text-decoration-color: var(--color-quick);
+  }
+</style>

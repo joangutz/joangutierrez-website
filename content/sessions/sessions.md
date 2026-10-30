@@ -3,10 +3,10 @@
 # The "Note on all plans" is verbatim and must stay that way — it is a
 # professional boundary statement, not a disclaimer.
 
-eyebrow: Sessions
-title: Four containers, each with a shape
+eyebrow: Work with me
+title: Five ways in, each with a shape
 lede: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
-description: Four somatic sex education offerings — what each includes, why the approach works, and what it costs. Chicago, Brooklyn, and online.
+description: Ma Somatix — the five ways into this work, what each includes, why the approach works, and what it costs. Chicago, online, and open to travel.
 
 cards:
   title: The offerings
@@ -18,7 +18,7 @@ prices:
 
 arc:
   title: What a practice session actually looks like
-  intro: 'No mystery, no guesswork. Every Erotic Embodiment session follows a clear arc:'
+  intro: 'No mystery, no guesswork. Every 1:1 session follows a clear arc:'
   steps:
     - lead: An intention
       rest: ', spoken aloud — one or two sentences naming what you''re here to explore.'

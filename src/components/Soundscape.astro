@@ -1,0 +1,172 @@
+---
+import { sound, withBase } from '../site';
+
+/**
+ * The ambient soundscape, offered rather than imposed.
+ *
+ * It never autoplays. Every browser blocks unprompted sound anyway, but the
+ * deeper reason is that this site asks people to settle, and noise arriving
+ * uninvited at a stranger does the opposite. So: a small control in the bar,
+ * silent until someone chooses otherwise, and the choice is remembered.
+ *
+ * Renders nothing at all until sound.file is set in site.ts (TODO-SOUND
+ * there), so the bar is never cluttered by a control that can only fail.
+ */
+const file = sound.file;
+---
+
+{
+  file && (
+    <div class="snd">
+      <button
+        class="snd-btn"
+        type="button"
+        data-sound-toggle
+        aria-pressed="false"
+        title={sound.credit}
+      >
+        <span class="snd-wave" aria-hidden="true"><i /><i /><i /><i /></span>
+        <span class="snd-label" data-sound-label>
+          Sound
+        </span>
+      </button>
+
+      {/* Never `autoplay`. The script starts it only on a real click. */}
+      <audio data-sound-el loop preload="none" src={withBase(`/audio/${file}`)} />
+    </div>
+  )
+}
+
+<style>
+  .snd {
+    display: flex;
+    align-items: center;
+  }
+
+  .snd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0.35rem 0;
+    color: var(--color-ink-2);
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .snd-btn:hover,
+  .snd-btn[aria-pressed='true'] {
+    color: var(--color-cochineal);
+  }
+
+  /* Four rules that stand still when the sound is off and breathe when it is
+     on — the control shows its own state without a word changing. */
+  .snd-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 12px;
+  }
+
+  .snd-wave i {
+    display: block;
+    width: 2px;
+    height: 3px;
+    background: currentColor;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .snd-btn[aria-pressed='true'] .snd-wave i {
+      animation: snd 1100ms var(--ease-open) infinite alternate;
+    }
+
+    .snd-wave i:nth-child(2) { animation-delay: 160ms; }
+    .snd-wave i:nth-child(3) { animation-delay: 320ms; }
+    .snd-wave i:nth-child(4) { animation-delay: 480ms; }
+
+    @keyframes snd {
+      from { height: 3px; }
+      to { height: 12px; }
+    }
+  }
+
+  /* With motion off the state still has to be visible, so the rules simply
+     stand tall instead of moving. */
+  @media (prefers-reduced-motion: reduce) {
+    .snd-btn[aria-pressed='true'] .snd-wave i {
+      height: 11px;
+    }
+  }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-sound-toggle]');
+  const el = document.querySelector<HTMLAudioElement>('[data-sound-el]');
+  const label = document.querySelector<HTMLElement>('[data-sound-label]');
+
+  if (btn && el) {
+    const KEY = 'ma-sound';
+    // Fades rather than cuts: a soundscape that stops dead is a jolt, which
+    // is the one thing this is here to avoid.
+    const FADE = 700;
+
+    const ramp = (to: number, done?: () => void) => {
+      const from = el.volume;
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / FADE);
+        el.volume = from + (to - from) * k;
+        if (k < 1) requestAnimationFrame(step);
+        else done?.();
+      };
+      requestAnimationFrame(step);
+    };
+
+    const setState = (on: boolean) => {
+      btn.setAttribute('aria-pressed', String(on));
+      if (label) label.textContent = on ? 'Sound on' : 'Sound';
+    };
+
+    btn.addEventListener('click', () => {
+      const on = btn.getAttribute('aria-pressed') === 'true';
+      if (on) {
+        ramp(0, () => el.pause());
+        try { localStorage.removeItem(KEY); } catch {}
+        setState(false);
+      } else {
+        el.volume = 0;
+        // A blocked play() is not an error worth showing anyone — the control
+        // simply stays off, which is the honest state.
+        el.play().then(
+          () => {
+            ramp(0.35);
+            try { localStorage.setItem(KEY, '1'); } catch {}
+            setState(true);
+          },
+          () => setState(false)
+        );
+      }
+    });
+
+    // A reader who turned it on last visit still has to touch the page once
+    // before a browser will make sound, so the choice is restored on the
+    // first interaction rather than on load.
+    let remembered = false;
+    try { remembered = localStorage.getItem(KEY) === '1'; } catch {}
+
+    if (remembered) {
+      const resume = () => {
+        btn.click();
+        document.removeEventListener('pointerdown', resume);
+        document.removeEventListener('keydown', resume);
+      };
+      document.addEventListener('pointerdown', resume, { once: true });
+      document.addEventListener('keydown', resume, { once: true });
+    }
+  }
+</script>

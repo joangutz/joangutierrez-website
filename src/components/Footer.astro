@@ -2,7 +2,7 @@
 import Vessel from './Vessel.astro';
 import Link from './Link.astro';
 import KitSignup from './KitSignup.astro';
-import { site, contact, booking, withBase } from '../site';
+import { site, contact, booking, kit, sound, withBase } from '../site';
 
 const year = new Date().getFullYear();
 ---
@@ -17,7 +17,7 @@ const year = new Date().getFullYear();
       <div class="footer-col">
         <span class="label">Where</span>
         <ul class="plain">
-          {site.locations.map((l) => <li>{l.place} — {l.mode.toLowerCase()}</li>)}
+          {site.locations.map((l) => <li>{l.mode ? `${l.place} — ${l.mode.toLowerCase()}` : l.place}</li>)}
         </ul>
       </div>
 
@@ -26,18 +26,23 @@ const year = new Date().getFullYear();
         <ul class="plain">
           <li><Link href={booking.url}>{booking.label}</Link></li>
           <li><Link href={contact.smsHref}>Text {contact.smsDisplay}</Link></li>
-          {contact.email && <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>}
+          <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
           <li><Link href={contact.substack}>The seasonal letter</Link></li>
         </ul>
       </div>
 
-      <div class="footer-col">
-        <KitSignup compact heading="The Red Rose Meditation" />
-      </div>
+      {/* The signup renders nothing until the Kit form exists, and an empty
+          column would still take its share of the grid. */}
+      {kit.formAction && (
+        <div class="footer-col">
+          <KitSignup compact heading={kit.freebie} />
+        </div>
+      )}
 
       <div class="footer-col">
         <span class="label">More</span>
         <ul class="plain">
+          <li><Link href={withBase('/resource/gift/')}>A gift</Link></li>
           <li><Link href={withBase('/for-clinicians/')}>For clinicians</Link></li>
           <li><Link href={contact.art}>Art practice</Link></li>
           <li><Link href={contact.ethics}>Code of ethics</Link></li>
@@ -47,7 +52,7 @@ const year = new Date().getFullYear();
 
     <div class="wide footer-base">
       <p class="credit">
-        Collage artwork by Joan Gutiérrez.
+        Collage artwork and photography by {site.person}.{sound.file && ` ${sound.credit}.`}
       </p>
       <p class="credit">© {year} {site.name}</p>
     </div>
