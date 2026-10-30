@@ -490,12 +490,22 @@ const inSection = (item: (typeof nav)[number]) =>
 
   /* min-height:0 lets this shrink inside the flex column rather than forcing
      the panel taller than the screen, which is what pushed the foot off. */
+  /* Top-aligned, and allowed to scroll as a last resort. Centred, the list
+     floated in the middle of a tall iPad with empty bands above and below
+     it, and on a short window — a phone on its side — it was taller than
+     its space and spilled out over the header and the foot. */
+  /* The list and the foot travel together as one block, centred in what
+     the header leaves. On a tall iPad the foot pinned to the bottom left
+     650px of nothing between it and the list; with auto margins the space
+     falls evenly above and below the pair, and on a short window the
+     margins collapse to nothing and the list scrolls instead. */
   .menu-nav {
-    flex: 1;
+    flex: 0 1 auto;
+    margin-top: auto;
     min-height: 0;
-    display: flex;
-    align-items: center;
-    padding-block: clamp(0.25rem, 1.5vh, 1rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-block: clamp(0.75rem, 4vh, 3rem) clamp(0.5rem, 2vh, 1.25rem);
   }
 
   .menu-list {
@@ -507,6 +517,34 @@ const inSection = (item: (typeof nav)[number]) =>
 
   .menu-list > li + li {
     border-top: 1px solid rgb(238 212 203 / 0.16);
+  }
+
+  /* Wherever there is room for two columns, use them: Work with me and
+     About on the left, Resource and Begin on the right. Halving the height
+     is what lets the whole menu fit a short window without scrolling. */
+  @media (min-width: 640px) {
+    .menu-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      grid-auto-flow: column;
+      column-gap: clamp(1.5rem, 5vw, 3.5rem);
+    }
+
+    /* Every item carries its own rule in the grid; "li + li" would put one
+       above Resource, at the top of the second column, and none above Work
+       with me. */
+    .menu-list > li,
+    .menu-list > li + li {
+      border-top: 1px solid rgb(238 212 203 / 0.16);
+    }
+
+    /* Sized to the column, not the window: at 600px the window-sized type
+       broke "Work with me" over two lines in a half-width column. */
+    .menu-list > li > a {
+      font-size: clamp(1.2rem, min(3.6vw, 4.2vh), 1.9rem);
+      white-space: nowrap;
+    }
   }
 
   /* The panel now carries nine destinations rather than four, so the type is
@@ -573,6 +611,7 @@ const inSection = (item: (typeof nav)[number]) =>
 
   .menu-foot {
     flex: none;
+    margin-bottom: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
     gap: clamp(0.75rem, 2vh, 1.5rem) clamp(1.25rem, 4vw, 3rem);
