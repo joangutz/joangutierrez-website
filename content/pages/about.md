@@ -1,7 +1,7 @@
 ---
 eyebrow: About
 title: My name is Joan
-lede: Somatic educator, artist, and founder of Ma Somatrix Vibrant Health Education.
+lede: Somatic educator, artist, and founder of Ma Somatrix
 description: Joan Gutiérrez — somatic educator and artist, founder of Ma Somatix. Training in somatic education and sexology, Butoh, Zen Shiatsu, and the body as a matrix of wisdom.
 ---
 

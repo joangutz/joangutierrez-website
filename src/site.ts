@@ -21,10 +21,10 @@ export const site = {
   domain: 'masomatix.com',
   /** The practitioner, still named wherever the writing is hers. */
   person: 'Joan Gutiérrez',
-  tagline: 'Somatic education delivered with artistry',
+  tagline: 'Somatic education delivered with artistry for vibrant health',
   place: 'Chicago and beyond',
   description:
-    'Ma Somatix — somatic education delivered with artistry. In person in Chicago, online internationally, open to travel.',
+    'Ma Somatix — somatic education delivered with artistry for vibrant health. In person in Chicago, online internationally, open to travel.',
   locations: [
     { place: 'Chicago, IL', mode: 'In person' },
     { place: 'Internationally', mode: 'Online' },

@@ -321,7 +321,10 @@ const movedAnchors = {
     font-size: clamp(1.05rem, 2.4vw, 1.7rem);
     line-height: 1.25;
     font-weight: 300;
-    max-width: 22ch;
+    /* Wide enough for the line to fall into two even halves, and balanced
+       so it does — at 22ch "health" was left alone on a third line. */
+    max-width: 30ch;
+    text-wrap: balance;
   }
 
   .hero-place {

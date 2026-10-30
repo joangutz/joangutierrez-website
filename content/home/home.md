@@ -7,7 +7,7 @@ hero:
   # margin, the whole first screen held open between them.
   markLeft: Ma
   markRight: Somatix
-  tagline: Somatic education delivered with artistry
+  tagline: Somatic education delivered with artistry for vibrant health
   place: Chicago and beyond
   collage: hero.jpg
   alt: A body in low warm light, the curve of a hip and thigh with a band of sun falling across it.
