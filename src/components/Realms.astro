@@ -1,5 +1,9 @@
 ---
+import { getImage } from 'astro:assets';
 import { realms } from '../site';
+import matrixImg from '../../assets/photos/hero.jpg';
+import maImg from '../../assets/photos/close-home.jpg';
+import somaImg from '../../assets/photos/close-sessions.jpg';
 
 /**
  * Ma. Soma. Matrix — the triangle, and beside it a panel of Joan's text.
@@ -29,6 +33,13 @@ interface Props {
 }
 
 const { intro, class: className = '' } = Astro.props;
+
+/* A body photograph behind each bubble's glass, small — it is blurred to
+   texture and light, so detail would be wasted bytes. Matrix: folds, held
+   and enfolding. Ma: a band of light falling across shadow. Soma: skin. */
+const TEXTURE = await Promise.all(
+  [matrixImg, maImg, somaImg].map((src) => getImage({ src, width: 360, format: 'webp' }))
+);
 
 /** Apex, lower left, lower right, as percentages of the figure. */
 const AT = [
@@ -64,7 +75,7 @@ const AT = [
       <ol class="triad-list">
         {
           realms.map((r, i) => (
-            <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%;--beat:${((i + 2) % 3) * 7 + 7}s`}>
+            <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%;--beat:${((i + 2) % 3) * 7 + 7}s;--img:url(${TEXTURE[i].src})`}>
               <span class="ripples" aria-hidden="true" data-ripples>
                 <i />
                 <i />
@@ -202,17 +213,40 @@ const AT = [
     font: inherit;
     text-align: center;
     --orb-ink: var(--glass-ink);
-    background: var(--glass);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    backdrop-filter: blur(14px) saturate(1.2);
+    --tint: rgb(70 14 22 / 0.64);
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-plumstone);
     box-shadow:
       inset 0 0 0 1px var(--glass-edge),
       0 0 0 0 rgb(44 11 18 / 0);
     transition:
       scale 420ms var(--ease-open),
       translate 420ms var(--ease-open),
-      background-color 420ms var(--ease-open),
       box-shadow 420ms var(--ease-open);
+  }
+
+  /* Its photograph, blurred until only skin, light and shadow remain, and
+     the wine glass over it. Both beneath the words, inside the circle. */
+  .orb::before,
+  .orb::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .orb::before {
+    inset: -14%;
+    background: var(--img) center / cover no-repeat;
+    filter: blur(7px) saturate(1.1);
+  }
+
+  .orb::after {
+    inset: 0;
+    background: var(--tint);
+    transition: background-color 420ms var(--ease-open);
   }
 
   /* The breath. A soft light travels one leg every seven seconds — a full,
@@ -355,7 +389,7 @@ const AT = [
   .orb:focus-visible {
     scale: 1.05;
     translate: 0 -3px;
-    background: var(--glass-deep);
+    --tint: rgb(62 12 20 / 0.76);
     box-shadow:
       inset 0 0 0 1px rgb(238 212 203 / 0.28),
       0 12px 30px rgb(44 11 18 / 0.22);
@@ -364,7 +398,7 @@ const AT = [
   /* The chosen one: deeper glass, a light inner edge, and a ring set just
      off it in the same wine. */
   .orb[aria-pressed='true'] {
-    background: var(--glass-deep);
+    --tint: rgb(62 12 20 / 0.82);
     box-shadow:
       inset 0 0 0 1px rgb(238 212 203 / 0.45),
       0 0 0 5px var(--color-madder),
@@ -410,7 +444,7 @@ const AT = [
 
   :global(.js) .panel > .view {
     grid-area: 1 / 1;
-    align-self: start;
+    align-self: center;
     visibility: hidden;
     opacity: 0;
     transition:
