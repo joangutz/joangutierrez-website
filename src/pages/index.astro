@@ -90,25 +90,15 @@ const movedAnchors = {
     ground and read as a stack of separate pages; this reads as one place.
 
       hero      photograph — the opening frame
-      question  the ground, with a pool of light behind the words
       realms    the ground
-      founder   a swell a shade deeper, portrait in colour
+      question  the ground, with a pool of light behind the words
       begin     the ground
+      founder   a swell a shade deeper, portrait in colour
       gift      the rose as the ground, the words on glass
       close     photograph — the closing frame
   */}
 
-  {/* 2 · One question, in a pool of light that dissolves into the ground
-      on every side, like the light in the flower photographs. */}
-  <section class="glow">
-    <div class="band section">
-      <div class="wide">
-        <p class="question-text">{h.question.text}</p>
-      </div>
-    </div>
-  </section>
-
-  {/* 3 · Ma. Soma. Matrix. */}
+  {/* 2 · Ma. Soma. Matrix. */}
   <section class="band section">
     <div class="wide">
       <span class="label">{h.realms.label}</span>
@@ -118,30 +108,17 @@ const movedAnchors = {
     </div>
   </section>
 
-  {/* 4 · Founder & educator. The portrait keeps its colour here — grey reads
-      as a record, and this is the one place on the site where a reader is
-      meeting a person. */}
-  <section class="swell">
+  {/* 3 · One question, in a pool of light that dissolves into the ground
+      on every side, like the light in the flower photographs. */}
+  <section class="glow">
     <div class="band section">
-    <div class="wide story rise">
-      <div class="story-portrait">
-        <Portrait
-          src={h.founder.portrait}
-          alt={h.founder.alt}
-          colour
-          sizes="(max-width: 900px) 60vw, 26vw"
-        />
+      <div class="wide">
+        <p class="question-text">{h.question.text}</p>
       </div>
-      <div class="story-text">
-        <span class="label">{h.founder.label}</span>
-        {h.founder.paragraphs.map((p) => <p>{p}</p>)}
-        <Link variant="door" href={withBase('/about/')}>{h.founder.link}</Link>
-      </div>
-    </div>
     </div>
   </section>
 
-  {/* 5 · Begin here — the five ways in, at rest. */}
+  {/* 4 · Begin here — the five ways in, at rest. */}
   <section id="begin-here">
     <div class="band section">
     <div class="wide">
@@ -170,6 +147,29 @@ const movedAnchors = {
         }
       </ul>
 
+    </div>
+    </div>
+  </section>
+
+  {/* 5 · Founder & educator. The portrait keeps its colour here — grey reads
+      as a record, and this is the one place on the site where a reader is
+      meeting a person. */}
+  <section class="swell">
+    <div class="band section">
+    <div class="wide story rise">
+      <div class="story-portrait">
+        <Portrait
+          src={h.founder.portrait}
+          alt={h.founder.alt}
+          colour
+          sizes="(max-width: 900px) 60vw, 26vw"
+        />
+      </div>
+      <div class="story-text">
+        <span class="label">{h.founder.label}</span>
+        {h.founder.paragraphs.map((p) => <p>{p}</p>)}
+        <Link variant="door" href={withBase('/about/')}>{h.founder.link}</Link>
+      </div>
     </div>
     </div>
   </section>
