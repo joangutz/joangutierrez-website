@@ -52,12 +52,19 @@ const AT = [
         focusable="false"
       >
         <path d="M50,0 L0,100 L100,100 Z" />
+        {/* A breath travelling the triangle: Matrix to Ma, Ma to Soma, Soma
+            back to Matrix, each leg one slow exhale. */}
+        <g class="pulses">
+          <path class="pulse" pathLength="100" d="M50,0 L0,100" />
+          <path class="pulse" pathLength="100" d="M0,100 L100,100" />
+          <path class="pulse" pathLength="100" d="M100,100 L50,0" />
+        </g>
       </svg>
 
       <ol class="triad-list">
         {
           realms.map((r, i) => (
-            <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%;--beat:${i * 2}s`}>
+            <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%;--beat:${((i + 2) % 3) * 4 + 4}s`}>
               <span class="ripples" aria-hidden="true" data-ripples>
                 <i />
                 <i />
@@ -152,7 +159,7 @@ const AT = [
     overflow: visible;
   }
 
-  .triad-lines path {
+  .triad-lines > path {
     fill: none;
     stroke: var(--color-quick);
     stroke-width: 1;
@@ -208,6 +215,67 @@ const AT = [
       box-shadow 420ms var(--ease-open);
   }
 
+  /* The breath. A soft light travels one leg every four seconds — the pace
+     of a slow exhale — and where it arrives, that bubble ripples. The whole
+     round takes twelve seconds. While the pointer rests on the figure, the
+     breath and its ripples fade out of the way and the bubbles answer the
+     hand instead. */
+  .pulse {
+    fill: none;
+    stroke: var(--color-quick);
+    /* Drawn in the figure's own units (no non-scaling stroke), so the dash
+       is measured along the leg and travels all of it. */
+    stroke-width: 0.5;
+    stroke-linecap: round;
+    stroke-dasharray: 16 200;
+    stroke-dashoffset: 16;
+    opacity: 0;
+    filter: drop-shadow(0 0 3px rgb(142 36 31 / 0.45));
+  }
+
+  .pulses,
+  .ripples {
+    transition: opacity 900ms var(--ease-open);
+  }
+
+  @media (hover: hover) {
+    .triad-shape:hover .pulses,
+    .triad-shape:hover .ripples {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse {
+      animation: breath 12s infinite;
+    }
+
+    .pulse:nth-child(2) { animation-delay: 4s; }
+    .pulse:nth-child(3) { animation-delay: 8s; }
+
+    @keyframes breath {
+      0% {
+        stroke-dashoffset: 16;
+        opacity: 0;
+        animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+      }
+      6% {
+        opacity: 0.75;
+      }
+      27% {
+        opacity: 0.75;
+      }
+      33.3% {
+        stroke-dashoffset: -100;
+        opacity: 0;
+      }
+      100% {
+        stroke-dashoffset: -100;
+        opacity: 0;
+      }
+    }
+  }
+
   /* Ripples, like drops on still water: from each bubble in turn, three
      rings spread one after another and fade. They sit beneath the glass, so
      the start of each ring shows faintly through it. They keep going once a
@@ -224,10 +292,23 @@ const AT = [
     pointer-events: none;
   }
 
+  .splash {
+    left: 50%;
+    top: 50%;
+    width: var(--orb);
+    height: var(--orb);
+    translate: -50% -50%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .ripples i {
+    inset: 0;
+  }
+
   .ripples i,
   .splash {
     position: absolute;
-    inset: 0;
     border-radius: 50%;
     border: 1px solid rgb(142 36 31 / 0.42);
     opacity: 0;
@@ -239,8 +320,7 @@ const AT = [
 
   @media (prefers-reduced-motion: no-preference) {
     .ripples i {
-      --cycle: 6s;
-      animation: ripple var(--cycle) cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+      animation: ripple 12s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
       animation-delay: calc(var(--beat) + var(--lag));
     }
 
@@ -249,7 +329,6 @@ const AT = [
     .ripples i:nth-child(3) { --lag: 1s; }
 
     .realms.has-opened .ripples i {
-      --cycle: 9s;
       border-color: rgb(142 36 31 / 0.26);
     }
 
@@ -258,10 +337,10 @@ const AT = [
         opacity: 0;
         scale: 1;
       }
-      6% {
+      3% {
         opacity: 1;
       }
-      42% {
+      24% {
         opacity: 0;
         scale: 1.32;
       }
@@ -526,7 +605,9 @@ const AT = [
     // A drop landing: three quick rings from the bubble that was pressed.
     const splash = (o: HTMLElement) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const host = o.parentElement?.querySelector<HTMLElement>('[data-ripples]');
+      // In the slot, not among the ambient rings, which step aside under the
+      // pointer.
+      const host = o.parentElement;
       if (!host) return;
       for (let k = 0; k < 3; k++) {
         const ring = document.createElement('i');
