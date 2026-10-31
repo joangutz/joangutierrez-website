@@ -261,15 +261,15 @@ const movedAnchors = {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(to bottom, rgb(44 11 18 / 0.7) 0%, rgb(44 11 18 / 0.42) 26%, transparent 46%),
+      linear-gradient(to bottom, rgb(var(--ch-plum) / 0.7) 0%, rgb(var(--ch-plum) / 0.42) 26%, transparent 46%),
       linear-gradient(
         100deg,
-        rgb(44 11 18 / 0.88) 0%,
-        rgb(44 11 18 / 0.74) 40%,
-        rgb(44 11 18 / 0.42) 72%,
-        rgb(44 11 18 / 0.26) 100%
+        rgb(var(--ch-plum) / 0.88) 0%,
+        rgb(var(--ch-plum) / 0.74) 40%,
+        rgb(var(--ch-plum) / 0.42) 72%,
+        rgb(var(--ch-plum) / 0.26) 100%
       ),
-      linear-gradient(to top, rgb(44 11 18 / 0.9) 0%, rgb(44 11 18 / 0.72) 26%, transparent 60%);
+      linear-gradient(to top, rgb(var(--ch-plum) / 0.9) 0%, rgb(var(--ch-plum) / 0.72) 26%, transparent 60%);
   }
 
   .hero-inner {
@@ -313,7 +313,7 @@ const movedAnchors = {
   .subtitle {
     margin: 0;
     padding-top: clamp(0.9rem, 1.8vw, 1.5rem);
-    border-top: 1px solid rgb(238 212 203 / 0.38);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.38);
     font-family: var(--font-label);
     font-size: clamp(0.66rem, 1.42vw, 1.1rem);
     font-weight: 500;
@@ -357,7 +357,7 @@ const movedAnchors = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.86);
+    color: rgb(var(--ch-bract) / 0.86);
   }
 
   /* The rule it hangs from. */
@@ -368,7 +368,7 @@ const movedAnchors = {
     top: 0;
     width: 1px;
     height: clamp(1.1rem, 2.6vh, 1.6rem);
-    background: rgb(238 212 203 / 0.5);
+    background: rgb(var(--ch-bract) / 0.5);
   }
 
   /* The line arrives at breath pace. Opacity only, so it is readable
@@ -407,8 +407,8 @@ const movedAnchors = {
     min-height: min(56svh, 520px);
     background: radial-gradient(
       ellipse 52% 46% at 50% 50%,
-      #e9d6c9 0%,
-      #efe3d9 48%,
+      var(--pool-a) 0%,
+      var(--pool-b) 48%,
       var(--color-madder) 100%
     );
   }
@@ -418,8 +418,8 @@ const movedAnchors = {
       min-height: 0;
       background: radial-gradient(
         ellipse 90% 44% at 50% 50%,
-        #e9d6c9 0%,
-        #efe3d9 50%,
+        var(--pool-a) 0%,
+        var(--pool-b) 50%,
         var(--color-madder) 100%
       );
     }
@@ -433,7 +433,7 @@ const movedAnchors = {
      change is felt as a swell rather than seen as an edge. On linen the
      secondary ink holds 8.94:1 at the deepest point. */
   .swell {
-    --swell: #e8e0d6;
+    --swell: var(--swell-ground);
     background: linear-gradient(
       to bottom,
       var(--color-madder) 0%,
@@ -624,10 +624,10 @@ const movedAnchors = {
     inset: 0;
     background: linear-gradient(
       100deg,
-      rgb(44 11 18 / 0.92) 0%,
-      rgb(44 11 18 / 0.86) 48%,
-      rgb(44 11 18 / 0.3) 74%,
-      rgb(44 11 18 / 0.05) 100%
+      rgb(var(--ch-plum) / 0.92) 0%,
+      rgb(var(--ch-plum) / 0.86) 48%,
+      rgb(var(--ch-plum) / 0.3) 74%,
+      rgb(var(--ch-plum) / 0.05) 100%
     );
   }
 
@@ -636,7 +636,7 @@ const movedAnchors = {
   }
 
   .gift-text :global(.label) {
-    color: rgb(238 212 203 / 0.82);
+    color: rgb(var(--ch-bract) / 0.82);
   }
 
   /* On a phone the words run the full width, so the rose gets the top of
@@ -645,10 +645,10 @@ const movedAnchors = {
     .rose-ground::after {
       background: linear-gradient(
         to bottom,
-        rgb(44 11 18 / 0.1) 0%,
-        rgb(44 11 18 / 0.35) 18%,
-        rgb(44 11 18 / 0.88) 38%,
-        rgb(44 11 18 / 0.92) 100%
+        rgb(var(--ch-plum) / 0.1) 0%,
+        rgb(var(--ch-plum) / 0.35) 18%,
+        rgb(var(--ch-plum) / 0.88) 38%,
+        rgb(var(--ch-plum) / 0.92) 100%
       );
     }
 
@@ -668,7 +668,7 @@ const movedAnchors = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.82);
+    color: rgb(var(--ch-bract) / 0.82);
   }
 
   .gift-body {
@@ -690,7 +690,7 @@ const movedAnchors = {
 
   .gift-title:hover {
     text-decoration: underline;
-    text-decoration-color: rgb(238 212 203 / 0.6);
+    text-decoration-color: rgb(var(--ch-bract) / 0.6);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.15em;
   }

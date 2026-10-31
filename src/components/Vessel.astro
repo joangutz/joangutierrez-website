@@ -90,9 +90,9 @@ const petal = (len: number) => {
 >
   <defs>
     <radialGradient id="vessel-glow">
-      <stop offset="0%" stop-color="var(--glow, #f4dcd2)" stop-opacity="0.95"></stop>
-      <stop offset="52%" stop-color="var(--glow, #f4dcd2)" stop-opacity="0.26"></stop>
-      <stop offset="100%" stop-color="var(--glow, #f4dcd2)" stop-opacity="0"></stop>
+      <stop offset="0%" stop-color="var(--glow, var(--shell-0))" stop-opacity="0.95"></stop>
+      <stop offset="52%" stop-color="var(--glow, var(--shell-0))" stop-opacity="0.26"></stop>
+      <stop offset="100%" stop-color="var(--glow, var(--shell-0))" stop-opacity="0"></stop>
     </radialGradient>
   </defs>
 
@@ -150,18 +150,18 @@ const petal = (len: number) => {
     transition: transform 900ms var(--ease-open);
   }
 
-  .vessel.shaded .t0 { fill: var(--petal-0, #8e2f2a); }
-  .vessel.shaded .t1 { fill: var(--petal-1, #75231f); }
-  .vessel.shaded .t2 { fill: var(--petal-2, #5a121c); }
-  .vessel.shaded .t3 { fill: var(--petal-3, #3d0e15); }
+  .vessel.shaded .t0 { fill: var(--petal-0, var(--pt0)); }
+  .vessel.shaded .t1 { fill: var(--petal-1, var(--pt1)); }
+  .vessel.shaded .t2 { fill: var(--petal-2, var(--pt2)); }
+  .vessel.shaded .t3 { fill: var(--petal-3, var(--pt3)); }
 
   /* On a deep ground the petals drop to mid tones rather than going as light
      as the egg. Bract petals and a near-white egg merge into one pale mass and
      the egg stops being the light, which is the whole point of the mark. */
-  .on-dark .vessel.shaded .t0 { fill: #e3b6ac; }
-  .on-dark .vessel.shaded .t1 { fill: #dba184; }
-  .on-dark .vessel.shaded .t2 { fill: #b8837c; }
-  .on-dark .vessel.shaded .t3 { fill: #97655f; }
+  .on-dark .vessel.shaded .t0 { fill: var(--pd0); }
+  .on-dark .vessel.shaded .t1 { fill: var(--pd1); }
+  .on-dark .vessel.shaded .t2 { fill: var(--pd2); }
+  .on-dark .vessel.shaded .t3 { fill: var(--pd3); }
 
   /* The egg is hidden until the petals have begun to part, then emerges and
      grows from the shared root. Opacity resolves fully opaque by ~0.7 open —
@@ -169,7 +169,7 @@ const petal = (len: number) => {
      reveal is carried by scale and the petals' motion, not by a long fade.
      CSS clamps opacity to [0,1], so the expression needs no clamp(). */
   .vessel .egg {
-    fill: var(--shell, #f4dcd2);
+    fill: var(--shell, var(--shell-0));
     opacity: calc((var(--open) - 0.18) / 0.5);
     transform-box: view-box;
     transform-origin: 50px 74.5px;
@@ -192,8 +192,8 @@ const petal = (len: number) => {
   /* On a deep ground the mark inverts: light petals, the egg still the light. */
   .on-dark .vessel {
     --petal: var(--color-madder);
-    --shell: #fbeee7;
-    --glow: #eed4cb;
+    --shell: var(--shell-1);
+    --glow: var(--color-bract);
   }
 
   @media (prefers-reduced-motion: no-preference) {

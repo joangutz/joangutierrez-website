@@ -176,9 +176,9 @@ const AT = [
      photograph: translucent, with whatever lies behind it blurred. One recipe
      for the bubbles and for the panel that opens beside them. */
   .realms {
-    --glass: rgb(70 14 22 / 0.82);
-    --glass-deep: rgb(62 12 20 / 0.88);
-    --glass-edge: rgb(238 212 203 / 0.16);
+    --glass: rgb(var(--ch-glass) / 0.82);
+    --glass-deep: rgb(var(--ch-glass-deep) / 0.88);
+    --glass-edge: rgb(var(--ch-bract) / 0.16);
     --glass-ink: var(--color-bract);
   }
 
@@ -234,13 +234,13 @@ const AT = [
     font: inherit;
     text-align: center;
     --orb-ink: var(--glass-ink);
-    --tint: rgb(70 14 22 / 0.64);
+    --tint: rgb(var(--ch-glass) / 0.64);
     isolation: isolate;
     overflow: hidden;
     background: var(--color-plumstone);
     box-shadow:
       inset 0 0 0 1px var(--glass-edge),
-      0 0 0 0 rgb(44 11 18 / 0);
+      0 0 0 0 rgb(var(--ch-plum) / 0);
     transition:
       scale 420ms var(--ease-open),
       translate 420ms var(--ease-open),
@@ -314,9 +314,9 @@ const AT = [
     border-radius: 50%;
     background: radial-gradient(
       closest-side,
-      rgb(142 36 31 / 0.42) 0%,
-      rgb(142 36 31 / 0.2) 45%,
-      rgb(142 36 31 / 0.06) 75%,
+      rgb(var(--ch-quick) / 0.42) 0%,
+      rgb(var(--ch-quick) / 0.2) 45%,
+      rgb(var(--ch-quick) / 0.06) 75%,
       transparent 100%
     );
     filter: blur(1.5px);
@@ -413,7 +413,7 @@ const AT = [
   .splash {
     position: absolute;
     border-radius: 50%;
-    border: 1px solid rgb(142 36 31 / 0.42);
+    border: 1px solid rgb(var(--ch-quick) / 0.42);
     opacity: 0;
   }
 
@@ -432,7 +432,7 @@ const AT = [
     .ripples i:nth-child(3) { --lag: 2.2s; }
 
     .realms.has-opened .ripples i {
-      border-color: rgb(142 36 31 / 0.26);
+      border-color: rgb(var(--ch-quick) / 0.26);
     }
 
     @keyframes ripple {
@@ -458,20 +458,20 @@ const AT = [
   .orb:focus-visible {
     scale: 1.05;
     translate: 0 -3px;
-    --tint: rgb(62 12 20 / 0.76);
+    --tint: rgb(var(--ch-glass-deep) / 0.76);
     box-shadow:
-      inset 0 0 0 1px rgb(238 212 203 / 0.28),
-      0 12px 30px rgb(44 11 18 / 0.22);
+      inset 0 0 0 1px rgb(var(--ch-bract) / 0.28),
+      0 12px 30px rgb(var(--ch-plum) / 0.22);
   }
 
   /* The chosen one: deeper glass, a light inner edge, and a ring set just
      off it in the same wine. */
   .orb[aria-pressed='true'] {
-    --tint: rgb(62 12 20 / 0.82);
+    --tint: rgb(var(--ch-glass-deep) / 0.82);
     box-shadow:
-      inset 0 0 0 1px rgb(238 212 203 / 0.45),
+      inset 0 0 0 1px rgb(var(--ch-bract) / 0.45),
       0 0 0 5px var(--color-madder),
-      0 0 0 6px rgb(90 18 28 / 0.7);
+      0 0 0 6px rgb(var(--ch-ink) / 0.7);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -552,7 +552,7 @@ const AT = [
     position: relative;
     padding: clamp(1.4rem, 3vw, 2.25rem);
     background:
-      linear-gradient(rgb(66 13 21 / 0.74), rgb(66 13 21 / 0.74)),
+      linear-gradient(rgb(var(--ch-glass) / 0.74), rgb(var(--ch-glass) / 0.74)),
       var(--img) center / cover no-repeat,
       var(--color-plumstone);
     box-shadow: inset 0 0 0 1px var(--glass-edge);
@@ -578,7 +578,7 @@ const AT = [
      and the italic cut of the text face draws the ī of matrīcis with its
      macron adrift. */
   .view-origin {
-    color: rgb(238 212 203 / 0.8);
+    color: rgb(var(--ch-bract) / 0.8);
   }
 
   /* A cross, drawn, so the close control needs no word. */
@@ -589,7 +589,7 @@ const AT = [
     border: 0;
     background: none;
     cursor: pointer;
-    color: rgb(238 212 203 / 0.8);
+    color: rgb(var(--ch-bract) / 0.8);
   }
 
   .view-close span::before,

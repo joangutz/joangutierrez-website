@@ -171,7 +171,7 @@ const inSection = (item: (typeof nav)[number]) =>
     z-index: 60;
     background: var(--color-madder);
     border-top: 1px solid var(--rule);
-    box-shadow: 0 -10px 24px rgb(44 11 18 / 0.1);
+    box-shadow: 0 -10px 24px rgb(var(--ch-plum) / 0.1);
     /* Phones with a home indicator put a strip of unusable glass below the
        viewport; the bar's contents sit above it. */
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -221,7 +221,7 @@ const inSection = (item: (typeof nav)[number]) =>
   }
 
   .brand[aria-current='page'] .brand-name {
-    border-bottom-color: rgb(142 36 31 / 0.6);
+    border-bottom-color: rgb(var(--ch-quick) / 0.6);
   }
 
   .brand-name,
@@ -309,21 +309,21 @@ const inSection = (item: (typeof nav)[number]) =>
 
   .nav-inline a:hover {
     color: var(--color-cochineal);
-    border-bottom-color: rgb(142 36 31 / 0.35);
+    border-bottom-color: rgb(var(--ch-quick) / 0.35);
   }
 
   .nav-inline > ul > li > a.in-section {
     color: var(--color-cochineal);
     border-bottom-style: dotted;
     border-bottom-width: 1px;
-    border-bottom-color: rgb(142 36 31 / 0.5);
+    border-bottom-color: rgb(var(--ch-quick) / 0.5);
   }
 
   .nav-inline a[aria-current='page'] {
     color: var(--color-cochineal);
     border-bottom-style: solid;
     border-bottom-width: var(--word-rule);
-    border-bottom-color: rgb(142 36 31 / 0.6);
+    border-bottom-color: rgb(var(--ch-quick) / 0.6);
   }
 
   /* A plus that becomes a minus while its list is open: two hairlines, the
@@ -390,7 +390,7 @@ const inSection = (item: (typeof nav)[number]) =>
        cannot see past the bar. */
     background: color-mix(in srgb, var(--color-madder) 94%, transparent);
     border-top: 1px solid var(--rule);
-    box-shadow: 0 -10px 24px rgb(44 11 18 / 0.08);
+    box-shadow: 0 -10px 24px rgb(var(--ch-plum) / 0.08);
     opacity: 0;
     visibility: hidden;
     transition:
@@ -439,12 +439,12 @@ const inSection = (item: (typeof nav)[number]) =>
 
   .sub a:hover {
     color: var(--color-cochineal);
-    border-bottom-color: rgb(142 36 31 / 0.35);
+    border-bottom-color: rgb(var(--ch-quick) / 0.35);
   }
 
   .sub a[aria-current='page'] {
     color: var(--color-cochineal);
-    border-bottom-color: rgb(142 36 31 / 0.6);
+    border-bottom-color: rgb(var(--ch-quick) / 0.6);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -527,7 +527,7 @@ const inSection = (item: (typeof nav)[number]) =>
     /* 0.9, not lighter: at 0.84 a light page behind lifted the panel enough
        to drop the small sub-links to 4.2:1. */
     .menu {
-      background: rgb(44 11 18 / 0.9);
+      background: rgb(var(--ch-plum) / 0.9);
       -webkit-backdrop-filter: blur(24px) saturate(1.1);
       backdrop-filter: blur(24px) saturate(1.1);
     }
@@ -641,7 +641,7 @@ const inSection = (item: (typeof nav)[number]) =>
   }
 
   .menu-list > li + li {
-    border-top: 1px solid rgb(238 212 203 / 0.16);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
   }
 
   /* Wherever there is room for two columns, use them: Work with me and
@@ -661,7 +661,7 @@ const inSection = (item: (typeof nav)[number]) =>
        with me. */
     .menu-list > li,
     .menu-list > li + li {
-      border-top: 1px solid rgb(238 212 203 / 0.16);
+      border-top: 1px solid rgb(var(--ch-bract) / 0.16);
     }
 
     /* Sized to the column, not the window: at 600px the window-sized type
@@ -686,7 +686,7 @@ const inSection = (item: (typeof nav)[number]) =>
     line-height: 1.15;
     letter-spacing: -0.02em;
     padding-block: clamp(0.35rem, 1.2vh, 0.7rem);
-    color: rgb(238 212 203 / 0.82);
+    color: rgb(var(--ch-bract) / 0.82);
     transition: color 300ms var(--ease-open);
   }
 
@@ -711,7 +711,7 @@ const inSection = (item: (typeof nav)[number]) =>
     text-decoration: none;
     font-size: clamp(0.82rem, 2.6vh, 0.95rem);
     line-height: 1.3;
-    color: rgb(238 212 203 / 0.74);
+    color: rgb(var(--ch-bract) / 0.74);
   }
 
   .menu-sub a:hover,
@@ -741,7 +741,7 @@ const inSection = (item: (typeof nav)[number]) =>
     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
     gap: clamp(0.75rem, 2vh, 1.5rem) clamp(1.25rem, 4vw, 3rem);
     padding-top: clamp(0.75rem, 2vh, 1.5rem);
-    border-top: 1px solid rgb(238 212 203 / 0.16);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
     font-size: 0.86rem;
   }
 
@@ -766,12 +766,12 @@ const inSection = (item: (typeof nav)[number]) =>
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.74);
+    color: rgb(var(--ch-bract) / 0.74);
   }
 
   .menu-where {
     font-size: 0.88rem;
-    color: rgb(238 212 203 / 0.8);
+    color: rgb(var(--ch-bract) / 0.8);
   }
 
   /* The panel arrives from the foot of the screen, which is where the button

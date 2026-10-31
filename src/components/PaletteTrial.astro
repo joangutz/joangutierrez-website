@@ -1,0 +1,159 @@
+---
+/**
+ * A palette picker for trying the site on in other colours. Visitors never
+ * see it: it appears only on a device that has opened a link with
+ * ?palette=… (for example /?palette=stone), and the choice is kept only in
+ * that browser. Wine is the site as built; the others are neutral
+ * variations defined in global.css.
+ */
+const PALETTES = [
+  { id: 'wine', name: 'Wine', swatch: ['#2c0b12', '#5a121c', '#7e2a26', '#8e3b2e'] },
+  { id: 'umber', name: 'Umber', swatch: ['#221913', '#3b2c24', '#5f4a3d', '#7b6150'] },
+  { id: 'stone', name: 'Stone', swatch: ['#1d1c1a', '#33312e', '#56524c', '#67615a'] },
+  { id: 'mauve', name: 'Mauve', swatch: ['#2a1b1e', '#4a3135', '#6b4e50', '#775b58'] },
+  { id: 'olive', name: 'Olive', swatch: ['#1d1e18', '#33342a', '#575847', '#666550'] },
+];
+---
+
+<div class="trial" data-trial hidden>
+  <span class="trial-label">Palette</span>
+  <div class="trial-list">
+    {
+      PALETTES.map((p) => (
+        <button type="button" class="trial-btn" data-palette-pick={p.id} aria-pressed="false">
+          <span class="trial-chips" aria-hidden="true">
+            {p.swatch.map((c) => (
+              <i style={`background:${c}`} />
+            ))}
+          </span>
+          {p.name}
+        </button>
+      ))
+    }
+  </div>
+  <button type="button" class="trial-hide" data-trial-hide aria-label="Hide the palette picker">
+    ×
+  </button>
+</div>
+
+<style>
+  .trial {
+    position: fixed;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    max-width: calc(100vw - 1.5rem);
+    padding: 0.5rem 0.6rem 0.5rem 0.85rem;
+    background: rgb(255 255 255 / 0.92);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgb(0 0 0 / 0.12);
+    box-shadow: 0 8px 26px rgb(0 0 0 / 0.14);
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #2a2a2a;
+  }
+
+  .trial[hidden] {
+    display: none;
+  }
+
+  .trial-list {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .trial-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid transparent;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .trial-btn:hover {
+    border-color: rgb(0 0 0 / 0.15);
+  }
+
+  .trial-btn[aria-pressed='true'] {
+    border-color: #2a2a2a;
+  }
+
+  .trial-chips {
+    display: inline-flex;
+  }
+
+  .trial-chips i {
+    width: 9px;
+    height: 14px;
+  }
+
+  .trial-hide {
+    border: 0;
+    background: none;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0.2rem 0.35rem;
+    cursor: pointer;
+    color: #555;
+  }
+</style>
+
+<script>
+  const box = document.querySelector<HTMLElement>('[data-trial]');
+  if (box) {
+    const get = (k: string) => {
+      try {
+        return localStorage.getItem(k);
+      } catch {
+        return null;
+      }
+    };
+    const set = (k: string, v: string | null) => {
+      try {
+        if (v === null) localStorage.removeItem(k);
+        else localStorage.setItem(k, v);
+      } catch {
+        /* private mode: the choice lasts this page only */
+      }
+    };
+    const sync = () => {
+      const now = document.documentElement.dataset.palette ?? 'wine';
+      for (const b of box.querySelectorAll<HTMLButtonElement>('[data-palette-pick]')) {
+        b.setAttribute('aria-pressed', String(b.dataset.palettePick === now));
+      }
+    };
+    if (get('ms-trial') === '1' || new URLSearchParams(location.search).has('palette')) {
+      box.hidden = false;
+      sync();
+    }
+    box.addEventListener('click', (e) => {
+      const pick = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-palette-pick]');
+      if (pick) {
+        const id = pick.dataset.palettePick as string;
+        if (id === 'wine') delete document.documentElement.dataset.palette;
+        else document.documentElement.dataset.palette = id;
+        set('ms-palette', id === 'wine' ? null : id);
+        sync();
+      }
+      if ((e.target as HTMLElement).closest('[data-trial-hide]')) {
+        box.hidden = true;
+        set('ms-trial', null);
+      }
+    });
+  }
+</script>

@@ -14,6 +14,7 @@ interface Props {
 const { title, description, bare = false } = Astro.props;
 const fullTitle = bare ? title : `${title} · ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+import PaletteTrial from '../components/PaletteTrial.astro';
 ---
 
 <!doctype html>
@@ -35,6 +36,27 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       // them. Without this class every .rise block stays at opacity 0 forever
       // if the module script fails to run.
       document.documentElement.classList.add('js');
+
+      // Palette trial (see PaletteTrial.astro). Set before first paint so a
+      // chosen palette never flashes the default.
+      (function () {
+        var ok = ['umber', 'stone', 'mauve', 'olive', 'wine'];
+        var q = new URLSearchParams(location.search).get('palette');
+        var pick = null;
+        try {
+          if (q && ok.indexOf(q) > -1) {
+            localStorage.setItem('ms-trial', '1');
+            if (q === 'wine') localStorage.removeItem('ms-palette');
+            else localStorage.setItem('ms-palette', q);
+          }
+          pick = localStorage.getItem('ms-palette');
+        } catch (e) {
+          pick = q;
+        }
+        if (pick && pick !== 'wine' && ok.indexOf(pick) > -1) {
+          document.documentElement.dataset.palette = pick;
+        }
+      })();
     </script>
   </head>
   <body>
@@ -44,6 +66,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+    <PaletteTrial />
 
     <script>
       // The one orchestrated motion: things open when they arrive.

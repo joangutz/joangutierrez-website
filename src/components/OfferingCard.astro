@@ -174,7 +174,7 @@ const id = offering.id;
     /* A lit top edge so the swatch reads as its own band whatever sits above
        it — including a placeholder tinted in the same register, which would
        otherwise merge with it into one dark block. */
-    box-shadow: inset 0 1px 0 rgb(238 212 203 / 0.22);
+    box-shadow: inset 0 1px 0 rgb(var(--ch-bract) / 0.22);
   }
 
   [data-register='plumstone'] .chip-name { background: var(--color-plumstone); }
@@ -235,7 +235,7 @@ const id = offering.id;
   /* Burgundy glass, the same recipe as the Ma Soma Matrix panel, laid over
      the card's own image blurred until only its colour and light remain. */
   .face-back {
-    --rule-glass: rgb(238 212 203 / 0.22);
+    --rule-glass: rgb(var(--ch-bract) / 0.22);
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -266,8 +266,8 @@ const id = offering.id;
     content: '';
     position: absolute;
     inset: 0;
-    background: rgb(62 12 20 / 0.8);
-    box-shadow: inset 0 0 0 1px rgb(238 212 203 / 0.14);
+    background: rgb(var(--ch-glass-deep) / 0.8);
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.14);
   }
 
   .back-head {
@@ -304,7 +304,7 @@ const id = offering.id;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.8);
+    color: rgb(var(--ch-bract) / 0.8);
     margin-bottom: 1rem;
   }
 
@@ -339,7 +339,7 @@ const id = offering.id;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: rgb(238 212 203 / 0.7);
+    background: rgb(var(--ch-bract) / 0.7);
   }
 
   .panel-right p {
@@ -378,14 +378,14 @@ const id = offering.id;
   /* The way in is a piece of the glass the card turns to. */
   .turn[data-turn='open'] {
     --petal: var(--color-bract);
-    --petal-0: #f3dfd7;
-    --petal-1: #e3b6ac;
-    --petal-2: #cf9a90;
-    --petal-3: #b8837c;
-    background: rgb(70 14 22 / 0.9);
+    --petal-0: var(--pl0);
+    --petal-1: var(--pd0);
+    --petal-2: var(--pl2);
+    --petal-3: var(--pd2);
+    background: rgb(var(--ch-glass) / 0.9);
     border-color: transparent;
     color: var(--color-bract);
-    box-shadow: inset 0 0 0 1px rgb(238 212 203 / 0.16);
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.16);
     transition: background-color 300ms var(--ease-open), box-shadow 300ms var(--ease-open);
   }
 
@@ -393,12 +393,12 @@ const id = offering.id;
   .turn[data-turn='open']:focus-visible {
     background: var(--color-plumstone);
     box-shadow:
-      inset 0 0 0 1px rgb(238 212 203 / 0.3),
-      0 8px 22px rgb(44 11 18 / 0.2);
+      inset 0 0 0 1px rgb(var(--ch-bract) / 0.3),
+      0 8px 22px rgb(var(--ch-plum) / 0.2);
   }
 
   .turn-back {
-    border-color: rgb(238 212 203 / 0.35);
+    border-color: rgb(var(--ch-bract) / 0.35);
   }
 
   .turn-back:hover,

@@ -158,10 +158,216 @@
   --ease-open: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/* ------------------------------------------------------------------
+   Palettes. Wine is the site as built and stays the default. The others
+   are neutral variations Joan can try on the live site (?palette=umber,
+   or the picker that appears once a palette has been chosen). Every
+   colour on the site reads from these tokens — the named colours above,
+   and channel values (--ch-*) for the translucent washes and glass, so a
+   palette swap changes all of it at once.
+   ------------------------------------------------------------------ */
+:root {
+  --ch-bract: 238 212 203;
+  --ch-plum: 44 11 18;
+  --ch-quick: 142 36 31;
+  --ch-ink: 90 18 28;
+  --ch-glass: 70 14 22;
+  --ch-glass-deep: 62 12 20;
+  --ch-aura: 240 206 196;
+
+  /* Lit corners of the card placeholders, by register. */
+  --lit-plumstone: #4a1520;
+  --lit-cochineal: #78202c;
+  --lit-brick: #9c3a33;
+  --lit-clay: #ab4d3c;
+
+  --portrait-a: #8a5f59;
+  --portrait-b: #3a1c1e;
+
+  /* The lotus: petals on light, petals on dark, and its shell and glow. */
+  --pt0: #8e2f2a;
+  --pt1: #75231f;
+  --pt2: #5a121c;
+  --pt3: #3d0e15;
+  --pd0: #e3b6ac;
+  --pd1: #dba184;
+  --pd2: #b8837c;
+  --pd3: #97655f;
+  --pl0: #f3dfd7;
+  --pl2: #cf9a90;
+  --shell-0: #f4dcd2;
+  --shell-1: #fbeee7;
+
+  /* The homepage's pooled light and its swell. */
+  --pool-a: #e9d6c9;
+  --pool-b: #efe3d9;
+  --swell-ground: #e8e0d6;
+}
+
+/* Umber — warm earth browns. */
+html[data-palette='umber'] {
+  --color-cochineal: #3b2c24;
+  --color-plumstone: #221913;
+  --color-bract: #ede3d8;
+  --color-quick: #7c5a46;
+  --color-ink-2: #513e33;
+  --color-brick: #5f4a3d;
+  --color-clay: #7b6150;
+  --color-barro: #c4a587;
+  --ch-bract: 237 227 216;
+  --ch-plum: 34 25 19;
+  --ch-quick: 124 90 70;
+  --ch-ink: 59 44 36;
+  --ch-glass: 58 43 35;
+  --ch-glass-deep: 50 37 30;
+  --ch-aura: 232 218 204;
+  --lit-plumstone: #3a2c23;
+  --lit-cochineal: #574337;
+  --lit-brick: #7b6253;
+  --lit-clay: #977c6a;
+  --portrait-a: #84705f;
+  --portrait-b: #2f241d;
+  --pt0: #8a6852;
+  --pt1: #735643;
+  --pt2: #5a4334;
+  --pt3: #3d2d22;
+  --pd0: #e4d3c3;
+  --pd1: #d3baa3;
+  --pd2: #b59b85;
+  --pd3: #937864;
+  --pl0: #f2e8de;
+  --pl2: #cdb6a1;
+  --shell-0: #f1e6da;
+  --shell-1: #f8f1ea;
+  --pool-a: #e5dace;
+  --pool-b: #ece4da;
+  --swell-ground: #e6e0d8;
+}
+
+/* Stone — cool greige, the most neutral. */
+html[data-palette='stone'] {
+  --color-cochineal: #33312e;
+  --color-plumstone: #1d1c1a;
+  --color-bract: #ebe8e3;
+  --color-quick: #6c665e;
+  --color-ink-2: #4a4743;
+  --color-brick: #56524c;
+  --color-clay: #67615a;
+  --color-barro: #bdb3a4;
+  --ch-bract: 235 232 227;
+  --ch-plum: 29 28 26;
+  --ch-quick: 108 102 94;
+  --ch-ink: 51 49 46;
+  --ch-glass: 49 47 44;
+  --ch-glass-deep: 42 40 38;
+  --ch-aura: 226 222 215;
+  --lit-plumstone: #2f2d2a;
+  --lit-cochineal: #4b4844;
+  --lit-brick: #6c675f;
+  --lit-clay: #8a837a;
+  --portrait-a: #7c766e;
+  --portrait-b: #2a2826;
+  --pt0: #7e776d;
+  --pt1: #68625a;
+  --pt2: #524d47;
+  --pt3: #36332f;
+  --pd0: #e2ded7;
+  --pd1: #cfc9c0;
+  --pd2: #b0a99f;
+  --pd3: #8f887e;
+  --pl0: #f0eeea;
+  --pl2: #c7c1b8;
+  --shell-0: #ece9e4;
+  --shell-1: #f6f4f1;
+  --pool-a: #e2ded8;
+  --pool-b: #e9e6e1;
+  --swell-ground: #e4e0da;
+}
+
+/* Mauve — taupe with a memory of the rose. */
+html[data-palette='mauve'] {
+  --color-cochineal: #4a3135;
+  --color-plumstone: #2a1b1e;
+  --color-bract: #eddfdc;
+  --color-quick: #845f5e;
+  --color-ink-2: #5f4346;
+  --color-brick: #6b4e50;
+  --color-clay: #775b58;
+  --color-barro: #c7a593;
+  --ch-bract: 237 223 220;
+  --ch-plum: 42 27 30;
+  --ch-quick: 132 95 94;
+  --ch-ink: 74 49 53;
+  --ch-glass: 68 45 49;
+  --ch-glass-deep: 58 38 42;
+  --ch-aura: 236 218 213;
+  --lit-plumstone: #44302f;
+  --lit-cochineal: #634a4c;
+  --lit-brick: #846a68;
+  --lit-clay: #a0857c;
+  --portrait-a: #8b726e;
+  --portrait-b: #33242a;
+  --pt0: #93716d;
+  --pt1: #7b5a57;
+  --pt2: #624544;
+  --pt3: #43302f;
+  --pd0: #e7d4cf;
+  --pd1: #d7bcb6;
+  --pd2: #b99c96;
+  --pd3: #987c77;
+  --pl0: #f4e9e6;
+  --pl2: #d0b5ae;
+  --shell-0: #f1e4e0;
+  --shell-1: #f8f0ee;
+  --pool-a: #e8dad3;
+  --pool-b: #eee4dd;
+  --swell-ground: #e7dfd8;
+}
+
+/* Olive — grey-green earth. */
+html[data-palette='olive'] {
+  --color-cochineal: #33342a;
+  --color-plumstone: #1d1e18;
+  --color-bract: #e9e7dd;
+  --color-quick: #6c6b52;
+  --color-ink-2: #48493b;
+  --color-brick: #575847;
+  --color-clay: #666550;
+  --color-barro: #bdb391;
+  --ch-bract: 233 231 221;
+  --ch-plum: 29 30 24;
+  --ch-quick: 108 107 82;
+  --ch-ink: 51 52 42;
+  --ch-glass: 48 49 39;
+  --ch-glass-deep: 41 42 33;
+  --ch-aura: 226 224 210;
+  --lit-plumstone: #31322a;
+  --lit-cochineal: #4b4c3e;
+  --lit-brick: #6c6c57;
+  --lit-clay: #8a8970;
+  --portrait-a: #7c7b66;
+  --portrait-b: #2a2b23;
+  --pt0: #7d7c62;
+  --pt1: #696850;
+  --pt2: #53533f;
+  --pt3: #38382a;
+  --pd0: #e3e1d3;
+  --pd1: #d0cdb9;
+  --pd2: #b2ae98;
+  --pd3: #908c76;
+  --pl0: #f1f0e8;
+  --pl2: #c8c5b0;
+  --shell-0: #ecebe2;
+  --shell-1: #f6f5ef;
+  --pool-a: #e4e1d6;
+  --pool-b: #ebe8de;
+  --swell-ground: #e5e2d9;
+}
+
 @layer base {
   :root {
-    --rule: rgb(90 18 28 / 0.28);
-    --rule-soft: rgb(90 18 28 / 0.14);
+    --rule: rgb(var(--ch-ink) / 0.28);
+    --rule-soft: rgb(var(--ch-ink) / 0.14);
 
     /* Focus rings flip by ground: Plumstone fails on dark, Bract fails on light. */
     --focus: var(--color-plumstone);
@@ -194,8 +400,8 @@
   .on-dark {
     color: var(--color-bract);
     --focus: var(--color-bract);
-    --rule: rgb(238 212 203 / 0.3);
-    --rule-soft: rgb(238 212 203 / 0.16);
+    --rule: rgb(var(--ch-bract) / 0.3);
+    --rule-soft: rgb(var(--ch-bract) / 0.16);
   }
 
   html {
@@ -365,7 +571,7 @@
   }
 
   .on-dark .lnk-inline .lnk-label {
-    text-decoration-color: rgb(238 212 203 / 0.5);
+    text-decoration-color: rgb(var(--ch-bract) / 0.5);
   }
 
   /* A door to another page: the small letterspaced form, ruled beneath. */
@@ -429,25 +635,25 @@
     position: relative;
     border: 1px solid var(--rule);
     padding: clamp(1.75rem, 4vw, 2.75rem);
-    background: rgb(238 212 203 / 0.42);
+    background: rgb(var(--ch-bract) / 0.42);
   }
 
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .pane {
-      background: rgb(238 212 203 / 0.26);
+      background: rgb(var(--ch-bract) / 0.26);
       -webkit-backdrop-filter: blur(16px) saturate(1.15);
       backdrop-filter: blur(16px) saturate(1.15);
     }
   }
 
   .on-dark .pane {
-    background: rgb(44 11 18 / 0.68);
-    border-color: rgb(238 212 203 / 0.24);
+    background: rgb(var(--ch-plum) / 0.68);
+    border-color: rgb(var(--ch-bract) / 0.24);
   }
 
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .on-dark .pane {
-      background: rgb(44 11 18 / 0.52);
+      background: rgb(var(--ch-plum) / 0.52);
     }
   }
 
@@ -496,7 +702,7 @@
   }
 
   .on-dark .label {
-    color: rgb(238 212 203 / 0.92);
+    color: rgb(var(--ch-bract) / 0.92);
   }
 
   /* One page-title scale for the whole site — five pages had drifted to four
@@ -518,7 +724,7 @@
   }
 
   .on-dark .lede {
-    color: rgb(238 212 203 / 0.86);
+    color: rgb(var(--ch-bract) / 0.86);
   }
 
   /* Long-form prose. Used by every markdown body on the site. */
@@ -612,8 +818,8 @@
   .aura::before {
     background: radial-gradient(
       circle closest-side,
-      var(--aura-core, rgb(240 206 196 / 0.6)) 0%,
-      var(--aura-mid, rgb(142 36 31 / 0.1)) 44%,
+      var(--aura-core, rgb(var(--ch-aura) / 0.6)) 0%,
+      var(--aura-mid, rgb(var(--ch-quick) / 0.1)) 44%,
       transparent 72%
     );
   }
@@ -628,8 +834,8 @@
   }
 
   .on-dark .aura::before {
-    --aura-core: rgb(238 212 203 / 0.22);
-    --aura-mid: rgb(238 212 203 / 0.07);
+    --aura-core: rgb(var(--ch-bract) / 0.22);
+    --aura-mid: rgb(var(--ch-bract) / 0.07);
   }
 
   /* Grain applied to a single element rather than the viewport. */
