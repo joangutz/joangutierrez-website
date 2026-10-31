@@ -259,7 +259,8 @@ const id = offering.id;
     height: 124%;
     max-width: none;
     object-fit: cover;
-    filter: blur(36px) saturate(1.15);
+    /* Light and shadow only: the palette's glass gives the colour. */
+    filter: blur(36px) grayscale(1);
   }
 
   .back-glass::after {
