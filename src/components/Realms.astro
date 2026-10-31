@@ -1,9 +1,8 @@
 ---
-import { getImage } from 'astro:assets';
 import { realms } from '../site';
-import matrixImg from '../../assets/photos/hero.jpg';
-import maImg from '../../assets/photos/close-home.jpg';
-import somaImg from '../../assets/photos/close-sessions.jpg';
+import matrixImg from '../../assets/textures/matrix.webp';
+import maImg from '../../assets/textures/ma.webp';
+import somaImg from '../../assets/textures/soma.webp';
 
 /**
  * Ma. Soma. Matrix — the triangle, and beside it a panel of Joan's text.
@@ -34,12 +33,12 @@ interface Props {
 
 const { intro, class: className = '' } = Astro.props;
 
-/* A body photograph behind each bubble's glass, small — it is blurred to
-   texture and light, so detail would be wasted bytes. Matrix: folds, held
-   and enfolding. Ma: a band of light falling across shadow. Soma: skin. */
-const TEXTURE = await Promise.all(
-  [matrixImg, maImg, somaImg].map((src) => getImage({ src, width: 360, format: 'webp' }))
-);
+/* A body photograph behind each bubble's glass. Matrix: folds, held and
+   enfolding (hero.jpg). Ma: a band of light across shadow (close-home.jpg).
+   Soma: skin (close-sessions.jpg). Blurred ahead of time, into
+   /assets/textures/, rather than with a CSS filter: a filtered layer escapes
+   its rounded parent's clipping in Safari and shows as a square. */
+const TEXTURE = [matrixImg, maImg, somaImg];
 
 /** Apex, lower left, lower right, as percentages of the figure. */
 const AT = [
@@ -233,20 +232,80 @@ const AT = [
     content: '';
     position: absolute;
     z-index: -1;
+    inset: 0;
     border-radius: 50%;
+    clip-path: circle(50%);
     pointer-events: none;
   }
 
   .orb::before {
-    inset: -14%;
-    background: var(--img) center / cover no-repeat;
-    filter: blur(7px) saturate(1.1);
+    background: var(--img) center / 100% 100% no-repeat;
   }
 
+  /* The glass, and moving through it a ring of light, as if the surface of
+     water were touched at its centre. Two soft bands, the second fainter,
+     travel outward and leave at the rim just as the rings outside begin. */
   .orb::after {
-    inset: 0;
-    background: var(--tint);
+    background:
+      radial-gradient(
+        circle closest-side,
+        transparent calc(var(--wave) - 9%),
+        rgb(255 236 228 / 0.16) var(--wave),
+        transparent calc(var(--wave) + 9%)
+      ),
+      radial-gradient(
+        circle closest-side,
+        transparent calc(var(--wave) - 34%),
+        rgb(255 236 228 / 0.08) calc(var(--wave) - 26%),
+        transparent calc(var(--wave) - 18%)
+      ),
+      var(--tint);
     transition: background-color 420ms var(--ease-open);
+  }
+
+  @property --wave {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: -40%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .orb::after {
+      animation: through 21s cubic-bezier(0.25, 0.5, 0.35, 1) infinite;
+      animation-delay: calc(var(--beat) - 2.6s);
+    }
+
+    /* And the image beneath swells a breath as the wave passes — by its
+       background size, so the layer itself never grows past the circle. */
+    .orb::before {
+      animation: swell 21s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+      animation-delay: calc(var(--beat) - 2.6s);
+    }
+
+    @keyframes through {
+      0% {
+        --wave: -10%;
+      }
+      13% {
+        --wave: 140%;
+      }
+      100% {
+        --wave: 140%;
+      }
+    }
+
+    @keyframes swell {
+      0%,
+      100% {
+        background-size: 100% 100%;
+      }
+      7% {
+        background-size: 109% 109%;
+      }
+      20% {
+        background-size: 100% 100%;
+      }
+    }
   }
 
   /* The breath. A soft light travels one leg every seven seconds — a full,
@@ -639,6 +698,15 @@ const AT = [
     // A drop landing: three quick rings from the bubble that was pressed.
     const splash = (o: HTMLElement) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      try {
+        o.animate([{ '--wave': '-10%' }, { '--wave': '140%' }], {
+          duration: 1800,
+          easing: 'cubic-bezier(0.25, 0.5, 0.35, 1)',
+          pseudoElement: '::after',
+        });
+      } catch {
+        /* Older browsers: the rings outside are enough. */
+      }
       // In the slot, not among the ambient rings, which step aside under the
       // pointer.
       const host = o.parentElement;
