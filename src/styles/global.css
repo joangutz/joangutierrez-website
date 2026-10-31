@@ -79,12 +79,14 @@
    them. Contrast is measured, not assumed — see reference/design-plan.md.
    ------------------------------------------------------------------ */
 @theme {
-  /* The ground. Burnt salmon rather than the rose it was: same family, hue
-     pulled from 5° round to 20° and the saturation dropped toward sepia. The
-     swap is free — every ink measures at or above where it sat on the rose
-     (Cochineal 6.14:1, Ink-2 5.25:1, Quick 3.90:1), so nothing on the site
-     lost contrast in the move. */
-  --color-madder: #dba184;
+  /* The ground. Linen — a warm neutral white, chosen by Joan from five
+     candidates rendered on the real pages after the burnt salmon read too
+     much like skin. The token keeps its old name so nothing that points at
+     it has to move. With the ground this light the photographs and the
+     collage carry the colour, and every ink gains contrast: Cochineal
+     11.62:1, Ink-2 9.94:1, Quick 7.38:1 — Quick now passes as text, not only
+     as a mark. */
+  --color-madder: #f1ece5;
   --color-cochineal: #5a121c;
   --color-plumstone: #2c0b12;
   --color-bract: #eed4cb;

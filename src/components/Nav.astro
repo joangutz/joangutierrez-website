@@ -428,6 +428,42 @@ const inSection = (item: (typeof nav)[number]) =>
     display: none;
   }
 
+  /* Translucent where the browser can blur what is behind: the page shows
+     through the bar and the open menu, softened, so neither reads as a slab
+     laid over the content. The tint is mixed from the ground token, so it
+     follows the palette. Where blur is unsupported both stay solid — a
+     see-through bar without the blur is just illegible — and anyone who has
+     asked their system to reduce transparency gets the solid version too. */
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nav-bar {
+      background: color-mix(in srgb, var(--color-madder) 74%, transparent);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      backdrop-filter: blur(18px) saturate(1.2);
+    }
+
+    /* 0.9, not lighter: at 0.84 a light page behind lifted the panel enough
+       to drop the small sub-links to 4.2:1. */
+    .menu {
+      background: rgb(44 11 18 / 0.9);
+      -webkit-backdrop-filter: blur(24px) saturate(1.1);
+      backdrop-filter: blur(24px) saturate(1.1);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .nav-bar {
+      background: var(--color-madder);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .menu {
+      background: var(--color-plumstone);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
   .menu-inner {
     height: 100%;
     max-width: 1240px;
@@ -586,7 +622,7 @@ const inSection = (item: (typeof nav)[number]) =>
     text-decoration: none;
     font-size: clamp(0.82rem, 2.6vh, 0.95rem);
     line-height: 1.3;
-    color: rgb(238 212 203 / 0.62);
+    color: rgb(238 212 203 / 0.74);
   }
 
   .menu-sub a:hover,
@@ -641,7 +677,7 @@ const inSection = (item: (typeof nav)[number]) =>
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.6);
+    color: rgb(238 212 203 / 0.74);
   }
 
   .menu-where {

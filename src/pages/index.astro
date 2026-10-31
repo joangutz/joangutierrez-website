@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
-import Vessel from '../components/Vessel.astro';
 import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
@@ -46,7 +45,7 @@ const movedAnchors = {
   {/* 1 · The title card. The name runs margin to margin, and the line under
       it is set to exactly the same length — justified across the full width,
       so name and subtitle read as one engraved block rather than a heading
-      and a caption. The mark rests at the foot of the frame. */}
+      and a caption. */}
   <section class="hero on-dark">
     <div class="hero-bg">
       <Collage
@@ -74,14 +73,12 @@ const movedAnchors = {
         </p>
       </div>
 
+      {/* The mark is out of the hero for now, by Joan's choice; the bar at the
+          foot of the window still carries it on every page. What is left at
+          the foot of the frame is the place, centred on the page's axis and
+          hung from a short rule, so it reads as the end of the title card
+          rather than a stray line. */}
       <div class="hero-foot breath">
-        <div class="hero-mark">
-          <Vessel
-            size="clamp(104px, 16vw, 230px)"
-            bloom
-            label="Petals opening to reveal a lit egg — the mark of this practice."
-          />
-        </div>
         <p class="hero-place">{h.hero.place}</p>
       </div>
     </div>
@@ -369,22 +366,31 @@ const movedAnchors = {
 
   .hero-foot {
     display: flex;
-    align-items: center;
-    gap: clamp(1.25rem, 4vw, 3rem);
-  }
-
-  .hero-mark {
-    flex: none;
+    justify-content: center;
   }
 
   .hero-place {
+    position: relative;
     margin: 0;
+    padding-top: clamp(1.75rem, 4vh, 2.5rem);
+    text-align: center;
     font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: rgb(238 212 203 / 0.86);
+  }
+
+  /* The rule it hangs from. */
+  .hero-place::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: clamp(1.1rem, 2.6vh, 1.6rem);
+    background: rgb(238 212 203 / 0.5);
   }
 
   /* The line arrives at breath pace. Opacity only, so it is readable
@@ -413,8 +419,9 @@ const movedAnchors = {
   }
 
   /* ---- The ground and its swells ---- */
-  /* A pool of light, not a band: the ellipse is small enough that it has
-     fallen all the way back to the ground colour before it reaches any
+  /* A pool of warmth, not a band: on the linen ground a lighter pool would
+     vanish, so it is a faint blush instead, and the ellipse is small enough
+     that it has fallen all the way back to the ground before it reaches any
      edge, so there is no line where the section begins or ends. */
   .glow {
     display: grid;
@@ -422,8 +429,8 @@ const movedAnchors = {
     min-height: min(56svh, 520px);
     background: radial-gradient(
       ellipse 52% 46% at 50% 50%,
-      #f2d6c6 0%,
-      #e9bea7 48%,
+      #e9d6c9 0%,
+      #efe3d9 48%,
       var(--color-madder) 100%
     );
   }
@@ -433,8 +440,8 @@ const movedAnchors = {
       min-height: 0;
       background: radial-gradient(
         ellipse 90% 44% at 50% 50%,
-        #f2d6c6 0%,
-        #e9bea7 50%,
+        #e9d6c9 0%,
+        #efe3d9 50%,
         var(--color-madder) 100%
       );
     }
@@ -445,10 +452,10 @@ const movedAnchors = {
   }
 
   /* A shade deeper, eased in and out over the section's own padding so the
-     change is felt as a swell rather than seen as an edge. #d4977a keeps
-     Cochineal at 5.53:1 and the secondary ink at 4.73:1. */
+     change is felt as a swell rather than seen as an edge. On linen the
+     secondary ink holds 8.94:1 at the deepest point. */
   .swell {
-    --swell: #d4977a;
+    --swell: #e8e0d6;
     background: linear-gradient(
       to bottom,
       var(--color-madder) 0%,
