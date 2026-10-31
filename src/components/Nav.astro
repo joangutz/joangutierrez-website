@@ -213,6 +213,8 @@ const inSection = (item: (typeof nav)[number]) =>
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.06em;
+    /* Room between the two words, as on the title page. */
+    word-spacing: 0.7em;
     padding-block: var(--word-pad);
     border-bottom: var(--word-rule) solid transparent;
     white-space: nowrap;
@@ -230,6 +232,15 @@ const inSection = (item: (typeof nav)[number]) =>
 
   .brand :global(.brand-mark) {
     transition: --open 900ms var(--ease-open);
+    /* The lotus carries its weight low; lift it so its ink, not its box,
+       shares the words' centre line. */
+    translate: 0 -1.3px;
+  }
+
+  /* Ronzino's capitals sit a touch above where their metrics say; measured,
+     this puts the tabs' letters on the same line as the name's. */
+  .nav-inline > ul > li > a {
+    translate: 0 1.2px;
   }
 
   .brand:hover :global(.brand-mark),
