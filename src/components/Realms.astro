@@ -87,6 +87,7 @@ const AT = [
                 aria-pressed="false"
                 aria-controls="realm-panel"
               >
+                <canvas class="orb-tex" data-tex={TEXTURE[i].src} aria-hidden="true" />
                 <span class="orb-name">{r.name}</span>
                 <span class="orb-gloss">{r.gloss}</span>
               </button>
@@ -242,70 +243,25 @@ const AT = [
     background: var(--img) center / 100% 100% no-repeat;
   }
 
-  /* The glass, and moving through it a ring of light, as if the surface of
-     water were touched at its centre. Two soft bands, the second fainter,
-     travel outward and leave at the rim just as the rings outside begin. */
+  /* The wine glass over it. */
   .orb::after {
-    background:
-      radial-gradient(
-        circle closest-side,
-        transparent calc(var(--wave) - 9%),
-        rgb(255 236 228 / 0.16) var(--wave),
-        transparent calc(var(--wave) + 9%)
-      ),
-      radial-gradient(
-        circle closest-side,
-        transparent calc(var(--wave) - 34%),
-        rgb(255 236 228 / 0.08) calc(var(--wave) - 26%),
-        transparent calc(var(--wave) - 18%)
-      ),
-      var(--tint);
+    background: var(--tint);
     transition: background-color 420ms var(--ease-open);
   }
 
-  @property --wave {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: -40%;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .orb::after {
-      animation: through 21s cubic-bezier(0.25, 0.5, 0.35, 1) infinite;
-      animation-delay: calc(var(--beat) - 2.6s);
-    }
-
-    /* And the image beneath swells a breath as the wave passes — by its
-       background size, so the layer itself never grows past the circle. */
-    .orb::before {
-      animation: swell 21s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-      animation-delay: calc(var(--beat) - 2.6s);
-    }
-
-    @keyframes through {
-      0% {
-        --wave: -10%;
-      }
-      13% {
-        --wave: 140%;
-      }
-      100% {
-        --wave: 140%;
-      }
-    }
-
-    @keyframes swell {
-      0%,
-      100% {
-        background-size: 100% 100%;
-      }
-      7% {
-        background-size: 109% 109%;
-      }
-      20% {
-        background-size: 100% 100%;
-      }
-    }
+  /* Where scripting runs, the photograph is redrawn on a canvas that can
+     bend it: when the breath arrives, a ripple spreads from the centre and
+     the image refracts through it, the way skin looks through moving water.
+     The canvas sits over the plain image above and under the glass. */
+  .orb-tex {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    clip-path: circle(50%);
+    pointer-events: none;
   }
 
   /* The breath. A soft light travels one leg every seven seconds — a full,
@@ -675,8 +631,174 @@ const AT = [
 </style>
 
 <script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /**
+   * Water. Each bubble's photograph is drawn to a canvas, and while a
+   * ripple is passing, every pixel is pushed along the line from the centre
+   * by a travelling wave — a crest bends the image outward, a trough inward —
+   * and lit a little where the surface tilts toward the eye. That is the
+   * whole trick of refraction through ripples, done by hand on a small
+   * image; a frame costs a few milliseconds, and nothing redraws between
+   * ripples.
+   */
+  const water = (() => {
+    const CYCLE = 21000; // the breath round, as in the CSS
+    const LEAD = 2600; // the wave begins this long before the outer rings
+    const RUN = 3600; // how long a wave takes to cross and settle
+    const CLICK_RUN = 2400;
+
+    interface Pool {
+      orb: HTMLElement;
+      canvas: HTMLCanvasElement;
+      ctx: CanvasRenderingContext2D;
+      img: HTMLImageElement;
+      src?: ImageData;
+      out?: ImageData;
+      size: number;
+      ring?: Animation;
+      clickAt: number;
+      still: boolean;
+    }
+    const pools: Pool[] = [];
+    let visible = true;
+    let running = false;
+
+    const prepare = (p: Pool) => {
+      const size = Math.max(64, Math.round(p.orb.clientWidth));
+      if (!p.img.complete || !p.img.naturalWidth) return;
+      p.size = size;
+      p.canvas.width = size;
+      p.canvas.height = size;
+      p.ctx.drawImage(p.img, 0, 0, size, size);
+      p.src = p.ctx.getImageData(0, 0, size, size);
+      p.out = p.ctx.createImageData(size, size);
+      p.still = true;
+    };
+
+    /** 0..1 progress of the wave now passing, or -1 for none. */
+    const progress = (p: Pool, now: number) => {
+      if (now - p.clickAt < CLICK_RUN) return (now - p.clickAt) / CLICK_RUN;
+      const a = p.ring;
+      if (!a || a.playState !== 'running' || a.currentTime == null) return -1;
+      const delay = Number(a.effect?.getTiming().delay ?? 0);
+      const t = ((((Number(a.currentTime) - delay + LEAD) % CYCLE) + CYCLE) % CYCLE);
+      return t < RUN ? t / RUN : -1;
+    };
+
+    const draw = (p: Pool, k: number) => {
+      const { src, out, size } = p;
+      if (!src || !out) return;
+      const S = src.data;
+      const O = out.data;
+      const R = size / 2;
+      const front = k * 1.35 * R; // where the leading crest has reached
+      const wl = 0.3 * R; // wavelength
+      const width = 0.42 * R; // how many crests ride together
+      const amp = 0.085 * R * Math.pow(1 - k, 0.7); // fades as it spreads
+      for (let y = 0; y < size; y++) {
+        const dy0 = y - R + 0.5;
+        for (let x = 0; x < size; x++) {
+          const dx0 = x - R + 0.5;
+          const r = Math.sqrt(dx0 * dx0 + dy0 * dy0);
+          const o = (y * size + x) * 4;
+          const behind = front - r;
+          if (r > R || behind < 0 || behind > width * 2.4) {
+            O[o] = S[o];
+            O[o + 1] = S[o + 1];
+            O[o + 2] = S[o + 2];
+            O[o + 3] = S[o + 3];
+            continue;
+          }
+          const env = Math.exp(-((behind - width) ** 2) / (width * width * 0.5));
+          const phase = (behind / wl) * Math.PI * 2;
+          const d = amp * env * Math.sin(phase);
+          const ux = r > 0.001 ? dx0 / r : 0;
+          const uy = r > 0.001 ? dy0 / r : 0;
+          // Sample between pixels, so a bent edge stays smooth.
+          let fx = x - ux * d;
+          let fy = y - uy * d;
+          fx = fx < 0 ? 0 : fx > size - 1.001 ? size - 1.001 : fx;
+          fy = fy < 0 ? 0 : fy > size - 1.001 ? size - 1.001 : fy;
+          const x0 = fx | 0;
+          const y0 = fy | 0;
+          const tx = fx - x0;
+          const ty = fy - y0;
+          const a0 = (y0 * size + x0) * 4;
+          const a1 = a0 + 4;
+          const b0 = a0 + size * 4;
+          const b1 = b0 + 4;
+          const light = 1 + 0.16 * env * Math.cos(phase) * (1 - k);
+          for (let c = 0; c < 3; c++) {
+            const top = S[a0 + c] + (S[a1 + c] - S[a0 + c]) * tx;
+            const bot = S[b0 + c] + (S[b1 + c] - S[b0 + c]) * tx;
+            O[o + c] = (top + (bot - top) * ty) * light;
+          }
+          O[o + 3] = 255;
+        }
+      }
+      p.ctx.putImageData(out, 0, 0);
+      p.still = false;
+    };
+
+    const frame = (now: number) => {
+      let any = false;
+      for (const p of pools) {
+        const k = progress(p, now);
+        if (k >= 0) {
+          draw(p, k);
+          any = true;
+        } else if (!p.still && p.src) {
+          p.ctx.putImageData(p.src, 0, 0);
+          p.still = true;
+        }
+      }
+      if (visible) requestAnimationFrame(frame);
+      else running = false;
+      void any;
+    };
+
+    const start = () => {
+      if (running || !visible || reduce.matches) return;
+      running = true;
+      requestAnimationFrame(frame);
+    };
+
+    return {
+      add(orb: HTMLElement) {
+        const canvas = orb.querySelector<HTMLCanvasElement>('canvas[data-tex]');
+        const ctx = canvas?.getContext('2d', { willReadFrequently: true });
+        if (!canvas || !ctx) return;
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = canvas.dataset.tex as string;
+        const ring =
+          orb.parentElement?.querySelector<HTMLElement>('.ripples i')?.getAnimations()[0];
+        const p: Pool = { orb, canvas, ctx, img, size: 0, ring, clickAt: -1e9, still: true };
+        pools.push(p);
+        img.addEventListener('load', () => prepare(p));
+        if ('ResizeObserver' in window) new ResizeObserver(() => prepare(p)).observe(orb);
+      },
+      watch(el: HTMLElement) {
+        if (!('IntersectionObserver' in window)) return start();
+        new IntersectionObserver(([e]) => {
+          visible = e.isIntersecting;
+          start();
+        }).observe(el);
+      },
+      splash(orb: HTMLElement) {
+        const p = pools.find((q) => q.orb === orb);
+        if (!p) return;
+        p.clickAt = performance.now();
+        start();
+      },
+    };
+  })();
+
   for (const root of document.querySelectorAll<HTMLElement>('[data-realms]')) {
     const orbs = [...root.querySelectorAll<HTMLButtonElement>('[data-orb]')];
+    for (const o of orbs) water.add(o);
+    water.watch(root);
     const views = [...root.querySelectorAll<HTMLElement>('[data-view]')];
     const panel = root.querySelector<HTMLElement>('[data-panel]');
     if (!panel) continue;
@@ -698,15 +820,7 @@ const AT = [
     // A drop landing: three quick rings from the bubble that was pressed.
     const splash = (o: HTMLElement) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      try {
-        o.animate([{ '--wave': '-10%' }, { '--wave': '140%' }], {
-          duration: 1800,
-          easing: 'cubic-bezier(0.25, 0.5, 0.35, 1)',
-          pseudoElement: '::after',
-        });
-      } catch {
-        /* Older browsers: the rings outside are enough. */
-      }
+      water.splash(o);
       // In the slot, not among the ambient rings, which step aside under the
       // pointer.
       const host = o.parentElement;
