@@ -10,14 +10,17 @@ interface Props {
   /** Home suppresses the page title prefix. */
   bare?: boolean;
   /**
-   * A photograph for the page's close. When given, the page ends in one
-   * pane: Get in Touch and the footer together on this picture, under the
-   * same wash, deepening toward the foot so the small type stays clear.
+   * End the page with Get in Touch. Every page ends on the same photograph
+   * (CLOSING_PHOTO); with this set, Get in Touch sits on it above the
+   * footer, as one pane.
    */
-  close?: string;
+  close?: boolean;
 }
 
-const { title, description, bare = false, close } = Astro.props;
+const { title, description, bare = false, close = false } = Astro.props;
+
+/** The one photograph every page's footer stands on. */
+const CLOSING_PHOTO = 'close-home.jpg';
 const fullTitle = bare ? title : `${title} · ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const shareImage = new URL(withBase('/share.png'), Astro.site).href;
@@ -88,18 +91,12 @@ import GetInTouch from '../components/GetInTouch.astro';
     <main id="main">
       <slot />
     </main>
-    {
-      close ? (
-        <div class="closing has-ground on-dark">
-          <PhotoGround src={close} />
-          <span class="closing-deep" aria-hidden="true" />
-          <GetInTouch />
-          <Footer onGround />
-        </div>
-      ) : (
-        <Footer />
-      )
-    }
+    <div class:list={['closing has-ground on-dark', { 'closing-bare': !close }]}>
+      <PhotoGround src={CLOSING_PHOTO} />
+      <span class="closing-deep" aria-hidden="true" />
+      {close && <GetInTouch />}
+      <Footer onGround />
+    </div>
     <PaletteTrial />
 
     <script>
@@ -179,6 +176,17 @@ import GetInTouch from '../components/GetInTouch.astro';
 <style>
   .closing {
     background: var(--color-plumstone);
+  }
+
+  /* With no Get in Touch above it, the footer opens the pane: no dividing
+     rule, and the full top padding back. */
+  .closing-bare :global(.footer-on-ground) {
+    padding-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .closing-bare :global(.footer-on-ground > .band) {
+    padding-top: 0;
+    border-top: 0;
   }
 
   /* Over the photograph's own wash, a second one that gathers toward the

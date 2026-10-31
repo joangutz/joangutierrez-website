@@ -20,7 +20,7 @@ const { Content } = await render(entry);
 const p = entry.data;
 ---
 
-<Base title={p.title} description={p.description} close="about-close.jpg">
+<Base title={p.title} description={p.description} close>
   <ChapterRail />
 
   <PageBanner eyebrow={p.eyebrow} title={p.title} lede={p.lede} image="about.jpg" />
