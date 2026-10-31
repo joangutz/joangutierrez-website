@@ -206,7 +206,8 @@ const id = offering.id;
     width: 130%;
     height: 130%;
     object-fit: cover;
-    filter: blur(40px) saturate(1.1);
+    /* Light and shadow only — no colour on the pale side. */
+    filter: blur(40px) grayscale(1);
   }
 
   /* Linen glass, mostly opaque: the page's own ground with the picture's
