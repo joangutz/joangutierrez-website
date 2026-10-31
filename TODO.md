@@ -130,8 +130,9 @@ Every page now opens with a photograph, drawn from what you uploaded. Eight
 library photographs are placed; nothing is left unused. What is still
 missing:
 
-- **`share.jpg`** — 1200×630. Without it, every link you text or post
-  previews blank. This is the cheapest high-value item on the list.
+- ~~**Share image**~~ — done: `public/share.png`, the Driftwood lotus with
+  the name and tagline on linen, shown when a link is texted or posted. A
+  photograph could replace it later if you prefer one.
 - **Video.** The spec is in `assets/video/README.md`: under 5 MB, 6–12
   seconds, silent, 1280px, H.264. The clay-kneading clip is earmarked for
   the Founder section. I have no ffmpeg here, so compression has to happen
