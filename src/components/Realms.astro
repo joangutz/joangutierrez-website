@@ -104,17 +104,26 @@ const AT = [
     </div>
 
     {
-      realms.map((r) => (
-        <div class="view" data-view={r.id}>
-          <div class="view-head">
-            <h3 class="view-name">{r.name}</h3>
-            <button class="view-close" type="button" data-close aria-label={`Close ${r.name}`}>
-              <span aria-hidden="true" />
-            </button>
-          </div>
-          {r.paragraphs.map((p, k) => (
-            <p class:list={[{ 'view-origin': k === 0 }]}>{p}</p>
-          ))}
+      realms.map((r, i) => (
+        <div class="view" data-view={r.id} style={`--img:url(${TEXTURE[i].src})`}>
+          {/* No title: each definition already opens with its word (and its
+              character), set in bold where it stands. The heading remains
+              for screen readers. */}
+          <h3 class="visually-hidden">{r.name}</h3>
+          <button class="view-close" type="button" data-close aria-label={`Close ${r.name}`}>
+            <span aria-hidden="true" />
+          </button>
+          {r.paragraphs.map((p, k) => {
+            const cut = k === 0 ? p.indexOf(' : ') : -1;
+            return cut > 0 ? (
+              <p class="view-origin">
+                <strong>{p.slice(0, cut)}</strong>
+                {p.slice(cut)}
+              </p>
+            ) : (
+              <p>{p}</p>
+            );
+          })}
         </div>
       ))
     }
@@ -493,33 +502,30 @@ const AT = [
   }
 
   /* An open definition sits in a pane of the same glass, square-edged. */
+  /* …over the same photograph as its bubble, softened. */
   .view:not(.view-intro) {
+    position: relative;
     padding: clamp(1.4rem, 3vw, 2.25rem);
-    background: var(--glass);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    backdrop-filter: blur(14px) saturate(1.2);
+    background:
+      linear-gradient(rgb(66 13 21 / 0.74), rgb(66 13 21 / 0.74)),
+      var(--img) center / cover no-repeat,
+      var(--color-plumstone);
     box-shadow: inset 0 0 0 1px var(--glass-edge);
     color: var(--glass-ink);
   }
 
-  .view-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-bottom: 0.9rem;
-    margin-bottom: 1.1rem;
-    border-bottom: 1px solid rgb(238 212 203 / 0.24);
-    max-width: 38ch;
+  .view-close {
+    position: absolute;
+    top: clamp(0.9rem, 2.2vw, 1.6rem);
+    right: clamp(0.9rem, 2.2vw, 1.6rem);
   }
 
-  .view-name {
-    margin: 0;
-    font-family: var(--font-label);
-    font-size: 0.78rem;
+  .view-origin {
+    padding-right: 2.25rem;
+  }
+
+  .view-origin strong {
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
     color: var(--color-bract);
   }
 
@@ -532,7 +538,6 @@ const AT = [
 
   /* A cross, drawn, so the close control needs no word. */
   .view-close {
-    position: relative;
     flex: none;
     width: 2rem;
     height: 2rem;
