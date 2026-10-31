@@ -51,7 +51,12 @@ const id = offering.id;
     </div>
 
     <!-- Turned face -->
-    <div class="face face-back" data-face="back" id={`${id}-back`}>
+    <div class="face face-back on-dark" data-face="back" id={`${id}-back`}>
+      {/* The card's own image, blurred to colour and light beneath burgundy
+          glass: the turned side is the front seen through frosted wine. */}
+      <div class="back-glass" aria-hidden="true">
+        <Collage src={o.collage} alt="" register={o.register} sizes="40vw" class="back-blur" />
+      </div>
       <div class="back-head">
         <div>
           <span class="label">{o.container}</span>
@@ -190,8 +195,41 @@ const id = offering.id;
   }
 
   /* ---- Turned face ---- */
+  /* Burgundy glass, the same recipe as the Ma Soma Matrix panel, laid over
+     the card's own image blurred until only its colour and light remain. */
   .face-back {
+    --rule-glass: rgb(238 212 203 / 0.22);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--color-plumstone);
+    border-color: transparent;
+    color: var(--color-bract);
+  }
+
+  .back-glass {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .back-glass :global(.collage) {
+    position: absolute;
+    inset: -12%;
+    width: 124%;
+    height: 124%;
+    object-fit: cover;
+    filter: blur(36px) saturate(1.15);
+  }
+
+  .back-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(62 12 20 / 0.8);
+    box-shadow: inset 0 0 0 1px rgb(238 212 203 / 0.14);
   }
 
   .back-head {
@@ -200,7 +238,7 @@ const id = offering.id;
     justify-content: space-between;
     gap: 1rem;
     padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule-glass);
   }
 
   .back-title {
@@ -217,7 +255,7 @@ const id = offering.id;
   }
 
   .panel-right {
-    border-left: 1px solid var(--rule);
+    border-left: 1px solid var(--rule-glass);
     padding-left: clamp(1.5rem, 4vw, 3rem);
   }
 
@@ -228,7 +266,7 @@ const id = offering.id;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: var(--color-ink-2);
+    color: rgb(238 212 203 / 0.8);
     margin-bottom: 1rem;
   }
 
@@ -263,7 +301,7 @@ const id = offering.id;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--color-quick);
+    background: rgb(238 212 203 / 0.7);
   }
 
   .panel-right p {
@@ -297,6 +335,37 @@ const id = offering.id;
 
   .turn:hover {
     border-color: var(--color-quick);
+  }
+
+  /* The way in is a piece of the glass the card turns to. */
+  .turn[data-turn='open'] {
+    --petal: var(--color-bract);
+    --petal-0: #f3dfd7;
+    --petal-1: #e3b6ac;
+    --petal-2: #cf9a90;
+    --petal-3: #b8837c;
+    background: rgb(70 14 22 / 0.9);
+    border-color: transparent;
+    color: var(--color-bract);
+    box-shadow: inset 0 0 0 1px rgb(238 212 203 / 0.16);
+    transition: background-color 300ms var(--ease-open), box-shadow 300ms var(--ease-open);
+  }
+
+  .turn[data-turn='open']:hover,
+  .turn[data-turn='open']:focus-visible {
+    background: var(--color-plumstone);
+    box-shadow:
+      inset 0 0 0 1px rgb(238 212 203 / 0.3),
+      0 8px 22px rgb(44 11 18 / 0.2);
+  }
+
+  .turn-back {
+    border-color: rgb(238 212 203 / 0.35);
+  }
+
+  .turn-back:hover,
+  .turn-back:focus-visible {
+    border-color: var(--color-bract);
   }
 
   .turn :global(.turn-mark) {
@@ -356,7 +425,7 @@ const id = offering.id;
 
     .panel-right {
       border-left: 0;
-      border-top: 1px solid var(--rule);
+      border-top: 1px solid var(--rule-glass);
       padding-left: 0;
       padding-top: 2rem;
     }
