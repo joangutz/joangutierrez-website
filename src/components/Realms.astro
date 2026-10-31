@@ -40,6 +40,9 @@ const { intro, class: className = '' } = Astro.props;
    its rounded parent's clipping in Safari and shows as a square. */
 const TEXTURE = [matrixImg, maImg, somaImg];
 
+/** The legs, in the order the breath travels them. */
+const LEGS = ['M50,0 L0,100', 'M0,100 L100,100', 'M100,100 L50,0'];
+
 /** Apex, lower left, lower right, as percentages of the figure. */
 const AT = [
   { x: 50, y: 0 },
@@ -64,11 +67,25 @@ const AT = [
         <path d="M50,0 L0,100 L100,100 Z" />
         {/* A breath travelling the triangle: Matrix to Ma, Ma to Soma, Soma
             back to Matrix, each leg one slow exhale. */}
-        <g class="pulses">
-          <path class="pulse" pathLength="100" d="M50,0 L0,100" />
-          <path class="pulse" pathLength="100" d="M0,100 L100,100" />
-          <path class="pulse" pathLength="100" d="M100,100 L50,0" />
+        <defs>
+          {/* User-space region: a level leg has no height, and a filter
+              sized to its box would swallow it. */}
+          <filter id="pulse-soft" filterUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120">
+            <feGaussianBlur stdDeviation="0.45" />
+          </filter>
+        </defs>
+        <g class="pulses" filter="url(#pulse-soft)">
+          {LEGS.map((d) => (
+            <g class="leg">
+              <path class="swell-a" pathLength="100" d={d} />
+              <path class="swell-b" pathLength="100" d={d} />
+              <path class="swell-c" pathLength="100" d={d} />
+            </g>
+          ))}
         </g>
+        {/* Where a press sends a quicker one, outside the group that steps
+            aside under the pointer. */}
+        <g class="shots" data-shots />
       </svg>
 
       <ol class="triad-list">
@@ -278,17 +295,26 @@ const AT = [
      round takes twenty-one seconds. While the pointer rests on the figure, the
      breath and its ripples fade out of the way and the bubbles answer the
      hand instead. */
-  .pulse {
+  /* Not a dash but a swelling of the line itself: three strokes centred on
+     one point, each wider, longer and fainter than the last, then blurred
+     together, so the line thickens softly and thins again as it passes.
+     --L is each stroke's length along the leg (out of 100); the offset
+     keeps all three centred on the same travelling point. */
+  .leg path,
+  .shot path {
     fill: none;
     stroke: var(--color-quick);
-    /* Drawn in the figure's own units (no non-scaling stroke), so the dash
-       is measured along the leg and travels all of it. */
-    stroke-width: 0.5;
     stroke-linecap: round;
-    stroke-dasharray: 16 200;
-    stroke-dashoffset: 16;
+    stroke-dasharray: calc(var(--L) * 1px) 300px;
+    stroke-dashoffset: calc(var(--L) * 0.5px + 12px);
+  }
+
+  .swell-a { --L: 30; stroke-width: 1.15; stroke-opacity: 0.16; }
+  .swell-b { --L: 18; stroke-width: 0.75; stroke-opacity: 0.3; }
+  .swell-c { --L: 9; stroke-width: 0.45; stroke-opacity: 0.55; }
+
+  .leg {
     opacity: 0;
-    filter: drop-shadow(0 0 3px rgb(142 36 31 / 0.45));
   }
 
   .pulses,
@@ -304,32 +330,38 @@ const AT = [
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .pulse {
-      animation: breath 21s infinite;
+    .leg,
+    .leg path {
+      animation: 21s infinite;
     }
 
-    .pulse:nth-child(2) { animation-delay: 7s; }
-    .pulse:nth-child(3) { animation-delay: 14s; }
+    .leg { animation-name: breath; }
+    .leg path { animation-name: travel; }
+
+    .leg:nth-child(2),
+    .leg:nth-child(2) path { animation-delay: 7s; }
+
+    .leg:nth-child(3),
+    .leg:nth-child(3) path { animation-delay: 14s; }
 
     @keyframes breath {
+      0% { opacity: 0; }
+      7% { opacity: 1; }
+      26% { opacity: 1; }
+      33.3% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes travel {
       0% {
-        stroke-dashoffset: 16;
-        opacity: 0;
+        stroke-dashoffset: calc(var(--L) * 0.5px + 12px);
         animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
       }
-      6% {
-        opacity: 0.75;
-      }
-      27% {
-        opacity: 0.75;
-      }
       33.3% {
-        stroke-dashoffset: -100;
-        opacity: 0;
+        stroke-dashoffset: calc(var(--L) * 0.5px - 112px);
       }
       100% {
-        stroke-dashoffset: -100;
-        opacity: 0;
+        stroke-dashoffset: calc(var(--L) * 0.5px - 112px);
       }
     }
   }
@@ -824,9 +856,48 @@ const AT = [
       }
     };
 
+    // A press sends the swell racing in along both legs that meet at the
+    // bubble — quicker and more urgent than the breath.
+    const shots = root.querySelector<SVGGElement>('[data-shots]');
+    const legs = [...root.querySelectorAll<SVGGElement>('.pulses .leg')];
+    const shoot = (o: HTMLElement) => {
+      if (!shots || legs.length !== 3) return;
+      const i = orbs.indexOf(o as HTMLButtonElement);
+      if (i < 0) return;
+      // The leg that ends at this bubble runs forward; the one that starts
+      // there runs backward, so both arrive.
+      for (const [leg, back] of [
+        [legs[(i + 2) % 3], false],
+        [legs[i], true],
+      ] as const) {
+        const g = leg.cloneNode(true) as SVGGElement;
+        // Swap the one class, keeping the stylesheet's scoping class.
+        g.classList.replace('leg', 'shot');
+        // Blurred one by one: Chrome paints a filtered group that is
+        // sometimes empty as a small black square.
+        g.setAttribute('filter', 'url(#pulse-soft)');
+        shots.appendChild(g);
+        const anims = [...g.querySelectorAll<SVGPathElement>('path')].map((p) => {
+          const L = Number(getComputedStyle(p).getPropertyValue('--L')) || 10;
+          const from = L / 2 + 12;
+          const to = L / 2 - 112;
+          return p.animate(
+            [{ strokeDashoffset: `${back ? to : from}px` }, { strokeDashoffset: `${back ? from : to}px` }],
+            { duration: 720, easing: 'cubic-bezier(0.4, 0.15, 0.3, 1)', fill: 'both' }
+          );
+        });
+        g.animate([{ opacity: 0 }, { opacity: 1, offset: 0.08 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }], {
+          duration: 720,
+          fill: 'both',
+        });
+        Promise.all(anims.map((a) => a.finished)).then(() => g.remove(), () => g.remove());
+      }
+    };
+
     // A drop landing: three quick rings from the bubble that was pressed.
     const splash = (o: HTMLElement) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      shoot(o);
       water.splash(o);
       // In the slot, not among the ambient rings, which step aside under the
       // pointer.
