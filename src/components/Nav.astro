@@ -179,7 +179,14 @@ const inSection = (item: (typeof nav)[number]) =>
 
   /* Same box as a .band, so the wordmark sits directly below the first
      character of the page's own text rather than out on its own margin. */
+  /* Words in the bar are trimmed to their capitals (text-box), so a box is
+     exactly as tall as the letters and centring it centres them — whatever
+     each browser makes of the fonts' ascent and descent, which is where
+     Safari and Chrome disagreed. The top pad carries the rule's width too,
+     so the letters, not letters-plus-rule, sit on the centre line. */
   .nav-inner {
+    --word-rule: 0.5px;
+    --word-pad: calc(0.42rem + var(--word-rule)) 0.42rem;
     max-width: 62rem;
     margin-inline: auto;
     min-height: var(--bar-h);
@@ -206,13 +213,19 @@ const inSection = (item: (typeof nav)[number]) =>
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    padding-block: 0.4rem 0.35rem;
-    border-bottom: 1px solid transparent;
+    padding-block: var(--word-pad);
+    border-bottom: var(--word-rule) solid transparent;
     white-space: nowrap;
   }
 
   .brand[aria-current='page'] .brand-name {
-    border-bottom-color: var(--color-quick);
+    border-bottom-color: rgb(142 36 31 / 0.6);
+  }
+
+  .brand-name,
+  .nav-inline > ul > li > a,
+  .menu-btn > span:last-child {
+    text-box: trim-both cap alphabetic;
   }
 
   .brand :global(.brand-mark) {
@@ -255,8 +268,11 @@ const inSection = (item: (typeof nav)[number]) =>
     gap: clamp(0.9rem, 2.6vw, 2rem);
   }
 
+  /* Flex, so each tab's box is the line box — no strut below it nudging
+     the word off the bar's centre. */
   .nav-item {
     position: relative;
+    display: flex;
   }
 
   /* Where am I: the current page is the only item in full ink with a solid
@@ -273,8 +289,8 @@ const inSection = (item: (typeof nav)[number]) =>
     letter-spacing: 0.14em;
     text-decoration: none;
     line-height: 1;
-    padding-block: 0.4rem 0.35rem;
-    border-bottom: 1px solid transparent;
+    padding-block: var(--word-pad);
+    border-bottom: var(--word-rule) solid transparent;
     color: var(--color-ink-2);
     white-space: nowrap;
   }
@@ -287,13 +303,15 @@ const inSection = (item: (typeof nav)[number]) =>
   .nav-inline > ul > li > a.in-section {
     color: var(--color-cochineal);
     border-bottom-style: dotted;
-    border-bottom-color: var(--color-quick);
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(142 36 31 / 0.5);
   }
 
   .nav-inline a[aria-current='page'] {
     color: var(--color-cochineal);
     border-bottom-style: solid;
-    border-bottom-color: var(--color-quick);
+    border-bottom-width: var(--word-rule);
+    border-bottom-color: rgb(142 36 31 / 0.6);
   }
 
   .caret {
