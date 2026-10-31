@@ -40,20 +40,21 @@ import PaletteTrial from '../components/PaletteTrial.astro';
       // Palette trial (see PaletteTrial.astro). Set before first paint so a
       // chosen palette never flashes the default.
       (function () {
-        var ok = ['umber', 'stone', 'mauve', 'olive', 'taupe', 'driftwood', 'fog', 'sand', 'wine'];
+        // Driftwood is the default and needs no attribute.
+        var ok = ['wine', 'umber', 'stone', 'mauve', 'olive', 'taupe', 'driftwood', 'fog', 'sand'];
         var q = new URLSearchParams(location.search).get('palette');
         var pick = null;
         try {
           if (q && ok.indexOf(q) > -1) {
             localStorage.setItem('ms-trial', '1');
-            if (q === 'wine') localStorage.removeItem('ms-palette');
+            if (q === 'driftwood') localStorage.removeItem('ms-palette');
             else localStorage.setItem('ms-palette', q);
           }
           pick = localStorage.getItem('ms-palette');
         } catch (e) {
           pick = q;
         }
-        if (pick && pick !== 'wine' && ok.indexOf(pick) > -1) {
+        if (pick && pick !== 'driftwood' && ok.indexOf(pick) > -1) {
           document.documentElement.dataset.palette = pick;
         }
       })();

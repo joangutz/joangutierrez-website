@@ -3,17 +3,17 @@
  * A palette picker for trying the site on in other colours. Visitors never
  * see it: it appears only on a device that has opened a link with
  * ?palette=… (for example /?palette=stone), and the choice is kept only in
- * that browser. Wine is the site as built; the others are neutral
- * variations defined in global.css.
+ * that browser. Driftwood is the site's palette; Wine (the site as first
+ * built) and the others are saved variations defined in global.css.
  */
 const PALETTES = [
+  { id: 'driftwood', name: 'Driftwood', swatch: ['#4a3c33', '#3d3029', '#6f5a4c', '#7d6656'] },
   { id: 'wine', name: 'Wine', swatch: ['#2c0b12', '#5a121c', '#7e2a26', '#8e3b2e'] },
   { id: 'umber', name: 'Umber', swatch: ['#221913', '#3b2c24', '#5f4a3d', '#7b6150'] },
   { id: 'stone', name: 'Stone', swatch: ['#1d1c1a', '#33312e', '#56524c', '#67615a'] },
   { id: 'mauve', name: 'Mauve', swatch: ['#2a1b1e', '#4a3135', '#6b4e50', '#775b58'] },
   { id: 'olive', name: 'Olive', swatch: ['#1d1e18', '#33342a', '#575847', '#666550'] },
   { id: 'taupe', name: 'Taupe', swatch: ['#201c19', '#38322d', '#5b524a', '#6b6157'] },
-  { id: 'driftwood', name: 'Driftwood', swatch: ['#4a3c33', '#3d3029', '#6f5a4c', '#7d6656'] },
   { id: 'fog', name: 'Fog', swatch: ['#45423e', '#393734', '#66625c', '#6f6a63'] },
   { id: 'sand', name: 'Sand', swatch: ['#5a4b40', '#43362e', '#7a6556', '#7e6959'] },
 ];
@@ -136,7 +136,7 @@ const PALETTES = [
       }
     };
     const sync = () => {
-      const now = document.documentElement.dataset.palette ?? 'wine';
+      const now = document.documentElement.dataset.palette ?? 'driftwood';
       for (const b of box.querySelectorAll<HTMLButtonElement>('[data-palette-pick]')) {
         b.setAttribute('aria-pressed', String(b.dataset.palettePick === now));
       }
@@ -149,9 +149,9 @@ const PALETTES = [
       const pick = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-palette-pick]');
       if (pick) {
         const id = pick.dataset.palettePick as string;
-        if (id === 'wine') delete document.documentElement.dataset.palette;
+        if (id === 'driftwood') delete document.documentElement.dataset.palette;
         else document.documentElement.dataset.palette = id;
-        set('ms-palette', id === 'wine' ? null : id);
+        set('ms-palette', id === 'driftwood' ? null : id);
         sync();
       }
       if ((e.target as HTMLElement).closest('[data-trial-hide]')) {

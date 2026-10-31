@@ -129,25 +129,25 @@
      11.62:1, Ink-2 9.94:1, Quick 7.38:1 — Quick now passes as text, not only
      as a mark. */
   --color-madder: #f1ece5;
-  --color-cochineal: #5a121c;
-  --color-plumstone: #2c0b12;
-  --color-bract: #eed4cb;
+  --color-cochineal: #3d3029;
+  --color-plumstone: #4a3c33;
+  --color-bract: #f3ece4;
   /* One live red, dark enough to work as a mark on the rose ground at 3.86:1.
      A brighter coral was tried and pulled back: it measured 1.78:1 here, which
      forced a second value and a set of rules to keep them apart. */
-  --color-quick: #8e241f;
+  --color-quick: #7f6352;
 
   /* Secondary ink. 5.21:1 on Madder. */
-  --color-ink-2: #6b1a23;
+  --color-ink-2: #54443a;
 
   /* Card registers. Each carries a Bract title at 5.3:1 or better. */
-  --color-brick: #7e2a26;
-  --color-clay: #8e3b2e;
+  --color-brick: #6f5a4c;
+  --color-clay: #7d6656;
 
   /* Barro — the earth counter-tone, from the board's adobe walls. Light
      plaster, so it takes DARK type only: Plumstone 6.19:1, Cochineal 4.68:1.
      Bract fails at 2.07:1 and Quick does not read as a mark on it. */
-  --color-barro: #c68a5e;
+  --color-barro: #ccb39b;
 
   --font-display: 'Sprat', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
@@ -159,54 +159,56 @@
 }
 
 /* ------------------------------------------------------------------
-   Palettes. Wine is the site as built and stays the default. The others
-   are neutral variations Joan can try on the live site (?palette=umber,
-   or the picker that appears once a palette has been chosen). Every
+   Palettes. Driftwood — a soft, light umber, chosen by Joan — is the
+   default (the values in @theme and :root). Wine, the site as first built,
+   is saved below with the other variations; any can be tried on the live
+   site (?palette=wine, or the picker that appears once one has been
+   chosen). Every
    colour on the site reads from these tokens — the named colours above,
    and channel values (--ch-*) for the translucent washes and glass, so a
    palette swap changes all of it at once.
    ------------------------------------------------------------------ */
 :root {
-  --ch-bract: 238 212 203;
-  --ch-plum: 44 11 18;
-  --ch-quick: 142 36 31;
-  --ch-ink: 90 18 28;
-  --ch-glass: 70 14 22;
-  --ch-glass-deep: 62 12 20;
-  --ch-aura: 240 206 196;
+  --ch-bract: 243 236 228;
+  --ch-plum: 74 60 51;
+  --ch-quick: 127 99 82;
+  --ch-ink: 61 48 41;
+  --ch-glass: 92 76 64;
+  --ch-glass-deep: 80 66 56;
+  --ch-aura: 236 226 215;
 
   /* Lit corners of the card placeholders, by register. */
-  --lit-plumstone: #4a1520;
-  --lit-cochineal: #78202c;
-  --lit-brick: #9c3a33;
-  --lit-clay: #ab4d3c;
+  --lit-plumstone: #5c4b40;
+  --lit-cochineal: #6c5749;
+  --lit-brick: #8a7262;
+  --lit-clay: #9a8270;
 
-  --portrait-a: #8a5f59;
-  --portrait-b: #3a1c1e;
+  --portrait-a: #957f6e;
+  --portrait-b: #4a3c33;
 
   /* The lotus: petals on light, petals on dark, and its shell and glow. */
-  --pt0: #8e2f2a;
-  --pt1: #75231f;
-  --pt2: #5a121c;
-  --pt3: #3d0e15;
-  --pd0: #e3b6ac;
-  --pd1: #dba184;
-  --pd2: #b8837c;
-  --pd3: #97655f;
-  --pl0: #f3dfd7;
-  --pl2: #cf9a90;
-  --shell-0: #f4dcd2;
-  --shell-1: #fbeee7;
+  --pt0: #9a7a64;
+  --pt1: #836650;
+  --pt2: #6a5141;
+  --pt3: #4c3a2e;
+  --pd0: #eadccf;
+  --pd1: #dbc6b3;
+  --pd2: #c0a891;
+  --pd3: #a18873;
+  --pl0: #f5eee7;
+  --pl2: #d7c3b0;
+  --shell-0: #f3eae1;
+  --shell-1: #faf5f0;
 
   /* The homepage's pooled light and its swell. */
-  --pool-a: #e9d6c9;
-  --pool-b: #efe3d9;
-  --swell-ground: #e8e0d6;
+  --pool-a: #e9dfd4;
+  --pool-b: #efe8df;
+  --swell-ground: #e9e3db;
 
   /* How much of the glass covers the photographs beneath it: the bubbles,
      the definition panes, the turned cards. Lighter palettes thin it. */
-  --veil-orb: 0.64;
-  --veil-pane: 0.74;
+  --veil-orb: 0.56;
+  --veil-pane: 0.78;
   --veil-back: 0.8;
 }
 
@@ -248,6 +250,9 @@ html[data-palette='umber'] {
   --pool-a: #e5dace;
   --pool-b: #ece4da;
   --swell-ground: #e6e0d8;
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
+  --veil-back: 0.8;
 }
 
 /* Stone — cool greige, the most neutral. */
@@ -288,6 +293,9 @@ html[data-palette='stone'] {
   --pool-a: #e2ded8;
   --pool-b: #e9e6e1;
   --swell-ground: #e4e0da;
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
+  --veil-back: 0.8;
 }
 
 /* Mauve — taupe with a memory of the rose. */
@@ -328,6 +336,9 @@ html[data-palette='mauve'] {
   --pool-a: #e8dad3;
   --pool-b: #eee4dd;
   --swell-ground: #e7dfd8;
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
+  --veil-back: 0.8;
 }
 
 /* Olive — grey-green earth. */
@@ -368,6 +379,9 @@ html[data-palette='olive'] {
   --pool-a: #e4e1d6;
   --pool-b: #ebe8de;
   --swell-ground: #e5e2d9;
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
+  --veil-back: 0.8;
 }
 
 /* Taupe — between Umber and Stone: grey-brown. */
@@ -408,48 +422,51 @@ html[data-palette='taupe'] {
   --pool-a: #e3ddd5;
   --pool-b: #eae5de;
   --swell-ground: #e5e0d9;
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
+  --veil-back: 0.8;
 }
 
-/* Driftwood — a softer, lighter Umber: the glass thinner, so more of the body shows. */
-html[data-palette='driftwood'] {
-  --color-cochineal: #3d3029;
-  --color-plumstone: #4a3c33;
-  --color-bract: #f3ece4;
-  --color-quick: #7f6352;
-  --color-ink-2: #54443a;
-  --color-brick: #6f5a4c;
-  --color-clay: #7d6656;
-  --color-barro: #ccb39b;
-  --ch-bract: 243 236 228;
-  --ch-plum: 74 60 51;
-  --ch-quick: 127 99 82;
-  --ch-ink: 61 48 41;
-  --ch-glass: 92 76 64;
-  --ch-glass-deep: 80 66 56;
-  --ch-aura: 236 226 215;
-  --lit-plumstone: #5c4b40;
-  --lit-cochineal: #6c5749;
-  --lit-brick: #8a7262;
-  --lit-clay: #9a8270;
-  --portrait-a: #957f6e;
-  --portrait-b: #4a3c33;
-  --pt0: #9a7a64;
-  --pt1: #836650;
-  --pt2: #6a5141;
-  --pt3: #4c3a2e;
-  --pd0: #eadccf;
-  --pd1: #dbc6b3;
-  --pd2: #c0a891;
-  --pd3: #a18873;
-  --pl0: #f5eee7;
-  --pl2: #d7c3b0;
-  --shell-0: #f3eae1;
-  --shell-1: #faf5f0;
-  --pool-a: #e9dfd4;
-  --pool-b: #efe8df;
-  --swell-ground: #e9e3db;
-  --veil-orb: 0.56;
-  --veil-pane: 0.78;
+/* Wine — the site as first built, saved. */
+html[data-palette='wine'] {
+  --color-cochineal: #5a121c;
+  --color-plumstone: #2c0b12;
+  --color-bract: #eed4cb;
+  --color-quick: #8e241f;
+  --color-ink-2: #6b1a23;
+  --color-brick: #7e2a26;
+  --color-clay: #8e3b2e;
+  --color-barro: #c68a5e;
+  --ch-bract: 238 212 203;
+  --ch-plum: 44 11 18;
+  --ch-quick: 142 36 31;
+  --ch-ink: 90 18 28;
+  --ch-glass: 70 14 22;
+  --ch-glass-deep: 62 12 20;
+  --ch-aura: 240 206 196;
+  --lit-plumstone: #4a1520;
+  --lit-cochineal: #78202c;
+  --lit-brick: #9c3a33;
+  --lit-clay: #ab4d3c;
+  --portrait-a: #8a5f59;
+  --portrait-b: #3a1c1e;
+  --pt0: #8e2f2a;
+  --pt1: #75231f;
+  --pt2: #5a121c;
+  --pt3: #3d0e15;
+  --pd0: #e3b6ac;
+  --pd1: #dba184;
+  --pd2: #b8837c;
+  --pd3: #97655f;
+  --pl0: #f3dfd7;
+  --pl2: #cf9a90;
+  --shell-0: #f4dcd2;
+  --shell-1: #fbeee7;
+  --pool-a: #e9d6c9;
+  --pool-b: #efe3d9;
+  --swell-ground: #e8e0d6;
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
   --veil-back: 0.8;
 }
 
