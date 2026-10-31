@@ -39,6 +39,11 @@ const id = offering.id;
       </div>
 
       <div class="front-text">
+        {/* The same picture again, blurred to a breath of colour under pale
+            glass: the light side of the card the back answers in wine. */}
+        <div class="front-glass" aria-hidden="true">
+          <Collage src={o.collage} alt="" register={o.register} sizes="30vw" />
+        </div>
         <span class="label">{o.container}</span>
 
         <div class="front-foot">
@@ -178,12 +183,40 @@ const id = offering.id;
   [data-register='clay'] .chip-name { background: var(--color-clay); }
 
   .front-text {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     padding: clamp(1.5rem, 3vw, 2.25rem);
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
   }
 
+
+  .front-glass {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .front-glass :global(.collage) {
+    position: absolute;
+    inset: -15%;
+    width: 130%;
+    height: 130%;
+    object-fit: cover;
+    filter: blur(40px) saturate(1.1);
+  }
+
+  /* Linen glass, mostly opaque: the page's own ground with the picture's
+     colour breathing through it. */
+  .front-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-madder) 80%, transparent);
+  }
 
   .front-foot {
     margin-top: auto;
