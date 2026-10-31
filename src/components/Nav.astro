@@ -325,19 +325,46 @@ const inSection = (item: (typeof nav)[number]) =>
     border-bottom-color: rgb(142 36 31 / 0.6);
   }
 
+  /* A plus that becomes a minus while its list is open: two hairlines, the
+     upright one folding away. */
   .caret {
-    width: 0;
-    height: 0;
-    border-inline: 3px solid transparent;
-    /* Points up, because that is where the list opens. */
-    border-bottom: 4px solid currentColor;
-    opacity: 0.6;
+    position: relative;
+    width: 7px;
+    height: 7px;
+    opacity: 0.7;
     transition: opacity 250ms var(--ease-open);
+  }
+
+  .caret::before,
+  .caret::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+  }
+
+  .caret::before {
+    left: 0;
+    right: 0;
+    top: calc(50% - 0.5px);
+    height: 1px;
+  }
+
+  .caret::after {
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    transition: scale 250ms var(--ease-open);
   }
 
   .has-sub:hover .caret,
   .has-sub:focus-within .caret {
     opacity: 1;
+  }
+
+  .has-sub:hover .caret::after,
+  .has-sub:focus-within .caret::after {
+    scale: 1 0;
   }
 
   /* ---- The lists ---- */
@@ -352,9 +379,12 @@ const inSection = (item: (typeof nav)[number]) =>
     margin: 0;
     padding: 0.6rem 0;
     min-width: max-content;
-    background: var(--color-plumstone);
-    border: 1px solid rgb(238 212 203 / 0.18);
-    box-shadow: 0 10px 30px rgb(44 11 18 / 0.3);
+    /* The bar's own linen glass, a shade more solid. */
+    background: color-mix(in srgb, var(--color-madder) 90%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--rule);
+    box-shadow: 0 10px 30px rgb(44 11 18 / 0.12);
     opacity: 0;
     visibility: hidden;
     translate: 0 0.4rem;
@@ -385,14 +415,14 @@ const inSection = (item: (typeof nav)[number]) =>
     padding: 0.5rem 1.1rem;
     font-size: 0.64rem;
     letter-spacing: 0.14em;
-    color: rgb(238 212 203 / 0.82);
+    color: var(--color-ink-2);
     border-bottom: 0;
   }
 
   .sub a:hover,
   .sub a[aria-current='page'] {
-    color: var(--color-bract);
-    background: rgb(238 212 203 / 0.08);
+    color: var(--color-cochineal);
+    background: rgb(142 36 31 / 0.06);
     border-bottom: 0;
   }
 
@@ -491,6 +521,12 @@ const inSection = (item: (typeof nav)[number]) =>
 
     .menu {
       background: var(--color-plumstone);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .sub {
+      background: var(--color-madder);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
     }
