@@ -4,10 +4,16 @@ import Link from './Link.astro';
 import KitSignup from './KitSignup.astro';
 import { site, contact, booking, kit, withBase } from '../site';
 
+interface Props {
+  /** Sitting on the closing photograph with Get in Touch (see Base). */
+  onGround?: boolean;
+}
+
+const { onGround = false } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer on-dark grained">
+<footer class:list={['footer on-dark', { grained: !onGround, 'footer-on-ground': onGround }]}>
   <div class="band">
     <div class="rail">
       <Vessel size="52px" open={0.55} />
@@ -71,6 +77,19 @@ const year = new Date().getFullYear();
        a strip of the page ground showing below it. */
     padding-block: clamp(3rem, 7vw, 5rem)
       calc(clamp(3rem, 7vw, 5rem) + var(--bar-h) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* On the shared photograph the footer has no ground of its own, and no
+     top padding beyond a little air: it continues the Get in Touch pane,
+     divided from it by a single hairline. */
+  .footer-on-ground {
+    background: transparent;
+    padding-top: 0;
+  }
+
+  .footer-on-ground > .band {
+    padding-top: clamp(2.25rem, 5vw, 3.5rem);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.18);
   }
 
   .footer-grid {

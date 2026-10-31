@@ -9,13 +9,21 @@ interface Props {
   description: string;
   /** Home suppresses the page title prefix. */
   bare?: boolean;
+  /**
+   * A photograph for the page's close. When given, the page ends in one
+   * pane: Get in Touch and the footer together on this picture, under the
+   * same wash, deepening toward the foot so the small type stays clear.
+   */
+  close?: string;
 }
 
-const { title, description, bare = false } = Astro.props;
+const { title, description, bare = false, close } = Astro.props;
 const fullTitle = bare ? title : `${title} · ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const shareImage = new URL(withBase('/share.png'), Astro.site).href;
 import PaletteTrial from '../components/PaletteTrial.astro';
+import PhotoGround from '../components/PhotoGround.astro';
+import GetInTouch from '../components/GetInTouch.astro';
 ---
 
 <!doctype html>
@@ -80,7 +88,18 @@ import PaletteTrial from '../components/PaletteTrial.astro';
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    {
+      close ? (
+        <div class="closing has-ground on-dark">
+          <PhotoGround src={close} />
+          <span class="closing-deep" aria-hidden="true" />
+          <GetInTouch />
+          <Footer onGround />
+        </div>
+      ) : (
+        <Footer />
+      )
+    }
     <PaletteTrial />
 
     <script>
@@ -156,3 +175,26 @@ import PaletteTrial from '../components/PaletteTrial.astro';
     </style>
   </body>
 </html>
+
+<style>
+  .closing {
+    background: var(--color-plumstone);
+  }
+
+  /* Over the photograph's own wash, a second one that gathers toward the
+     foot: Get in Touch keeps the picture, the footer's small type gets a
+     deeper ground beneath it. */
+  .closing-deep {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 32%,
+      rgb(var(--ch-plum) / 0.55) 55%,
+      rgb(var(--ch-plum) / 0.82) 100%
+    );
+  }
+</style>

@@ -3,7 +3,6 @@ import Base from '../../layouts/Base.astro';
 import ChapterRail from '../../components/ChapterRail.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import ApplicationForm from '../../components/ApplicationForm.astro';
-import GetInTouch from '../../components/GetInTouch.astro';
 import OfferingCard from '../../components/OfferingCard.astro';
 import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
@@ -39,7 +38,7 @@ const motifs = [
 ];
 ---
 
-<Base title={s.title} description={s.description}>
+<Base title={s.title} description={s.description} close="close-sessions.jpg">
   <ChapterRail />
 
   <PageBanner title={s.title} lede={s.lede} image="work-with-me.jpg" />
@@ -140,8 +139,6 @@ const motifs = [
       <ApplicationForm subject="1:1 Sessions" />
     </div>
   </section>
-
-  <GetInTouch image="close-sessions.jpg" />
 </Base>
 
 <style>

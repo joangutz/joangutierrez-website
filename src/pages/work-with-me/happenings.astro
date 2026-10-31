@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import GetInTouch from '../../components/GetInTouch.astro';
 import { site } from '../../site';
 
 /**
@@ -15,7 +14,7 @@ const happenings = [
 ];
 ---
 
-<Base title="Happenings: Relational" description={site.description}>
+<Base title="Happenings: Relational" description={site.description} close="close-work.jpg">
   <PageBanner eyebrow="Work with me" title="Happenings: Relational" image="happenings.jpg" />
 
   <section class="band section">
@@ -33,8 +32,6 @@ const happenings = [
       </ul>
     </div>
   </section>
-
-  <GetInTouch image="close-work.jpg" />
 </Base>
 
 <style>

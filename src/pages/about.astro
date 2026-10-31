@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
 import ChapterRail from '../components/ChapterRail.astro';
 import Portrait from '../components/Portrait.astro';
-import GetInTouch from '../components/GetInTouch.astro';
 import { getEntry, render } from 'astro:content';
 
 /**
@@ -21,7 +20,7 @@ const { Content } = await render(entry);
 const p = entry.data;
 ---
 
-<Base title={p.title} description={p.description}>
+<Base title={p.title} description={p.description} close="about-close.jpg">
   <ChapterRail />
 
   <PageBanner eyebrow={p.eyebrow} title={p.title} lede={p.lede} image="about.jpg" />
@@ -42,8 +41,6 @@ const p = entry.data;
       </div>
     </div>
   </section>
-
-  <GetInTouch image="about-close.jpg" />
 </Base>
 
 <style>

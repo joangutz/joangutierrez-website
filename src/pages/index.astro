@@ -6,7 +6,6 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import KitSignup from '../components/KitSignup.astro';
 import Testimonials from '../components/Testimonials.astro';
-import GetInTouch from '../components/GetInTouch.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { site, booking, kit, beginHere, withBase } from '../site';
 
@@ -41,7 +40,7 @@ const movedAnchors = {
 };
 ---
 
-<Base title={`${site.name} — ${site.tagline}`} description={site.description} bare>
+<Base title={`${site.name} — ${site.tagline}`} description={site.description} bare close="close-home.jpg">
   {/* 1 · The title card. The name runs margin to margin, and the line under
       it is set to exactly the same length — justified across the full width,
       so name and subtitle read as one engraved block rather than a heading
@@ -215,9 +214,6 @@ const movedAnchors = {
       </div>
     </div>
   </section>
-
-  <!-- 7 · Get in Touch -->
-  <GetInTouch image="close-home.jpg" />
 
   <script define:vars={{ movedAnchors }}>
     var to = movedAnchors[window.location.hash];
@@ -602,11 +598,18 @@ const movedAnchors = {
     z-index: -1;
   }
 
+  /* The rose photograph is small for a full-width ground, and stretched it
+     showed its pixels. Softened, it keeps its colour and its spiral and
+     gives up only the grain — the same soft focus as the glass elsewhere.
+     Scaled a touch so the blur never pulls in a pale edge. */
   .rose-ground :global(.collage) {
     width: 100%;
     height: 100%;
+    max-width: none;
     object-fit: cover;
     object-position: 50% 45%;
+    filter: blur(7px) saturate(1.05);
+    scale: 1.06;
   }
 
   .gift-row {
