@@ -281,8 +281,9 @@ const inSection = (item: (typeof nav)[number]) =>
 
   /* Flex, so each tab's box is the line box — no strut below it nudging
      the word off the bar's centre. */
+  /* Static, so an open list measures itself against the whole bar and can
+     run its full width. */
   .nav-item {
-    position: relative;
     display: flex;
   }
 
@@ -368,62 +369,75 @@ const inSection = (item: (typeof nav)[number]) =>
   }
 
   /* ---- The lists ---- */
-  /* Upward, because down is the edge of the window. Hover and focus-within
-     only — no script, so this works with scripting off. */
+  /* A second tier of the bar: the full width of the window, directly on top
+     of it, the links set in a row. Upward, because down is the edge of the
+     window. Hover and focus-within only — no script, so this works with
+     scripting off. */
   .sub {
     position: absolute;
-    bottom: calc(100% + 0.65rem);
-    left: -0.9rem;
+    left: 0;
+    right: 0;
+    bottom: 100%;
     z-index: 2;
     list-style: none;
     margin: 0;
-    padding: 0.6rem 0;
-    min-width: max-content;
-    /* The bar's own linen glass, a shade more solid. */
-    background: color-mix(in srgb, var(--color-madder) 90%, transparent);
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
-    backdrop-filter: blur(18px) saturate(1.2);
-    border: 1px solid var(--rule);
-    box-shadow: 0 10px 30px rgb(44 11 18 / 0.12);
+    padding: 0.95rem clamp(1.25rem, 5vw, 3rem);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem clamp(1.25rem, 3.5vw, 2.75rem);
+    /* Solid enough to stand alone: a blur nested inside the bar's own
+       cannot see past the bar. */
+    background: color-mix(in srgb, var(--color-madder) 94%, transparent);
+    border-top: 1px solid var(--rule);
+    box-shadow: 0 -10px 24px rgb(44 11 18 / 0.08);
     opacity: 0;
     visibility: hidden;
-    translate: 0 0.4rem;
     transition:
-      opacity 220ms var(--ease-open),
-      translate 220ms var(--ease-open),
-      visibility 220ms;
+      opacity 240ms var(--ease-open),
+      visibility 240ms;
   }
 
-  /* The gap between tab and list would break a hover on the way up, so the
-     tab's own hit area is extended to meet it. */
-  .has-sub::after {
+  /* Between the word and the row above lies the bar's own padding; the tab
+     reaches up through it so a pointer on its way to the row keeps it open. */
+  .has-sub > a {
+    position: relative;
+  }
+
+  .has-sub > a::after {
     content: '';
     position: absolute;
-    inset: auto 0 100% 0;
-    height: 0.75rem;
+    left: -0.75rem;
+    right: -0.75rem;
+    bottom: 100%;
+    height: 1.4rem;
   }
 
   .has-sub:hover .sub,
   .has-sub:focus-within .sub {
     opacity: 1;
     visibility: visible;
-    translate: 0;
   }
 
   .sub a {
-    display: block;
-    padding: 0.5rem 1.1rem;
-    font-size: 0.64rem;
+    display: inline-flex;
+    padding: 0.35rem 0;
+    font-size: 0.66rem;
     letter-spacing: 0.14em;
     color: var(--color-ink-2);
-    border-bottom: 0;
+    border-bottom: var(--word-rule) solid transparent;
+    text-box: trim-both cap alphabetic;
+    padding-block: var(--word-pad);
   }
 
-  .sub a:hover,
+  .sub a:hover {
+    color: var(--color-cochineal);
+    border-bottom-color: rgb(142 36 31 / 0.35);
+  }
+
   .sub a[aria-current='page'] {
     color: var(--color-cochineal);
-    background: rgb(142 36 31 / 0.06);
-    border-bottom: 0;
+    border-bottom-color: rgb(142 36 31 / 0.6);
   }
 
   @media (prefers-reduced-motion: reduce) {
