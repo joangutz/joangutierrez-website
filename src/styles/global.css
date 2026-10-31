@@ -202,6 +202,12 @@
   --pool-a: #e9d6c9;
   --pool-b: #efe3d9;
   --swell-ground: #e8e0d6;
+
+  /* How much of the glass covers the photographs beneath it: the bubbles,
+     the definition panes, the turned cards. Lighter palettes thin it. */
+  --veil-orb: 0.64;
+  --veil-pane: 0.74;
+  --veil-back: 0.8;
 }
 
 /* Umber — warm earth browns. */
@@ -362,6 +368,175 @@ html[data-palette='olive'] {
   --pool-a: #e4e1d6;
   --pool-b: #ebe8de;
   --swell-ground: #e5e2d9;
+}
+
+/* Taupe — between Umber and Stone: grey-brown. */
+html[data-palette='taupe'] {
+  --color-cochineal: #38322d;
+  --color-plumstone: #201c19;
+  --color-bract: #ece6df;
+  --color-quick: #736659;
+  --color-ink-2: #4e463f;
+  --color-brick: #5b524a;
+  --color-clay: #6b6157;
+  --color-barro: #c0ae98;
+  --ch-bract: 236 230 223;
+  --ch-plum: 32 28 25;
+  --ch-quick: 115 102 89;
+  --ch-ink: 56 50 45;
+  --ch-glass: 56 49 43;
+  --ch-glass-deep: 48 42 37;
+  --ch-aura: 229 221 211;
+  --lit-plumstone: #342e29;
+  --lit-cochineal: #514942;
+  --lit-brick: #736a61;
+  --lit-clay: #887d72;
+  --portrait-a: #7f7368;
+  --portrait-b: #2c2723;
+  --pt0: #837567;
+  --pt1: #6d6155;
+  --pt2: #564c43;
+  --pt3: #3a332d;
+  --pd0: #e3dbd2;
+  --pd1: #d1c5b9;
+  --pd2: #b3a698;
+  --pd3: #918476;
+  --pl0: #f1ece6;
+  --pl2: #cbbfb2;
+  --shell-0: #eee7df;
+  --shell-1: #f7f3ee;
+  --pool-a: #e3ddd5;
+  --pool-b: #eae5de;
+  --swell-ground: #e5e0d9;
+}
+
+/* Driftwood — a softer, lighter Umber: the glass thinner, so more of the body shows. */
+html[data-palette='driftwood'] {
+  --color-cochineal: #3d3029;
+  --color-plumstone: #4a3c33;
+  --color-bract: #f3ece4;
+  --color-quick: #7f6352;
+  --color-ink-2: #54443a;
+  --color-brick: #6f5a4c;
+  --color-clay: #7d6656;
+  --color-barro: #ccb39b;
+  --ch-bract: 243 236 228;
+  --ch-plum: 74 60 51;
+  --ch-quick: 127 99 82;
+  --ch-ink: 61 48 41;
+  --ch-glass: 92 76 64;
+  --ch-glass-deep: 80 66 56;
+  --ch-aura: 236 226 215;
+  --lit-plumstone: #5c4b40;
+  --lit-cochineal: #6c5749;
+  --lit-brick: #8a7262;
+  --lit-clay: #9a8270;
+  --portrait-a: #957f6e;
+  --portrait-b: #4a3c33;
+  --pt0: #9a7a64;
+  --pt1: #836650;
+  --pt2: #6a5141;
+  --pt3: #4c3a2e;
+  --pd0: #eadccf;
+  --pd1: #dbc6b3;
+  --pd2: #c0a891;
+  --pd3: #a18873;
+  --pl0: #f5eee7;
+  --pl2: #d7c3b0;
+  --shell-0: #f3eae1;
+  --shell-1: #faf5f0;
+  --pool-a: #e9dfd4;
+  --pool-b: #efe8df;
+  --swell-ground: #e9e3db;
+  --veil-orb: 0.56;
+  --veil-pane: 0.78;
+  --veil-back: 0.8;
+}
+
+/* Fog — a softer, lighter Stone: pale grey glass. */
+html[data-palette='fog'] {
+  --color-cochineal: #393734;
+  --color-plumstone: #45423e;
+  --color-bract: #f2f0ec;
+  --color-quick: #6c675f;
+  --color-ink-2: #4f4c48;
+  --color-brick: #66625c;
+  --color-clay: #6f6a63;
+  --color-barro: #c4bcb0;
+  --ch-bract: 242 240 236;
+  --ch-plum: 69 66 62;
+  --ch-quick: 108 103 95;
+  --ch-ink: 57 55 52;
+  --ch-glass: 88 85 80;
+  --ch-glass-deep: 76 73 69;
+  --ch-aura: 232 229 224;
+  --lit-plumstone: #57544f;
+  --lit-cochineal: #625f5a;
+  --lit-brick: #7c7770;
+  --lit-clay: #878178;
+  --portrait-a: #8d8780;
+  --portrait-b: #45423e;
+  --pt0: #8a847b;
+  --pt1: #75706a;
+  --pt2: #5e5a55;
+  --pt3: #43403c;
+  --pd0: #e8e5e0;
+  --pd1: #d7d3cc;
+  --pd2: #bab5ad;
+  --pd3: #9a958d;
+  --pl0: #f4f2ef;
+  --pl2: #cfcac3;
+  --shell-0: #efede9;
+  --shell-1: #f8f7f4;
+  --pool-a: #e6e3de;
+  --pool-b: #ecebe7;
+  --swell-ground: #e7e4df;
+  --veil-orb: 0.56;
+  --veil-pane: 0.78;
+  --veil-back: 0.8;
+}
+
+/* Sand — the lightest and warmest: sun-bleached clay. */
+html[data-palette='sand'] {
+  --color-cochineal: #43362e;
+  --color-plumstone: #5a4b40;
+  --color-bract: #f7f1ea;
+  --color-quick: #806654;
+  --color-ink-2: #5a4a40;
+  --color-brick: #7a6556;
+  --color-clay: #7e6959;
+  --color-barro: #d2bba3;
+  --ch-bract: 247 241 234;
+  --ch-plum: 90 75 64;
+  --ch-quick: 128 102 84;
+  --ch-ink: 67 54 46;
+  --ch-glass: 104 88 75;
+  --ch-glass-deep: 92 77 66;
+  --ch-aura: 240 231 221;
+  --lit-plumstone: #6d5c50;
+  --lit-cochineal: #7a6556;
+  --lit-brick: #957e6d;
+  --lit-clay: #a18977;
+  --portrait-a: #a08a78;
+  --portrait-b: #5a4b40;
+  --pt0: #a3846c;
+  --pt1: #8d6f58;
+  --pt2: #735a48;
+  --pt3: #564334;
+  --pd0: #efe3d6;
+  --pd1: #e2cfbd;
+  --pd2: #c8b19b;
+  --pd3: #a9917c;
+  --pl0: #f8f2ec;
+  --pl2: #ddcab8;
+  --shell-0: #f6eee6;
+  --shell-1: #fcf8f3;
+  --pool-a: #ece3d9;
+  --pool-b: #f1ebe3;
+  --swell-ground: #ebe5dd;
+  --veil-orb: 0.54;
+  --veil-pane: 0.8;
+  --veil-back: 0.82;
 }
 
 @layer base {
