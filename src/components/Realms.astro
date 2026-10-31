@@ -142,6 +142,17 @@ const AT = [
     --orb-ground: var(--color-madder);
   }
 
+  /* Burgundy glass — the same smoked wine as the menu laid over a
+     photograph: translucent, with whatever lies behind it blurred. One recipe
+     for the bubbles and for the panel that opens beside them. */
+  .realms,
+  .orb-flying {
+    --glass: rgb(70 14 22 / 0.82);
+    --glass-deep: rgb(62 12 20 / 0.88);
+    --glass-edge: rgb(238 212 203 / 0.16);
+    --glass-ink: var(--color-bract);
+  }
+
   .triad-lines {
     position: absolute;
     z-index: 0;
@@ -182,8 +193,8 @@ const AT = [
     translate: -50% -50%;
   }
 
-  /* The bubble: a lit dome over an opaque disc in the ground colour, both on
-     the element itself so that transforming it never reorders its layers. */
+  /* The bubble: a disc of burgundy glass. Its lines run behind it and show
+     through, softened. */
   .orb {
     position: relative;
     display: grid;
@@ -198,23 +209,18 @@ const AT = [
     color: inherit;
     font: inherit;
     text-align: center;
-    background:
-      radial-gradient(
-        circle at 36% 30%,
-        rgb(255 250 246 / 0.98) 0%,
-        rgb(240 214 203 / 0.85) 40%,
-        rgb(214 160 145 / 0.45) 74%,
-        transparent 100%
-      ),
-      radial-gradient(circle closest-side, var(--orb-ground) 0%, var(--orb-ground) 100%);
+    --orb-ink: var(--glass-ink);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
     box-shadow:
-      inset 0 0 calc(var(--orb) * 0.14) rgb(255 246 240 / 0.55),
-      0 0 0 0 rgb(142 36 31 / 0);
+      inset 0 0 0 1px var(--glass-edge),
+      0 0 0 0 rgb(44 11 18 / 0);
     transition:
       scale 420ms var(--ease-open),
       translate 420ms var(--ease-open),
-      box-shadow 420ms var(--ease-open),
-      filter 420ms var(--ease-open);
+      background-color 420ms var(--ease-open),
+      box-shadow 420ms var(--ease-open);
   }
 
   /* An invitation, not a demand: one soft ring breathes out from each bubble
@@ -259,22 +265,24 @@ const AT = [
   .orb:focus-visible {
     scale: 1.05;
     translate: 0 -3px;
-    filter: brightness(1.04);
+    background: var(--glass-deep);
     box-shadow:
-      inset 0 0 calc(var(--orb) * 0.14) rgb(255 246 240 / 0.6),
-      0 10px 28px rgb(90 18 28 / 0.18);
+      inset 0 0 0 1px rgb(238 212 203 / 0.28),
+      0 12px 30px rgb(44 11 18 / 0.22);
   }
 
   /* The place a bubble left: its ground disc and a dotted outline, so the
      triangle keeps its shape and the corner can still be pressed to call the
      bubble back. A border, not an outline, so the focus ring survives. */
   .orb.is-away {
-    background: radial-gradient(circle closest-side, var(--orb-ground) 0%, var(--orb-ground) 100%);
+    --orb-ink: var(--color-cochineal);
+    background: var(--orb-ground);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     box-shadow: none;
     border: 1px dashed rgb(142 36 31 / 0.4);
     scale: 1;
     translate: 0;
-    filter: none;
   }
 
   .orb.is-away > * {
@@ -293,13 +301,16 @@ const AT = [
     flex: none;
     cursor: default;
     padding: calc(var(--orb) * 0.1);
+    /* Glass on glass: a little lighter than the panel it rests on. */
+    background: rgb(238 212 203 / 0.1);
+    box-shadow: inset 0 0 0 1px rgb(238 212 203 / 0.3);
   }
 
   .orb-landed:hover {
     scale: 1;
     translate: 0;
-    filter: none;
-    box-shadow: inset 0 0 calc(var(--orb) * 0.14) rgb(255 246 240 / 0.55);
+    background: rgb(238 212 203 / 0.1);
+    box-shadow: inset 0 0 0 1px rgb(238 212 203 / 0.3);
   }
 
   .orb-landed .orb-name {
@@ -342,14 +353,15 @@ const AT = [
     text-transform: uppercase;
     letter-spacing: 0.14em;
     line-height: 1.1;
-    color: var(--color-cochineal);
+    color: var(--orb-ink);
   }
 
   .orb-gloss {
     font-size: clamp(0.72rem, 3cqw, 1rem);
     font-style: italic;
     line-height: 1.3;
-    color: var(--color-ink-2);
+    color: var(--orb-ink);
+    opacity: 0.82;
   }
 
   /* ---- The panel ---- */
@@ -361,6 +373,7 @@ const AT = [
 
   :global(.js) .panel > .view {
     grid-area: 1 / 1;
+    align-self: start;
     visibility: hidden;
     opacity: 0;
     transition:
@@ -393,6 +406,16 @@ const AT = [
     margin-top: 1.1rem;
   }
 
+  /* An open definition sits in a pane of the same glass, square-edged. */
+  .view:not(.view-intro) {
+    padding: clamp(1.4rem, 3vw, 2.25rem);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
+    box-shadow: inset 0 0 0 1px var(--glass-edge);
+    color: var(--glass-ink);
+  }
+
   .view-head {
     display: flex;
     align-items: center;
@@ -406,7 +429,7 @@ const AT = [
      and the italic cut of the text face draws the ī of matrīcis with its
      macron adrift. */
   .view-origin {
-    color: var(--color-ink-2);
+    color: rgb(238 212 203 / 0.8);
   }
 
   /* A cross, drawn, so the close control needs no word. */
@@ -418,7 +441,7 @@ const AT = [
     border: 0;
     background: none;
     cursor: pointer;
-    color: var(--color-ink-2);
+    color: rgb(238 212 203 / 0.8);
   }
 
   .view-close span::before,
@@ -441,7 +464,11 @@ const AT = [
   }
 
   .view-close:hover {
-    color: var(--color-cochineal);
+    color: var(--color-bract);
+  }
+
+  .view-close:focus-visible {
+    outline-color: var(--color-bract);
   }
 
   :global(html:not(.js)) .view-close {
