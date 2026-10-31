@@ -1,6 +1,5 @@
 ---
 import Collage from './Collage.astro';
-import Vessel from './Vessel.astro';
 import type { CollectionEntry } from 'astro:content';
 
 /**
@@ -48,8 +47,11 @@ const id = offering.id;
 
         <div class="front-foot">
           <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
-            <Vessel size="20px" form="egg" class="turn-mark" />
             <span>Includes</span>
+            {/* A hairline arrow: there is more on the other side. */}
+            <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
+              <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
+            </svg>
           </button>
         </div>
       </div>
@@ -378,11 +380,6 @@ const id = offering.id;
 
   /* The way in is a piece of the glass the card turns to. */
   .turn[data-turn='open'] {
-    --petal: var(--color-bract);
-    --petal-0: var(--pl0);
-    --petal-1: var(--pd0);
-    --petal-2: var(--pl2);
-    --petal-3: var(--pd2);
     background: rgb(var(--ch-glass) / 0.9);
     border-color: transparent;
     color: var(--color-bract);
@@ -407,12 +404,26 @@ const id = offering.id;
     border-color: var(--color-bract);
   }
 
-  .turn :global(.turn-mark) {
-    transition: --open 900ms var(--ease-open);
+  .turn-arrow {
+    width: 16px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: translate 300ms var(--ease-open);
   }
 
-  .turn:hover :global(.turn-mark) {
-    --open: 1;
+  .turn:hover .turn-arrow,
+  .turn:focus-visible .turn-arrow {
+    translate: 3px 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .turn-arrow {
+      transition: none;
+    }
   }
 
   .turn-back {
