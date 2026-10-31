@@ -64,7 +64,7 @@ const AT = [
       <ol class="triad-list">
         {
           realms.map((r, i) => (
-            <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%;--beat:${((i + 2) % 3) * 4 + 4}s`}>
+            <li class="orb-slot" style={`--ox:${AT[i].x}%;--oy:${AT[i].y}%;--beat:${((i + 2) % 3) * 7 + 7}s`}>
               <span class="ripples" aria-hidden="true" data-ripples>
                 <i />
                 <i />
@@ -215,9 +215,9 @@ const AT = [
       box-shadow 420ms var(--ease-open);
   }
 
-  /* The breath. A soft light travels one leg every four seconds — the pace
-     of a slow exhale — and where it arrives, that bubble ripples. The whole
-     round takes twelve seconds. While the pointer rests on the figure, the
+  /* The breath. A soft light travels one leg every seven seconds — a full,
+     unhurried breath — and where it arrives, that bubble ripples. The whole
+     round takes twenty-one seconds. While the pointer rests on the figure, the
      breath and its ripples fade out of the way and the bubbles answer the
      hand instead. */
   .pulse {
@@ -235,7 +235,7 @@ const AT = [
 
   .pulses,
   .ripples {
-    transition: opacity 900ms var(--ease-open);
+    transition: opacity 1600ms var(--ease-open);
   }
 
   @media (hover: hover) {
@@ -247,11 +247,11 @@ const AT = [
 
   @media (prefers-reduced-motion: no-preference) {
     .pulse {
-      animation: breath 12s infinite;
+      animation: breath 21s infinite;
     }
 
-    .pulse:nth-child(2) { animation-delay: 4s; }
-    .pulse:nth-child(3) { animation-delay: 8s; }
+    .pulse:nth-child(2) { animation-delay: 7s; }
+    .pulse:nth-child(3) { animation-delay: 14s; }
 
     @keyframes breath {
       0% {
@@ -320,13 +320,13 @@ const AT = [
 
   @media (prefers-reduced-motion: no-preference) {
     .ripples i {
-      animation: ripple 12s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+      animation: ripple 21s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
       animation-delay: calc(var(--beat) + var(--lag));
     }
 
     .ripples i:nth-child(1) { --lag: 0s; }
-    .ripples i:nth-child(2) { --lag: 0.5s; }
-    .ripples i:nth-child(3) { --lag: 1s; }
+    .ripples i:nth-child(2) { --lag: 1.1s; }
+    .ripples i:nth-child(3) { --lag: 2.2s; }
 
     .realms.has-opened .ripples i {
       border-color: rgb(142 36 31 / 0.26);
@@ -622,7 +622,7 @@ const AT = [
               { opacity: 0.9, scale: 1 },
               { opacity: 0, scale: 1.5 },
             ],
-            { duration: 1300, delay: k * 180, easing: 'cubic-bezier(0.2, 0.6, 0.35, 1)', fill: 'backwards' }
+            { duration: 2200, delay: k * 320, easing: 'cubic-bezier(0.2, 0.6, 0.35, 1)', fill: 'backwards' }
           )
           .finished.then(() => ring.remove());
       }
