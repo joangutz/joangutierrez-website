@@ -19,7 +19,16 @@ import { realms } from '../site';
  *
  * The bubbles say they can be pressed without any words of instruction: a
  * slow breathing ring at rest, a lift and a deepening glow under the
- * pointer, and a solid ring on the one that is open.
+ * pointer.
+ *
+ * Choosing one sends it across: the bubble leaves its corner and glides to
+ * the head of the panel, settling there a little smaller beside its words,
+ * while a dotted outline keeps its place in the triangle and the lines dim.
+ * Closing it, or choosing another, sends it home. The travelling bubble is
+ * a decorative copy (aria-hidden); the real button never leaves its corner,
+ * so focus and the reading order stay put. Where the panel sits below the
+ * triangle rather than beside it — a phone — and for anyone who has asked
+ * for reduced motion, there is no journey: the bubble is simply there.
  */
 interface Props {
   /** Joan's opening paragraphs — what the panel says when no word is open. */
@@ -83,7 +92,13 @@ const AT = [
       realms.map((r) => (
         <div class="view" data-view={r.id}>
           <div class="view-head">
-            <h3 class="view-name">{r.name}</h3>
+            {/* Where the chosen bubble comes to rest. Decorative — the heading
+                beside it carries the word for screen readers. */}
+            <span class="orb orb-landed" data-landed={r.id} aria-hidden="true">
+              <span class="orb-name">{r.name}</span>
+              <span class="orb-gloss">{r.gloss}</span>
+            </span>
+            <h3 class="visually-hidden">{r.name}</h3>
             <button class="view-close" type="button" data-close aria-label={`Close ${r.name}`}>
               <span aria-hidden="true" />
             </button>
@@ -143,6 +158,12 @@ const AT = [
     stroke-linecap: round;
     opacity: 0.5;
     vector-effect: non-scaling-stroke;
+    transition: opacity 500ms var(--ease-open);
+  }
+
+  /* With a bubble away, the triangle steps back. */
+  .realms.is-open .triad-lines path {
+    opacity: 0.2;
   }
 
   .triad-list {
@@ -244,12 +265,62 @@ const AT = [
       0 10px 28px rgb(90 18 28 / 0.18);
   }
 
-  /* The open one wears a solid ring. */
-  .orb[aria-pressed='true'] {
-    box-shadow:
-      inset 0 0 calc(var(--orb) * 0.14) rgb(255 246 240 / 0.6),
-      0 0 0 2px var(--color-madder),
-      0 0 0 3px var(--color-quick);
+  /* The place a bubble left: its ground disc and a dotted outline, so the
+     triangle keeps its shape and the corner can still be pressed to call the
+     bubble back. A border, not an outline, so the focus ring survives. */
+  .orb.is-away {
+    background: radial-gradient(circle closest-side, var(--orb-ground) 0%, var(--orb-ground) 100%);
+    box-shadow: none;
+    border: 1px dashed rgb(142 36 31 / 0.4);
+    scale: 1;
+    translate: 0;
+    filter: none;
+  }
+
+  .orb.is-away > * {
+    opacity: 0.4;
+  }
+
+  .orb.is-away:hover {
+    border-color: var(--color-quick);
+  }
+
+  /* The bubble at rest in the panel. Smaller than in the triangle, and not
+     a control — the close button beside it is. */
+  .orb-landed {
+    --orb: clamp(6.25rem, 8.5vw, 7.5rem);
+    --orb-ground: var(--color-madder);
+    flex: none;
+    cursor: default;
+    padding: calc(var(--orb) * 0.1);
+  }
+
+  .orb-landed:hover {
+    scale: 1;
+    translate: 0;
+    filter: none;
+    box-shadow: inset 0 0 calc(var(--orb) * 0.14) rgb(255 246 240 / 0.55);
+  }
+
+  .orb-landed .orb-name {
+    font-size: 0.92rem;
+  }
+
+  .orb-landed .orb-gloss {
+    font-size: 0.78rem;
+  }
+
+  /* Hidden while its travelling copy is in the air, so there are never two. */
+  .orb-landed.is-arriving {
+    opacity: 0;
+  }
+
+  .orb-flying {
+    position: fixed;
+    margin: 0;
+    z-index: 55;
+    pointer-events: none;
+    transform-origin: 0 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -327,20 +398,8 @@ const AT = [
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding-bottom: 0.9rem;
-    margin-bottom: 1.1rem;
-    border-bottom: 1px solid var(--rule);
+    margin-bottom: 1.4rem;
     max-width: 38ch;
-  }
-
-  .view-name {
-    margin: 0;
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-cochineal);
   }
 
   /* The etymology line, set apart by colour only. Joan did not italicise it,
@@ -447,45 +506,150 @@ const AT = [
 </style>
 
 <script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const FLIGHT = 760;
+
   for (const root of document.querySelectorAll<HTMLElement>('[data-realms]')) {
     const orbs = [...root.querySelectorAll<HTMLButtonElement>('[data-orb]')];
     const views = [...root.querySelectorAll<HTMLElement>('[data-view]')];
     const panel = root.querySelector<HTMLElement>('[data-panel]');
     if (!panel) continue;
 
+    const vertex = (id: string) => orbs.find((o) => o.dataset.orb === id)!;
+    const landed = (id: string) => root.querySelector<HTMLElement>(`[data-landed="${id}"]`)!;
+
+    // The panel is beside the triangle only while the grid has two columns.
+    const sideBySide = () =>
+      getComputedStyle(root).gridTemplateColumns.trim().split(/\s+/).length > 1;
+
+    // One flight per word at a time: a new one finishes the old one first.
+    const flights = new Map<string, Animation>();
+
+    /**
+     * Send a decorative copy of `from` to where `to` sits, then call done.
+     * The copy is pinned to the window and moved with a transform, so the
+     * page underneath never reflows while it travels.
+     */
+    const fly = (id: string, from: HTMLElement, to: HTMLElement, done: () => void) => {
+      flights.get(id)?.finish();
+      const a = from.getBoundingClientRect();
+      const b = to.getBoundingClientRect();
+      if (reduce.matches || !sideBySide() || !a.width || !b.width) {
+        done();
+        return;
+      }
+
+      const copy = from.cloneNode(true) as HTMLElement;
+      for (const attr of ['data-orb', 'data-landed', 'aria-pressed', 'aria-controls', 'type']) {
+        copy.removeAttribute(attr);
+      }
+      copy.classList.remove('is-away', 'is-arriving', 'orb-landed');
+      copy.classList.add('orb-flying');
+      copy.setAttribute('aria-hidden', 'true');
+      copy.tabIndex = -1;
+
+      // Its type is sized in container units, which mean nothing outside
+      // the figure — so the copy carries the sizes it left with.
+      for (const part of ['.orb-name', '.orb-gloss']) {
+        const src = from.querySelector<HTMLElement>(part);
+        const dst = copy.querySelector<HTMLElement>(part);
+        if (src && dst) {
+          const cs = getComputedStyle(src);
+          dst.style.fontSize = cs.fontSize;
+          dst.style.letterSpacing = cs.letterSpacing;
+        }
+      }
+
+      Object.assign(copy.style, {
+        left: `${a.left}px`,
+        top: `${a.top}px`,
+        width: `${a.width}px`,
+        height: `${a.height}px`,
+        padding: `${a.width * 0.12}px`,
+      });
+      copy.style.setProperty('--orb', `${a.width}px`);
+      copy.style.setProperty('--orb-ground', getComputedStyle(document.body).backgroundColor);
+      document.body.appendChild(copy);
+
+      const k = b.width / a.width;
+
+      // Landing in the panel: size its words to what the copy will carry
+      // there, so nothing jumps when the copy hands over.
+      if (to.hasAttribute('data-landed')) {
+        for (const part of ['.orb-name', '.orb-gloss']) {
+          const src = from.querySelector<HTMLElement>(part);
+          const dst = to.querySelector<HTMLElement>(part);
+          if (src && dst) dst.style.fontSize = `${parseFloat(getComputedStyle(src).fontSize) * k}px`;
+        }
+      }
+      const anim = copy.animate(
+        [
+          { transform: 'translate(0, 0) scale(1)' },
+          { transform: `translate(${b.left - a.left}px, ${b.top - a.top}px) scale(${k})` },
+        ],
+        { duration: FLIGHT, easing: 'cubic-bezier(0.65, 0, 0.25, 1)', fill: 'forwards' }
+      );
+      flights.set(id, anim);
+      anim.onfinish = () => {
+        flights.delete(id);
+        done();
+        requestAnimationFrame(() => copy.remove());
+      };
+    };
+
+    let current = 'intro';
+
     const show = (id: string) => {
+      if (id === current) return;
+      const prev = current;
+      current = id;
+
+      // The one that was out goes home first — measured before its view
+      // fades, from where it sat in the panel.
+      if (prev !== 'intro') {
+        const back = landed(prev);
+        const home = vertex(prev);
+        back.classList.add('is-arriving');
+        fly(prev, back, home, () => home.classList.remove('is-away'));
+      }
+
       for (const v of views) v.classList.toggle('is-shown', v.dataset.view === id);
       for (const o of orbs) o.setAttribute('aria-pressed', String(o.dataset.orb === id));
-      if (id !== 'intro') root.classList.add('has-opened');
+      root.classList.toggle('is-open', id !== 'intro');
+
+      if (id !== 'intro') {
+        root.classList.add('has-opened');
+        const out = vertex(id);
+        const seat = landed(id);
+        out.classList.add('is-away');
+        seat.classList.add('is-arriving');
+        fly(id, out, seat, () => seat.classList.remove('is-arriving'));
+      }
 
       // On a phone the panel sits below all three bubbles, so a press near
       // the top would change text the reader cannot see.
       const r = panel.getBoundingClientRect();
       if (r.top > window.innerHeight * 0.85 || r.bottom < 0) {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+        panel.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'nearest' });
       }
     };
 
     for (const o of orbs) {
       o.addEventListener('click', () => {
-        const open = o.getAttribute('aria-pressed') === 'true';
-        show(open ? 'intro' : (o.dataset.orb as string));
+        show(o.getAttribute('aria-pressed') === 'true' ? 'intro' : (o.dataset.orb as string));
       });
     }
 
     for (const c of root.querySelectorAll<HTMLButtonElement>('[data-close]')) {
       c.addEventListener('click', () => {
-        const was = orbs.find((o) => o.getAttribute('aria-pressed') === 'true');
+        const was = current;
         show('intro');
-        was?.focus();
+        if (was !== 'intro') vertex(was).focus({ preventScroll: true });
       });
     }
 
     root.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && orbs.some((o) => o.getAttribute('aria-pressed') === 'true')) {
-        show('intro');
-      }
+      if (e.key === 'Escape' && current !== 'intro') show('intro');
     });
   }
 </script>
