@@ -419,6 +419,13 @@ const inSection = (item: (typeof nav)[number]) =>
     visibility: visible;
   }
 
+  /* With scripting, the row starts where its tab starts (--start, measured),
+     pulled back only as far as it must to stay inside the window. */
+  .sub.is-aligned {
+    justify-content: flex-start;
+    padding-left: var(--start);
+  }
+
   .sub a {
     display: inline-flex;
     padding: 0.35rem 0;
@@ -827,6 +834,30 @@ const inSection = (item: (typeof nav)[number]) =>
 </style>
 
 <script>
+  // Line each list's row up under its tab.
+  const bar = document.querySelector<HTMLElement>('.nav-bar');
+  const alignRows = () => {
+    if (!bar) return;
+    const b = bar.getBoundingClientRect();
+    for (const item of document.querySelectorAll<HTMLElement>('.has-sub')) {
+      const tab = item.querySelector<HTMLElement>(':scope > a');
+      const row = item.querySelector<HTMLElement>(':scope > .sub');
+      const links = row ? [...row.querySelectorAll<HTMLElement>('a')] : [];
+      if (!tab || !row || !links.length || !tab.offsetParent) continue;
+      row.classList.remove('is-aligned');
+      const cs = getComputedStyle(row);
+      const pad = parseFloat(cs.paddingRight);
+      const width = links[links.length - 1].getBoundingClientRect().right - links[0].getBoundingClientRect().left;
+      const tabLeft = tab.getBoundingClientRect().left - b.left;
+      const start = Math.max(pad, Math.min(tabLeft, b.width - pad - width));
+      row.style.setProperty('--start', `${start}px`);
+      row.classList.add('is-aligned');
+    }
+  };
+  alignRows();
+  window.addEventListener('resize', alignRows);
+  document.fonts?.ready.then(alignRows);
+
   const panel = document.querySelector<HTMLElement>('[data-menu]');
   const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
   const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
