@@ -683,7 +683,9 @@ const AT = [
 
     /** 0..1 progress of the wave now passing, or -1 for none. */
     const progress = (p: Pool, now: number) => {
-      if (now - p.clickAt < CLICK_RUN) return (now - p.clickAt) / CLICK_RUN;
+      // A click starts the wave already under way, so the image answers
+      // the touch at once rather than after the front has gathered.
+      if (now - p.clickAt < CLICK_RUN) return 0.24 + 0.76 * ((now - p.clickAt) / CLICK_RUN);
       const a = p.ring;
       if (!a || a.playState !== 'running' || a.currentTime == null) return -1;
       const delay = Number(a.effect?.getTiming().delay ?? 0);
