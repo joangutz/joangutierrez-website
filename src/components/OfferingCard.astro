@@ -70,6 +70,9 @@ const id = offering.id;
           <h2 class="back-title">{o.title}</h2>
         </div>
         <button type="button" class="turn turn-back" data-turn="close">
+          <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
+            <path d="M16 5 H1.5 M5.5 1 L1.5 5 L5.5 9" />
+          </svg>
           <span>Back</span>
         </button>
       </div>
@@ -418,6 +421,11 @@ const id = offering.id;
   .turn:hover .turn-arrow,
   .turn:focus-visible .turn-arrow {
     translate: 3px 0;
+  }
+
+  .turn-back:hover .turn-arrow,
+  .turn-back:focus-visible .turn-arrow {
+    translate: -3px 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
