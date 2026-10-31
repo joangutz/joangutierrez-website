@@ -23,11 +23,12 @@ export const site = {
   person: 'Joan Gutiérrez',
   tagline: 'Somatic education delivered with artistry for vibrant health',
   place: 'Chicago and beyond',
-  description:
-    'Ma Somatrix — somatic education delivered with artistry for vibrant health. In person in Chicago, online internationally, open to travel.',
+  // Joan's own line, so the description search engines show is in her words.
+  description: 'Somatic education delivered with artistry for vibrant health',
+  // Exactly as Joan wrote her "WHERE" list.
   locations: [
-    { place: 'Chicago, IL', mode: 'In person' },
-    { place: 'Internationally', mode: 'Online' },
+    { place: 'Chicago, IL', mode: 'in-person' },
+    { place: 'Internationally', mode: 'online' },
     { place: 'Open to travel', mode: '' },
   ],
 } as const;
@@ -37,7 +38,8 @@ export const booking = {
   calLink: 'joan.gutierrez/20min',
   url: 'https://cal.com/joan.gutierrez/20min',
   duration: '20 minutes',
-  label: 'Book a free consultation',
+  // Joan's wording, from her original site's navigation.
+  label: 'Book a Complimentary Call',
 } as const;
 
 /**
@@ -89,7 +91,7 @@ export const form = {
  */
 export const sound = {
   file: null as string | null,
-  credit: 'Soundscape by Stu Pender',
+  credit: 'Stu Pender',
 } as const;
 
 export const contact = {
@@ -122,7 +124,7 @@ export const nav: readonly NavItem[] = [
     label: 'Work with me',
     children: [
       { href: '/work-with-me/#one-to-one', label: '1:1 Sessions' },
-      { href: '/work-with-me/this-very-body/', label: 'This Very Body Program — waitlist' },
+      { href: '/work-with-me/this-very-body/', label: 'This Very Body Program (waitlist)' },
       { href: '/work-with-me/happenings/', label: 'Happenings: Relational' },
     ],
   },
@@ -140,79 +142,84 @@ export const nav: readonly NavItem[] = [
 ];
 
 /**
- * Ma. Soma. Matrix — the sacred process of embodiment.
+ * Ma. Soma. Matrix — Joan's text, exactly as she wrote it.
  *
- * Each one carries two faces: the word and its one-line reading, which is
- * what the figure shows at rest, and the etymology underneath, which is what
- * a bubble gives up when you hover, focus or tap it. Order is the order of
- * the process: source, then space, then body.
+ * Each realm carries its word, its one-line reading from her diagram, and
+ * her definition in full. The figure shows the word and reading; the
+ * definition opens in the panel beside it. The layout bends to fit the
+ * words: an earlier version cut the definitions down to fit inside the
+ * bubbles, which put words in her mouth.
+ *
+ * Order is the order of her diagram: source, then space, then body.
  */
 export const realms = [
   {
     id: 'matrix',
     name: 'Matrix',
     gloss: 'The Source',
-    origin: 'Latin · matrīcis, from mater',
-    detail:
-      'The womb of potential — an origin point from which new life develops and takes form.',
+    paragraphs: [
+      'Matrix matrīcis : of Latin origin, derived from mater, meaning mother.',
+      'Speaks of the womb of potential / of the mother source. An origin point from which new life originates, develops or takes form.',
+    ],
   },
   {
     id: 'ma',
     name: 'Ma',
     gloss: 'The Space',
-    origin: 'Japanese · 間, the sun within a gate',
-    detail:
-      'Pause, silence, breath, fertile void — the openness in which new meaning can form.',
+    paragraphs: [
+      'MA 間 : of Japanese origin, combines the character for gate 門 with the character for sun 日.',
+      'Depicts the warm light of the sun pouring through the space between an open doorway.',
+      'Ma is interpreted as pause, silence, stillness, breath, and fertile void; a generative openness that delves into space-time relationships. A force that opens up and allows for the creation of new relationships and meanings.',
+    ],
   },
   {
     id: 'soma',
     name: 'Soma',
     gloss: 'The Body',
-    origin: 'Greek · σῶμα, the body',
-    detail:
-      'The physical body of a living organism, as distinct from mind, soul or spirit.',
+    paragraphs: [
+      'Soma σῶμα : of ancient Greek origin, translates to body.',
+      'Specifically the physical body of an organism as distinguished from the mind, the soul, or the spirit.',
+    ],
   },
 ] as const;
 
 /**
- * Begin Here — the five ways in, in the order Joan wants them met.
- *
- * Two of them have no written detail yet, so they carry `pending` and link to
- * a page that says plainly that it is coming rather than to an empty one.
+ * Begin Here — the five, in the order Joan listed them, with only the words
+ * she wrote beside each name: "(waitlist)" and "(free monthly gathering)".
  */
 export const beginHere = [
   {
     href: '/work-with-me/#one-to-one',
     title: '1:1 Sessions',
-    note: 'Three-month study',
+    note: '',
     collage: 'erotic-embodiment.jpg',
     register: 'plumstone',
   },
   {
     href: '/work-with-me/this-very-body/',
     title: 'This Very Body Program',
-    note: 'Waitlist open',
+    note: 'waitlist',
     collage: 'desire-mapping.jpg',
     register: 'cochineal',
   },
   {
     href: '/work-with-me/#liberate-the-pelvis',
     title: 'Liberate the Pelvis',
-    note: 'Scar tissue care',
+    note: '',
     collage: 'scar-tissue.jpg',
     register: 'brick',
   },
   {
     href: '/work-with-me/happenings/',
     title: 'Relational Integrity Labs',
-    note: 'In a group',
+    note: '',
     collage: 'all-in-one.jpg',
     register: 'clay',
   },
   {
     href: '/work-with-me/happenings/#spine-society',
     title: 'Spine Society',
-    note: 'Free, monthly',
+    note: 'free monthly gathering',
     collage: 'roots-territories.jpg',
     register: 'plumstone',
   },

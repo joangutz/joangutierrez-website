@@ -40,12 +40,11 @@ const id = offering.id;
 
       <div class="front-text">
         <span class="label">{o.container}</span>
-        <p class="front-teaser">{o.teaser}</p>
 
         <div class="front-foot">
           <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
             <Vessel size="20px" form="egg" class="turn-mark" />
-            <span>What this includes</span>
+            <span>Includes</span>
           </button>
         </div>
       </div>
@@ -65,7 +64,7 @@ const id = offering.id;
 
       <div class="panels">
         <div class="panel panel-left">
-          <span class="panel-label">What you get</span>
+          <span class="panel-label">Includes</span>
           <ul class="includes">
             {o.includes.map((item) => <li>{item}</li>)}
           </ul>
@@ -73,7 +72,7 @@ const id = offering.id;
           {
             o.entails && (
               <>
-                <span class="panel-label panel-label-2">What it entails</span>
+                <span class="panel-label panel-label-2">Entails</span>
                 <ul class="entails">
                   {o.entails.map((e) => (
                     <li>
@@ -101,11 +100,6 @@ const id = offering.id;
         </div>
       </div>
 
-      {/* Every number lives in "What it costs" — one place to compare, so a
-          card never has to be turned to learn a price. */}
-      <div class="back-foot">
-        <a class="back-link" href="#prices">See what it costs</a>
-      </div>
     </div>
   </div>
 </article>
@@ -185,13 +179,6 @@ const id = offering.id;
     gap: 0.6rem;
   }
 
-  .front-teaser {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--color-ink-2);
-    max-width: 34ch;
-  }
 
   .front-foot {
     margin-top: auto;
@@ -289,18 +276,7 @@ const id = offering.id;
     margin-bottom: 0;
   }
 
-  .back-foot {
-    border-top: 1px solid var(--rule);
-    padding-top: 1.25rem;
-  }
 
-  .back-link {
-    font-family: var(--font-label);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    text-decoration-color: var(--color-quick);
-  }
 
   /* ---- The control ---- */
   .turn {

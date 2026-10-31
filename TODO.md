@@ -47,7 +47,7 @@ on everywhere at once.
    - Home, the gift section (currently a link to the gift page instead)
    - `/resource/gift/`, which currently falls back to an email link
    - Work with me, after the price grid
-   - Begin, below the booking
+   - Begin, below the booking button
    - the footer of every page, compact
 5. One check: the site's forms submit the field `email_address`, Kit's
    standard. If your embed uses a different name, change it in
@@ -71,8 +71,8 @@ but it asks more of the applicant and loses anyone whose device has no mail
 app set up — so this one is worth ten minutes.
 
 The form appears on **Work with me** (for 1:1) and on **This Very Body**
-(for the waitlist). The questions are in one array at the top of
-`src/components/ApplicationForm.astro` — change them freely.
+(for the waitlist). It asks only for name, email, pronouns, location and a
+message; the questions you want to ask are in `WRITING.md`, item 4.
 
 ## 4 · The soundscape
 
@@ -87,22 +87,11 @@ bar, off by default, fades in and out, and remembers the choice.
 
 ---
 
-## 5 · The writing you listed as yours
+## 5 · Writing — see WRITING.md
 
-Each of these has a page built and waiting, marked `TODO-JOAN` in the file:
-
-| What | Where it goes |
-| --- | --- |
-| **This Very Body** — the programme description | `src/pages/work-with-me/this-very-body.astro` |
-| **Relational Integrity Labs** — description, dates | `src/pages/work-with-me/happenings.astro` |
-| **Spine Society** — description, dates | same file, second block |
-| **Erotic Embodiment weekly class** | not placed yet — tell me where it belongs and I'll build it |
-| **1:1 sessions**: who it's for / what to expect / what may be explored, short–medium–long | `content/offerings/one-to-one.md` — the long form is already there; the short and medium are not |
-| **Inspiration** list | `content/pages/inspiration.md` — plain markdown, example shape in the comment |
-| **Library** list | `content/pages/library.md` — same |
-
-Every one of those pages says truthfully that the thing is coming rather
-than standing empty or carrying words I made up for you.
+Everything that needs your words is in one place: `WRITING.md`, with a few
+questions for each to start from. Every sentence now on the site is yours;
+where there were sentences I had written for you, they are gone.
 
 ## 6 · The name — settled
 
@@ -112,23 +101,7 @@ yet is the domain — see item 1.
 
 ## 7 · (Settled) The wordmark reads MA at the left, SOMATRIX at the right
 
-## 8 · FAQ answers — four questions need your words
-
-`content/sessions/sessions.md` holds four answers marked `todo: true` that
-will not render until you write them:
-
-- What do I wear? Do I undress?
-- Is what happens in sessions confidential?
-- How do online sessions work?
-- What is your cancellation policy?
-
-Replace each `a:` and delete its `todo: true` line.
-
-## 9 · For Clinicians — approve or rewrite
-
-`content/pages/for-clinicians.md` is the one page not in your words, and it
-makes scope-of-practice statements publicly. Read it; edit freely; then
-delete the DRAFT comment at the top.
+## 8 · (Moved) Common questions and For Clinicians — see WRITING.md
 
 ## 10 · Two offerings I archived rather than deleted
 

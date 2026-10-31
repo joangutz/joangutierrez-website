@@ -1,24 +1,17 @@
 ---
 eyebrow: Resource
 title: Library
-lede: What to read, watch and practise between sessions.
-description: Books, papers and practices recommended by Ma Somatrix — reading for body literacy, pelvic care, somatic sexology and embodiment.
+description: Somatic education delivered with artistry for vibrant health
 ---
 
 <!--
-TODO-JOAN: this is yours to compile. Write it as an ordinary list. Example of
-the shape:
+TODO-JOAN: this page is yours to fill. Anything you write below this comment
+appears on the page, as ordinary markdown. A list looks like this:
 
-## Books
+## A heading
 
-- **The Erotic Mind** — Jack Morin. Where the three realms come from.
-- **Sister Outsider** — Audre Lorde. The essay on the uses of the erotic.
+- **A name** — a line about it.
+- **Another name** — another line.
 
-## Papers and talks
-
-- …
-
-Delete this comment when you add the real list.
+Until you write something, the page shows only its title.
 -->
-
-This shelf is being filled. If there is something you are looking for in the meantime, ask me — I would rather point you at the right thing than let you guess.

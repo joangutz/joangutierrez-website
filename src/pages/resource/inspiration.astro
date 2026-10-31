@@ -1,9 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import Link from '../../components/Link.astro';
 import { getEntry, render } from 'astro:content';
-import { contact, withBase } from '../../site';
 
 /**
  * The list itself is Joan's to compile — the whole page body comes from
@@ -14,44 +12,23 @@ const entry = await getEntry('pages', 'inspiration');
 if (!entry) throw new Error('Missing /content/pages/inspiration.md');
 const { Content } = await render(entry);
 const p = entry.data;
+
+// An empty section would still keep its padding, so it only renders once
+// there is something in the file besides the instructions comment.
+const hasBody = (entry.body ?? '').replace(/<!--[\s\S]*?-->/g, '').trim().length > 0;
 ---
 
 <Base title={p.title} description={p.description}>
-  <PageBanner eyebrow={p.eyebrow} title={p.title} lede={p.lede} image="inspiration.jpg" tinted />
+  <PageBanner eyebrow={p.eyebrow} title={p.title} image="inspiration.jpg" tinted />
 
-  <section class="band section">
-    <div class="col prose">
-      <Content />
-    </div>
-  </section>
+  {
+    hasBody && (
+      <section class="band section">
+        <div class="col prose">
+          <Content />
+        </div>
+      </section>
+    )
+  }
 
-  <section class="band section next">
-    <div class="col">
-      <span class="label">Elsewhere</span>
-      <ul class="plain">
-        <li><Link href={withBase('/resource/library/')}>The library</Link></li>
-        <li><Link href={withBase('/resource/gift/')}>The Red Rose Visualization</Link></li>
-        <li><Link href={`mailto:${contact.email}`}>Ask me something</Link></li>
-      </ul>
-    </div>
-  </section>
 </Base>
-
-<style>
-  .next {
-    border-top: 1px solid var(--rule-soft);
-  }
-
-  .plain {
-    list-style: none;
-    margin: 1.25rem 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .plain a {
-    text-decoration-color: var(--color-quick);
-  }
-</style>

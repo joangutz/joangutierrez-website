@@ -1,24 +1,17 @@
 ---
-# All prose here is Joan's own, carried across unaltered from /content/_source/.
+# Every line here is Joan's own, carried across unaltered from
+# /content/_source/ — nothing is written for her. Questions she may want to
+# answer are in WRITING.md rather than here.
 # The "Note on all plans" is verbatim and must stay that way — it is a
 # professional boundary statement, not a disclaimer.
 
-eyebrow: Work with me
-title: Five ways in, each with a shape
+title: Work with me
 lede: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
-description: Ma Somatrix — the five ways into this work, what each includes, why the approach works, and what it costs. Chicago, online, and open to travel.
-
-cards:
-  title: The offerings
-  body: Turn a card over for what it includes and why it runs the way it runs.
-
-prices:
-  title: What it costs
-  body: Every offering, every duration, in one place. The price is the way in — each one starts with the same free conversation.
+description: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
 
 arc:
   title: What a practice session actually looks like
-  intro: 'No mystery, no guesswork. Every 1:1 session follows a clear arc:'
+  intro: 'No mystery, no guesswork. Every Erotic Embodiment session follows a clear arc:'
   steps:
     - lead: An intention
       rest: ', spoken aloud — one or two sentences naming what you''re here to explore.'
@@ -52,35 +45,4 @@ note:
     - I am a somatic sex educator, an artist, and a student of Zen Shiatsu. I am not a therapist nor medical provider. I don't diagnose or treat; I teach practices you carry out in your own body, at your own pace. These plans complement (and pair beautifully with) psychotherapy, pelvic floor physical therapy, licensed therapeutic bodywork, and medical care.
     - Each month ends the way every session ends — with time to savor, reflect, and celebrate somatic openings.
 
-faq:
-  # Assembled from Joan's existing copy only. Entries with todo: true still
-  # need her words and are never rendered — they are the visible gap list.
-  - q: Is this therapy?
-    a: No. I am a somatic sex educator, an artist, and a student of Zen Shiatsu — not a therapist nor medical provider. I don't diagnose or treat; I teach practices you carry out in your own body, at your own pace. Many clients do this work alongside therapy — the two complement each other beautifully.
-  - q: Is touch involved?
-    a: Sessions are experiential and consent-based, shaped by movement, breath, awareness, dialogue, and touch. Genital touch is welcome in this work, and it's never required — and nothing proceeds without your clear agreement.
-  - q: What actually happens in a session?
-    a: Every session follows a clear arc — an intention spoken aloud, a clear beginning and end, breath, and quiet at the close so the experience installs rather than evaporates. The nine steps are laid out above.
-  - q: Do I need to be experienced, confident, or comfortable to begin?
-    a: You don't need to be "good at" pleasure to begin. You don't need to be orgasmic, confident, or comfortable. This work is entirely client-led, and we start wherever you are. You need only curiosity and a willingness to practice.
-  - q: What do I wear? Do I undress?
-    a: TODO — needs Joan's words.
-    todo: true
-  - q: Is what happens in sessions confidential?
-    a: TODO — needs Joan's words.
-    todo: true
-  - q: How do online sessions work?
-    a: TODO — needs Joan's words.
-    todo: true
-  - q: What is your cancellation policy?
-    a: TODO — needs Joan's words.
-    todo: true
-
-close:
-  title: Begin with a conversation
-  body: Twenty minutes, free. We talk about where you are, what you're longing for, and whether this work is the right fit.
-
-clinicians:
-  body: If you are a therapist or a pelvic floor physical therapist considering a referral, there is a page written for you.
-  link: Read the page for clinicians
 ---

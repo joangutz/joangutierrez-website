@@ -6,7 +6,6 @@ register: clay
 combined: true
 collage: all-in-one.jpg
 alt: Collage — a seated figure in grey with a halved watermelon and melon laid across the body.
-teaser: The whole ecosystem, re-weighed each month to meet what actually reveals itself.
 prices:
   - label: Monthly
     amount: 780

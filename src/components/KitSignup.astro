@@ -22,9 +22,11 @@ interface Props {
   class?: string;
 }
 
+// Joan's title and description for the gift — no sentence here is written
+// for her. The button and the field label are the only interface words.
 const {
   heading = kit.freebie,
-  body = 'A guided audio meditation, free. Try a small piece of this work alone, at your own pace — it arrives in your inbox.',
+  body = kit.freebieBody,
   compact = false,
   class: className = '',
 } = Astro.props;
@@ -58,10 +60,9 @@ const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
             placeholder="you@example.com"
             required
           />
-          <button class="kit-submit" type="submit">Send the meditation</button>
+          <button class="kit-submit" type="submit">Send</button>
         </div>
       </form>
-      <p class="kit-note">Free. Unsubscribe any time.</p>
     </div>
   )
 }

@@ -3,10 +3,8 @@ import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
 import ChapterRail from '../components/ChapterRail.astro';
 import Portrait from '../components/Portrait.astro';
-import Link from '../components/Link.astro';
-import PhotoGround from '../components/PhotoGround.astro';
+import GetInTouch from '../components/GetInTouch.astro';
 import { getEntry, render } from 'astro:content';
-import { booking, contact, withBase } from '../site';
 
 /**
  * One page about Joan, and only that.
@@ -45,22 +43,7 @@ const p = entry.data;
     </div>
   </section>
 
-  <section class="close on-dark has-ground">
-    <PhotoGround src="about-close.jpg" />
-    <div class="band section">
-      <div class="col">
-        <h2 class="close-title">Allow me to accompany you.</h2>
-        <p class="close-body">
-          Twenty minutes, free. We talk about where you are, what you're longing for, and
-          whether this work is the right fit.
-        </p>
-        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
-        <p class="close-alt">
-          Or write to me: <Link href={`mailto:${contact.email}`}>{contact.email}</Link>
-        </p>
-      </div>
-    </div>
-  </section>
+  <GetInTouch image="about-close.jpg" />
 </Base>
 
 <style>
@@ -93,30 +76,5 @@ const p = entry.data;
   .about-prose :global(blockquote) {
     font-size: clamp(1.15rem, 2.2vw, 1.4rem);
     line-height: 1.5;
-  }
-
-  .close {
-    background: var(--color-plumstone);
-    color: var(--color-bract);
-  }
-
-  .close-title {
-    font-size: clamp(1.6rem, 3.6vw, 2.4rem);
-    line-height: 1.12;
-  }
-
-  .close-body {
-    margin: 1.25rem 0 2.25rem;
-    max-width: 42ch;
-  }
-
-  .close-alt {
-    margin: 1.5rem 0 0;
-    font-size: 0.95rem;
-    color: rgb(238 212 203 / 0.8);
-  }
-
-  .close-alt a {
-    text-decoration-color: var(--color-quick);
   }
 </style>

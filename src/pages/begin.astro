@@ -3,108 +3,66 @@ import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import KitSignup from '../components/KitSignup.astro';
 import PageBanner from '../components/PageBanner.astro';
-import { contact, booking, kit, withBase } from '../site';
+import { contact, booking, kit } from '../site';
 ---
 
-<Base
-  title="Begin"
-  description="Book a free twenty-minute consultation with Joan at Ma Somatrix. Chicago, online, open to travel."
->
+{/* Joan's "Get in Touch" section from her original site, unaltered: its
+    heading, its two sentences, its sign-off. The booking label is hers too.
+    Nothing on this page is written for her. */}
+<Base title="Begin" description="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.">
   <PageBanner
     eyebrow="Begin"
-    title="Twenty minutes, free, no obligation."
-    lede="We talk about where you are, what you're longing for, and whether this work is the right fit. If it isn't, I'll say so."
+    title="Get in Touch"
+    lede="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too."
     image="begin.jpg"
   >
-    {/* A link rather than an embed. Cal.com renders in its own white, which
-        cannot be reached across an origin boundary and read as a hole cut in
-        the page. A button that leaves is honest about where you are going and
-        loads no third-party script on a page most people only pass through. */}
+    {/* A link rather than an embed: Cal.com renders in its own white, which
+        cannot be reached across an origin boundary. */}
     <Link variant="action" href={booking.url}>{booking.label}</Link>
-    <p class="booking-note">Opens cal.com — {booking.duration}, free, no obligation.</p>
   </PageBanner>
 
-  {/* The not-yet fallback. Renders nothing until the Kit form exists, so the
-      section has to go with it — left in, it was 224px of empty page. */}
   {
     kit.formAction && (
       <section class="band section">
         <div class="col">
-          <KitSignup
-            heading="Not ready to book?"
-            body="Begin alone instead. The Red Rose Visualization is a guided audio practice — free, private, at your own pace. It arrives in your inbox."
-          />
+          <KitSignup />
         </div>
       </section>
     )
   }
 
-  <section class="band section other">
-    <div class="wide other-grid">
-      <div>
-        <span class="label">Another way</span>
-        <ul class="plain">
-          <li><Link href={contact.smsHref}>Text {contact.smsDisplay}</Link></li>
-          <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
-          <li><Link href={contact.substack}>The seasonal letter</Link></li>
-        </ul>
-        <p class="curiosity">Curiosity is welcomed. Collaborations are too.</p>
-      </div>
-
-      {/* No "where we can work" column: the footer, one scroll below, says
-          exactly the same three lines. */}
-      <div>
-        <span class="label">If you're a clinician</span>
-        <p class="clin">
-          There is a page written for therapists and pelvic floor physical therapists.
-          <Link href={withBase('/for-clinicians/')}>Read it here</Link>.
-        </p>
-      </div>
+  <section class="band section">
+    <div class="col">
+      <ul class="plain">
+        <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
+        <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
+        <li><Link href={contact.substack}>Substack</Link></li>
+      </ul>
+      <p class="signoff">Cheers to being alive.</p>
     </div>
   </section>
 </Base>
 
 <style>
-  .booking-note {
-    margin: 1rem 0 0;
-    font-size: 0.92rem;
-    color: rgb(238 212 203 / 0.78);
-  }
-
-  .other-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 2.5rem;
-  }
-
-  .other-grid .label {
-    margin-bottom: 1rem;
-  }
-
   .plain {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    font-size: 0.98rem;
+    gap: 0.7rem;
+    font-size: 1.05rem;
   }
 
   .plain a {
     text-decoration-color: var(--color-quick);
   }
 
-  .curiosity,
-  .clin {
-    margin: 1.25rem 0 0;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--color-ink-2);
-    max-width: 30ch;
-  }
-
-  .clin a {
-    text-decoration-color: var(--color-quick);
+  .signoff {
+    margin: 2rem 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+    font-weight: 300;
+    line-height: 1.3;
   }
 </style>

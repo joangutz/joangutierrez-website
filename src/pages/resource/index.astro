@@ -2,43 +2,19 @@
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import Collage from '../../components/Collage.astro';
-import { withBase, kit } from '../../site';
+import { withBase, kit, site } from '../../site';
 
+// The names are Joan's (her navigation); the gift's title and line are hers
+// too. Inspiration and Library carry no description until she writes one.
 const items = [
-  {
-    href: '/resource/gift/',
-    label: 'A Gift',
-    title: kit.freebie,
-    line: kit.freebieSub,
-    image: 'rose.jpg',
-  },
-  {
-    href: '/resource/inspiration/',
-    label: 'Inspiration',
-    title: 'What this work comes from',
-    line: 'The teachers, lineages and ideas behind the practice.',
-    image: 'inspiration.jpg',
-  },
-  {
-    href: '/resource/library/',
-    label: 'Library',
-    title: 'Books, papers, practices',
-    line: 'What to read, watch and try between sessions.',
-    image: 'library.jpg',
-  },
+  { href: '/resource/gift/', label: 'A Gift', title: kit.freebie, line: kit.freebieSub, image: 'rose.jpg' },
+  { href: '/resource/inspiration/', label: '', title: 'Inspiration', line: '', image: 'inspiration.jpg' },
+  { href: '/resource/library/', label: '', title: 'Library', line: '', image: 'library.jpg' },
 ];
 ---
 
-<Base
-  title="Resource"
-  description="A gift, the inspiration behind this work, and a library of what to read and practise between sessions."
->
-  <PageBanner
-    eyebrow="Resource"
-    title="Take something with you."
-    lede="Three ways to carry this work on your own: a gift to begin with, where the practice comes from, and what to read next."
-    image="resource.jpg"
-  />
+<Base title="Resource" description={site.description}>
+  <PageBanner title="Resource" image="resource.jpg" />
 
   <section class="band section">
     <div class="wide">
@@ -50,9 +26,9 @@ const items = [
                 <span class="res-art">
                   <Collage src={it.image} alt="" register="cochineal" sizes="(max-width: 760px) 92vw, 30vw" />
                 </span>
-                <span class="label">{it.label}</span>
+                {it.label && <span class="label">{it.label}</span>}
                 <span class="res-title">{it.title}</span>
-                <span class="res-line">{it.line}</span>
+                {it.line && <span class="res-line">{it.line}</span>}
               </a>
             </li>
           ))

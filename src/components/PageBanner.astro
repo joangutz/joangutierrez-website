@@ -14,8 +14,9 @@ import PhotoGround from './PhotoGround.astro';
  * is hidden from screen readers; the heading says where you are.
  */
 interface Props {
-  /** The page's name, in the small letterspaced form. */
-  eyebrow: string;
+  /** The section's name, in the small letterspaced form. Optional — a page
+      whose title is already its name needs no second label. */
+  eyebrow?: string;
   title: string;
   lede?: string;
   /** A filename in /assets/photos/ or /assets/collage/. */
@@ -43,7 +44,7 @@ const {
   <PhotoGround src={image} from={from} tinted={tinted} />
   <div class="band">
     <div class="col banner-text">
-      <span class="label">{eyebrow}</span>
+      {eyebrow && <span class="label">{eyebrow}</span>}
       <h1 class="page-title">{title}</h1>
       {lede && <p class="lede banner-lede">{lede}</p>}
       {/* A page whose whole point is one action can put it here, on the

@@ -3,14 +3,13 @@ import Base from '../../layouts/Base.astro';
 import ChapterRail from '../../components/ChapterRail.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import ApplicationForm from '../../components/ApplicationForm.astro';
-import PhotoGround from '../../components/PhotoGround.astro';
-import Link from '../../components/Link.astro';
+import GetInTouch from '../../components/GetInTouch.astro';
 import OfferingCard from '../../components/OfferingCard.astro';
 import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
 import KitSignup from '../../components/KitSignup.astro';
 import Testimonials from '../../components/Testimonials.astro';
-import { withBase, contact, booking, beginHere, kit } from '../../site';
+import { withBase, beginHere, kit } from '../../site';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
@@ -43,17 +42,14 @@ const motifs = [
 <Base title={s.title} description={s.description}>
   <ChapterRail />
 
-  <PageBanner eyebrow={s.eyebrow} title={s.title} lede={s.lede} image="work-with-me.jpg" />
+  <PageBanner title={s.title} lede={s.lede} image="work-with-me.jpg" />
 
   <!-- The cards carry depth. -->
   <section class="band section">
     <div class="wide">
-      <span class="label">{s.cards.title}</span>
-      <p class="section-note">{s.cards.body}</p>
-
       {/* The four registers read as one range — until now they only ever
           appeared separately, one per offering. Doubles as a key. */}
-      <ol class="range" aria-label="The five ways in">
+      <ol class="range">
         {
           beginHere.map((o) => (
             <li class={`range-step reg-${o.register}`}>
@@ -72,13 +68,7 @@ const motifs = [
   <!-- The price grid carries comparison. A different job, kept separate. -->
   <section class="band section">
     <div class="wide">
-      <span class="label">{s.prices.title}</span>
-      <p class="section-note">{s.prices.body}</p>
       <PriceGrid />
-      <p class="trust">
-        Certified in Somatic Sexological Bodywork · practicing under the
-        <Link href={contact.ethics}>ACSB code of ethics</Link> · an educator, not a therapist.
-      </p>
 
       {/* Other people's experience, at the moment a price has just been read. */}
       {/* Both of these render nothing until their content exists, and an
@@ -92,10 +82,7 @@ const motifs = [
 
       {kit.formAction && (
         <div class="not-ready">
-          <KitSignup
-            heading="Not ready?"
-            body="Begin with the Red Rose Visualization instead — alone, free, at your own pace. It arrives in your inbox."
-          />
+          <KitSignup />
         </div>
       )}
     </div>
@@ -134,23 +121,6 @@ const motifs = [
     </div>
   </section>
 
-  <!-- Common questions — the unasked ones are the bounce reasons. Answers
-       assembled from Joan's own copy; the gaps live in the content file. -->
-  <section class="band section" id="faq">
-    <div class="col">
-      <h2 class="section-title">Common questions</h2>
-      <dl class="faq">
-        {
-          s.faq.filter((f) => !f.todo).map((f) => (
-            <>
-              <dt>{f.q}</dt>
-              <dd>{f.a}</dd>
-            </>
-          ))
-        }
-      </dl>
-    </div>
-  </section>
 
   <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
   <section class="band section">
@@ -167,30 +137,11 @@ const motifs = [
       on the page where someone can put their hand up for it. */}
   <section class="band section apply" id="apply">
     <div class="col">
-      <ApplicationForm
-        subject="1:1 Sessions"
-        heading="Apply"
-        body="For 1:1 work. Tell me as much or as little as you like — what you write comes with you into the free consultation. I read every one of these myself."
-      />
+      <ApplicationForm subject="1:1 Sessions" />
     </div>
   </section>
 
-  <!-- The buying page ends the way every page ends: with a door in, not a
-       sideways exit. The clinicians line is real but demoted to small type. -->
-  <section class="close on-dark has-ground">
-    <PhotoGround src="close-sessions.jpg" />
-    <div class="band section">
-      <div class="col">
-        <h2 class="section-title">{s.close.title}</h2>
-        <p class="close-body">{s.close.body}</p>
-        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
-        <p class="clinicians">
-          {s.clinicians.body}
-          <Link href={withBase('/for-clinicians/')}>{s.clinicians.link}</Link>
-        </p>
-      </div>
-    </div>
-  </section>
+  <GetInTouch image="close-sessions.jpg" />
 </Base>
 
 <style>
@@ -204,11 +155,6 @@ const motifs = [
     letter-spacing: -0.015em;
   }
 
-  .section-note {
-    margin: 1rem 0 2.5rem;
-    max-width: 46ch;
-    color: var(--color-ink-2);
-  }
 
   .range {
     list-style: none;
@@ -358,52 +304,17 @@ const motifs = [
     margin-bottom: 0;
   }
 
-  .trust {
-    margin: 1.25rem 0 0;
-    font-size: 0.88rem;
-    color: var(--color-ink-2);
-  }
 
   .after-prices,
   .not-ready {
     margin-top: clamp(2.5rem, 6vw, 4rem);
   }
 
-  .faq {
-    margin: 2rem 0 0;
-  }
 
-  .faq dt {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.35;
-    margin-top: 2rem;
-  }
 
-  .faq dd {
-    margin: 0.6rem 0 0;
-    line-height: 1.7;
-  }
 
-  .close {
-    background: var(--color-plumstone);
-    color: var(--color-bract);
-  }
 
-  .close-body {
-    margin: 1.25rem 0 2.25rem;
-    max-width: 42ch;
-    color: var(--color-bract);
-  }
 
-  .clinicians {
-    margin: 3rem 0 0;
-    font-size: 0.85rem;
-    /* Deliberately quiet, but not so quiet it fails over a photograph. */
-    color: rgb(238 212 203 / 0.88);
-    max-width: 52ch;
-  }
 
   .arc-intro,
   .arc-after {

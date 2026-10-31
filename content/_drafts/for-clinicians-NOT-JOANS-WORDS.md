@@ -1,3 +1,11 @@
+<!--
+NOT JOAN'S WORDS. This page was drafted for her and published briefly; it was
+taken down because every sentence on it was written by the site's builder,
+not by Joan. It is kept here, unpublished, only as raw material in case she
+wants a page for clinicians and would like something to react to. Nothing in
+/content/_drafts/ is ever rendered.
+-->
+
 ---
 title: For Clinicians
 eyebrow: For clinicians

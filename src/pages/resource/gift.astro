@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import KitSignup from '../../components/KitSignup.astro';
 import Link from '../../components/Link.astro';
-import { kit, contact, withBase } from '../../site';
+import { kit, contact } from '../../site';
 
 /**
  * The gift: the Red Rose Visualization, recorded for Joan's workshop at CPR.
@@ -16,58 +16,28 @@ import { kit, contact, withBase } from '../../site';
 const ready = Boolean(kit.formAction);
 ---
 
-<Base
-  title={kit.freebie}
-  description="A guided meditation held within a custom soundscape by Stu Pender. Free, in your inbox."
->
-  <PageBanner
-    eyebrow="A gift"
-    title={kit.freebie}
-    lede={kit.freebieSub}
-    image="rose.jpg"
-  />
+<Base title={kit.freebie} description={kit.freebieBody}>
+  <PageBanner eyebrow="A Gift" title={kit.freebie} lede={kit.freebieSub} image="rose.jpg" />
 
+  {/* Joan's description, whole. The signup appears once the Kit form
+      exists; until then the only way to ask for the recording is her
+      address, given as itself rather than wrapped in a sentence. */}
   <section class="band section">
     <div class="col">
       <p class="lede gift-lede">{kit.freebieBody}</p>
 
-      <p class="gift-body">
-        Recorded for a workshop at the Chicago Public Radio studios. It asks nothing of
-        you but somewhere to sit and a pair of headphones — a small ritual to settle into
-        stillness and return softened and alive.
-      </p>
-    </div>
-  </section>
-
-  <section class="band section gift-take">
-    <div class="col">
-      {ready ? (
-        <KitSignup heading="Receive it" body="Leave an address and it arrives in your inbox. Free, and you can leave the list whenever you like." />
-      ) : (
-        <>
-          <span class="label">Receive it</span>
-          <p class="gift-hold">
-            The list this arrives on is being set up. Until it is, write to me and I'll
-            send the recording to you myself.
-          </p>
+      <div class="gift-take">
+        {ready ? (
+          <KitSignup heading={kit.freebie} />
+        ) : (
           <Link
             variant="action"
             href={`mailto:${contact.email}?subject=${encodeURIComponent(kit.freebie)}`}
           >
-            Ask for the recording
+            {contact.email}
           </Link>
-        </>
-      )}
-    </div>
-  </section>
-
-  <section class="band section credit-row">
-    <div class="col">
-      <p class="credit-note">
-        Soundscape composed by Stu Pender. Guided by Joan.
-        <Link href={withBase('/work-with-me/')}>See the ways in</Link> when you want more
-        than a recording.
-      </p>
+        )}
+      </div>
     </div>
   </section>
 </Base>
@@ -77,34 +47,7 @@ const ready = Boolean(kit.formAction);
     max-width: 44ch;
   }
 
-  .gift-body {
-    margin-top: 1.75rem;
-    max-width: 48ch;
-  }
-
   .gift-take {
-    border-top: 1px solid var(--rule-soft);
-  }
-
-  .gift-hold {
-    margin: 1.25rem 0 2rem;
-    max-width: 44ch;
-    color: var(--color-ink-2);
-  }
-
-  .credit-row {
-    border-top: 1px solid var(--rule-soft);
-  }
-
-  .credit-note {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.65;
-    color: var(--color-ink-2);
-    max-width: 44ch;
-  }
-
-  .credit-note a {
-    text-decoration-color: var(--color-quick);
+    margin-top: var(--gap-door);
   }
 </style>

@@ -18,8 +18,6 @@ const offerings = defineCollection({
     /** Filename in /assets/collage/. Renders a tinted placeholder until the file exists. */
     collage: z.string(),
     alt: z.string(),
-    /** One line, shown on the resting face of the card. */
-    teaser: z.string(),
     /**
      * True for the offering that combines the others. It is a different kind of
      * thing from the single-focus offerings, so it gets its own hierarchy in
@@ -115,8 +113,7 @@ const home = defineCollection({
     realms: z.object({
       label: z.string(),
       title: z.string(),
-      body: z.string(),
-      coda: z.string(),
+      intro: z.array(z.string()),
     }),
     founder: z.object({
       label: z.string(),
@@ -125,13 +122,7 @@ const home = defineCollection({
       alt: z.string(),
       link: z.string(),
     }),
-    beginHere: z.object({
-      label: z.string(),
-      title: z.string(),
-      body: z.string(),
-      link: z.string(),
-    }),
-    close: z.object({ title: z.string(), body: z.string() }),
+    beginHere: z.object({ label: z.string() }),
   }),
 });
 
@@ -139,12 +130,9 @@ const home = defineCollection({
 const sessionsPage = defineCollection({
   loader: glob({ base: './content/sessions', pattern: '**/*.md' }),
   schema: z.object({
-    eyebrow: z.string(),
     title: z.string(),
     lede: z.string(),
     description: z.string(),
-    cards: z.object({ title: z.string(), body: z.string() }),
-    prices: z.object({ title: z.string(), body: z.string() }),
     arc: z.object({
       title: z.string(),
       intro: z.string(),
@@ -154,16 +142,6 @@ const sessionsPage = defineCollection({
     consent: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
     /** Verbatim scope-of-practice text. A professional boundary, not fine print. */
     note: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
-    /**
-     * Answers assembled from Joan's existing copy only. Entries marked
-     * todo: true are questions that still need her words — they are kept in
-     * the content file as the visible gap list and never rendered.
-     */
-    faq: z.array(
-      z.object({ q: z.string(), a: z.string(), todo: z.boolean().default(false) })
-    ),
-    close: z.object({ title: z.string(), body: z.string() }),
-    clinicians: z.object({ body: z.string(), link: z.string() }),
   }),
 });
 

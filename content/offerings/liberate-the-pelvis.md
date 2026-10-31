@@ -1,13 +1,12 @@
 ---
 title: Liberate the Pelvis
-container: Monthly practice
+container: Monthly Practice
 order: 2
 register: brick
 collage: scar-tissue.jpg
 alt: Collage — pale arms and open hands reaching across a grey ground, holding something small and lit.
-teaser: Your hands, your scar, taught step by step. I teach the practice; the daily tending is yours.
 prices:
-  - label: Monthly practice
+  - label: Monthly Practice
     amount: 580
     note: Payment plans available
 includes:

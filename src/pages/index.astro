@@ -6,7 +6,7 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import KitSignup from '../components/KitSignup.astro';
 import Testimonials from '../components/Testimonials.astro';
-import PhotoGround from '../components/PhotoGround.astro';
+import GetInTouch from '../components/GetInTouch.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { site, booking, kit, beginHere, withBase } from '../site';
 
@@ -115,13 +115,7 @@ const movedAnchors = {
       <span class="label">{h.realms.label}</span>
       <h2 class="section-title">{h.realms.title}</h2>
 
-      <div class="realms-row rise">
-        <Realms />
-        <div class="realms-body">
-          <p>{h.realms.body}</p>
-          <p class="realms-coda">{h.realms.coda}</p>
-        </div>
-      </div>
+      <Realms intro={h.realms.intro} class="realms-row rise" />
     </div>
   </section>
 
@@ -152,9 +146,7 @@ const movedAnchors = {
   <section id="begin-here">
     <div class="band section">
     <div class="wide">
-      <span class="label">{h.beginHere.label}</span>
-      <h2 class="section-title">{h.beginHere.title}</h2>
-      <p class="lede sessions-lede">{h.beginHere.body}</p>
+      <h2 class="label">{h.beginHere.label}</h2>
 
       <ul class="cards rise">
         {
@@ -171,7 +163,7 @@ const movedAnchors = {
                 </span>
                 <span class="card-meta">
                   <span class="card-title">{o.title}</span>
-                  <span class="card-container">{o.note}</span>
+                  {o.note && <span class="card-container">{o.note}</span>}
                 </span>
               </a>
             </li>
@@ -179,7 +171,6 @@ const movedAnchors = {
         }
       </ul>
 
-      <Link variant="door" href={withBase('/work-with-me/')}>{h.beginHere.link}</Link>
     </div>
     </div>
   </section>
@@ -205,19 +196,15 @@ const movedAnchors = {
             hasSignup ? (
               <>
                 <KitSignup heading={kit.freebie} body={kit.freebieBody} />
-                <p class="gift-more">
-                  <Link variant="door" href={withBase('/resource/gift/')}>
-                    About the visualization
-                  </Link>
-                </p>
               </>
             ) : (
               <>
                 <span class="label">A gift</span>
-                <h2 class="section-title">{kit.freebie}</h2>
+                <h2 class="section-title">
+                  <a class="gift-title" href={withBase('/resource/gift/')}>{kit.freebie}</a>
+                </h2>
                 <p class="gift-sub">{kit.freebieSub}</p>
                 <p class="gift-body">{kit.freebieBody}</p>
-                <Link variant="door" href={withBase('/resource/gift/')}>Receive it</Link>
               </>
             )
           }
@@ -229,17 +216,8 @@ const movedAnchors = {
     </div>
   </section>
 
-  <!-- 7 · Begin -->
-  <section class="close on-dark has-ground">
-    <PhotoGround src="close-home.jpg" />
-    <div class="band section">
-      <div class="col">
-        <h2 class="section-title">{h.close.title}</h2>
-        <p class="close-body">{h.close.body}</p>
-        <Link variant="action" href={withBase('/begin/')}>{booking.label}</Link>
-      </div>
-    </div>
-  </section>
+  <!-- 7 · Get in Touch -->
+  <GetInTouch image="close-home.jpg" />
 
   <script define:vars={{ movedAnchors }}>
     var to = movedAnchors[window.location.hash];
@@ -486,38 +464,11 @@ const movedAnchors = {
   }
 
   /* ---- Realms ---- */
-  .realms-row {
-    display: grid;
-    grid-template-columns: minmax(0, 8fr) minmax(0, 5fr);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: center;
+  :global(.realms-row) {
     margin-top: clamp(2.5rem, 6vw, 4rem);
   }
 
-  .realms-body p {
-    margin: 0;
-    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
-    line-height: 1.65;
-    max-width: 34ch;
-  }
-
-  .realms-coda {
-    margin-top: 1.25rem !important;
-    color: var(--color-ink-2);
-  }
-
-  @media (max-width: 880px) {
-    .realms-row {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
   /* ---- Begin here ---- */
-  .sessions-lede {
-    margin: 1.25rem 0 0;
-    max-width: 44ch;
-  }
-
   .cards {
     list-style: none;
     margin: 2.5rem 0 0;
@@ -704,21 +655,14 @@ const movedAnchors = {
     margin-top: var(--gap-door);
   }
 
-  .gift-more {
-    margin: 1.5rem 0 0;
+  .gift-title {
+    text-decoration: none;
   }
 
-  /* ---- Close ---- */
-  /* No top margin: the swell above eases back to the ground colour, and
-     the photograph begins where it ends. */
-  .close {
-    background: var(--color-plumstone);
-    color: var(--color-bract);
-  }
-
-  .close-body {
-    margin: 1.25rem 0 2.25rem;
-    max-width: 42ch;
-    color: var(--color-bract);
+  .gift-title:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-quick);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
   }
 </style>

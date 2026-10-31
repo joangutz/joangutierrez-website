@@ -1,13 +1,12 @@
 ---
 title: 1:1 Sessions
-container: Three-month study
+container: Three-Month Study
 order: 1
 register: plumstone
 collage: erotic-embodiment.jpg
 alt: Collage — a face in profile, cut from grey photograph, with a halved cantaloupe where the body would be.
-teaser: The full study. Three months, six hours a month, a practice map that changes as you do.
 prices:
-  - label: Three-month study
+  - label: Three-Month Study
     amount: 1800
     note: Monthly payment plans available
 includes:

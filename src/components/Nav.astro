@@ -148,14 +148,14 @@ const inSection = (item: (typeof nav)[number]) =>
 
     <div class="menu-foot">
       <div class="menu-col">
-        <span class="menu-label">Reach me</span>
-        <Link href={booking.url}>Book a free consultation</Link>
+        <span class="menu-label">Get in Touch</span>
+        <Link href={booking.url}>{booking.label}</Link>
         <Link href={`mailto:${contact.email}`}>{contact.email}</Link>
       </div>
       <div class="menu-col">
         <span class="menu-label">Where</span>
         {site.locations.map((l) => (
-          <span class="menu-where">{l.mode ? `${l.place} — ${l.mode.toLowerCase()}` : l.place}</span>
+          <span class="menu-where">{l.mode ? `${l.place} — ${l.mode}` : l.place}</span>
         ))}
       </div>
     </div>

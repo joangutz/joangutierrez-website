@@ -1,0 +1,48 @@
+---
+import PhotoGround from './PhotoGround.astro';
+import Link from './Link.astro';
+import { booking } from '../site';
+
+/**
+ * The close at the foot of a page: Joan's "Get in Touch" section from her
+ * original site, word for word, and her booking label. One component so
+ * every page ends in her words rather than in a line written for her.
+ */
+interface Props {
+  /** The photograph behind it, from /assets/photos/. */
+  image: string;
+}
+
+const { image } = Astro.props;
+---
+
+<section class="close on-dark has-ground">
+  <PhotoGround src={image} />
+  <div class="band section">
+    <div class="col">
+      <h2 class="close-title">Get in Touch</h2>
+      <p class="close-body">
+        Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.
+      </p>
+      <Link variant="action" href={booking.url}>{booking.label}</Link>
+    </div>
+  </div>
+</section>
+
+<style>
+  .close {
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .close-title {
+    font-size: clamp(1.85rem, 4.2vw, 2.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+  }
+
+  .close-body {
+    margin: 1.25rem 0 2.25rem;
+    max-width: 42ch;
+  }
+</style>

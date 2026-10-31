@@ -5,7 +5,6 @@ order: 2
 register: cochineal
 collage: desire-mapping.jpg
 alt: Collage — a reclining figure on rock in grey, melons opened and set along the length of the body.
-teaser: A month of finding out where your pleasure actually lives, and what pulls you away from it.
 prices:
   - label: Monthly study
     amount: 780

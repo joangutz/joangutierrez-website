@@ -22,19 +22,19 @@ interface Props {
   body?: string;
 }
 
-const { subject, heading = 'Apply', body } = Astro.props;
+const { subject, heading = 'Application form', body } = Astro.props;
 
 const fields = [
-  { name: 'name', label: 'Your name', type: 'text', required: true, autocomplete: 'name' },
+  { name: 'name', label: 'Name', type: 'text', required: true, autocomplete: 'name' },
   { name: 'email', label: 'Email', type: 'email', required: true, autocomplete: 'email' },
   { name: 'pronouns', label: 'Pronouns', type: 'text', required: false, autocomplete: 'off' },
-  { name: 'location', label: 'Where you are', type: 'text', required: false, autocomplete: 'address-level2' },
+  { name: 'location', label: 'Location', type: 'text', required: false, autocomplete: 'address-level2' },
 ];
 
+// Plain field names only. The questions an applicant answers are Joan's to
+// write — until she does, there is one open field. WRITING.md asks for them.
 const questions = [
-  { name: 'why_now', label: 'Why this, why now?', required: true },
-  { name: 'hoping', label: 'What are you hoping for?', required: true },
-  { name: 'anything', label: 'Anything you want me to know before we speak?', required: false },
+  { name: 'message', label: 'Message', required: true },
 ];
 
 const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
@@ -87,15 +87,11 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
       ))
     }
 
-    <button class="app-submit" type="submit">Send this</button>
+    <button class="app-submit" type="submit">Send</button>
 
-    <p class="app-note" data-app-note>
-      {
-        form.endpoint
-          ? 'Goes straight to Joan. You will hear back within a few days.'
-          : `Opens your email app with the answers filled in, addressed to ${form.to}.`
-      }
-    </p>
+    {!form.endpoint && (
+      <p class="app-note" data-app-note>Opens your email app, addressed to {form.to}.</p>
+    )}
 
     <p class="app-status" data-app-status role="status" aria-live="polite"></p>
   </form>
@@ -253,7 +249,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
           `?subject=${encodeURIComponent(`Ma Somatrix — ${subject}`)}` +
           `&body=${encodeURIComponent(lines.join('\n'))}`;
 
-        status.textContent = 'Opening your email app — press send there and it reaches Joan.';
+        status.textContent = 'Opening your email app.';
         window.location.href = href;
         return;
       }
@@ -275,13 +271,13 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
         .then((r) => {
           if (!r.ok) throw new Error(String(r.status));
           el.reset();
-          status.textContent = 'Received. Joan will write back within a few days.';
+          status.textContent = 'Sent.';
         })
         .catch(() => {
           // Never a dead end: the fallback that works without any of this is
           // still right there.
           status.innerHTML =
-            `That didn't send. Please email <a href="mailto:${to}">${to}</a> instead.`;
+            `Not sent. <a href="mailto:${to}">${to}</a>`;
         })
         .finally(() => {
           if (btn) btn.disabled = false;
