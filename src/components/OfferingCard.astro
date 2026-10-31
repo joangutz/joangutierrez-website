@@ -205,6 +205,9 @@ const id = offering.id;
     inset: -15%;
     width: 130%;
     height: 130%;
+    /* The site caps images at their container's width, which left the
+       right-hand edge bare. */
+    max-width: none;
     object-fit: cover;
     /* Light and shadow only — no colour on the pale side. */
     filter: blur(40px) grayscale(1);
@@ -254,6 +257,7 @@ const id = offering.id;
     inset: -12%;
     width: 124%;
     height: 124%;
+    max-width: none;
     object-fit: cover;
     filter: blur(36px) saturate(1.15);
   }
