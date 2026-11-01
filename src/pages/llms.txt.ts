@@ -6,7 +6,8 @@ import { site, booking, contact, kit, beginHere } from '../site';
 /**
  * llms.txt — a plain-text guide to the site for AI assistants, following
  * the llms.txt proposal (llmstxt.org): what Ma Somatrix is, what it offers,
- * where, and how to begin, each with its link. Every sentence is Joan's.
+ * where, and how to begin, each with its link. The descriptions are
+ * Joan's own text; only the short notes on what each page holds are not.
  */
 export const GET: APIRoute = async () => {
   const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
