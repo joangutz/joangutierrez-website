@@ -22,6 +22,9 @@ const h = entry.data;
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 
 const subWords = h.hero.tagline.split(' ');
+
+/** The kind each colour stands for, named under each card. */
+const KIND: Record<string, string> = { one: '1:1', program: 'Program', gathering: 'Happenings' };
 const subHalf = Math.ceil(subWords.length / 2);
 const subFirst = subWords.slice(0, subHalf).join(' ');
 const subSecond = subWords.slice(subHalf).join(' ');
@@ -135,7 +138,7 @@ const movedAnchors = {
         {
           beginHere.map((o) => (
             <li>
-              <a class="card" href={withBase(o.href)}>
+              <a class="card" href={withBase(o.href)} data-kind={o.register}>
                 <span class="card-art film">
                   <Collage
                     src={o.collage}
@@ -147,6 +150,7 @@ const movedAnchors = {
                 <span class="card-meta">
                   <span class="card-title">{o.title}</span>
                   {o.note && <span class="card-container">{o.note}</span>}
+                  <span class="card-kind">{KIND[o.register]}</span>
                 </span>
               </a>
             </li>
@@ -511,6 +515,22 @@ const movedAnchors = {
     aspect-ratio: 3 / 4;
     overflow: hidden;
     border: 1px solid var(--rule);
+    border-bottom: 5px solid var(--kind, var(--rule));
+  }
+
+  .card[data-kind='one'] { --kind: var(--kind-one); --kind-text: var(--kind-one); }
+  .card[data-kind='program'] { --kind: var(--kind-program); --kind-text: var(--kind-program-text); }
+  .card[data-kind='gathering'] { --kind: var(--kind-gathering); --kind-text: var(--kind-gathering); }
+
+  .card-kind {
+    display: block;
+    margin-top: 0.45rem;
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--kind-text, var(--color-ink-2));
   }
 
   .card-art :global(.collage) {

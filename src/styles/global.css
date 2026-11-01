@@ -868,6 +868,41 @@ html[data-palette='sand'] {
   /* Glass over a photograph — Begin's pane, used wherever words sit on a
      picture: smoked with the palette's darkest tone, the picture blurred
      through it, a hairline edge. */
+  /* ---- Kinds of offering ----
+     Each kind of offering carries one colour wherever it appears — the
+     strip on Offerings, the card's name band, the price tile, the line
+     under its homepage card and its small label — so the colour tells a
+     reader what sort of thing it is. Chosen by Joan (palette E). The
+     gold is light, so names set on it are dark; the label in gold on the
+     linen uses a deeper gold to stay readable. */
+  :root {
+    --kind-one: #a3501f;
+    --kind-program: #c9971f;
+    --kind-program-ink: #2e241f;
+    --kind-program-text: #7d5c0e;
+    --kind-gathering: #5b6a52;
+  }
+
+  .reg-one {
+    background: var(--kind-one);
+  }
+
+  .reg-gathering {
+    background: var(--kind-gathering);
+  }
+
+  /* Dark type on the gold band: it is the one light colour of the three.
+     Marked important because the components set their light type with
+     more specific rules. */
+  .reg-program {
+    background: var(--kind-program);
+  }
+
+  .reg-program,
+  .reg-program * {
+    color: var(--kind-program-ink) !important;
+  }
+
   .glass-pane {
     background: rgb(var(--ch-plum) / 0.38);
     -webkit-backdrop-filter: blur(18px) saturate(1.1);

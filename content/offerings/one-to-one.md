@@ -2,7 +2,7 @@
 title: 1:1 Sessions
 container: Three-Month Study
 order: 1
-register: plumstone
+register: one
 collage: erotic-embodiment.jpg
 alt: Collage — a face in profile, cut from grey photograph, with a halved cantaloupe where the body would be.
 prices:

@@ -13,8 +13,9 @@ const offerings = defineCollection({
     title: z.string(),
     container: z.string(),
     order: z.number(),
-    /** Which register of red this offering's card face carries. */
-    register: z.enum(['plumstone', 'cochineal', 'brick', 'clay']),
+    /** The kind of offering, which sets its colour: one (1:1), program,
+        gathering (Happenings). Older red registers still accepted. */
+    register: z.enum(['one', 'program', 'gathering', 'plumstone', 'cochineal', 'brick', 'clay']),
     /** Filename in /assets/collage/. Renders a tinted placeholder until the file exists. */
     collage: z.string(),
     alt: z.string(),

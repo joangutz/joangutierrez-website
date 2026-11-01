@@ -15,7 +15,7 @@ interface Props {
   title: string;
   note?: string;
   collage: string;
-  register: 'plumstone' | 'cochineal' | 'brick' | 'clay';
+  register: 'one' | 'program' | 'gathering' | 'plumstone' | 'cochineal' | 'brick' | 'clay';
   action?: { href: string; label: string; subject?: string; external?: boolean };
 }
 
@@ -129,6 +129,12 @@ const compact = !action;
   [data-register='cochineal'] .chip-name { background: var(--color-cochineal); }
   [data-register='brick'] .chip-name { background: var(--color-brick); }
   [data-register='clay'] .chip-name { background: var(--color-clay); }
+  [data-register='one'] .chip-name { background: var(--kind-one); }
+  [data-register='gathering'] .chip-name { background: var(--kind-gathering); }
+  [data-register='program'] .chip-name {
+    background: var(--kind-program);
+    color: var(--kind-program-ink);
+  }
 
   .front-text {
     position: relative;
