@@ -13,7 +13,7 @@ and the choice is Joan's.
 | Name: Ma Somatix, in place of Joan Gutierrez | **Done** as **Ma Somatrix** (spelling corrected later) |
 | Domain masomatix.com | **Open / clash** — the name is Soma**tr**ix but the domain is masoma**tix**. Joan to decide which to register; moving the site is three steps, listed in `astro.config.mjs` |
 | Delete the Roots page and its CV; a simple About page | **Done** — old /roots address forwards to About |
-| An image banner to open Work with me (now Offerings) / About / Resources / Begin | **Done** — Begin now opens as one full-screen photograph |
+| An image banner to open Work with me (now Offerings) / About / Resources / Begin | **Done** — each now opens full-screen, like the homepage: the page's name large on the photograph, Joan's line beside it |
 | Drop-down tabs under Work with me and Resource | **Clash** — later replaced, in a build session, by four plain tabs. Every offering is a card on Work with me; the gift and Substack are cards on Resources (renamed from Resource) |
 | The Red Rose Visualization as a gift that collects emails | **Done** as a card that turns over. **Open:** collecting emails needs the Kit form address (TODO-KIT in `src/site.ts`); until then the card offers Joan's email |
 | "Recorded for my w.s at CPR" | **Open** — not stated on the site (an earlier guess at "CPR" was removed). WRITING.md asks where and for whom |

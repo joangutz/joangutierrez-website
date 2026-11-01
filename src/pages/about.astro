@@ -33,7 +33,9 @@ const { Content: Lineage } = await render(lineageEntry);
   schema={[person, crumbs('About', '/about/')]}
 >
   {/* Joan: no "About" over the picture — the banner reads her greeting. */}
-  <PageBanner title={p.title} lede={p.lede} image="about.jpg" focus="45% 72%" />
+  {/* "I am Joan." held together, so a two-line greeting breaks after
+      "Hello," — the words unchanged, only the spaces made non-breaking. */}
+  <PageBanner title={p.title.replace('I am Joan', 'I\u00a0am\u00a0Joan')} lede={p.lede} image="about.jpg" cinema />
 
   {/* Her two tabs, "Founder" and "Lineage of Modalities". She asked for them
       as a drop-down under ABOUT; the bar no longer has drop-downs, so they
