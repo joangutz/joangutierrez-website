@@ -54,3 +54,56 @@ and the choice is Joan's.
 |---|---|
 | Resources as cards: the gift turns over, ripples when touched; Substack as a card; empty Inspiration / Library hidden until written | **Done** |
 | Begin as one invitation: photograph, glass pane, one large action, quiet email and phone, WHERE as a line, "Cheers to being alive." | **Done** |
+| Search and AI search (SEO / GEO): titles, descriptions, structured data, sitemap, robots.txt, llms.txt, 404 | **Done** — details in SEO.md |
+| Offerings banner image | **Done** — the fire photograph (option D) |
+
+## Next steps, for later
+
+Everything still open, in one list. The first group is search (from
+SEO.md); the rest are the open items above.
+
+### Search and AI search — Joan's to do
+
+1. **Her own domain.** The biggest single step for search: a GitHub
+   address reads as a sub-folder of someone else's site, and `robots.txt`
+   only takes effect at a domain's root. Decide masomatrix.com vs
+   masomatix.com first; the three steps are in `astro.config.mjs`.
+2. **Google Business Profile** for Ma Somatrix, Chicago (free) — the map
+   listing, which AI answers lean on heavily.
+3. **Google Search Console** and **Bing Webmaster Tools** (free): add the
+   site, submit `/sitemap.xml`.
+4. **Answer the common questions** (WRITING.md §3). A plain questions
+   section is the strongest addition for AI search; it would get its own
+   structured data.
+5. **Testimonials**, where clients are willing — the site has a place
+   ready for them.
+6. **One name, place and link everywhere:** Substack, Instagram, the
+   Sexological Bodyworkers directory and any listings should say *Ma
+   Somatrix*, *Chicago, IL*, and link to the site.
+7. **AI training — a choice.** The site is open to AI search and AI
+   training crawlers alike. To stay findable but out of training, switch
+   the training crawlers to Disallow in `src/pages/robots.txt.ts`.
+
+### Waiting on Joan
+
+- The **Kit form address**, so the gift can collect emails (TODO-KIT).
+- A **Formspree address**, so the application form sends directly
+  (TODO-FORM).
+- The **soundscape file** from Stu Pender (TODO-SOUND).
+- **Her writing** for the open descriptions (WRITING.md): This Very Body
+  Program, Relational Integrity Labs, Spine Society, the Erotic Embodiment
+  weekly class, 1:1 short and medium forms, application questions,
+  Inspiration and Library — each appears on the site once written.
+- **Larger originals** of `about.jpg` and `rose.jpg` (2,000 px or wider).
+- **Where and for whom** the Red Rose Visualization was recorded ("CPR").
+
+### Choices for Joan (the clashes above)
+
+- Title screen: what sits at the foot (options A–F were mocked up;
+  Chicago and beyond stays for now).
+- Begin Here vs Offerings as the homepage label; Work with me vs
+  Offerings as the page name.
+- Her quote on About: within the bio, or its own section.
+- A solid or translucent bar on phones.
+- The egg logo on the title screen.
+
