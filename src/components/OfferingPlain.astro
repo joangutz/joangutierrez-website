@@ -20,16 +20,24 @@ interface Props {
 }
 
 const { id, title, note, collage, register, action } = Astro.props;
+
+/* With nothing yet to say or do, a card is only its picture and its name:
+   a compact tile rather than a wide card with an empty pale side. */
+const compact = !action;
 ---
 
-<article class="plain-card" id={id} data-register={register}>
+<article class:list={['plain-card', { compact }]} id={id} data-register={register}>
   <div class="front-art">
     <div class="chip-image">
       <Collage src={collage} alt="" register={register} />
     </div>
-    <h3 class="chip-name">{title}</h3>
+    <h3 class="chip-name">
+      {title}
+      {compact && note && <span class="chip-note">{note}</span>}
+    </h3>
   </div>
 
+  {!compact && (
   <div class="front-text">
     <div class="front-glass" aria-hidden="true">
       <Collage src={collage} alt="" register={register} sizes="30vw" />
@@ -55,6 +63,7 @@ const { id, title, note, collage, register, action } = Astro.props;
       )
     }
   </div>
+  )}
 </article>
 
 <style>
@@ -97,6 +106,23 @@ const { id, title, note, collage, register, action } = Astro.props;
     color: var(--color-bract);
     padding: 0.85rem 0.9rem;
     box-shadow: inset 0 1px 0 rgb(var(--ch-bract) / 0.22);
+  }
+
+  .compact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compact .chip-image {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .chip-note {
+    display: block;
+    margin-top: 0.3rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    opacity: 0.82;
   }
 
   [data-register='plumstone'] .chip-name { background: var(--color-plumstone); }

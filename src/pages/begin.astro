@@ -22,40 +22,40 @@ import { contact, booking, site } from '../site';
     <div class="band invite-band">
       <div class="wide">
         <div class="invite-pane">
-          <span class="label">Begin</span>
-          <h1 class="invite-title">Get in Touch</h1>
-          <p class="invite-lede">
-            Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.
-          </p>
-
-          <div class="invite-action">
-            <Link variant="action" href={booking.url}>{booking.label}</Link>
+          {/* The invitation and its one action… */}
+          <div class="invite-main">
+            <span class="label">Begin</span>
+            <h1 class="invite-title">Get in Touch</h1>
+            <p class="invite-lede">
+              Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.
+            </p>
+            <div class="invite-action">
+              <Link variant="action" href={booking.url}>{booking.label}</Link>
+            </div>
           </div>
 
-          <ul class="invite-write">
-            <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
-            <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
-          </ul>
+          {/* …and, beside it, for anyone who would rather write: her
+              address and number, where she works, and her sign-off. */}
+          <div class="invite-side">
+            <ul class="invite-write">
+              <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
+              <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
+            </ul>
 
-          {/* Joan's WHERE list, as one line. */}
-          <p class="invite-where">
-            {site.locations.map((l, i) => (
-              <span class="where-item">
-                {i > 0 && <span class="dot" aria-hidden="true">·</span>}
-                {l.mode ? `${l.place} — ${l.mode}` : l.place}
-              </span>
-            ))}
-          </p>
+            <ul class="invite-where">
+              {site.locations.map((l) => <li>{l.mode ? `${l.place} — ${l.mode}` : l.place}</li>)}
+            </ul>
+
+            <p class="invite-signoff">Cheers to being alive.</p>
+          </div>
         </div>
-
-        <p class="invite-signoff">Cheers to being alive.</p>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  /* The window, less the bar. */
+  /* The window, less the bar: everything fits in one screen. */
   .invite {
     min-height: calc(100svh - var(--bar-h));
     display: flex;
@@ -65,12 +65,14 @@ import { contact, booking, site } from '../site';
 
   .invite-band {
     width: 100%;
-    padding-block: clamp(3rem, 9vh, 6rem);
+    padding-block: clamp(1.5rem, 5vh, 3.5rem);
   }
 
+  /* One pane across the width: the invitation on the left, the quieter
+     ways in on the right, divided by a hairline. */
   .invite-pane {
-    max-width: 34rem;
-    padding: clamp(1.75rem, 4.5vw, 3rem);
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     background: rgb(var(--ch-plum) / 0.38);
     -webkit-backdrop-filter: blur(18px) saturate(1.1);
     backdrop-filter: blur(18px) saturate(1.1);
@@ -83,27 +85,39 @@ import { contact, booking, site } from '../site';
     }
   }
 
+  .invite-main,
+  .invite-side {
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .invite-side {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vh, 1.75rem);
+    border-left: 1px solid rgb(var(--ch-bract) / 0.16);
+  }
+
   .invite-pane .label {
     color: rgb(var(--ch-bract) / 0.82);
   }
 
   .invite-title {
-    margin: 0.9rem 0 0;
-    font-size: clamp(2.4rem, 6vw, 4rem);
+    margin: 0.8rem 0 0;
+    font-size: clamp(2.2rem, 5.2vw, 3.6rem);
     font-weight: 300;
     line-height: 1.02;
     letter-spacing: -0.02em;
   }
 
   .invite-lede {
-    margin: 1.25rem 0 0;
-    font-size: clamp(1.08rem, 1.9vw, 1.25rem);
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
     line-height: 1.55;
-    max-width: 30ch;
+    max-width: 34ch;
   }
 
   .invite-action {
-    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    margin-top: clamp(1.5rem, 3.5vh, 2.25rem);
   }
 
   /* Bigger than an ordinary action: the one thing to do here. */
@@ -112,45 +126,54 @@ import { contact, booking, site } from '../site';
     padding: 1.1rem 1.6rem;
   }
 
-  .invite-write {
+  .invite-write,
+  .invite-where {
     list-style: none;
-    margin: clamp(1.75rem, 4vw, 2.25rem) 0 0;
-    padding: clamp(1.25rem, 3vw, 1.5rem) 0 0;
-    border-top: 1px solid rgb(var(--ch-bract) / 0.18);
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 1.75rem;
-    font-size: 0.98rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .invite-write {
+    font-size: 1rem;
   }
 
   .invite-where {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 1rem 0 0;
     font-family: var(--font-label);
     font-size: 0.66rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    line-height: 1.9;
+    line-height: 1.6;
     color: rgb(var(--ch-bract) / 0.78);
   }
 
-  /* A place never breaks across lines; the line breaks between places. */
-  .where-item {
-    white-space: nowrap;
-  }
-
-  .dot {
-    margin-inline: 0.6em;
-  }
-
   .invite-signoff {
-    margin: clamp(2.5rem, 7vh, 4rem) 0 0;
+    margin: auto 0 0;
+    padding-top: 0.5rem;
     font-family: var(--font-display);
-    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.01em;
+  }
+
+  /* Narrow: one column, the hairline turning to lie across. */
+  @media (max-width: 760px) {
+    .invite-pane {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .invite-side {
+      border-left: 0;
+      border-top: 1px solid rgb(var(--ch-bract) / 0.16);
+      padding-top: 1.25rem;
+    }
+
+    .invite-main {
+      padding-bottom: 1.5rem;
+    }
   }
 </style>
