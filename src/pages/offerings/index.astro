@@ -22,8 +22,8 @@ const hasQuotes = (await getCollection('testimonials')).length > 0;
 /* The offerings with only a name so far, from the same list as Begin Here
    so their names, notes, collages and swatches never drift apart. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-const program = byHref('/work-with-me/#this-very-body');
-const happenings = [byHref('/work-with-me/#relational-integrity-labs'), byHref('/work-with-me/#spine-society')];
+const program = byHref('/offerings/#this-very-body');
+const happenings = [byHref('/offerings/#relational-integrity-labs'), byHref('/offerings/#spine-society')];
 const anchor = (h: string) => h.split('#')[1];
 
 const offerings = (await getCollection('offerings')).sort(

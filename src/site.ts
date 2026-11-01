@@ -106,7 +106,7 @@ export const contact = {
 
 /**
  * The bar at the foot of every page: four tabs, each one page. Every
- * offering lives on Work with me and every resource on Resource, so a tab
+ * offering lives on Offerings and every resource on Resources, so a tab
  * never hides a list.
  */
 export interface NavItem {
@@ -115,7 +115,7 @@ export interface NavItem {
 }
 
 export const nav: readonly NavItem[] = [
-  { href: '/work-with-me/', label: 'Work with me' },
+  { href: '/offerings/', label: 'Offerings' },
   { href: '/about/', label: 'About' },
   { href: '/resources/', label: 'Resources' },
   { href: '/begin/', label: 'Begin' },
@@ -169,35 +169,35 @@ export const realms = [
  */
 export const beginHere = [
   {
-    href: '/work-with-me/#one-to-one',
+    href: '/offerings/#one-to-one',
     title: '1:1 Sessions',
     note: '',
     collage: 'erotic-embodiment.jpg',
     register: 'plumstone',
   },
   {
-    href: '/work-with-me/#this-very-body',
+    href: '/offerings/#this-very-body',
     title: 'This Very Body Program',
     note: 'waitlist',
     collage: 'desire-mapping.jpg',
     register: 'cochineal',
   },
   {
-    href: '/work-with-me/#liberate-the-pelvis',
+    href: '/offerings/#liberate-the-pelvis',
     title: 'Liberate the Pelvis',
     note: '',
     collage: 'scar-tissue.jpg',
     register: 'brick',
   },
   {
-    href: '/work-with-me/#relational-integrity-labs',
+    href: '/offerings/#relational-integrity-labs',
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',
     register: 'clay',
   },
   {
-    href: '/work-with-me/#spine-society',
+    href: '/offerings/#spine-society',
     title: 'Spine Society',
     note: 'free monthly gathering',
     collage: 'roots-territories.jpg',

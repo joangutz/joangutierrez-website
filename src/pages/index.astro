@@ -4,10 +4,10 @@ import Link from '../components/Link.astro';
 import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
-import KitSignup from '../components/KitSignup.astro';
+import GiftCard from '../components/GiftCard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, booking, kit, beginHere, withBase } from '../site';
+import { site, booking, beginHere, withBase } from '../site';
 
 const entry = await getEntry('home', 'home');
 if (!entry) throw new Error('Missing /content/home/home.md');
@@ -19,7 +19,6 @@ const h = entry.data;
  * to go when its contents do.
  */
 const hasQuotes = (await getCollection('testimonials')).length > 0;
-const hasSignup = Boolean(kit.formAction);
 
 const subWords = h.hero.tagline.split(' ');
 const subHalf = Math.ceil(subWords.length / 2);
@@ -35,7 +34,7 @@ const subSecond = subWords.slice(subHalf).join(' ');
 const movedAnchors = {
   '#approach': withBase('/the-work/'),
   '#about': withBase('/about/'),
-  '#offerings': withBase('/work-with-me/'),
+  '#offerings': withBase('/offerings/'),
   '#connect': withBase('/begin/'),
 };
 ---
@@ -94,7 +93,7 @@ const movedAnchors = {
       question  the ground, with a pool of light behind the words
       begin     the ground
       founder   a swell a shade deeper, portrait in colour
-      gift      the rose as the ground, the words on glass
+      gift      the gift card on a swell of tone
       close     photograph — the closing frame
   */}
 
@@ -184,34 +183,12 @@ const movedAnchors = {
     )
   }
 
-  {/* 6 · A gift. The rose is the ground, edge to edge; the words sit
-      straight on it, over a wash that is deep under them and clears toward
-      the far side so the rose keeps its red. */}
-  <section class="gift-rose has-ground on-dark">
-    <div class="rose-ground" aria-hidden="true">
-      <Collage src="rose.jpg" alt="" register="cochineal" sizes="100vw" />
-    </div>
-    <div class="band section">
-      <div class="wide gift-row rise">
-        <div class="gift-text">
-          {
-            hasSignup ? (
-              <>
-                <KitSignup heading={kit.freebie} body={kit.freebieBody} />
-              </>
-            ) : (
-              <>
-                <span class="label">A gift</span>
-                <h2 class="section-title">
-                  <a class="gift-title" href={withBase('/resources/#gift')}>{kit.freebie}</a>
-                </h2>
-                <p class="gift-sub">{kit.freebieSub}</p>
-                <p class="gift-body">{kit.freebieBody}</p>
-              </>
-            )
-          }
-        </div>
-      </div>
+  {/* 6 · A gift: the same card that turns as on Resources — the rose,
+      its name and Joan's line; turned over, her description and the way to
+      receive it. The rose ripples under the pointer. */}
+  <section class="band section gift-band">
+    <div class="wide rise">
+      <GiftCard />
     </div>
   </section>
 
@@ -587,117 +564,7 @@ const movedAnchors = {
   }
 
   /* ---- The gift ---- */
-  .gift-rose {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: var(--color-plumstone);
-    color: var(--color-bract);
-  }
-
-  .rose-ground {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-  }
-
-  /* The rose photograph is small for a full-width ground, and stretched it
-     showed its pixels. Softened, it keeps its colour and its spiral and
-     gives up only the grain — the same soft focus as the glass elsewhere.
-     Scaled a touch so the blur never pulls in a pale edge. */
-  .rose-ground :global(.collage) {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-    object-position: 50% 45%;
-    filter: blur(7px) saturate(1.05);
-    scale: 1.06;
-  }
-
-  .gift-row {
-    display: flex;
-    min-height: clamp(22rem, 42vw, 32rem);
-    align-items: center;
-  }
-
-  /* Deep under the words, lifting across so the rose shows in its own red.
-     Measured so the smallest type stays readable before the picture gets
-     its colour back. */
-  .rose-ground::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      100deg,
-      rgb(var(--ch-plum) / 0.92) 0%,
-      rgb(var(--ch-plum) / 0.86) 48%,
-      rgb(var(--ch-plum) / 0.3) 74%,
-      rgb(var(--ch-plum) / 0.05) 100%
-    );
-  }
-
-  .gift-text {
-    max-width: 32rem;
-  }
-
-  .gift-text :global(.label) {
-    color: rgb(var(--ch-bract) / 0.82);
-  }
-
-  /* On a phone the words run the full width, so the rose gets the top of
-     the section instead and the words sit on the deep part below. */
-  @media (max-width: 760px) {
-    .rose-ground::after {
-      background: linear-gradient(
-        to bottom,
-        rgb(var(--ch-plum) / 0.1) 0%,
-        rgb(var(--ch-plum) / 0.35) 18%,
-        rgb(var(--ch-plum) / 0.88) 38%,
-        rgb(var(--ch-plum) / 0.92) 100%
-      );
-    }
-
-    .gift-rose > .band {
-      padding-top: clamp(10rem, 48vw, 13rem);
-    }
-
-    .gift-row {
-      min-height: 0;
-    }
-  }
-
-  .gift-sub {
-    margin: 0.6rem 0 0;
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: rgb(var(--ch-bract) / 0.82);
-  }
-
-  .gift-body {
-    margin: 1.25rem 0 0;
-    max-width: 46ch;
-  }
-
-  .gift-text :global(.lnk-door) {
-    margin-top: var(--gap-door);
-  }
-
-  .gift-title {
-    text-decoration: none;
-  }
-
-  .gift-title {
-    color: var(--color-bract);
-  }
-
-  .gift-title:hover {
-    text-decoration: underline;
-    text-decoration-color: rgb(var(--ch-bract) / 0.6);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
+  .gift-band {
+    background: var(--swell-ground);
   }
 </style>
