@@ -31,7 +31,7 @@ const { src, alt, from = 'left', tinted = false } = Astro.props;
 ---
 
 <div
-  class:list={['ground', `ground-${from}`, { 'ground-tinted': tinted }]}
+  class:list={['ground film', `ground-${from}`, { 'ground-tinted': tinted }]}
   aria-hidden={alt ? undefined : 'true'}
 >
   <Collage src={src} alt={alt ?? ''} register="cochineal" sizes="100vw" />
