@@ -124,9 +124,10 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     color: rgb(var(--ch-bract) / 0.85);
   }
 
+  /* Short fields pair up two to a row wherever there is room for both. */
   .app-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
     gap: 0 1.5rem;
   }
 
