@@ -4,6 +4,8 @@ import Link from '../components/Link.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import { contact, booking, site } from '../site';
 
+const year = new Date().getFullYear();
+
 /**
  * Begin: one invitation, not a directory.
  *
@@ -15,7 +17,7 @@ import { contact, booking, site } from '../site';
  */
 ---
 
-<Base title="Begin" description="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.">
+<Base title="Begin" description="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too." selfClosing>
   <section class="invite on-dark has-ground">
     <PhotoGround src="begin.jpg" />
 
@@ -49,6 +51,9 @@ import { contact, booking, site } from '../site';
             <p class="invite-signoff">Cheers to being alive.</p>
           </div>
         </div>
+
+        {/* The page's own close: the footer's one line, on the photograph. */}
+        <p class="invite-credit">© {year} {site.name}</p>
       </div>
     </div>
   </section>
@@ -56,8 +61,10 @@ import { contact, booking, site } from '../site';
 
 <style>
   /* The window, less the bar: everything fits in one screen. */
+  /* The photograph runs under the bar, so the page ends on it. */
   .invite {
-    min-height: calc(100svh - var(--bar-h));
+    min-height: 100svh;
+    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
     display: flex;
     align-items: center;
     color: var(--color-bract);
@@ -91,6 +98,7 @@ import { contact, booking, site } from '../site';
   }
 
   .invite-side {
+    container-type: inline-size;
     display: flex;
     flex-direction: column;
     gap: clamp(1.25rem, 3vh, 1.75rem);
@@ -150,14 +158,25 @@ import { contact, booking, site } from '../site';
     color: rgb(var(--ch-bract) / 0.78);
   }
 
+  /* Sized to its column: one line, the column's width, at any screen. */
   .invite-signoff {
     margin: auto 0 0;
     padding-top: 0.5rem;
+    white-space: nowrap;
     font-family: var(--font-display);
-    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    font-size: clamp(1rem, 8.6cqi, 1.75rem);
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.01em;
+  }
+
+  .invite-credit {
+    margin: clamp(1rem, 2.5vh, 1.5rem) 0 0;
+    font-family: var(--font-label);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.7;
   }
 
   /* Narrow: one column, the hairline turning to lie across. */

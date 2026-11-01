@@ -15,9 +15,14 @@ interface Props {
    * footer, as one pane.
    */
   close?: boolean;
+  /**
+   * The page ends itself (Begin): no closing photograph or footer band —
+   * the page carries its own one-line credit.
+   */
+  selfClosing?: boolean;
 }
 
-const { title, description, bare = false, close = false } = Astro.props;
+const { title, description, bare = false, close = false, selfClosing = false } = Astro.props;
 
 /** The one photograph every page's footer stands on. */
 const CLOSING_PHOTO = 'close-home.jpg';
@@ -91,6 +96,7 @@ import GetInTouch from '../components/GetInTouch.astro';
     <main id="main">
       <slot />
     </main>
+    {!selfClosing && (
     <div class:list={['closing has-ground on-dark', { 'closing-bare': !close && !Astro.slots.has('close') }]}>
       <PhotoGround src={CLOSING_PHOTO} />
       <span class="closing-deep" aria-hidden="true" />
@@ -99,6 +105,7 @@ import GetInTouch from '../components/GetInTouch.astro';
       <slot name="close">{close && <GetInTouch />}</slot>
       <Footer onGround />
     </div>
+    )}
     <PaletteTrial />
 
     <script>

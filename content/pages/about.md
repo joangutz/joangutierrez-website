@@ -2,12 +2,12 @@
 title: Hello, I am Joan.
 lede: Somatic educator, artist, and founder of Ma Somatrix
 description: Somatic educator, artist, and founder of Ma Somatrix
-quote: "I'm devoted to bridging the gap between what people think they know about their body and what they actually feel, live, and Know as the pulsing wisdom that lives within their cells, organs, and flesh."
 ---
 
 <!-- Joan's updated bio of 10/31, verbatim (content/_source/joan-2026-10-31.md).
-     Her quote is not in this text: it is set as its own section below it
-     (the `quote` field above), as she asked. -->
+     Her quote sits within the text as a pull-quote, where it stood in her
+     first version of the bio. (Her 10/31 note asked for it as its own larger
+     section below the bio — see NOTES-STATUS.md.) -->
 
 I received my training in somatic education and sexology from Pacific Center of Somatic Sexology, with continued mentorship with Ellen Heed, PhD. and Zen Shiatsu Chicago.
 
@@ -18,6 +18,8 @@ I come into this work from the arts. Transitioning out of the fine art world sin
 In time, I’ve gravitated toward Butoh pioneer Minako Seki's evolution of this art form into a more holistic approach to working with the moving body. This begins with how we see with our eyes, how we nourish, and how we care for the body-mind before and after the stage. Happening within a comprehensive lens that integrates meditation, macrobiotic nutrition, Japanese detoxification methods, active imagination, and dance, seeing dance as an expression of living fully. This formation continues to fertilize the ground for my approach and perspective on health and human potential.
 
 After more than a decade of personal and professional immersion, I discover the body as a matrix of wisdom. Where seemingly disparate threads are exquisitely braided into a coherent web. Its threads express through a person's nervous system, authentic creativity, sexuality, pelvic health, scar tissue, biochemistry, biomechanics, and psycho-spiritual energetic field.
+
+> "I'm devoted to bridging the gap between what people think they know about their body and what they actually feel, live, and Know as the pulsing wisdom that lives within their cells, organs, and flesh."
 
 At Ma Somatrix, I specialize in supporting people who value self-responsibility, depth, and precision in forging a meaningful relationship with their body.
 

@@ -39,7 +39,7 @@ and the choice is Joan's.
 |---|---|
 | Updated ABOUT bio | **Done**, verbatim |
 | About banner: delete "About", read "Hello, I am Joan." | **Done** |
-| The quote as its own larger section below the bio, like the Audre Lorde quote | **Done** — centred, large, in the display face, as the epigraph was |
+| The quote as its own larger section below the bio, like the Audre Lorde quote | **Clash** — built that way, then moved back into the bio as a pull-quote (larger type, a hairline beside it) at a later request, where it stood in her first version of the bio. Either is a small change |
 | LINEAGES as a drop-down in the ABOUT tab: Founder / Lineage of Modalities | **Done, adapted (clash)** — the bar no longer has drop-downs, so these are two tabs at the top of the About page. /about/#lineage opens the second. Each modality folds open |
 | Homepage Founder & Educator text | **Done**, verbatim |
 | Remove the text below BEGIN HERE ("five ways in…") | **Done** — nothing shows under the heading |

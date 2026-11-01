@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
 import Portrait from '../components/Portrait.astro';
 import Link from '../components/Link.astro';
-import Vessel from '../components/Vessel.astro';
 import { contact } from '../site';
 import { getEntry, render } from 'astro:content';
 
@@ -63,20 +62,6 @@ const { Content: Lineage } = await render(lineageEntry);
       </div>
     </section>
 
-    {
-      p.quote && (
-        <section class="epigraph">
-          <div class="band">
-            <div class="wide epigraph-inner">
-              <Vessel size="clamp(44px, 6vw, 64px)" open={0.4} />
-              <blockquote>
-                <p>{p.quote}</p>
-              </blockquote>
-            </div>
-          </div>
-        </section>
-      )
-    }
   </div>
 
   <div class="tab-panel" id="lineage" role="tabpanel" aria-labelledby="tab-lineage" data-panel="lineage">
@@ -232,33 +217,20 @@ const { Content: Lineage } = await render(lineageEntry);
     background: var(--color-cochineal);
   }
 
-  /* ---- The quote, set apart ---- */
-  .epigraph {
-    padding-block: clamp(4rem, 12vw, 8rem);
-    background: var(--swell-ground);
+  /* ---- Joan's quote, within the bio ---- */
+  .about-prose :global(blockquote) {
+    margin: clamp(2rem, 5vw, 3rem) 0;
+    padding: 0.2rem 0 0.2rem clamp(1.1rem, 3vw, 1.75rem);
+    border-left: 1px solid var(--color-quick);
   }
 
-  .epigraph-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(1.75rem, 4vw, 2.75rem);
-    text-align: center;
-  }
-
-  .epigraph blockquote {
+  .about-prose :global(blockquote p) {
     margin: 0;
-  }
-
-  .epigraph blockquote p {
-    margin: 0 auto;
-    max-width: 24ch;
     font-family: var(--font-display);
-    font-size: clamp(1.45rem, 3.6vw, 2.6rem);
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
     font-weight: 300;
-    line-height: 1.24;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
     color: var(--color-cochineal);
   }
 
