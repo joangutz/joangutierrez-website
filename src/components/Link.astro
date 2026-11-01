@@ -10,8 +10,8 @@
  *
  * Destinations fall into three kinds:
  *   internal  another page of this site        no mark, same tab
- *   external  another site entirely            ↗, new tab, announced
- *   handoff   hands off to a device app        ↗, same tab, announced
+ *   external  another site entirely            arrow out of a square, new tab, announced
+ *   handoff   hands off to a device app        the same mark, same tab, announced
  *
  * The mark is never decoration: it appears only when the link leaves the
  * site, and it always comes with text a screen reader can read.
@@ -56,8 +56,10 @@ const announce =
   <span class="lnk-label"><slot /></span>{
     leaves && (
       <>
-        <svg class="lnk-mark" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
-          <path d="M2.5,7.5 L7.5,2.5 M3.6,2.5 L7.5,2.5 L7.5,6.4" />
+        {/* Leaving the page: an arrow out of a square. */}
+        <svg class="lnk-mark" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+          <path d="M5.25,1.75 H2.25 Q1.75,1.75 1.75,2.25 V9.75 Q1.75,10.25 2.25,10.25 H9.75 Q10.25,10.25 10.25,9.75 V6.75" />
+          <path d="M7.25,1.75 H10.25 V4.75 M10.25,1.75 L5.75,6.25" />
         </svg>
         <span class="visually-hidden">({announce})</span>
       </>
