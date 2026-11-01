@@ -9,7 +9,8 @@ import { getCollection, getEntry } from 'astro:content';
 import KitSignup from '../../components/KitSignup.astro';
 import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
-import { withBase, beginHere, kit } from '../../site';
+import { withBase, beginHere, kit, contact } from '../../site';
+import Link from '../../components/Link.astro';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
@@ -104,6 +105,8 @@ const motifs = [
         <aside class="ground-note" aria-labelledby="note-title">
           <span class="label" id="note-title">{s.note.title}</span>
           {s.note.paragraphs.map((p) => <p>{p}</p>)}
+          {/* The code of ethics the work is held to, next to its scope. */}
+          <p class="note-ethics"><Link href={contact.ethics}>sexologicalbodyworkers.org/ethics</Link></p>
         </aside>
       </div>
     </div>
@@ -177,6 +180,13 @@ const motifs = [
     margin: 1rem 0 0;
     font-size: 0.98rem;
     line-height: 1.65;
+  }
+
+  .ground-note .note-ethics {
+    margin-top: 1.5rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid rgb(var(--ch-bract) / 0.18);
+    font-size: 0.92rem;
   }
 
   .ground-note p:first-of-type {

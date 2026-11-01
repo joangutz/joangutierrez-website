@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import KitSignup from '../components/KitSignup.astro';
 import PageBanner from '../components/PageBanner.astro';
-import { contact, booking, kit } from '../site';
+import { contact, booking, kit, site } from '../site';
 ---
 
 {/* Joan's "Get in Touch" section from her original site, unaltered: its
@@ -38,12 +38,24 @@ import { contact, booking, kit } from '../site';
         <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
         <li><Link href={contact.substack}>Substack</Link></li>
       </ul>
+
+      {/* Joan's "WHERE" list, exactly as she wrote it. */}
+      <span class="label where-label">Where</span>
+      <ul class="plain">
+        {site.locations.map((l) => <li>{l.mode ? `${l.place} — ${l.mode}` : l.place}</li>)}
+      </ul>
+
       <p class="signoff">Cheers to being alive.</p>
     </div>
   </section>
 </Base>
 
 <style>
+  .where-label {
+    display: block;
+    margin: clamp(2.25rem, 5vw, 3rem) 0 1rem;
+  }
+
   .plain {
     list-style: none;
     margin: 0;
@@ -59,7 +71,7 @@ import { contact, booking, kit } from '../site';
   }
 
   .signoff {
-    margin: 2rem 0 0;
+    margin: clamp(2.5rem, 6vw, 3.5rem) 0 0;
     font-family: var(--font-display);
     font-size: clamp(1.3rem, 2.6vw, 1.7rem);
     font-weight: 300;

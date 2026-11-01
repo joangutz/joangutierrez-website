@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
 import ChapterRail from '../components/ChapterRail.astro';
 import Portrait from '../components/Portrait.astro';
+import Link from '../components/Link.astro';
+import { contact } from '../site';
 import { getEntry, render } from 'astro:content';
 
 /**
@@ -38,6 +40,8 @@ const p = entry.data;
 
       <div class="col prose about-prose">
         <Content />
+        {/* Her art, beside the writing that names her an artist. */}
+        <p class="about-art"><Link href={contact.art}>joangutz.com</Link></p>
       </div>
     </div>
   </section>
@@ -68,6 +72,10 @@ const p = entry.data;
       position: static;
       max-width: 18rem;
     }
+  }
+
+  .about-art {
+    margin-top: 2rem;
   }
 
   .about-prose :global(blockquote) {
