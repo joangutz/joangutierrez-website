@@ -87,6 +87,7 @@ const movedAnchors = {
         <p class="hero-place">{h.hero.place}</p>
       </div>
     </div>
+
   </section>
 
   {/*
@@ -353,6 +354,21 @@ const movedAnchors = {
     width: 1px;
     height: clamp(1.1rem, 2.6vh, 1.6rem);
     background: rgb(var(--ch-bract) / 0.5);
+    transform-origin: top;
+  }
+
+  /* The same breath as the line at the foot of the page openings. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-place::before {
+      animation: hero-cue 3.2s var(--ease-open) infinite;
+    }
+
+    @keyframes hero-cue {
+      0% { scale: 1 0; opacity: 0; }
+      30% { opacity: 1; }
+      70% { scale: 1 1; opacity: 1; }
+      100% { scale: 1 1; opacity: 0; }
+    }
   }
 
   /* The line arrives at breath pace. Opacity only, so it is readable
