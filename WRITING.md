@@ -35,14 +35,14 @@ Society** (free monthly gathering).
 - For the Labs: what does it cost?
 
 ### Inspiration and Library
-Both are sections of the Resource page, a title and a picture so far. Write straight into
+Both are sections of the Resources page, a title and a picture so far. Write straight into
 `content/pages/inspiration.md` and `content/pages/library.md`; the comment
 at the top of each shows the shape. Anything you write appears.
 
 - Inspiration: which teachers, lineages, artists, ideas?
 - Library: which books, papers, talks, practices — and a line on why?
 
-### Resource
+### Resources
 One page now: the gift, then Inspiration, then Library.
 
 - Would you like a sentence that introduces the three?

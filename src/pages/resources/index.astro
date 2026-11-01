@@ -7,7 +7,7 @@ import { getEntry, render } from 'astro:content';
 import { contact, site } from '../../site';
 
 /**
- * Resource: cards, in the same language as Work with me. The gift turns
+^ * Resources: cards, in the same language as Work with me. The gift turns
  * over to give itself; Substack leads to Joan's writing. Inspiration and
  * Library appear on their own the moment she writes them
  * (/content/pages/inspiration.md and library.md) — until then a title over
@@ -25,8 +25,8 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
 const substackHost = new URL(contact.substack).host;
 ---
 
-<Base title="Resource" description={site.description}>
-  <PageBanner title="Resource" image="resource.jpg" />
+<Base title="Resources" description={site.description}>
+  <PageBanner title="Resources" image="resource.jpg" />
 
   <section class="band section">
     <div class="wide res-stack">

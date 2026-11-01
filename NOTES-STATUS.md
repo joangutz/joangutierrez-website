@@ -13,8 +13,8 @@ and the choice is Joan's.
 | Name: Ma Somatix, in place of Joan Gutierrez | **Done** as **Ma Somatrix** (spelling corrected later) |
 | Domain masomatix.com | **Open / clash** — the name is Soma**tr**ix but the domain is masoma**tix**. Joan to decide which to register; moving the site is three steps, listed in `astro.config.mjs` |
 | Delete the Roots page and its CV; a simple About page | **Done** — old /roots address forwards to About |
-| An image banner to open Work with me / About / Resource / Begin | **Done** — Begin now opens as one full-screen photograph |
-| Drop-down tabs under Work with me and Resource | **Clash** — later replaced, in a build session, by four plain tabs. Every offering is a card on Work with me; the gift and Substack are cards on Resource |
+| An image banner to open Work with me / About / Resources / Begin | **Done** — Begin now opens as one full-screen photograph |
+| Drop-down tabs under Work with me and Resource | **Clash** — later replaced, in a build session, by four plain tabs. Every offering is a card on Work with me; the gift and Substack are cards on Resources (renamed from Resource) |
 | The Red Rose Visualization as a gift that collects emails | **Done** as a card that turns over. **Open:** collecting emails needs the Kit form address (TODO-KIT in `src/site.ts`); until then the card offers Joan's email |
 | "Recorded for my w.s at CPR" | **Open** — not stated on the site (an earlier guess at "CPR" was removed). WRITING.md asks where and for whom |
 | Burnt / sepia salmon colour | **Clash** — superseded by later choices: a linen ground (Joan picked "D Linen") and now the **Driftwood** palette. The salmon-era Wine palette is saved and can be tried at `?palette=wine` |
@@ -29,7 +29,7 @@ and the choice is Joan's.
 | Homepage 5: A Gift | **Done** — on the rose |
 | Phone: content scrolling visibly behind the menu bar | **Clash** — fixed by moving the bar to the bottom, but a later session asked for a translucent bar, so the page shows softly through it (blurred). A solid bar is a one-line change |
 | WHERE: Chicago, IL — in-person / Internationally — online / Open to travel | **Done** — on Begin and in the phone menu |
-| Descriptions to write (Spine Society, This Very Body, Erotic Embodiment weekly class, 1:1 short / medium / long, application questions, Inspiration and Library lists) | **Open** — Joan's to write; WRITING.md has prompts. Inspiration and Library appear on Resource automatically once written |
+| Descriptions to write (Spine Society, This Very Body, Erotic Embodiment weekly class, 1:1 short / medium / long, application questions, Inspiration and Library lists) | **Open** — Joan's to write; WRITING.md has prompts. Inspiration and Library appear on Resources automatically once written |
 | "Only my words" | **Done** — every sentence on the site is Joan's; interface words are listed in WRITING.md |
 | Triangle definitions shown in full, not summarised | **Done** |
 
@@ -51,5 +51,5 @@ and the choice is Joan's.
 
 | Note | Status |
 |---|---|
-| Resource as cards: the gift turns over, ripples when touched; Substack as a card; empty Inspiration / Library hidden until written | **Done** |
+| Resources as cards: the gift turns over, ripples when touched; Substack as a card; empty Inspiration / Library hidden until written | **Done** |
 | Begin as one invitation: photograph, glass pane, one large action, quiet email and phone, WHERE as a line, "Cheers to being alive." | **Done** |

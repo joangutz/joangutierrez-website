@@ -42,10 +42,12 @@ export default defineConfig({
     // The pages that used to sit under the dropdowns now live as sections.
     '/work-with-me/this-very-body': to('/work-with-me/#this-very-body'),
     '/work-with-me/happenings': to('/work-with-me/#relational-integrity-labs'),
-    '/resource/gift': to('/resource/#gift'),
-    // Inspiration and Library show on Resource once written.
-    '/resource/inspiration': to('/resource/'),
-    '/resource/library': to('/resource/'),
+    '/resource/gift': to('/resources/#gift'),
+    // Inspiration and Library show on Resources once written.
+    '/resource/inspiration': to('/resources/'),
+    '/resource/library': to('/resources/'),
+    // Renamed from Resource to Resources.
+    '/resource': to('/resources/'),
   },
   vite: {
     plugins: [tailwindcss()],

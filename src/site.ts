@@ -117,7 +117,7 @@ export interface NavItem {
 export const nav: readonly NavItem[] = [
   { href: '/work-with-me/', label: 'Work with me' },
   { href: '/about/', label: 'About' },
-  { href: '/resource/', label: 'Resource' },
+  { href: '/resources/', label: 'Resources' },
   { href: '/begin/', label: 'Begin' },
 ];
 
