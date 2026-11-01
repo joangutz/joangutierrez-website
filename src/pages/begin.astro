@@ -192,6 +192,64 @@ const contact_page = {
     opacity: 0.7;
   }
 
+  /* Phones: everything still fits one screen, down to the shortest. The
+     pane, the type and the gaps all tighten with the screen's height, and
+     the two ways to write sit side by side. */
+  @media (max-width: 760px) {
+    .invite-band {
+      padding-block: clamp(0.75rem, 2.5vh, 1.5rem);
+    }
+
+    .invite-main,
+    .invite-side {
+      padding: clamp(0.9rem, 2.6vh, 1.4rem) clamp(1rem, 4.5vw, 1.4rem);
+    }
+
+    .invite-title {
+      margin-top: 0.5rem;
+      font-size: clamp(1.7rem, 5.6vh, 2.4rem);
+    }
+
+    .invite-lede {
+      margin-top: 0.6rem;
+      font-size: clamp(0.92rem, 2.3vh, 1.05rem);
+      line-height: 1.45;
+    }
+
+    .invite-action {
+      margin-top: clamp(0.8rem, 2.2vh, 1.25rem);
+    }
+
+    .invite-action :global(.lnk-action) {
+      padding: 0.85rem 1.2rem;
+    }
+
+    .invite-side {
+      gap: clamp(0.55rem, 1.6vh, 0.9rem);
+    }
+
+    .invite-write {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      font-size: 0.92rem;
+    }
+
+    .invite-where {
+      gap: 0.15rem;
+      line-height: 1.5;
+    }
+
+    .invite-signoff {
+      padding-top: 0;
+      font-size: clamp(1.15rem, 3.4vh, 1.5rem);
+    }
+
+    .invite-credit {
+      margin-top: clamp(0.5rem, 1.5vh, 1rem);
+    }
+  }
+
   /* Narrow: one column, the hairline turning to lie across. */
   @media (max-width: 760px) {
     .invite-pane {
