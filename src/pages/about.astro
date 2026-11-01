@@ -1,9 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
-import ChapterRail from '../components/ChapterRail.astro';
 import Portrait from '../components/Portrait.astro';
 import Link from '../components/Link.astro';
+import Vessel from '../components/Vessel.astro';
 import { contact } from '../site';
 import { getEntry, render } from 'astro:content';
 
@@ -20,32 +20,128 @@ const entry = await getEntry('pages', 'about');
 if (!entry) throw new Error('Missing /content/pages/about.md');
 const { Content } = await render(entry);
 const p = entry.data;
+
+const lineageEntry = await getEntry('pages', 'lineage');
+if (!lineageEntry) throw new Error('Missing /content/pages/lineage.md');
+const { Content: Lineage } = await render(lineageEntry);
 ---
 
-<Base title={p.title} description={p.description} close>
-  <ChapterRail />
+<Base title="About" description={p.description} close>
+  {/* Joan: no "About" over the picture — the banner reads her greeting. */}
+  <PageBanner title={p.title} lede={p.lede} image="about.jpg" focus="45% 72%" />
 
-  <PageBanner eyebrow={p.eyebrow} title={p.title} lede={p.lede} image="about.jpg" />
-
-  <section class="band section">
-    <div class="wide about-grid">
-      <div class="about-portrait">
-        <Portrait
-          src="joan-roots.jpg"
-          alt="Joan seated and laughing, one arm resting over the back of a chair."
-          colour
-          sizes="(max-width: 900px) 70vw, 30vw"
-        />
-      </div>
-
-      <div class="col prose about-prose">
-        <Content />
-        {/* Her art, beside the writing that names her an artist. */}
-        <p class="about-art"><Link href={contact.art}>joangutz.com</Link></p>
+  {/* Her two tabs, "Founder" and "Lineage of Modalities". She asked for them
+      as a drop-down under ABOUT; the bar no longer has drop-downs, so they
+      are tabs at the head of the page instead. /about/#lineage opens the
+      second. Without scripting both simply follow one another. */}
+  <div class="tabs-band" data-tabs>
+    <div class="band">
+      <div class="wide tabs" role="tablist" aria-label="About">
+        <button class="tab" type="button" role="tab" id="tab-founder" aria-controls="founder" aria-selected="true" data-tab="founder">Founder</button>
+        <button class="tab" type="button" role="tab" id="tab-lineage" aria-controls="lineage" aria-selected="false" data-tab="lineage">Lineage of Modalities</button>
       </div>
     </div>
-  </section>
+  </div>
+
+  <div class="tab-panel" id="founder" role="tabpanel" aria-labelledby="tab-founder" data-panel="founder">
+    <section class="band section">
+      <div class="wide about-grid">
+        <div class="about-portrait">
+          <Portrait
+            src="joan-roots.jpg"
+            alt="Joan seated and laughing, one arm resting over the back of a chair."
+            colour
+            sizes="(max-width: 900px) 70vw, 30vw"
+          />
+        </div>
+
+        <div class="col prose about-prose">
+          <Content />
+          {/* Her art, beside the writing that names her an artist. */}
+          <p class="about-art"><Link href={contact.art}>joangutz.com</Link></p>
+        </div>
+      </div>
+    </section>
+
+    {
+      p.quote && (
+        <section class="epigraph">
+          <div class="band">
+            <div class="wide epigraph-inner">
+              <Vessel size="clamp(44px, 6vw, 64px)" open={0.4} />
+              <blockquote>
+                <p>{p.quote}</p>
+              </blockquote>
+            </div>
+          </div>
+        </section>
+      )
+    }
+  </div>
+
+  <div class="tab-panel" id="lineage" role="tabpanel" aria-labelledby="tab-lineage" data-panel="lineage">
+    <section class="band section">
+      <div class="wide lineage" data-lineage>
+        <Lineage />
+      </div>
+    </section>
+  </div>
 </Base>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const panels = [...document.querySelectorAll<HTMLElement>('[data-panel]')];
+    const show = (id: string, focus = false) => {
+      for (const t of tabs) {
+        const on = t.dataset.tab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      }
+      for (const p of panels) p.hidden = p.dataset.panel !== id;
+    };
+    for (const t of tabs) {
+      t.addEventListener('click', () => {
+        show(t.dataset.tab as string);
+        history.replaceState(null, '', t.dataset.tab === 'founder' ? location.pathname : '#lineage');
+      });
+      t.addEventListener('keydown', (e) => {
+        const i = tabs.indexOf(t);
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+          show(n.dataset.tab as string, true);
+        }
+      });
+    }
+    show(location.hash === '#lineage' ? 'lineage' : 'founder');
+  }
+
+  // Each modality folds: its name is the control, its text the panel. The
+  // first opens on arrival. Built from the headings in lineage.md, so the
+  // words stay in the markdown and nothing is lost without scripting.
+  for (const box of document.querySelectorAll<HTMLElement>('[data-lineage]')) {
+    const heads = [...box.querySelectorAll<HTMLElement>(':scope h2')];
+    heads.forEach((h, i) => {
+      const d = document.createElement('details');
+      d.className = 'mod';
+      if (i === 0) d.open = true;
+      const sum = document.createElement('summary');
+      sum.className = 'mod-name';
+      sum.innerHTML = `<span>${h.textContent}</span><i aria-hidden="true"></i>`;
+      const body = document.createElement('div');
+      body.className = 'mod-body';
+      let n = h.nextElementSibling;
+      while (n && n.tagName !== 'H2') {
+        const next = n.nextElementSibling;
+        body.appendChild(n);
+        n = next;
+      }
+      d.append(sum, body);
+      h.replaceWith(d);
+    });
+  }
+</script>
 
 <style>
   /* The portrait sits beside the opening of the writing rather than above
@@ -78,8 +174,186 @@ const p = entry.data;
     margin-top: 2rem;
   }
 
-  .about-prose :global(blockquote) {
-    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
-    line-height: 1.5;
+  /* ---- The tabs ---- */
+  .tabs-band {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: color-mix(in srgb, var(--color-madder) 92%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  :global(html:not(.js)) .tabs-band {
+    display: none;
+  }
+
+  .tabs {
+    display: flex;
+    gap: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .tab {
+    position: relative;
+    padding: 1.15rem 0 1.05rem;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+    text-box: trim-both cap alphabetic;
+  }
+
+  .tab::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: transparent;
+    transition: background-color 250ms var(--ease-open);
+  }
+
+  .tab:hover {
+    color: var(--color-cochineal);
+  }
+
+  .tab[aria-selected='true'] {
+    color: var(--color-cochineal);
+  }
+
+  .tab[aria-selected='true']::after {
+    background: var(--color-cochineal);
+  }
+
+  /* ---- The quote, set apart ---- */
+  .epigraph {
+    padding-block: clamp(4rem, 12vw, 8rem);
+    background: var(--swell-ground);
+  }
+
+  .epigraph-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+    text-align: center;
+  }
+
+  .epigraph blockquote {
+    margin: 0;
+  }
+
+  .epigraph blockquote p {
+    margin: 0 auto;
+    max-width: 24ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 3.6vw, 2.6rem);
+    font-weight: 300;
+    line-height: 1.24;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    color: var(--color-cochineal);
+  }
+
+  /* ---- The lineage ---- */
+  .lineage {
+    max-width: 52rem;
+  }
+
+  .lineage :global(.mod) {
+    border-top: 1px solid var(--rule);
+  }
+
+  .lineage :global(.mod:last-child) {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .lineage :global(.mod-name) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.15;
+    color: var(--color-cochineal);
+  }
+
+  .lineage :global(.mod-name::-webkit-details-marker) {
+    display: none;
+  }
+
+  /* A hairline plus that folds to a minus, as the bar's tabs once did. */
+  .lineage :global(.mod-name i) {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+
+  .lineage :global(.mod-name i::before),
+  .lineage :global(.mod-name i::after) {
+    content: '';
+    position: absolute;
+    background: currentColor;
+  }
+
+  .lineage :global(.mod-name i::before) {
+    left: 0;
+    right: 0;
+    top: calc(50% - 0.5px);
+    height: 1px;
+  }
+
+  .lineage :global(.mod-name i::after) {
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    transition: scale 250ms var(--ease-open);
+  }
+
+  .lineage :global(.mod[open] .mod-name i::after) {
+    scale: 1 0;
+  }
+
+  .lineage :global(.mod-body) {
+    padding-bottom: clamp(1.75rem, 4vw, 2.5rem);
+    max-width: var(--measure);
+  }
+
+  .lineage :global(.mod-body p) {
+    margin: 0 0 1.1em;
+  }
+
+  .lineage :global(.mod-body h3),
+  .lineage :global(h3) {
+    margin: 2rem 0 1rem;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+  }
+
+  /* Without scripting the headings stay headings. */
+  .lineage :global(h2) {
+    margin: 2.5rem 0 1rem;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+  }
+
+  .lineage :global(p) {
+    max-width: var(--measure);
   }
 </style>

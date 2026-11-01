@@ -16,7 +16,7 @@ interface Props {
   note?: string;
   collage: string;
   register: 'plumstone' | 'cochineal' | 'brick' | 'clay';
-  action?: { href: string; label: string; subject?: string };
+  action?: { href: string; label: string; subject?: string; external?: boolean };
 }
 
 const { id, title, note, collage, register, action } = Astro.props;
@@ -38,11 +38,18 @@ const { id, title, note, collage, register, action } = Astro.props;
     {
       action && (
         <div class="front-foot">
-          <a class="turn" href={action.href} data-apply-subject={action.subject}>
+          <a
+            class="turn"
+            href={action.href}
+            data-apply-subject={action.subject}
+            target={action.external ? '_blank' : undefined}
+            rel={action.external ? 'noopener noreferrer' : undefined}
+          >
             <span>{action.label}</span>
             <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
               <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
             </svg>
+            {action.external && <span class="visually-hidden">(opens in a new tab)</span>}
           </a>
         </div>
       )

@@ -27,6 +27,8 @@ interface Props {
   from?: 'left' | 'bottom';
   /** Home runs taller; inner pages run shorter. */
   tall?: boolean;
+  /** Which part of the picture to keep in a wide crop (CSS object-position). */
+  focus?: string;
 }
 
 const {
@@ -37,10 +39,11 @@ const {
   tinted = false,
   from = 'bottom',
   tall = false,
+  focus,
 } = Astro.props;
 ---
 
-<section class:list={['banner on-dark has-ground', { 'banner-tall': tall }]}>
+<section class:list={['banner on-dark has-ground', { 'banner-tall': tall }]} style={focus ? `--focus:${focus}` : undefined}>
   <PhotoGround src={image} from={from} tinted={tinted} />
   <div class="band">
     <div class="col banner-text">
@@ -60,6 +63,10 @@ const {
 </section>
 
 <style>
+  .banner :global(.collage) {
+    object-position: var(--focus, 50% 50%);
+  }
+
   /* .on-dark re-points the focus and rule tokens; the ink comes from the
      token now, but the ground is set here because a banner is the one
      section whose background is a picture rather than a colour. */

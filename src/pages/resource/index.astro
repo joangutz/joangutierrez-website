@@ -1,81 +1,54 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import Collage from '../../components/Collage.astro';
-import KitSignup from '../../components/KitSignup.astro';
-import Link from '../../components/Link.astro';
+import GiftCard from '../../components/GiftCard.astro';
+import OfferingPlain from '../../components/OfferingPlain.astro';
 import { getEntry, render } from 'astro:content';
-import { kit, contact, site } from '../../site';
+import { contact, site } from '../../site';
 
 /**
- * Resource: everything in one place — the gift, then Inspiration and
- * Library. The names are Joan's (her navigation); the gift's title, line
- * and description are hers too. Inspiration and Library show their words
- * once she writes them in /content/pages/inspiration.md and library.md.
- *
- * The gift's signup appears once the Kit form exists (TODO-KIT in site.ts);
- * until then her address is the way to ask for the recording, so the one
- * thing this page hands over is never a dead end.
+ * Resource: cards, in the same language as Work with me. The gift turns
+ * over to give itself; Substack leads to Joan's writing. Inspiration and
+ * Library appear on their own the moment she writes them
+ * (/content/pages/inspiration.md and library.md) — until then a title over
+ * an empty space would read as unfinished, so they are not shown.
  */
-const ready = Boolean(kit.formAction);
-
-const page = async (id: 'inspiration' | 'library') => {
+const shelf = async (id: 'inspiration' | 'library') => {
   const entry = await getEntry('pages', id);
   if (!entry) throw new Error(`Missing /content/pages/${id}.md`);
   const { Content } = await render(entry);
-  // The file's instructions comment is not a body.
   const hasBody = (entry.body ?? '').replace(/<!--[\s\S]*?-->/g, '').trim().length > 0;
   return { id, title: entry.data.title, Content, hasBody };
 };
 
-const shelves = [
-  { ...(await page('inspiration')), image: 'inspiration.jpg' },
-  { ...(await page('library')), image: 'library.jpg' },
-];
+const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).filter((s) => s.hasBody);
+const substackHost = new URL(contact.substack).host;
 ---
 
 <Base title="Resource" description={site.description}>
   <PageBanner title="Resource" image="resource.jpg" />
 
-  <section class="band section" id="gift">
-    <div class="wide res-row">
-      <div class="res-art">
-        <Collage src="rose.jpg" alt="" register="cochineal" sizes="(max-width: 860px) 92vw, 40vw" />
-      </div>
-      <div class="res-text">
-        <span class="label">A Gift</span>
-        <h2 class="res-title">{kit.freebie}</h2>
-        <p class="res-sub">{kit.freebieSub}</p>
-        <p class="res-body">{kit.freebieBody}</p>
-        <div class="res-take">
-          {
-            ready ? (
-              <KitSignup heading={kit.freebie} />
-            ) : (
-              <Link variant="action" href={`mailto:${contact.email}?subject=${encodeURIComponent(kit.freebie)}`}>
-                {contact.email}
-              </Link>
-            )
-          }
-        </div>
-      </div>
+  <section class="band section">
+    <div class="wide res-stack">
+      <GiftCard />
+
+      <OfferingPlain
+        id="substack"
+        title="Substack"
+        collage="library.jpg"
+        register="plumstone"
+        action={{ href: contact.substack, label: substackHost, external: true }}
+      />
     </div>
   </section>
 
   {
-    shelves.map(({ id, title, Content, hasBody, image }) => (
+    shelves.map(({ id, title, Content }) => (
       <section class="band section res-shelf" id={id}>
-        <div class="wide res-row">
-          <div class="res-art">
-            <Collage src={image} alt="" register="cochineal" sizes="(max-width: 860px) 92vw, 40vw" />
-          </div>
-          <div class="res-text">
-            <h2 class="res-title">{title}</h2>
-            {hasBody && (
-              <div class="prose res-prose">
-                <Content />
-              </div>
-            )}
+        <div class="wide">
+          <h2 class="res-title">{title}</h2>
+          <div class="prose res-prose">
+            <Content />
           </div>
         </div>
       </section>
@@ -84,66 +57,23 @@ const shelves = [
 </Base>
 
 <style>
+  .res-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+
   .res-shelf {
     border-top: 1px solid var(--rule-soft);
-  }
-
-  .res-row {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: clamp(1.75rem, 5vw, 3.5rem);
-    align-items: center;
-  }
-
-  .res-art {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    border: 1px solid var(--rule);
-  }
-
-  .res-art :global(.collage) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 
   .res-title {
     font-size: clamp(1.75rem, 3.8vw, 2.6rem);
     line-height: 1.1;
     letter-spacing: -0.015em;
-    margin: 0.9rem 0 0;
-  }
-
-  .res-title:first-child {
-    margin-top: 0;
-  }
-
-  .res-sub {
-    margin: 0.7rem 0 0;
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
-  }
-
-  .res-body {
-    margin: 1.25rem 0 0;
-    max-width: 46ch;
-  }
-
-  .res-take {
-    margin-top: var(--gap-door);
   }
 
   .res-prose {
     margin-top: 1.25rem;
-  }
-
-  @media (max-width: 860px) {
-    .res-row {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 </style>

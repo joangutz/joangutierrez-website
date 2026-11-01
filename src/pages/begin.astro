@@ -1,80 +1,154 @@
 ---
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
-import KitSignup from '../components/KitSignup.astro';
-import PageBanner from '../components/PageBanner.astro';
-import { contact, booking, kit, site } from '../site';
+import PhotoGround from '../components/PhotoGround.astro';
+import { contact, booking, site } from '../site';
+
+/**
+ * Begin: one invitation, not a directory.
+ *
+ * A single photograph fills the window, and on it a pane of glass carries
+ * Joan's "Get in Touch" — her heading, her two sentences, her booking label
+ * as the one large action. For anyone who would rather write, her address
+ * and number sit quietly beneath it, and her WHERE list becomes one line.
+ * Her sign-off closes it. Every word here is hers.
+ */
 ---
 
-{/* Joan's "Get in Touch" section from her original site, unaltered: its
-    heading, its two sentences, its sign-off. The booking label is hers too.
-    Nothing on this page is written for her. */}
 <Base title="Begin" description="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.">
-  <PageBanner
-    eyebrow="Begin"
-    title="Get in Touch"
-    lede="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too."
-    image="begin.jpg"
-  >
-    {/* A link rather than an embed: Cal.com renders in its own white, which
-        cannot be reached across an origin boundary. */}
-    <Link variant="action" href={booking.url}>{booking.label}</Link>
-  </PageBanner>
+  <section class="invite on-dark has-ground">
+    <PhotoGround src="begin.jpg" />
 
-  {
-    kit.formAction && (
-      <section class="band section">
-        <div class="col">
-          <KitSignup />
+    <div class="band invite-band">
+      <div class="wide">
+        <div class="invite-pane">
+          <span class="label">Begin</span>
+          <h1 class="invite-title">Get in Touch</h1>
+          <p class="invite-lede">
+            Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.
+          </p>
+
+          <div class="invite-action">
+            <Link variant="action" href={booking.url}>{booking.label}</Link>
+          </div>
+
+          <ul class="invite-write">
+            <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
+            <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
+          </ul>
+
+          {/* Joan's WHERE list, as one line. */}
+          <p class="invite-where">
+            {site.locations.map((l, i) => (
+              <span class="where-item">
+                {i > 0 && <span class="dot" aria-hidden="true">·</span>}
+                {l.mode ? `${l.place} — ${l.mode}` : l.place}
+              </span>
+            ))}
+          </p>
         </div>
-      </section>
-    )
-  }
 
-  <section class="band section">
-    <div class="col">
-      <ul class="plain">
-        <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
-        <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
-        <li><Link href={contact.substack}>Substack</Link></li>
-      </ul>
-
-      {/* Joan's "WHERE" list, exactly as she wrote it. */}
-      <span class="label where-label">Where</span>
-      <ul class="plain">
-        {site.locations.map((l) => <li>{l.mode ? `${l.place} — ${l.mode}` : l.place}</li>)}
-      </ul>
-
-      <p class="signoff">Cheers to being alive.</p>
+        <p class="invite-signoff">Cheers to being alive.</p>
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .where-label {
-    display: block;
-    margin: clamp(2.25rem, 5vw, 3rem) 0 1rem;
-  }
-
-  .plain {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* The window, less the bar. */
+  .invite {
+    min-height: calc(100svh - var(--bar-h));
     display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    font-size: 1.05rem;
+    align-items: center;
+    color: var(--color-bract);
   }
 
-  .plain a {
-    text-decoration-color: var(--color-quick);
+  .invite-band {
+    width: 100%;
+    padding-block: clamp(3rem, 9vh, 6rem);
   }
 
-  .signoff {
-    margin: clamp(2.5rem, 6vw, 3.5rem) 0 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  .invite-pane {
+    max-width: 34rem;
+    padding: clamp(1.75rem, 4.5vw, 3rem);
+    background: rgb(var(--ch-plum) / 0.38);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    backdrop-filter: blur(18px) saturate(1.1);
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.16);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .invite-pane {
+      background: rgb(var(--ch-plum) / 0.82);
+    }
+  }
+
+  .invite-pane .label {
+    color: rgb(var(--ch-bract) / 0.82);
+  }
+
+  .invite-title {
+    margin: 0.9rem 0 0;
+    font-size: clamp(2.4rem, 6vw, 4rem);
     font-weight: 300;
-    line-height: 1.3;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .invite-lede {
+    margin: 1.25rem 0 0;
+    font-size: clamp(1.08rem, 1.9vw, 1.25rem);
+    line-height: 1.55;
+    max-width: 30ch;
+  }
+
+  .invite-action {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  /* Bigger than an ordinary action: the one thing to do here. */
+  .invite-action :global(.lnk-action) {
+    font-size: 0.8rem;
+    padding: 1.1rem 1.6rem;
+  }
+
+  .invite-write {
+    list-style: none;
+    margin: clamp(1.75rem, 4vw, 2.25rem) 0 0;
+    padding: clamp(1.25rem, 3vw, 1.5rem) 0 0;
+    border-top: 1px solid rgb(var(--ch-bract) / 0.18);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.75rem;
+    font-size: 0.98rem;
+  }
+
+  .invite-where {
+    margin: 1rem 0 0;
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.9;
+    color: rgb(var(--ch-bract) / 0.78);
+  }
+
+  /* A place never breaks across lines; the line breaks between places. */
+  .where-item {
+    white-space: nowrap;
+  }
+
+  .dot {
+    margin-inline: 0.6em;
+  }
+
+  .invite-signoff {
+    margin: clamp(2.5rem, 7vh, 4rem) 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
   }
 </style>

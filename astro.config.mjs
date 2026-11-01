@@ -43,8 +43,9 @@ export default defineConfig({
     '/work-with-me/this-very-body': to('/work-with-me/#this-very-body'),
     '/work-with-me/happenings': to('/work-with-me/#relational-integrity-labs'),
     '/resource/gift': to('/resource/#gift'),
-    '/resource/inspiration': to('/resource/#inspiration'),
-    '/resource/library': to('/resource/#library'),
+    // Inspiration and Library show on Resource once written.
+    '/resource/inspiration': to('/resource/'),
+    '/resource/library': to('/resource/'),
   },
   vite: {
     plugins: [tailwindcss()],

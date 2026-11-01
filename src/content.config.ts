@@ -88,6 +88,8 @@ const pages = defineCollection({
     title: z.string(),
     eyebrow: z.string().optional(),
     lede: z.string().optional(),
+    /** A line of Joan's set apart in large type below the page's text. */
+    quote: z.string().optional(),
     description: z.string(),
   }),
 });

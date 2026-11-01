@@ -1,0 +1,518 @@
+---
+import { getImage } from 'astro:assets';
+import Collage from './Collage.astro';
+import KitSignup from './KitSignup.astro';
+import Link from './Link.astro';
+import { kit, contact } from '../site';
+import rose from '../../assets/photos/rose.jpg';
+
+/**
+ * The gift, as a card that turns — the same gesture as the offerings.
+ *
+ * The front is the rose, its name and Joan's line for it. Turning it over
+ * is the unwrapping: her description, and the way to receive it — the Kit
+ * signup once that form exists (TODO-KIT in site.ts), her address until
+ * then, so the one thing this card hands over is never a dead end.
+ *
+ * The rose answers touch the way the triangle's bubbles do: a pointer
+ * arriving, or a press, sends a ripple through the picture. It is drawn on
+ * a canvas over the photograph and does nothing for reduced motion or
+ * without scripting.
+ */
+const ready = Boolean(kit.formAction);
+const roseTexture = await getImage({ src: rose, width: 720, format: 'webp' });
+---
+
+<article class="gift" id="gift" data-gift>
+  <div class="gift-inner" data-gift-inner>
+    <div class="face face-front" data-gift-face="front">
+      <div class="gift-art" data-ripple-host>
+        <Collage src="rose.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
+        <canvas class="gift-water" data-ripple={roseTexture.src} aria-hidden="true"></canvas>
+      </div>
+      <div class="front-text">
+        <div class="front-glass" aria-hidden="true">
+          <Collage src="rose.jpg" alt="" register="cochineal" sizes="30vw" />
+        </div>
+        <span class="label">A Gift</span>
+        <h2 class="gift-title">{kit.freebie}</h2>
+        <p class="gift-sub">{kit.freebieSub}</p>
+        <div class="front-foot">
+          <button type="button" class="turn" data-gift-turn="open" aria-expanded="false" aria-controls="gift-back">
+            <span>Open</span>
+            <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
+              <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="face face-back on-dark" id="gift-back" data-gift-face="back">
+      <div class="back-glass" aria-hidden="true">
+        <Collage src="rose.jpg" alt="" register="cochineal" sizes="40vw" />
+      </div>
+      <div class="back-head">
+        <div>
+          <span class="label">A Gift</span>
+          <h3 class="back-title">{kit.freebie}</h3>
+        </div>
+        <button type="button" class="turn turn-back" data-gift-turn="close">
+          <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
+            <path d="M16 5 H1.5 M5.5 1 L1.5 5 L5.5 9" />
+          </svg>
+          <span>Back</span>
+        </button>
+      </div>
+      <p class="back-body">{kit.freebieBody}</p>
+      <div class="back-take">
+        {
+          ready ? (
+            <KitSignup heading={kit.freebie} />
+          ) : (
+            <Link variant="action" href={`mailto:${contact.email}?subject=${encodeURIComponent(kit.freebie)}`}>
+              {contact.email}
+            </Link>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .gift {
+    perspective: 1800px;
+    scroll-margin-top: 2rem;
+  }
+
+  .gift-inner {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .face {
+    border: 1px solid var(--rule);
+    background: var(--color-madder);
+  }
+
+  .face-front {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  }
+
+  .gift-art {
+    position: relative;
+    overflow: hidden;
+    min-height: 15rem;
+    cursor: pointer;
+  }
+
+  .gift-art :global(.collage),
+  .gift-water {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gift-water {
+    opacity: 0;
+    transition: opacity 400ms var(--ease-open);
+    pointer-events: none;
+  }
+
+  .gift-water.is-moving {
+    opacity: 1;
+  }
+
+  .front-text {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .front-glass,
+  .back-glass {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .front-glass :global(.collage),
+  .back-glass :global(.collage) {
+    position: absolute;
+    inset: -15%;
+    width: 130%;
+    height: 130%;
+    max-width: none;
+    object-fit: cover;
+    filter: blur(40px) grayscale(1);
+  }
+
+  .front-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-madder) 80%, transparent);
+  }
+
+  .back-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(var(--ch-glass-deep) / var(--veil-back));
+  }
+
+  .gift-title {
+    margin: 0.4rem 0 0;
+    font-size: clamp(1.75rem, 3.8vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .gift-sub {
+    margin: 0.4rem 0 0;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+  }
+
+  .front-foot {
+    margin-top: auto;
+    padding-top: 1.75rem;
+  }
+
+  /* ---- The back ---- */
+  .face-back {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    background: var(--color-plumstone);
+    border-color: transparent;
+    color: var(--color-bract);
+  }
+
+  .face-back .label {
+    color: rgb(var(--ch-bract) / 0.8);
+  }
+
+  .back-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgb(var(--ch-bract) / 0.22);
+  }
+
+  .back-title {
+    margin: 0.2rem 0 0;
+    font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+    line-height: 1.1;
+  }
+
+  .back-body {
+    margin: 1.5rem 0 0;
+    max-width: 46ch;
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    line-height: 1.6;
+  }
+
+  .back-take {
+    margin-top: var(--gap-door);
+  }
+
+  /* ---- The control ---- */
+  .turn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 0.6rem 0.9rem;
+    background: rgb(var(--ch-glass) / 0.9);
+    color: var(--color-bract);
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.16);
+    transition: background-color 300ms var(--ease-open);
+  }
+
+  .turn:hover,
+  .turn:focus-visible {
+    background: var(--color-plumstone);
+  }
+
+  .turn-back {
+    flex: none;
+    background: none;
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.35);
+  }
+
+  .turn-back:hover,
+  .turn-back:focus-visible {
+    background: none;
+    box-shadow: inset 0 0 0 1px var(--color-bract);
+  }
+
+  .turn-arrow {
+    width: 16px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: translate 300ms var(--ease-open);
+  }
+
+  .turn:hover .turn-arrow,
+  .turn:focus-visible .turn-arrow {
+    translate: 3px 0;
+  }
+
+  .turn-back:hover .turn-arrow,
+  .turn-back:focus-visible .turn-arrow {
+    translate: -3px 0;
+  }
+
+  /* ---- Without JS both faces stack; with it, the card turns ---- */
+  .face-back {
+    margin-top: -1px;
+  }
+
+  :global(.js) .gift-inner {
+    height: var(--card-h, auto);
+    transition: height 900ms var(--ease-open), transform 900ms var(--ease-open);
+  }
+
+  :global(.js) .face {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    margin-top: 0;
+  }
+
+  :global(.js) .face-back {
+    transform: rotateY(180deg);
+  }
+
+  :global(.js) .gift[data-open] .gift-inner {
+    transform: rotateY(180deg);
+  }
+
+  @media (max-width: 780px) {
+    .face-front {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gift-art {
+      aspect-ratio: 3 / 2;
+      min-height: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .gift-inner {
+      transition: none;
+      transform: none !important;
+    }
+
+    :global(.js) .face {
+      backface-visibility: visible;
+      transform: none !important;
+      transition: opacity 200ms linear;
+    }
+
+    :global(.js) .face-back {
+      opacity: 0;
+    }
+
+    :global(.js) .gift[data-open] .face-front {
+      opacity: 0;
+    }
+
+    :global(.js) .gift[data-open] .face-back {
+      opacity: 1;
+    }
+
+    .turn-arrow {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const card of document.querySelectorAll<HTMLElement>('[data-gift]')) {
+    const inner = card.querySelector<HTMLElement>('[data-gift-inner]');
+    const front = card.querySelector<HTMLElement>('[data-gift-face="front"]');
+    const back = card.querySelector<HTMLElement>('[data-gift-face="back"]');
+    const openBtn = card.querySelector<HTMLButtonElement>('[data-gift-turn="open"]');
+    const closeBtn = card.querySelector<HTMLButtonElement>('[data-gift-turn="close"]');
+    if (!inner || !front || !back || !openBtn || !closeBtn) continue;
+
+    const isOpen = () => card.hasAttribute('data-open');
+    const size = () => inner.style.setProperty('--card-h', `${(isOpen() ? back : front).offsetHeight}px`);
+    const sync = () => {
+      const hidden = isOpen() ? front : back;
+      const shown = isOpen() ? back : front;
+      hidden.setAttribute('inert', '');
+      hidden.setAttribute('aria-hidden', 'true');
+      shown.removeAttribute('inert');
+      shown.removeAttribute('aria-hidden');
+      openBtn.setAttribute('aria-expanded', String(isOpen()));
+    };
+    const turn = (open: boolean) => {
+      if (open) card.setAttribute('data-open', '');
+      else card.removeAttribute('data-open');
+      sync();
+      size();
+      (open ? closeBtn : openBtn).focus({ preventScroll: true });
+    };
+    openBtn.addEventListener('click', () => turn(true));
+    closeBtn.addEventListener('click', () => turn(false));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) turn(false);
+    });
+    sync();
+    size();
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(size);
+      ro.observe(front);
+      ro.observe(back);
+    }
+    document.fonts?.ready.then(size);
+
+    // ---- The rose ripples, as the triangle's bubbles do ----
+    const host = card.querySelector<HTMLElement>('[data-ripple-host]');
+    const canvas = card.querySelector<HTMLCanvasElement>('canvas[data-ripple]');
+    const ctx = canvas?.getContext('2d', { willReadFrequently: true });
+    if (!host || !canvas || !ctx) continue;
+
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = canvas.dataset.ripple as string;
+    let src: ImageData | null = null;
+    let out: ImageData | null = null;
+    let W = 0;
+    let H = 0;
+    let started = -1e9;
+    let running = false;
+    let cx = 0.5;
+    let cy = 0.5;
+    const RUN = 4200;
+
+    const prepare = () => {
+      if (!img.naturalWidth) return;
+      // Half the shown size: the picture is soft, and the work per frame
+      // falls with the square of the width.
+      const r = host.getBoundingClientRect();
+      W = Math.max(80, Math.round(r.width / 2));
+      H = Math.max(60, Math.round(r.height / 2));
+      canvas.width = W;
+      canvas.height = H;
+      // Cover-fit, matching the photograph beneath.
+      const k = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+      const w = img.naturalWidth * k;
+      const h = img.naturalHeight * k;
+      ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+      src = ctx.getImageData(0, 0, W, H);
+      out = ctx.createImageData(W, H);
+    };
+    img.addEventListener('load', prepare);
+    if ('ResizeObserver' in window) new ResizeObserver(prepare).observe(host);
+
+    const frame = (now: number) => {
+      const k = (now - started) / RUN;
+      if (!src || !out || k >= 1) {
+        running = false;
+        canvas.classList.remove('is-moving');
+        return;
+      }
+      const S = src.data;
+      const O = out.data;
+      const R = Math.hypot(W, H) / 2;
+      const ox = cx * W;
+      const oy = cy * H;
+      const front = (0.12 + k) * 1.2 * R;
+      const wl = 0.16 * R;
+      const width = 0.3 * R;
+      const amp = 0.035 * R * Math.pow(1 - k, 0.8);
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const dx = x - ox;
+          const dy = y - oy;
+          const r = Math.sqrt(dx * dx + dy * dy) || 0.001;
+          const o = (y * W + x) * 4;
+          const behind = front - r;
+          if (behind < 0 || behind > width * 2.4) {
+            O[o] = S[o];
+            O[o + 1] = S[o + 1];
+            O[o + 2] = S[o + 2];
+            O[o + 3] = 255;
+            continue;
+          }
+          const env = Math.exp(-((behind - width) ** 2) / (width * width * 0.5));
+          const phase = (behind / wl) * Math.PI * 2;
+          const d = amp * env * Math.sin(phase);
+          let fx = x - (dx / r) * d;
+          let fy = y - (dy / r) * d;
+          fx = fx < 0 ? 0 : fx > W - 1.001 ? W - 1.001 : fx;
+          fy = fy < 0 ? 0 : fy > H - 1.001 ? H - 1.001 : fy;
+          const x0 = fx | 0;
+          const y0 = fy | 0;
+          const tx = fx - x0;
+          const ty = fy - y0;
+          const a0 = (y0 * W + x0) * 4;
+          const b0 = a0 + W * 4;
+          const light = 1 + 0.14 * env * Math.cos(phase) * (1 - k);
+          for (let c = 0; c < 3; c++) {
+            const top = S[a0 + c] + (S[a0 + 4 + c] - S[a0 + c]) * tx;
+            const bot = S[b0 + c] + (S[b0 + 4 + c] - S[b0 + c]) * tx;
+            O[o + c] = (top + (bot - top) * ty) * light;
+          }
+          O[o + 3] = 255;
+        }
+      }
+      ctx.putImageData(out, 0, 0);
+      requestAnimationFrame(frame);
+    };
+
+    const ripple = (e?: PointerEvent) => {
+      if (reduce.matches || !src) return;
+      const r = host.getBoundingClientRect();
+      cx = e ? (e.clientX - r.left) / r.width : 0.5;
+      cy = e ? (e.clientY - r.top) / r.height : 0.5;
+      started = performance.now();
+      canvas.classList.add('is-moving');
+      if (!running) {
+        running = true;
+        requestAnimationFrame(frame);
+      }
+    };
+
+    // Once as the pointer arrives, and wherever it is pressed.
+    host.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') ripple(e);
+    });
+    host.addEventListener('pointerdown', ripple);
+  }
+</script>

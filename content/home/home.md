@@ -28,8 +28,9 @@ realms:
 founder:
   label: Founder & Educator
   paragraphs:
-    - In this very body, I have touched an archive of meaning where reality is composed and decomposed. I crossed innumerable borders to remember the ancestral truths I carry in my pelvic root. I practice not confusing the map with the territory.
-    - My name is Joan, a devoted amateur, full of love and dignity. I draw on my wounds and strengths to point you back to the pulse of life that already lives in you. This is Ma Somatrix.
+    # Joan's text of 10/31, verbatim.
+    - In this very body I have touched a living matrix of meaning where reality is created and deconstructed. Crossing innumerable borders to remember the ancestral truths I carry in my pelvic root, I endeavor to not confuse the map with the territory. I approach the body as an altar, medium, and field capable of returning us to the common language of present awareness. My work as a human, artist, and somatic educator begins at the — point of a body — that knows how to listen, that responds from instinct, and that reclaims pleasure, presence, and aliveness.
+    - My name is Joan, a devoted amateur, full of love and dignity. I draw on my wounds and my strengths to return us to the pulse of life already beating within. Welcome to Ma Somatrix.
   portrait: joan-home.jpg
   alt: Joan looking directly at the camera, a flower tucked behind one ear.
   link: Learn more

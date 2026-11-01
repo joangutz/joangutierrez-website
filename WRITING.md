@@ -131,8 +131,8 @@ used yours. Tell me if any of these no longer feel right:
 
 ## 7 · Small choices I made with your text — tell me if any are wrong
 
-- **About:** your text says "My name is Joan" twice — as the heading and as
-  the first line. The page uses it once, as the title.
+- **About:** your greeting "Hello, I am Joan." is the banner's title, and
+  your quote is set apart, large, below the bio rather than inside it.
 - **About:** the subtitle is the shorter version you asked for: "Somatic
   educator, artist, and founder of Ma Somatrix".
 - **Ma Soma Matrix:** "Ma Soma Matrix is the sacred process of embodiment"
@@ -148,7 +148,8 @@ used yours. Tell me if any of these no longer feel right:
 
 These are not sentences, but they are words, and they are mine. Rename any:
 
-- **Menu**, **Back** (on a turned card), **Send**
+- **Menu**, **Back** (on a turned card), **Open** (on the gift card),
+  **Send**
 - Form fields: **Name**, **Email**, **Pronouns**, **Location**, **Message**,
   **— optional**, and the notes **"Opens your email app, addressed to
   joankgutz@gmail.com."**, **"Opening your email app."**, **"Sent."**,
