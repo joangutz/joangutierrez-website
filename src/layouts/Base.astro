@@ -205,13 +205,18 @@ import GetInTouch from '../components/GetInTouch.astro';
 
   /* With no Get in Touch above it, the footer opens the pane: no dividing
      rule, and the full top padding back. */
-  .closing-bare :global(.footer-on-ground) {
-    padding-top: clamp(3rem, 7vw, 5rem);
+  /* The credit sits just beneath the glass, as on Begin. */
+  .closing :global(.close > .band) {
+    padding-bottom: 0;
   }
 
-  .closing-bare :global(.footer-on-ground > .band) {
-    padding-top: 0;
-    border-top: 0;
+  .closing :global(.footer-on-ground) {
+    padding-top: clamp(1rem, 2.5vh, 1.5rem);
+  }
+
+  /* With nothing above it, the credit opens on a short band of the photo. */
+  .closing-bare :global(.footer-on-ground) {
+    padding-top: clamp(3rem, 8vh, 4.5rem);
   }
 
   /* Over the photograph's own wash, a second one that gathers toward the

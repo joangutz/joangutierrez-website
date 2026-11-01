@@ -1,5 +1,4 @@
 ---
-import Vessel from './Vessel.astro';
 import { site } from '../site';
 
 interface Props {
@@ -17,47 +16,36 @@ const year = new Date().getFullYear();
     ends on its own close rather than on a directory. */}
 <footer class:list={['footer on-dark', { grained: !onGround, 'footer-on-ground': onGround }]}>
   <div class="band">
-    <div class="wide footer-line">
-      <Vessel size="26px" open={0.55} />
+    <div class="wide">
       <p class="credit">© {year} {site.name}</p>
     </div>
   </div>
 </footer>
 
 <style>
+  /* One small line, as at the foot of Begin: no rule, no mark. The bottom
+     carries the bar's height, because the bar is fixed over the foot of
+     the window. */
   .footer {
     background: var(--color-plumstone);
     color: var(--color-bract);
-    /* The bottom carries the bar's height as well, because the bar is fixed
-       over the foot of the window. */
-    padding-block: clamp(1.75rem, 4vw, 2.5rem)
-      calc(clamp(1.75rem, 4vw, 2.5rem) + var(--bar-h) + env(safe-area-inset-bottom, 0px));
+    padding-block: clamp(1.25rem, 3vh, 1.75rem)
+      calc(clamp(1.5rem, 4vh, 2.5rem) + var(--bar-h) + env(safe-area-inset-bottom, 0px));
   }
 
-  /* On the closing photograph the footer has no ground of its own: one line
-     under a hairline, at the foot of the pane. */
+  /* On the closing photograph it follows straight on from what sits above
+     it, close beneath the glass. */
   .footer-on-ground {
     background: transparent;
     padding-top: 0;
   }
 
-  .footer-on-ground > .band {
-    padding-top: clamp(1.5rem, 3.5vw, 2.25rem);
-    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
-  }
-
-  .footer-line {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
   .credit {
     margin: 0;
     font-family: var(--font-label);
-    font-size: 0.66rem;
+    font-size: 0.62rem;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    opacity: 0.75;
+    opacity: 0.7;
   }
 </style>
