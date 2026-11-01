@@ -102,6 +102,16 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     max-width: 40rem;
   }
 
+  :global(.on-dark) .app {
+    max-width: none;
+  }
+
+  /* Room between the form's own heading and its first field. */
+  .app > .label {
+    display: block;
+    margin-bottom: 1.4rem;
+  }
+
   .app-body {
     margin: 1rem 0 2rem;
     font-size: 1rem;
@@ -110,7 +120,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     max-width: 46ch;
   }
 
-  .on-dark .app-body {
+  :global(.on-dark) .app-body {
     color: rgb(var(--ch-bract) / 0.85);
   }
 
@@ -136,7 +146,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     color: var(--color-ink-2);
   }
 
-  .on-dark .app-field label {
+  :global(.on-dark) .app-field label {
     color: rgb(var(--ch-bract) / 0.82);
   }
 
@@ -159,10 +169,15 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     width: 100%;
   }
 
-  .on-dark .app-field input,
-  .on-dark .app-field textarea {
+  :global(.on-dark) .app-field input,
+  :global(.on-dark) .app-field textarea {
     color: var(--color-bract);
     background: rgb(var(--ch-plum) / 0.45);
+    border-color: rgb(var(--ch-bract) / 0.28);
+  }
+
+  :global(.on-dark) .app-field :is(input, textarea):focus-visible {
+    border-color: var(--color-bract);
   }
 
   .app-field textarea {
@@ -192,7 +207,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     background: var(--color-plumstone);
   }
 
-  .on-dark .app-submit:hover {
+  :global(.on-dark) .app-submit:hover {
     background: var(--color-bract);
     color: var(--color-plumstone);
   }
@@ -203,7 +218,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     color: var(--color-ink-2);
   }
 
-  .on-dark .app-note {
+  :global(.on-dark) .app-note {
     color: rgb(var(--ch-bract) / 0.72);
   }
 

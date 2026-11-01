@@ -7,6 +7,7 @@ import OfferingCard from '../../components/OfferingCard.astro';
 import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
 import KitSignup from '../../components/KitSignup.astro';
+import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
 import { withBase, beginHere, kit } from '../../site';
 
@@ -38,7 +39,7 @@ const motifs = [
 ];
 ---
 
-<Base title={s.title} description={s.description} close>
+<Base title={s.title} description={s.description}>
   <ChapterRail />
 
   <PageBanner title={s.title} lede={s.lede} image="work-with-me.jpg" />
@@ -61,29 +62,6 @@ const motifs = [
       <div class="card-stack">
         {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
       </div>
-    </div>
-  </section>
-
-  <!-- The price grid carries comparison. A different job, kept separate. -->
-  <section class="band section">
-    <div class="wide">
-      <PriceGrid />
-
-      {/* Other people's experience, at the moment a price has just been read. */}
-      {/* Both of these render nothing until their content exists, and an
-          empty wrapper still keeps its margin — together they were 128px of
-          blank under the price grid. The wrapper goes when the contents do. */}
-      {hasQuotes && (
-        <div class="after-prices">
-          <Testimonials />
-        </div>
-      )}
-
-      {kit.formAction && (
-        <div class="not-ready">
-          <KitSignup />
-        </div>
-      )}
     </div>
   </section>
 
@@ -112,38 +90,105 @@ const motifs = [
     </div>
   </section>
 
-  <!-- Consent -->
-  <section class="band section">
-    <div class="col">
-      <h2 class="section-title">{s.consent.title}</h2>
-      {s.consent.paragraphs.map((p) => <p class="body-text">{p}</p>)}
-    </div>
-  </section>
+  {/* The ground the work stands on: how consent works, and the note that
+      holds every plan — side by side across the page, one section, rather
+      than two stray columns. */}
+  <section class="ground-band" id="consent">
+    <div class="band section">
+      <div class="wide ground-grid">
+        <div class="ground-consent">
+          <h2 class="section-title">{s.consent.title}</h2>
+          {s.consent.paragraphs.map((p) => <p class="body-text">{p}</p>)}
+        </div>
 
-
-  <!-- Scope of practice. Mid-page, readable size, calm. Not a footnote. -->
-  <section class="band section">
-    <div class="col">
-      <div class="note pane">
-        <span class="label">{s.note.title}</span>
-        {s.note.paragraphs.map((p) => <p>{p}</p>)}
+        <aside class="ground-note" aria-labelledby="note-title">
+          <span class="label" id="note-title">{s.note.title}</span>
+          {s.note.paragraphs.map((p) => <p>{p}</p>)}
+        </aside>
       </div>
-
     </div>
   </section>
 
-  {/* The way in. Everything above describes the work; this is the one place
-      on the page where someone can put their hand up for it. */}
-  <section class="band section apply" id="apply">
-    <div class="col">
+  {/* What it costs, read last, once the work is understood — directly
+      above the two ways to begin. */}
+  <section class="band section">
+    <div class="wide">
+      <PriceGrid />
+
+      {/* Other people's experience, at the moment a price has just been read. */}
+      {/* Both of these render nothing until their content exists, and an
+          empty wrapper still keeps its margin — together they were 128px of
+          blank under the price grid. The wrapper goes when the contents do. */}
+      {hasQuotes && (
+        <div class="after-prices">
+          <Testimonials />
+        </div>
+      )}
+
+      {kit.formAction && (
+        <div class="not-ready">
+          <KitSignup />
+        </div>
+      )}
+    </div>
+  </section>
+
+  {/* The way in: a conversation, or an application — together on the
+      closing photograph, running straight into the footer. */}
+  <GetInTouch slot="close">
+    <div id="apply">
       <ApplicationForm subject="1:1 Sessions" />
     </div>
-  </section>
+  </GetInTouch>
 </Base>
 
 <style>
-  .apply {
-    border-top: 1px solid var(--rule-soft);
+  /* ---- The ground: consent and the note ---- */
+  .ground-band {
+    background: var(--swell-ground);
+  }
+
+  .ground-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .ground-consent .body-text {
+    margin-top: 1.5rem;
+    max-width: var(--measure);
+  }
+
+  /* The note is a boundary statement, so it stands as its own pane — the
+     wine glass of the turned cards, over the card texture's colour. */
+  .ground-note {
+    padding: clamp(1.5rem, 3.5vw, 2.25rem);
+    background: rgb(var(--ch-glass) / 0.92);
+    color: var(--color-bract);
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.14);
+  }
+
+  .ground-note .label {
+    color: rgb(var(--ch-bract) / 0.82);
+  }
+
+  .ground-note p {
+    margin: 1rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .ground-note p:first-of-type {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 860px) {
+    .ground-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .section-title {
@@ -283,24 +328,6 @@ const motifs = [
 
   /* ---- Note on all plans ---- */
   /* Fill, border and padding all come from .pane now. */
-  .note {
-    max-width: var(--measure);
-  }
-
-  .note .label {
-    margin-bottom: 1.5rem;
-  }
-
-  .note p {
-    margin: 0 0 1.25em;
-    font-size: 1.02rem;
-    line-height: 1.7;
-  }
-
-  .note p:last-child {
-    margin-bottom: 0;
-  }
-
 
   .after-prices,
   .not-ready {

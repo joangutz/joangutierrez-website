@@ -91,10 +91,12 @@ import GetInTouch from '../components/GetInTouch.astro';
     <main id="main">
       <slot />
     </main>
-    <div class:list={['closing has-ground on-dark', { 'closing-bare': !close }]}>
+    <div class:list={['closing has-ground on-dark', { 'closing-bare': !close && !Astro.slots.has('close') }]}>
       <PhotoGround src={CLOSING_PHOTO} />
       <span class="closing-deep" aria-hidden="true" />
-      {close && <GetInTouch />}
+      {/* A page may put its own close here (slot="close"); otherwise
+          Get in Touch, when asked for. */}
+      <slot name="close">{close && <GetInTouch />}</slot>
       <Footer onGround />
     </div>
     <PaletteTrial />
