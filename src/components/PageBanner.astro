@@ -44,9 +44,9 @@ const {
 ---
 
 <section class:list={['banner on-dark has-ground', { 'banner-tall': tall }]} style={focus ? `--focus:${focus}` : undefined}>
-  <PhotoGround src={image} from={from} tinted={tinted} />
+  <PhotoGround src={image} from="glass" tinted={tinted} />
   <div class="band">
-    <div class="col banner-text">
+    <div class="banner-text glass-pane">
       {eyebrow && <span class="label">{eyebrow}</span>}
       <h1 class="page-title">{title}</h1>
       {lede && <p class="lede banner-lede">{lede}</p>}
@@ -82,7 +82,14 @@ const {
   }
 
   .band {
-    padding-block: clamp(2.5rem, 7vh, 4.5rem);
+    padding-block: clamp(2rem, 6vh, 4rem);
+  }
+
+  /* The words on a pane of glass, as on Begin. */
+  .banner-text {
+    width: fit-content;
+    max-width: min(40rem, 100%);
+    padding: clamp(1.4rem, 3.5vw, 2.25rem) clamp(1.5rem, 4vw, 2.75rem);
   }
 
   .banner-lede {

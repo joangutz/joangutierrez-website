@@ -21,7 +21,7 @@ interface Props {
   /** Supply only when the photograph is content rather than atmosphere. */
   alt?: string;
   /** Which corner the words sit in, so the scrim is deepest under them. */
-  from?: 'left' | 'bottom';
+  from?: 'left' | 'bottom' | 'glass';
 
   /** For pictures whose own colour fights the palette. */
   tinted?: boolean;
@@ -85,6 +85,12 @@ const { src, alt, from = 'left', tinted = false } = Astro.props;
       rgb(var(--ch-plum) / 0.6) 76%,
       rgb(var(--ch-plum) / 0.4) 100%
     );
+  }
+
+  /* Under a glass pane the picture needs only a light, even wash: the
+     pane carries the words, so the photograph can show. */
+  .ground-glass::after {
+    background: rgb(var(--ch-plum) / 0.28);
   }
 
   .ground-bottom::after {
