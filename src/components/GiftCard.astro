@@ -135,6 +135,13 @@ const ready = Boolean(kit.formAction);
     filter: blur(40px) grayscale(1);
   }
 
+  /* The rose is soft and nearly one tone; blurred and greyed it went flat.
+     A lift of light and contrast brings back the play of shapes the
+     offering cards' collages give their glass. */
+  .front-glass :global(.collage) {
+    filter: blur(34px) grayscale(1) contrast(1.9) brightness(1.4);
+  }
+
   .front-glass::after {
     content: '';
     position: absolute;

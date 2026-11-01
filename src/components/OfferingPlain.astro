@@ -154,7 +154,9 @@ const compact = !action;
     height: 130%;
     max-width: none;
     object-fit: cover;
-    filter: blur(40px) grayscale(1);
+    /* Lifted, as on the gift card, so a soft photograph still shows its
+       shapes through the glass the way the offering collages do. */
+    filter: blur(34px) grayscale(1) contrast(1.9) brightness(1.18);
   }
 
   .front-glass::after {
