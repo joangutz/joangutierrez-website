@@ -109,13 +109,13 @@ const {
     container-type: inline-size;
   }
 
-  /* The name to the left, Joan's line to its right, resting on the same
-     baseline; on a phone they stack. */
+  /* The name to the left, Joan's line to its right, each centred on the
+     other; on a phone they stack. */
   .banner-cinema .banner-text {
     width: 100%;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    align-items: end;
+    align-items: center;
     column-gap: clamp(2rem, 5vw, 4rem);
   }
 
@@ -133,10 +133,14 @@ const {
     line-height: 1;
     white-space: nowrap;
     font-size: min(5.6cqi, 5rem);
+    /* Trimmed to its capitals, and no inherited top margin, so centring
+       the box centres the letters. */
+    text-box: trim-both cap alphabetic;
+    margin: 0;
   }
 
   .banner-cinema .banner-lede {
-    margin: 0 0 0.2em;
+    margin: 0;
     justify-self: end;
     font-size: clamp(1rem, 1.4vw, 1.15rem);
     line-height: 1.5;
