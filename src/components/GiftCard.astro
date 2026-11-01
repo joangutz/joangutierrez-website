@@ -296,6 +296,25 @@ const ready = Boolean(kit.formAction);
     transform: rotateY(180deg);
   }
 
+  /* Each face switches off exactly halfway through the turn (see the
+     offering cards). */
+  :global(.js) .face-front {
+    transition: visibility 0s linear 450ms;
+  }
+
+  :global(.js) .face-back {
+    visibility: hidden;
+    transition: visibility 0s linear 450ms;
+  }
+
+  :global(.js) .gift[data-open] .face-front {
+    visibility: hidden;
+  }
+
+  :global(.js) .gift[data-open] .face-back {
+    visibility: visible;
+  }
+
   @media (max-width: 780px) {
     .face-front {
       grid-template-columns: minmax(0, 1fr);
@@ -362,7 +381,23 @@ const ready = Boolean(kit.formAction);
       else card.removeAttribute('data-open');
       sync();
       size();
-      (open ? closeBtn : openBtn).focus({ preventScroll: true });
+      // Move focus to the face the reader just turned to, once the turn has
+      // finished: a face is hidden until the card is halfway round, and a
+      // hidden button cannot take focus.
+      const target = open ? closeBtn : openBtn;
+      const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!motion) {
+        target.focus({ preventScroll: true });
+      } else {
+        let done = false;
+        const land = () => {
+          if (done) return;
+          done = true;
+          target.focus({ preventScroll: true });
+        };
+        inner.addEventListener('transitionend', (e) => e.propertyName === 'transform' && land(), { once: true });
+        setTimeout(land, 1100);
+      }
     };
     openBtn.addEventListener('click', () => turn(true));
     closeBtn.addEventListener('click', () => turn(false));

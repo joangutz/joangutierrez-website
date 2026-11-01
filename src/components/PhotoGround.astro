@@ -21,7 +21,7 @@ interface Props {
   /** Supply only when the photograph is content rather than atmosphere. */
   alt?: string;
   /** Which corner the words sit in, so the scrim is deepest under them. */
-  from?: 'left' | 'bottom' | 'glass';
+  from?: 'left' | 'bottom' | 'glass' | 'cinema';
 
   /** For pictures whose own colour fights the palette. */
   tinted?: boolean;
@@ -91,6 +91,17 @@ const { src, alt, from = 'left', tinted = false } = Astro.props;
      pane carries the words, so the photograph can show. */
   .ground-glass::after {
     background: rgb(var(--ch-plum) / 0.28);
+  }
+
+  /* A full-screen opening: the photograph carries the page, so the wash is
+     light, deepening only toward the foot where the words sit. */
+  .ground-cinema::after {
+    background: linear-gradient(
+      to top,
+      rgb(var(--ch-plum) / 0.72) 0%,
+      rgb(var(--ch-plum) / 0.42) 45%,
+      rgb(var(--ch-plum) / 0.18) 100%
+    );
   }
 
   .ground-bottom::after {

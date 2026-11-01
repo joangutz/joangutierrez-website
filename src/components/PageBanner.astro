@@ -29,6 +29,12 @@ interface Props {
   tall?: boolean;
   /** Which part of the picture to keep in a wide crop (CSS object-position). */
   focus?: string;
+  /**
+   * A full-screen opening, like the homepage's: the photograph fills the
+   * window, the page's name runs large in the title face, and a short line
+   * points down into the page.
+   */
+  cinema?: boolean;
 }
 
 const {
@@ -40,11 +46,12 @@ const {
   from = 'bottom',
   tall = false,
   focus,
+  cinema = false,
 } = Astro.props;
 ---
 
-<section class:list={['banner on-dark has-ground', { 'banner-tall': tall }]} style={focus ? `--focus:${focus}` : undefined}>
-  <PhotoGround src={image} from={from} tinted={tinted} />
+<section class:list={['banner on-dark has-ground', { 'banner-tall': tall, 'banner-cinema': cinema }]} style={focus ? `--focus:${focus}` : undefined}>
+  <PhotoGround src={image} from={cinema ? 'cinema' : from} tinted={tinted} />
   <div class="band">
     <div class="col banner-text">
       {eyebrow && <span class="label">{eyebrow}</span>}
@@ -60,6 +67,7 @@ const {
       )}
     </div>
   </div>
+  {cinema && <span class="banner-cue" aria-hidden="true" />}
 </section>
 
 <style>
@@ -83,6 +91,74 @@ const {
 
   .band {
     padding-block: clamp(2.5rem, 7vh, 4.5rem);
+  }
+
+  /* ---- Cinema ---- */
+  .banner-cinema {
+    min-height: calc(100svh - var(--bar-h));
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The band is the measure the name is sized against (a container whose
+     width comes from the page, not from its contents). */
+  .banner-cinema .band {
+    width: 100%;
+    justify-self: stretch;
+    padding-block: clamp(3rem, 10vh, 6rem);
+    container-type: inline-size;
+  }
+
+  .banner-cinema .banner-text {
+    width: 100%;
+  }
+
+  .banner-cinema .banner-text {
+    max-width: none;
+  }
+
+  /* The name in the title face, as wide as the column allows and never
+     wider: sized to its container so a long name still fits one line. */
+  .banner-cinema .page-title {
+    font-family: var(--font-wordmark);
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    white-space: nowrap;
+    font-size: min(9.2cqi, 6.5rem);
+  }
+
+  .banner-cinema .banner-lede {
+    margin-top: clamp(1.25rem, 3vh, 2rem);
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    max-width: 40ch;
+  }
+
+  /* A short line at the foot, breathing, pointing on into the page. */
+  .banner-cue {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1rem, 3vh, 1.75rem);
+    width: 1px;
+    height: clamp(2rem, 6vh, 3rem);
+    translate: -50% 0;
+    background: currentColor;
+    opacity: 0.6;
+    transform-origin: top;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .banner-cue {
+      animation: cue 3.2s var(--ease-open) infinite;
+    }
+
+    @keyframes cue {
+      0% { scale: 1 0; opacity: 0; }
+      30% { opacity: 0.6; }
+      70% { scale: 1 1; opacity: 0.6; }
+      100% { scale: 1 1; opacity: 0; }
+    }
   }
 
   .banner-lede {
