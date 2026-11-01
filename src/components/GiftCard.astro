@@ -87,7 +87,10 @@ const ready = Boolean(kit.formAction);
     background: var(--color-madder);
   }
 
+  /* No frame: against the rose's red the card's hairline read as a brown
+     outline. The rose runs to its edges; the pale glass stands on its own. */
   .face-front {
+    border: 0;
     display: grid;
     grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
   }
