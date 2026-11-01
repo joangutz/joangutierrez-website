@@ -105,39 +105,19 @@ export const contact = {
 } as const;
 
 /**
- * The bar at the foot of every page.
- *
- * Two of the four tabs open a short list rather than going somewhere on their
- * own — but each parent is still a real page, so the tab is a link first and
- * a disclosure second. Someone who taps straight through lands on a hub that
- * says the same thing the list does.
+ * The bar at the foot of every page: four tabs, each one page. Every
+ * offering lives on Work with me and every resource on Resource, so a tab
+ * never hides a list.
  */
 export interface NavItem {
   href: string;
   label: string;
-  children?: readonly { href: string; label: string }[];
 }
 
 export const nav: readonly NavItem[] = [
-  {
-    href: '/work-with-me/',
-    label: 'Work with me',
-    children: [
-      { href: '/work-with-me/#one-to-one', label: '1:1 Sessions' },
-      { href: '/work-with-me/this-very-body/', label: 'This Very Body Program (waitlist)' },
-      { href: '/work-with-me/happenings/', label: 'Happenings: Relational' },
-    ],
-  },
+  { href: '/work-with-me/', label: 'Work with me' },
   { href: '/about/', label: 'About' },
-  {
-    href: '/resource/',
-    label: 'Resource',
-    children: [
-      { href: '/resource/gift/', label: 'A Gift' },
-      { href: '/resource/inspiration/', label: 'Inspiration' },
-      { href: '/resource/library/', label: 'Library' },
-    ],
-  },
+  { href: '/resource/', label: 'Resource' },
   { href: '/begin/', label: 'Begin' },
 ];
 
@@ -196,7 +176,7 @@ export const beginHere = [
     register: 'plumstone',
   },
   {
-    href: '/work-with-me/this-very-body/',
+    href: '/work-with-me/#this-very-body',
     title: 'This Very Body Program',
     note: 'waitlist',
     collage: 'desire-mapping.jpg',
@@ -210,14 +190,14 @@ export const beginHere = [
     register: 'brick',
   },
   {
-    href: '/work-with-me/happenings/',
+    href: '/work-with-me/#relational-integrity-labs',
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',
     register: 'clay',
   },
   {
-    href: '/work-with-me/happenings/#spine-society',
+    href: '/work-with-me/#spine-society',
     title: 'Spine Society',
     note: 'free monthly gathering',
     collage: 'roots-territories.jpg',

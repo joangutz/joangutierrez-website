@@ -20,9 +20,14 @@ import tailwindcss from '@tailwindcss/vite';
  * steps 1 and 2 would break the current preview URL and serve nothing in its
  * place, which is why it is not done here.
  */
+const BASE = '/joangutierrez-website';
+
+/** Redirect targets are written to the page as-is, so they carry the base. */
+const to = (path) => `${BASE.replace(/\/$/, '')}${path}`;
+
 export default defineConfig({
   site: 'https://joangutz.github.io',
-  base: '/joangutierrez-website',
+  base: BASE,
   integrations: [mdx()],
   /**
    * The pages that moved in the Ma Somatrix rebuild. Astro writes a
@@ -32,8 +37,14 @@ export default defineConfig({
   redirects: {
     // One entry each: Astro treats '/roots' and '/roots/' as the same route
     // and warns that listing both will become a hard error.
-    '/sessions': '/work-with-me/',
-    '/roots': '/about/',
+    '/sessions': to('/work-with-me/'),
+    '/roots': to('/about/'),
+    // The pages that used to sit under the dropdowns now live as sections.
+    '/work-with-me/this-very-body': to('/work-with-me/#this-very-body'),
+    '/work-with-me/happenings': to('/work-with-me/#relational-integrity-labs'),
+    '/resource/gift': to('/resource/#gift'),
+    '/resource/inspiration': to('/resource/#inspiration'),
+    '/resource/library': to('/resource/#library'),
   },
   vite: {
     plugins: [tailwindcss()],

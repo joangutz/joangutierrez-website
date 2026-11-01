@@ -29,14 +29,6 @@ const isCurrent = (href: string) => {
   return path === target || path === target.replace(/\/$/, '');
 };
 
-/**
- * A parent tab is marked when the reader is somewhere inside its section but
- * not on the tab's own page — being on the page itself is a stronger state
- * with its own solid rule, and letting both apply would leave the dotted
- * section rule winning on specificity.
- */
-const inSection = (item: (typeof nav)[number]) =>
-  !isCurrent(item.href) && (item.children ?? []).some((c) => isCurrent(c.href));
 ---
 
 <header class="nav-bar">
@@ -53,30 +45,10 @@ const inSection = (item: (typeof nav)[number]) =>
       <ul>
         {
           nav.map((item) => (
-            <li class:list={['nav-item', { 'has-sub': item.children }]}>
-              <a
-                href={withBase(item.href)}
-                aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class:list={[{ 'in-section': inSection(item) }]}
-              >
+            <li class="nav-item">
+              <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                 {item.label}
-                {item.children && <span class="caret" aria-hidden="true" />}
               </a>
-
-              {item.children && (
-                <ul class="sub">
-                  {item.children.map((child) => (
-                    <li>
-                      <a
-                        href={withBase(child.href)}
-                        aria-current={isCurrent(child.href) ? 'page' : undefined}
-                      >
-                        {child.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </li>
           ))
         }
@@ -126,20 +98,6 @@ const inSection = (item: (typeof nav)[number]) =>
                 <span>{item.label}</span>
               </a>
 
-              {item.children && (
-                <ul class="menu-sub">
-                  {item.children.map((child) => (
-                    <li>
-                      <a
-                        href={withBase(child.href)}
-                        aria-current={isCurrent(child.href) ? 'page' : undefined}
-                      >
-                        {child.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </li>
           ))
         }
@@ -312,145 +270,11 @@ const inSection = (item: (typeof nav)[number]) =>
     border-bottom-color: rgb(var(--ch-quick) / 0.35);
   }
 
-  .nav-inline > ul > li > a.in-section {
-    color: var(--color-cochineal);
-    border-bottom-style: dotted;
-    border-bottom-width: 1px;
-    border-bottom-color: rgb(var(--ch-quick) / 0.5);
-  }
-
   .nav-inline a[aria-current='page'] {
     color: var(--color-cochineal);
     border-bottom-style: solid;
     border-bottom-width: var(--word-rule);
     border-bottom-color: rgb(var(--ch-quick) / 0.6);
-  }
-
-  /* A plus that becomes a minus while its list is open: two hairlines, the
-     upright one folding away. */
-  .caret {
-    position: relative;
-    width: 7px;
-    height: 7px;
-    opacity: 0.7;
-    transition: opacity 250ms var(--ease-open);
-  }
-
-  .caret::before,
-  .caret::after {
-    content: '';
-    position: absolute;
-    background: currentColor;
-  }
-
-  .caret::before {
-    left: 0;
-    right: 0;
-    top: calc(50% - 0.5px);
-    height: 1px;
-  }
-
-  .caret::after {
-    top: 0;
-    bottom: 0;
-    left: calc(50% - 0.5px);
-    width: 1px;
-    transition: scale 250ms var(--ease-open);
-  }
-
-  .has-sub:hover .caret,
-  .has-sub:focus-within .caret {
-    opacity: 1;
-  }
-
-  .has-sub:hover .caret::after,
-  .has-sub:focus-within .caret::after {
-    scale: 1 0;
-  }
-
-  /* ---- The lists ---- */
-  /* A second tier of the bar: the full width of the window, directly on top
-     of it, the links set in a row. Upward, because down is the edge of the
-     window. Hover and focus-within only — no script, so this works with
-     scripting off. */
-  .sub {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 100%;
-    z-index: 2;
-    list-style: none;
-    margin: 0;
-    padding: 0.95rem clamp(1.25rem, 5vw, 3rem);
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.6rem clamp(1.25rem, 3.5vw, 2.75rem);
-    /* Solid enough to stand alone: a blur nested inside the bar's own
-       cannot see past the bar. */
-    background: color-mix(in srgb, var(--color-madder) 94%, transparent);
-    border-top: 1px solid var(--rule);
-    box-shadow: 0 -10px 24px rgb(var(--ch-plum) / 0.08);
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 240ms var(--ease-open),
-      visibility 240ms;
-  }
-
-  /* Between the word and the row above lies the bar's own padding; the tab
-     reaches up through it so a pointer on its way to the row keeps it open. */
-  .has-sub > a {
-    position: relative;
-  }
-
-  .has-sub > a::after {
-    content: '';
-    position: absolute;
-    left: -0.75rem;
-    right: -0.75rem;
-    bottom: 100%;
-    height: 1.4rem;
-  }
-
-  .has-sub:hover .sub,
-  .has-sub:focus-within .sub {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* With scripting, the row starts where its tab starts (--start, measured),
-     pulled back only as far as it must to stay inside the window. */
-  .sub.is-aligned {
-    justify-content: flex-start;
-    padding-left: var(--start);
-  }
-
-  .sub a {
-    display: inline-flex;
-    padding: 0.35rem 0;
-    font-size: 0.66rem;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
-    border-bottom: var(--word-rule) solid transparent;
-    text-box: trim-both cap alphabetic;
-    padding-block: var(--word-pad);
-  }
-
-  .sub a:hover {
-    color: var(--color-cochineal);
-    border-bottom-color: rgb(var(--ch-quick) / 0.35);
-  }
-
-  .sub a[aria-current='page'] {
-    color: var(--color-cochineal);
-    border-bottom-color: rgb(var(--ch-quick) / 0.6);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .sub {
-      transition: none;
-    }
   }
 
   /* ---- The control ---- */
@@ -542,12 +366,6 @@ const inSection = (item: (typeof nav)[number]) =>
 
     .menu {
       background: var(--color-plumstone);
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-
-    .sub {
-      background: var(--color-madder);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
     }
@@ -698,26 +516,8 @@ const inSection = (item: (typeof nav)[number]) =>
   /* Children sit under their parent as a quiet indented row rather than a
      second level of display type — nine big lines would not fit, and the
      hierarchy is the information anyway. */
-  .menu-sub {
-    list-style: none;
-    margin: 0 0 clamp(0.4rem, 1.4vh, 0.9rem);
-    padding: 0 0 0 1.7em;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.3rem, 1vh, 0.55rem);
-  }
 
-  .menu-sub a {
-    text-decoration: none;
-    font-size: clamp(0.82rem, 2.6vh, 0.95rem);
-    line-height: 1.3;
-    color: rgb(var(--ch-bract) / 0.74);
-  }
 
-  .menu-sub a:hover,
-  .menu-sub a[aria-current='page'] {
-    color: var(--color-bract);
-  }
 
   /* The egg lights on the item you are on, and on the one under the cursor —
      the same reveal the mark performs everywhere else on the site. */
@@ -834,30 +634,6 @@ const inSection = (item: (typeof nav)[number]) =>
 </style>
 
 <script>
-  // Line each list's row up under its tab.
-  const bar = document.querySelector<HTMLElement>('.nav-bar');
-  const alignRows = () => {
-    if (!bar) return;
-    const b = bar.getBoundingClientRect();
-    for (const item of document.querySelectorAll<HTMLElement>('.has-sub')) {
-      const tab = item.querySelector<HTMLElement>(':scope > a');
-      const row = item.querySelector<HTMLElement>(':scope > .sub');
-      const links = row ? [...row.querySelectorAll<HTMLElement>('a')] : [];
-      if (!tab || !row || !links.length || !tab.offsetParent) continue;
-      row.classList.remove('is-aligned');
-      const cs = getComputedStyle(row);
-      const pad = parseFloat(cs.paddingRight);
-      const width = links[links.length - 1].getBoundingClientRect().right - links[0].getBoundingClientRect().left;
-      const tabLeft = tab.getBoundingClientRect().left - b.left;
-      const start = Math.max(pad, Math.min(tabLeft, b.width - pad - width));
-      row.style.setProperty('--start', `${start}px`);
-      row.classList.add('is-aligned');
-    }
-  };
-  alignRows();
-  window.addEventListener('resize', alignRows);
-  document.fonts?.ready.then(alignRows);
-
   const panel = document.querySelector<HTMLElement>('[data-menu]');
   const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
   const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
@@ -914,12 +690,4 @@ const inSection = (item: (typeof nav)[number]) =>
       }
     });
   }
-
-  // Escape closes an open desktop list too. Hover-and-focus CSS has no state
-  // to clear, so blurring the tab is what closes it.
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    const open = document.activeElement?.closest<HTMLElement>('.has-sub');
-    if (open) open.querySelector<HTMLElement>('a')?.blur();
-  });
 </script>

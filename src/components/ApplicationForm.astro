@@ -242,7 +242,9 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 
     const endpoint = el.dataset.endpoint ?? '';
     const to = root.dataset.to ?? '';
-    const subject = root.dataset.subject ?? 'Application';
+    // Read at the moment of sending: a page can change what the form is
+    // for (Work with me's This Very Body card does), via data-subject.
+    const subjectNow = () => root.dataset.subject ?? 'Application';
 
     el.addEventListener('submit', (e) => {
       // No endpoint: hand the answers to the reader's own mail app. The form
@@ -261,7 +263,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 
         const href =
           `mailto:${to}` +
-          `?subject=${encodeURIComponent(`Ma Somatrix — ${subject}`)}` +
+          `?subject=${encodeURIComponent(`Ma Somatrix — ${subjectNow()}`)}` +
           `&body=${encodeURIComponent(lines.join('\n'))}`;
 
         status.textContent = 'Opening your email app.';

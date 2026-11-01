@@ -15,7 +15,9 @@ you write it. Anything you would rather leave unsaid can stay that way.
 ## 1 · Pages that are only a title right now
 
 ### This Very Body Program (waitlist)
-The page has its name and the application form, and nothing else.
+A card on Work with me with its name, "waitlist", and a link to the
+application form — nothing else yet. Once you describe it, it can become a
+full card with an Includes side, like 1:1 Sessions.
 
 - What is it, in a sentence or two?
 - Who is it for? Who is it *not* for?
@@ -24,8 +26,8 @@ The page has its name and the application form, and nothing else.
 - What happens when someone joins the waitlist?
 
 ### Happenings: Relational
-Two names: **Relational Integrity Labs** and **Spine Society** (free monthly
-gathering).
+Two cards on Work with me: **Relational Integrity Labs** and **Spine
+Society** (free monthly gathering).
 
 - For each: what happens in the room?
 - Who is it for, and do people need any experience?
@@ -33,7 +35,7 @@ gathering).
 - For the Labs: what does it cost?
 
 ### Inspiration and Library
-Both open to a title and nothing more. Write straight into
+Both are sections of the Resource page, a title and a picture so far. Write straight into
 `content/pages/inspiration.md` and `content/pages/library.md`; the comment
 at the top of each shows the shape. Anything you write appears.
 
@@ -41,7 +43,7 @@ at the top of each shows the shape. Anything you write appears.
 - Library: which books, papers, talks, practices — and a line on why?
 
 ### Resource
-The page lists A Gift, Inspiration and Library by name.
+One page now: the gift, then Inspiration, then Library.
 
 - Would you like a sentence that introduces the three?
 

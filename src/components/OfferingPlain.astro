@@ -1,0 +1,192 @@
+---
+import Collage from './Collage.astro';
+
+/**
+ * An offering that has its name and nothing more written yet: the front of
+ * an OfferingCard — collage, name swatch, its note on pale glass — without
+ * a side to turn to. When Joan writes what it includes, it becomes a full
+ * OfferingCard in /content/offerings/.
+ *
+ * `action` is an optional link at the foot (This Very Body points to the
+ * application form). Notes are Joan's own words beside the name.
+ */
+interface Props {
+  id: string;
+  title: string;
+  note?: string;
+  collage: string;
+  register: 'plumstone' | 'cochineal' | 'brick' | 'clay';
+  action?: { href: string; label: string; subject?: string };
+}
+
+const { id, title, note, collage, register, action } = Astro.props;
+---
+
+<article class="plain-card" id={id} data-register={register}>
+  <div class="front-art">
+    <div class="chip-image">
+      <Collage src={collage} alt="" register={register} />
+    </div>
+    <h3 class="chip-name">{title}</h3>
+  </div>
+
+  <div class="front-text">
+    <div class="front-glass" aria-hidden="true">
+      <Collage src={collage} alt="" register={register} sizes="30vw" />
+    </div>
+    {note && <span class="label">{note}</span>}
+    {
+      action && (
+        <div class="front-foot">
+          <a class="turn" href={action.href} data-apply-subject={action.subject}>
+            <span>{action.label}</span>
+            <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
+              <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
+            </svg>
+          </a>
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .plain-card {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    border: 1px solid var(--rule);
+    background: var(--color-madder);
+    scroll-margin-top: 2rem;
+  }
+
+  .front-art {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chip-image {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    min-height: 11rem;
+  }
+
+  .chip-image :global(.collage) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .chip-name {
+    margin: 0;
+    font-family: var(--font-label);
+    font-size: clamp(0.62rem, 1.2vw, 0.72rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    color: var(--color-bract);
+    padding: 0.85rem 0.9rem;
+    box-shadow: inset 0 1px 0 rgb(var(--ch-bract) / 0.22);
+  }
+
+  [data-register='plumstone'] .chip-name { background: var(--color-plumstone); }
+  [data-register='cochineal'] .chip-name { background: var(--color-cochineal); }
+  [data-register='brick'] .chip-name { background: var(--color-brick); }
+  [data-register='clay'] .chip-name { background: var(--color-clay); }
+
+  .front-text {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .front-glass {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .front-glass :global(.collage) {
+    position: absolute;
+    inset: -15%;
+    width: 130%;
+    height: 130%;
+    max-width: none;
+    object-fit: cover;
+    filter: blur(40px) grayscale(1);
+  }
+
+  .front-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-madder) 80%, transparent);
+  }
+
+  .front-foot {
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  .turn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 0.6rem 0.9rem;
+    text-decoration: none;
+    background: rgb(var(--ch-glass) / 0.9);
+    color: var(--color-bract);
+    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.16);
+    transition: background-color 300ms var(--ease-open);
+  }
+
+  .turn:hover,
+  .turn:focus-visible {
+    background: var(--color-plumstone);
+  }
+
+  .turn-arrow {
+    width: 16px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: translate 300ms var(--ease-open);
+  }
+
+  .turn:hover .turn-arrow,
+  .turn:focus-visible .turn-arrow {
+    translate: 3px 0;
+  }
+
+  @media (max-width: 780px) {
+    .plain-card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .chip-image {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .turn-arrow {
+      transition: none;
+    }
+  }
+</style>

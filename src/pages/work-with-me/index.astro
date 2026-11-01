@@ -4,6 +4,7 @@ import ChapterRail from '../../components/ChapterRail.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import ApplicationForm from '../../components/ApplicationForm.astro';
 import OfferingCard from '../../components/OfferingCard.astro';
+import OfferingPlain from '../../components/OfferingPlain.astro';
 import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
 import KitSignup from '../../components/KitSignup.astro';
@@ -17,6 +18,13 @@ if (!entry) throw new Error('Missing /content/sessions/sessions.md');
 const s = entry.data;
 
 const hasQuotes = (await getCollection('testimonials')).length > 0;
+
+/* The offerings with only a name so far, from the same list as Begin Here
+   so their names, notes, collages and swatches never drift apart. */
+const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
+const program = byHref('/work-with-me/#this-very-body');
+const happenings = [byHref('/work-with-me/#relational-integrity-labs'), byHref('/work-with-me/#spine-society')];
+const anchor = (h: string) => h.split('#')[1];
 
 const offerings = (await getCollection('offerings')).sort(
   (a, b) => a.data.order - b.data.order
@@ -62,6 +70,24 @@ const motifs = [
 
       <div class="card-stack">
         {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
+        <OfferingPlain
+          id={anchor(program.href)}
+          title={program.title}
+          note={program.note}
+          collage={program.collage}
+          register={program.register}
+          action={{ href: '#apply', label: 'Application form', subject: 'This Very Body Program (waitlist)' }}
+        />
+      </div>
+
+      {/* Joan's own heading for the two gatherings. */}
+      <h2 class="label happenings-label">Happenings: Relational</h2>
+      <div class="card-stack">
+        {
+          happenings.map((h) => (
+            <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />
+          ))
+        }
       </div>
     </div>
   </section>
@@ -144,6 +170,21 @@ const motifs = [
     </div>
   </GetInTouch>
 </Base>
+
+<script>
+  // A card's link to the form says what the application is for: the form's
+  // subject (and its hidden fields) follow, so Joan's inbox shows it.
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-apply-subject]')) {
+    link.addEventListener('click', () => {
+      const subject = link.dataset.applySubject;
+      const app = document.querySelector<HTMLElement>('#apply [data-app]');
+      if (!subject || !app) return;
+      app.dataset.subject = subject;
+      app.querySelector<HTMLInputElement>('input[name="applying_for"]')?.setAttribute('value', subject);
+      app.querySelector<HTMLInputElement>('input[name="_subject"]')?.setAttribute('value', `Ma Somatrix — ${subject}`);
+    });
+  }
+</script>
 
 <style>
   /* ---- The ground: consent and the note ---- */
@@ -245,6 +286,11 @@ const motifs = [
     .range {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
+
+  .happenings-label {
+    display: block;
+    margin: clamp(3rem, 7vw, 4.5rem) 0 1.25rem;
   }
 
   .card-stack {
