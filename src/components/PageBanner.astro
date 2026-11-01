@@ -51,7 +51,7 @@ const {
 ---
 
 <section class:list={['banner on-dark has-ground', { 'banner-tall': tall, 'banner-cinema': cinema }]} style={focus ? `--focus:${focus}` : undefined}>
-  <PhotoGround src={image} from={cinema ? 'cinema' : from} tinted={tinted} />
+  <PhotoGround src={image} from={from} tinted={tinted} />
   <div class="band">
     <div class="col banner-text">
       {eyebrow && <span class="label">{eyebrow}</span>}
@@ -109,8 +109,14 @@ const {
     container-type: inline-size;
   }
 
+  /* The name to the left, Joan's line to its right, resting on the same
+     baseline; on a phone they stack. */
   .banner-cinema .banner-text {
     width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    column-gap: clamp(2rem, 5vw, 4rem);
   }
 
   .banner-cinema .banner-text {
@@ -126,13 +132,31 @@ const {
     letter-spacing: 0.03em;
     line-height: 1;
     white-space: nowrap;
-    font-size: min(9.2cqi, 6.5rem);
+    font-size: min(5.6cqi, 5rem);
   }
 
   .banner-cinema .banner-lede {
-    margin-top: clamp(1.25rem, 3vh, 2rem);
-    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-    max-width: 40ch;
+    margin: 0 0 0.2em;
+    justify-self: end;
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    line-height: 1.5;
+    max-width: 30ch;
+  }
+
+  @media (max-width: 760px) {
+    .banner-cinema .banner-text {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .banner-cinema .page-title {
+      font-size: min(9.2cqi, 5rem);
+    }
+
+    .banner-cinema .banner-lede {
+      justify-self: start;
+      margin-top: clamp(1rem, 2.5vh, 1.5rem);
+      max-width: 40ch;
+    }
   }
 
   /* A short line at the foot, breathing, pointing on into the page. */
