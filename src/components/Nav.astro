@@ -389,16 +389,31 @@ const isCurrent = (href: string) => {
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
 
+  /* The name as it is in the bar and on the title page: Sprat's wide light
+     cut, with room between the two words. */
   .menu-brand {
     display: flex;
     align-items: center;
     gap: 0.55rem;
     text-decoration: none;
-    font-family: var(--font-label);
-    font-size: 0.74rem;
-    font-weight: 600;
+    font-family: var(--font-wordmark);
+    font-size: 0.86rem;
+    font-weight: 300;
+    line-height: 1;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.06em;
+    word-spacing: 0.7em;
+  }
+
+  .menu-brand span {
+    text-box: trim-both cap alphabetic;
+  }
+
+  @media (max-width: 430px) {
+    .menu-brand {
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
   }
 
   .menu-close {
