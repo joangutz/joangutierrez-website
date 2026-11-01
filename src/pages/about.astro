@@ -4,6 +4,7 @@ import PageBanner from '../components/PageBanner.astro';
 import Portrait from '../components/Portrait.astro';
 import Link from '../components/Link.astro';
 import { contact } from '../site';
+import { person, crumbs } from '../seo';
 import { getEntry, render } from 'astro:content';
 
 /**
@@ -25,7 +26,12 @@ if (!lineageEntry) throw new Error('Missing /content/pages/lineage.md');
 const { Content: Lineage } = await render(lineageEntry);
 ---
 
-<Base title="About" description={p.description} close>
+<Base
+  title="Joan Gutiérrez — Somatic educator, artist, and founder"
+  description={`${p.lede}. Chicago, IL — in-person. Internationally — online. Open to travel.`}
+  close
+  schema={[person, crumbs('About', '/about/')]}
+>
   {/* Joan: no "About" over the picture — the banner reads her greeting. */}
   <PageBanner title={p.title} lede={p.lede} image="about.jpg" focus="45% 72%" />
 

@@ -8,6 +8,7 @@ import GiftCard from '../components/GiftCard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { site, booking, beginHere, withBase } from '../site';
+import { person } from '../seo';
 
 const entry = await getEntry('home', 'home');
 if (!entry) throw new Error('Missing /content/home/home.md');
@@ -39,7 +40,13 @@ const movedAnchors = {
 };
 ---
 
-<Base title={`${site.name} — ${site.tagline}`} description={site.description} bare close>
+<Base
+  title={`${site.name} — ${site.tagline}`}
+  description={`${site.tagline}. Chicago, IL — in-person. Internationally — online. Open to travel.`}
+  bare
+  close
+  schema={[person]}
+>
   {/* 1 · The title card. The name runs margin to margin, and the line under
       it is set to exactly the same length — justified across the full width,
       so name and subtitle read as one engraved block rather than a heading

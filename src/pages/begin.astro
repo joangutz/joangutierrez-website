@@ -3,8 +3,16 @@ import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import { contact, booking, site } from '../site';
+import { abs, crumbs } from '../seo';
 
 const year = new Date().getFullYear();
+
+const contact_page = {
+  '@type': 'ContactPage',
+  name: 'Get in Touch',
+  url: abs('/begin/'),
+  about: { '@id': abs('/#organization') },
+};
 
 /**
  * Begin: one invitation, not a directory.
@@ -17,7 +25,12 @@ const year = new Date().getFullYear();
  */
 ---
 
-<Base title="Begin" description="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too." selfClosing>
+<Base
+  title={`Begin — ${booking.label}`}
+  description="Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too. Chicago, IL — in-person. Internationally — online. Open to travel."
+  selfClosing
+  schema={[contact_page, crumbs('Begin', '/begin/')]}
+>
   <section class="invite on-dark has-ground">
     <PhotoGround src="begin.jpg" />
 

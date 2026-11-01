@@ -12,6 +12,7 @@ import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
 import { withBase, beginHere, kit, contact } from '../../site';
 import Link from '../../components/Link.astro';
+import { abs, crumbs } from '../../seo';
 
 const entry = await getEntry('sessionsPage', 'sessions');
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
@@ -29,6 +30,35 @@ const anchor = (h: string) => h.split('#')[1];
 const offerings = (await getCollection('offerings')).sort(
   (a, b) => a.data.order - b.data.order
 );
+
+/* What is offered, and at what price, for search engines and AI
+   assistants: each offering with its own words, and the two named
+   gatherings and the waitlist alongside. */
+const catalog = {
+  '@type': 'OfferCatalog',
+  name: s.title,
+  url: abs('/offerings/'),
+  itemListElement: [
+    ...offerings.map((o) => ({
+      '@type': 'Offer',
+      url: abs(`/offerings/#${o.id}`),
+      price: o.data.prices[0].amount,
+      priceCurrency: 'USD',
+      description: o.data.prices[0].label,
+      itemOffered: {
+        '@type': 'Service',
+        name: o.data.title,
+        description: o.data.includes[0],
+        provider: { '@id': abs('/#organization') },
+      },
+    })),
+    ...[program, ...happenings].map((h) => ({
+      '@type': 'Offer',
+      url: abs(h.href),
+      itemOffered: { '@type': 'Service', name: h.title, ...(h.note ? { description: h.note } : {}) },
+    })),
+  ],
+};
 
 /**
  * One abstract line mark per step of the arc, in the manner of the labelled
@@ -48,7 +78,11 @@ const motifs = [
 ];
 ---
 
-<Base title={s.title} description={s.description}>
+<Base
+  title={`${s.title} — 1:1 Sessions, Liberate the Pelvis`}
+  description={s.description}
+  schema={[catalog, crumbs(s.title, '/offerings/')]}
+>
   <ChapterRail />
 
   <PageBanner title={s.title} lede={s.lede} image="about-close.jpg" />

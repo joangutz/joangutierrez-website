@@ -4,7 +4,8 @@ import PageBanner from '../../components/PageBanner.astro';
 import GiftCard from '../../components/GiftCard.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
 import { getEntry, render } from 'astro:content';
-import { contact, site } from '../../site';
+import { contact, kit } from '../../site';
+import { gift, crumbs } from '../../seo';
 
 /**
  * Resources: cards, in the same language as Offerings. The gift turns
@@ -25,7 +26,7 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
 const substackHost = new URL(contact.substack).host;
 ---
 
-<Base title="Resources" description={site.description}>
+<Base title={`Resources — ${kit.freebie}`} description={`${kit.freebie}. ${kit.freebieBody}`} schema={[gift, crumbs('Resources', '/resources/')]}>
   <PageBanner title="Resources" image="resource.jpg" />
 
   <section class="band section">

@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Link from '../components/Link.astro';
+import { nav, withBase } from '../site';
+
+/**
+ * Not found. GitHub Pages serves this for any address that has no page.
+ * Its only words are the site's own: the four tabs, and the way home.
+ */
+---
+
+<Base title="Not found" description="Ma Somatrix" noindex>
+  <section class="band section lost">
+    <div class="col">
+      <h1 class="lost-mark">404</h1>
+      <ul class="lost-list">
+        <li><Link variant="door" href={withBase('/')}>Ma Somatrix</Link></li>
+        {nav.map((n) => <li><Link variant="door" href={withBase(n.href)}>{n.label}</Link></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    min-height: 60svh;
+    display: flex;
+    align-items: center;
+  }
+
+  .lost-mark {
+    margin: 0 0 2rem;
+    font-family: var(--font-wordmark);
+    font-size: clamp(3rem, 12vw, 7rem);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-cochineal);
+  }
+
+  .lost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+</style>

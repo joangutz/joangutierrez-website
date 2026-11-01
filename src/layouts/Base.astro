@@ -20,9 +20,13 @@ interface Props {
    * the page carries its own one-line credit.
    */
   selfClosing?: boolean;
+  /** Extra schema.org nodes for this page (see src/seo.ts). */
+  schema?: object[];
+  /** Keep the page out of search (the 404). */
+  noindex?: boolean;
 }
 
-const { title, description, bare = false, close = false, selfClosing = false } = Astro.props;
+const { title, description, bare = false, close = false, selfClosing = false, schema = [], noindex = false } = Astro.props;
 
 /** The one photograph every page's footer stands on. */
 const CLOSING_PHOTO = 'close-home.jpg';
@@ -30,6 +34,7 @@ const fullTitle = bare ? title : `${title} · ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const shareImage = new URL(withBase('/share.png'), Astro.site).href;
 import PaletteTrial from '../components/PaletteTrial.astro';
+import { graph, website, organization } from '../seo';
 import PhotoGround from '../components/PhotoGround.astro';
 import GetInTouch from '../components/GetInTouch.astro';
 ---
@@ -46,6 +51,13 @@ import GetInTouch from '../components/GetInTouch.astro';
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    {/* Let search show large previews of the photographs, and full text
+        snippets — what AI answer engines quote from too. */}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <meta name="author" content="Joan Gutiérrez" />
+    <link rel="sitemap" href={withBase('/sitemap.xml')} />
+    <link rel="alternate" type="text/plain" title="Ma Somatrix for AI assistants" href={withBase('/llms.txt')} />
     <meta property="og:url" content={canonical} />
     {/* The lotus in Driftwood: transparent for the browser tab, on the bar's
         linen for the home screen (iOS paints a transparent icon black). */}
@@ -61,6 +73,10 @@ import GetInTouch from '../components/GetInTouch.astro';
     <meta property="og:site_name" content={site.name} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={shareImage} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {/* The facts of the practice, for search engines and AI assistants. */}
+    <script type="application/ld+json" set:html={graph(website, organization, ...schema)} />
     <script is:inline>
       // Reveals hide themselves only once we know something is here to reveal
       // them. Without this class every .rise block stays at opacity 0 forever
