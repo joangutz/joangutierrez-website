@@ -148,6 +148,7 @@ used yours. Tell me if any of these no longer feel right:
 
 These are not sentences, but they are words, and they are mine. Rename any:
 
+- **Art** (the card for joangutz.com on Resources), **Substack**
 - **Menu**, **Back** (on a turned card), **Open** (on the gift card),
   **Send**
 - Form fields: **Name**, **Email**, **Pronouns**, **Location**, **Message**,
