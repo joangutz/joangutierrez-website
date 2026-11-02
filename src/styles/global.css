@@ -872,15 +872,15 @@ html[data-palette='sand'] {
      Each kind of offering carries one colour wherever it appears — the
      strip on Offerings, the card's name band, the price tile, the line
      under its homepage card and its small label — so the colour tells a
-     reader what sort of thing it is. Chosen by Joan (palette E). The
-     gold is light, so names set on it are dark; the label in gold on the
-     linen uses a deeper gold to stay readable. */
+     reader what sort of thing it is. The wine reds of the site's first
+     palette, by kind (option N): clay for 1:1, cochineal for the program,
+     plumstone for Happenings. All three are dark, so names on them are
+     set light. */
   :root {
-    --kind-one: #a3501f;
-    --kind-program: #c9971f;
-    --kind-program-ink: #2e241f;
-    --kind-program-text: #7d5c0e;
-    --kind-gathering: #5b6a52;
+    --kind-one: #8e3b2e;
+    --kind-program: #5a121c;
+    --kind-program-text: #5a121c;
+    --kind-gathering: #2c0b12;
   }
 
   .reg-one {
@@ -891,16 +891,8 @@ html[data-palette='sand'] {
     background: var(--kind-gathering);
   }
 
-  /* Dark type on the gold band: it is the one light colour of the three.
-     Marked important because the components set their light type with
-     more specific rules. */
   .reg-program {
     background: var(--kind-program);
-  }
-
-  .reg-program,
-  .reg-program * {
-    color: var(--kind-program-ink) !important;
   }
 
   .glass-pane {
