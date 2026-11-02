@@ -86,7 +86,10 @@ SEO.md); the rest are the open items above.
 
 ### Waiting on Joan
 
-- The **Kit form address**, so the gift can collect emails (TODO-KIT).
+- The **Kit form address**, so the gift can collect emails (TODO-KIT), and
+  the **recording** (MP3) uploaded to `public/audio/` with its name set in
+  `kit.audio` (TODO-AUDIO). Once both are set, the gift card's back asks
+  for an email and then shows a player and a download link.
 - A **Formspree address**, so the application form sends directly
   (TODO-FORM).
 - The **soundscape file** from Stu Pender (TODO-SOUND).

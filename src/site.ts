@@ -55,6 +55,15 @@ export const booking = {
  */
 export const kit = {
   formAction: null as string | null,
+  /**
+   * TODO-AUDIO: the recording, revealed (a player and a download link) on
+   * the gift card once someone has given their email. Upload the MP3 to
+   * /public/audio/ on GitHub and set its file name here, e.g.
+   * 'red-rose-visualization.mp3'. Note: the file is public at its address;
+   * the email form is a gentle gate, not a lock. For a true gate, leave
+   * this null and have Kit deliver the recording by email instead.
+   */
+  audio: null as string | null,
   freebie: 'Red Rose Visualization',
   freebieSub: 'A doorway for the inner eye',
   freebieBody:

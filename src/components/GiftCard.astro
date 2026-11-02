@@ -1,8 +1,7 @@
 ---
 import Collage from './Collage.astro';
-import KitSignup from './KitSignup.astro';
 import Link from './Link.astro';
-import { kit, contact } from '../site';
+import { kit, contact, withBase } from '../site';
 
 /**
  * The gift, as a card that turns — the same gesture as the offerings.
@@ -13,6 +12,7 @@ import { kit, contact } from '../site';
  * then, so the one thing this card hands over is never a dead end.
  */
 const ready = Boolean(kit.formAction);
+const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 ---
 
 <article class="gift" id="gift" data-gift>
@@ -59,7 +59,35 @@ const ready = Boolean(kit.formAction);
       <div class="back-take">
         {
           ready ? (
-            <KitSignup heading={kit.freebie} />
+            <>
+              {/* Give an email; then the recording is here to play or keep.
+                  Without scripting the form posts straight to Kit. */}
+              <form class="take-form" action={kit.formAction} method="post" data-gift-form>
+                <label class="visually-hidden" for="gift-email">Email address</label>
+                <div class="take-row">
+                  <input
+                    class="take-input"
+                    id="gift-email"
+                    type="email"
+                    name="email_address"
+                    autocomplete="email"
+                    placeholder="Email address"
+                    required
+                  />
+                  <button class="take-send" type="submit">Send</button>
+                </div>
+                <p class="take-status" role="status" data-gift-status></p>
+              </form>
+              {audioSrc && (
+                <div class="take-play" data-gift-play hidden>
+                  <audio controls preload="none" src={audioSrc}></audio>
+                  <a class="take-download" href={audioSrc} download>
+                    Download
+                    <svg viewBox="0 0 10 14" aria-hidden="true" focusable="false"><path d="M5 1 V11.5 M1.5 8 L5 11.5 L8.5 8 M1 13.25 H9" /></svg>
+                  </a>
+                </div>
+              )}
+            </>
           ) : (
             <Link variant="action" href={`mailto:${contact.email}?subject=${encodeURIComponent(kit.freebie)}`}>
               {contact.email}
@@ -222,6 +250,111 @@ const ready = Boolean(kit.formAction);
     margin-top: var(--gap-door);
   }
 
+  /* ---- Receiving it ---- */
+  .take-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    max-width: 30rem;
+  }
+
+  .take-input {
+    flex: 1 1 13rem;
+    min-width: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-bract);
+    background: rgb(var(--ch-plum) / 0.35);
+    border: 1px solid rgb(var(--ch-bract) / 0.3);
+    padding: 0.7rem 0.85rem;
+  }
+
+  .take-input::placeholder {
+    color: rgb(var(--ch-bract) / 0.55);
+  }
+
+  .take-input:focus-visible {
+    border-color: var(--color-bract);
+  }
+
+  .take-send {
+    flex: none;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-plumstone);
+    background: var(--color-bract);
+    border: 0;
+    padding: 0.8rem 1.3rem;
+    cursor: pointer;
+  }
+
+  .take-send:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .take-status {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+    color: rgb(var(--ch-bract) / 0.8);
+  }
+
+  .take-status:empty {
+    display: none;
+  }
+
+  .take-play {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .take-play[hidden] {
+    display: none;
+  }
+
+  /* The browser's own player, in its dark form to sit on the wine. */
+  .take-play audio {
+    color-scheme: dark;
+    flex: 1 1 18rem;
+    min-width: 0;
+    max-width: 30rem;
+  }
+
+  .take-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-bract);
+    text-decoration: none;
+    border-bottom: 1px solid rgb(var(--ch-bract) / 0.4);
+    padding-bottom: 0.2rem;
+  }
+
+  .take-download:hover,
+  .take-download:focus-visible {
+    border-bottom-color: var(--color-bract);
+  }
+
+  .take-download svg {
+    width: 9px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   /* ---- The control ---- */
   .turn {
     display: inline-flex;
@@ -367,6 +500,68 @@ const ready = Boolean(kit.formAction);
 </style>
 
 <script>
+  // Receiving the gift: the email goes to Kit, then the recording appears
+  // in the form's place. Remembered in this browser, so a returning reader
+  // finds it waiting.
+  const KEY = 'ms-gift-received';
+  const remembered = () => {
+    try {
+      return localStorage.getItem(KEY) === '1';
+    } catch {
+      return false;
+    }
+  };
+  const remember = () => {
+    try {
+      localStorage.setItem(KEY, '1');
+    } catch {
+      /* private mode: this visit only */
+    }
+  };
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-gift-form]')) {
+    const back = form.closest('[data-gift-face="back"]');
+    const play = back?.querySelector<HTMLElement>('[data-gift-play]');
+    const status = form.querySelector<HTMLElement>('[data-gift-status]');
+    const send = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const reveal = () => {
+      if (play) {
+        form.hidden = true;
+        play.hidden = false;
+      } else if (status) {
+        status.textContent = 'Sent.';
+      }
+    };
+    if (remembered() && play) reveal();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (status) status.textContent = '';
+      if (send) send.disabled = true;
+      const body = new FormData(form);
+      let ok = false;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/json' } });
+        ok = res.ok;
+      } catch {
+        // Kit may not answer across origins; send it anyway, unread.
+        try {
+          await fetch(form.action, { method: 'POST', body, mode: 'no-cors' });
+          ok = true;
+        } catch {
+          ok = false;
+        }
+      }
+      if (send) send.disabled = false;
+      if (ok) {
+        remember();
+        reveal();
+      } else if (status) {
+        status.textContent = 'Not sent.';
+      }
+    });
+  }
+
   for (const card of document.querySelectorAll<HTMLElement>('[data-gift]')) {
     const inner = card.querySelector<HTMLElement>('[data-gift-inner]');
     const front = card.querySelector<HTMLElement>('[data-gift-face="front"]');
