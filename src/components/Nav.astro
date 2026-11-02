@@ -135,6 +135,19 @@ const isCurrent = (href: string) => {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
+  /* A skirt of the bar's own colour hanging below it, so that while
+     Safari's toolbar slides away or back there is no gap for the page to
+     show through. */
+  .nav-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 50vh;
+    background: var(--color-madder);
+  }
+
   /* Same box as a .band, so the wordmark sits directly below the first
      character of the page's own text rather than out on its own margin. */
   /* Words in the bar are trimmed to their capitals (text-box), so a box is
@@ -341,11 +354,16 @@ const isCurrent = (href: string) => {
      follows the palette. Where blur is unsupported both stay solid — a
      see-through bar without the blur is just illegible — and anyone who has
      asked their system to reduce transparency gets the solid version too. */
+  /* Translucent where there is a pointer to hover with (desktop); solid on
+     phones and tablets, so text never shows through the bar while
+     scrolling. */
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .nav-bar {
-      background: color-mix(in srgb, var(--color-madder) 74%, transparent);
-      -webkit-backdrop-filter: blur(18px) saturate(1.2);
-      backdrop-filter: blur(18px) saturate(1.2);
+    @media (hover: hover) {
+      .nav-bar {
+        background: color-mix(in srgb, var(--color-madder) 74%, transparent);
+        -webkit-backdrop-filter: blur(18px) saturate(1.2);
+        backdrop-filter: blur(18px) saturate(1.2);
+      }
     }
 
     /* 0.9, not lighter: at 0.84 a light page behind lifted the panel enough

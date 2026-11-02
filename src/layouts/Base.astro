@@ -43,7 +43,9 @@ import GetInTouch from '../components/GetInTouch.astro';
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* viewport-fit=cover lets the bar reach the very bottom of an iPhone
+        screen, past the home indicator, so nothing shows beneath it. */}
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

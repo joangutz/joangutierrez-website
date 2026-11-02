@@ -28,7 +28,7 @@ and the choice is Joan's.
 | Erase "Sessions – Four Ways in"; Begin Here with the five offerings | **Done, then renamed (clash)** — the five are there; the label above them now reads **Offerings**, to match the renamed page. Joan's "Begin Here" is one word away |
 | WORK WITH ME as the tab name | **Clash** — renamed **Offerings** in a later session (old /work-with-me/ links forward) |
 | Homepage 5: A Gift | **Done** — now the same card that turns over as on Resources, with the rose rippling under the pointer |
-| Phone: content scrolling visibly behind the menu bar | **Clash** — fixed by moving the bar to the bottom, but a later session asked for a translucent bar, so the page shows softly through it (blurred). A solid bar is a one-line change |
+| Phone: content scrolling visibly behind the menu bar | **Done** — on phones and tablets the bar is solid and reaches the very bottom of the screen, with no gap while Safari's toolbar moves; it stays softly translucent only on desktop |
 | WHERE: Chicago, IL — in-person / Internationally — online / Open to travel | **Done** — on Begin and in the phone menu |
 | Descriptions to write (Spine Society, This Very Body, Erotic Embodiment weekly class, 1:1 short / medium / long, application questions, Inspiration and Library lists) | **Open** — Joan's to write; WRITING.md has prompts. Inspiration and Library appear on Resources automatically once written |
 | "Only my words" | **Done** — every sentence on the site is Joan's; interface words are listed in WRITING.md |
@@ -104,6 +104,5 @@ SEO.md); the rest are the open items above.
 - Begin Here vs Offerings as the homepage label; Work with me vs
   Offerings as the page name.
 - Her quote on About: within the bio, or its own section.
-- A solid or translucent bar on phones.
 - The egg logo on the title screen.
 
