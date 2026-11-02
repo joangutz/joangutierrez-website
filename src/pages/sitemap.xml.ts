@@ -7,7 +7,7 @@ import { abs } from '../seo';
  */
 const PAGES = [
   { path: '/', priority: '1.0' },
-  { path: '/offerings/', priority: '0.9' },
+  { path: '/services/', priority: '0.9' },
   { path: '/about/', priority: '0.8' },
   { path: '/begin/', priority: '0.8' },
   { path: '/resources/', priority: '0.7' },

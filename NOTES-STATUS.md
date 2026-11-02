@@ -13,7 +13,7 @@ and the choice is Joan's.
 | Name: Ma Somatix, in place of Joan Gutierrez | **Done** as **Ma Somatrix** (spelling corrected later) |
 | Domain masomatix.com | **Open / clash** — the name is Soma**tr**ix but the domain is masoma**tix**. Joan to decide which to register; moving the site is three steps, listed in `astro.config.mjs` |
 | Delete the Roots page and its CV; a simple About page | **Done** — old /roots address forwards to About |
-| An image banner to open Work with me (now Offerings) / About / Resources / Begin | **Done** — each now opens full-screen, like the homepage: the page's name large on the photograph, Joan's line beside it |
+| An image banner to open Work with me (now Services) / About / Resources / Begin | **Done** — each now opens full-screen, like the homepage: the page's name large on the photograph, Joan's line beside it |
 | Drop-down tabs under Work with me and Resource | **Clash** — later replaced, in a build session, by four plain tabs. Every offering is a card on Work with me; the gift and Substack are cards on Resources (renamed from Resource) |
 | The Red Rose Visualization as a gift that collects emails | **Done** as a card that turns over. **Open:** collecting emails needs the Kit form address (TODO-KIT in `src/site.ts`); until then the card offers Joan's email |
 | "Recorded for my w.s at CPR" | **Open** — not stated on the site (an earlier guess at "CPR" was removed). WRITING.md asks where and for whom |
@@ -25,8 +25,8 @@ and the choice is Joan's.
 | Homepage 2: "What if the reason you're here…" | **Done** (now after the triangle, in the order set later) |
 | Homepage 3: the triangle as "The sacred process of embodiment", Matrix / Ma / Soma with The Source / The Space / The Body, much larger, clickable, deletions | **Done** — clicking a bubble opens Joan's full definition beside it (her later note) |
 | Homepage 4: Founder & Educator, colour photo, Learn more | **Done** — text updated to the 10/31 version |
-| Erase "Sessions – Four Ways in"; Begin Here with the five offerings | **Done, then renamed (clash)** — the five are there; the label above them now reads **Offerings**, to match the renamed page. Joan's "Begin Here" is one word away |
-| WORK WITH ME as the tab name | **Clash** — renamed **Offerings** in a later session (old /work-with-me/ links forward) |
+| Erase "Sessions – Four Ways in"; Begin Here with the five offerings | **Done, then renamed (clash)** — the five are there; the label above them now reads **Services**, to match the renamed page. Joan's "Begin Here" is one word away |
+| WORK WITH ME as the tab name | **Clash** — renamed **Services** in a later session (old /work-with-me/ and /offerings/ links forward) |
 | Homepage 5: A Gift | **Done** — now the same card that turns over as on Resources, with the rose rippling under the pointer |
 | Phone: content scrolling visibly behind the menu bar | **Done** — on phones and tablets the bar is solid and reaches the very bottom of the screen, with no gap while Safari's toolbar moves; it stays softly translucent only on desktop |
 | WHERE: Chicago, IL — in-person / Internationally — online / Open to travel | **Done** — on Begin and in the phone menu |
@@ -55,7 +55,7 @@ and the choice is Joan's.
 | Resources as cards: the gift turns over, ripples when touched; Substack as a card; empty Inspiration / Library hidden until written | **Done** |
 | Begin as one invitation: photograph, glass pane, one large action, quiet email and phone, WHERE as a line, "Cheers to being alive." | **Done** |
 | Search and AI search (SEO / GEO): titles, descriptions, structured data, sitemap, robots.txt, llms.txt, 404 | **Done** — details in SEO.md |
-| Offerings banner image | **Done** — the fire photograph (option D) |
+| Services banner image | **Done** — the fire photograph (option D) |
 
 ## Next steps, for later
 
@@ -101,8 +101,8 @@ SEO.md); the rest are the open items above.
 
 - Title screen: what sits at the foot (options A–F were mocked up;
   Chicago and beyond stays for now).
-- Begin Here vs Offerings as the homepage label; Work with me vs
-  Offerings as the page name.
+- Begin Here vs Services as the homepage label; Work with me vs
+  Services as the page name.
 - Her quote on About: within the bio, or its own section.
 - The egg logo on the title screen.
 

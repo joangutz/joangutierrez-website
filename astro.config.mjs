@@ -37,13 +37,14 @@ export default defineConfig({
   redirects: {
     // One entry each: Astro treats '/roots' and '/roots/' as the same route
     // and warns that listing both will become a hard error.
-    '/sessions': to('/offerings/'),
+    '/sessions': to('/services/'),
     '/roots': to('/about/'),
     // The pages that used to sit under the dropdowns now live as sections.
-    '/work-with-me/this-very-body': to('/offerings/#this-very-body'),
-    '/work-with-me/happenings': to('/offerings/#relational-integrity-labs'),
-    // Renamed from Work with me to Offerings.
-    '/work-with-me': to('/offerings/'),
+    '/work-with-me/this-very-body': to('/services/#this-very-body'),
+    '/work-with-me/happenings': to('/services/#relational-integrity-labs'),
+    // Renamed from Work with me, then Offerings, to Services.
+    '/work-with-me': to('/services/'),
+    '/offerings': to('/services/'),
     '/resource/gift': to('/resources/#gift'),
     // Inspiration and Library show on Resources once written.
     '/resource/inspiration': to('/resources/'),

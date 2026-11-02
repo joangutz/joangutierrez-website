@@ -5,7 +5,7 @@
 # The "Note on all plans" is verbatim and must stay that way — it is a
 # professional boundary statement, not a disclaimer.
 
-title: Offerings
+title: Services
 lede: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
 description: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
 

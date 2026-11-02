@@ -29,11 +29,11 @@ export const GET: APIRoute = async () => {
     '',
     'Where: Chicago, IL — in-person. Internationally — online. Open to travel.',
     '',
-    '## Offerings',
+    '## Services',
     '',
     ...offerings.map((o) => {
       const p = o.data.prices[0];
-      return `- [${o.data.title}](${abs(`/offerings/#${o.id}`)}): ${p.label}, ${money(p.amount)}${p.note ? ` (${p.note})` : ''}. ${o.data.includes[0]}`;
+      return `- [${o.data.title}](${abs(`/services/#${o.id}`)}): ${p.label}, ${money(p.amount)}${p.note ? ` (${p.note})` : ''}. ${o.data.includes[0]}`;
     }),
     ...beginHere
       .filter((b) => !offerings.some((o) => b.href.endsWith(`#${o.id}`)))
@@ -43,7 +43,7 @@ export const GET: APIRoute = async () => {
     '',
     '## Pages',
     '',
-    `- [Offerings](${abs('/offerings/')}): every offering, how a session goes, how consent works, prices, and the application form.`,
+    `- [Services](${abs('/services/')}): every offering, how a session goes, how consent works, prices, and the application form.`,
     `- [About](${abs('/about/')}): Joan's biography and her Lineage of Modalities — Seki Method; Somatic Sexology – Certified Sexological Bodywork; Holistic Pelvic Care™; Zen Shiatsu Bodywork.`,
     `- [Resources](${abs('/resources/')}): ${kit.freebie} — ${kit.freebieBody}`,
     `- [Begin](${abs('/begin/')}): ${booking.label}.`,

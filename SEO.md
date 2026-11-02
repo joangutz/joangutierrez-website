@@ -8,7 +8,7 @@
   as a professional practice in Chicago that also works online: its
   tagline, email, phone, booking link, founder, Substack and art site.
   Each page adds its own facts:
-  - **Offerings:** each offering with its price ($1,800 three-month study;
+  - **Services:** each offering with its price ($1,800 three-month study;
     $580 monthly practice) and the waitlist and gatherings.
   - **About:** Joan as a person: her role, her training, and her modalities.
   - **Resources:** the Red Rose Visualization, free, with Stu Pender credited.

@@ -36,8 +36,8 @@ founder:
   link: Learn more
 
 beginHere:
-  # Was Joan's "Begin Here"; renamed to match the Offerings page (see
+  # Was Joan's "Begin Here"; renamed to match the Services page (see
   # NOTES-STATUS.md).
-  label: Offerings
+  label: Services
 
 ---

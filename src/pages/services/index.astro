@@ -23,8 +23,8 @@ const hasQuotes = (await getCollection('testimonials')).length > 0;
 /* The offerings with only a name so far, from the same list as Begin Here
    so their names, notes, collages and swatches never drift apart. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-const program = byHref('/offerings/#this-very-body');
-const happenings = [byHref('/offerings/#relational-integrity-labs'), byHref('/offerings/#spine-society')];
+const program = byHref('/services/#this-very-body');
+const happenings = [byHref('/services/#relational-integrity-labs'), byHref('/services/#spine-society')];
 const anchor = (h: string) => h.split('#')[1];
 
 const offerings = (await getCollection('offerings')).sort(
@@ -37,11 +37,11 @@ const offerings = (await getCollection('offerings')).sort(
 const catalog = {
   '@type': 'OfferCatalog',
   name: s.title,
-  url: abs('/offerings/'),
+  url: abs('/services/'),
   itemListElement: [
     ...offerings.map((o) => ({
       '@type': 'Offer',
-      url: abs(`/offerings/#${o.id}`),
+      url: abs(`/services/#${o.id}`),
       price: o.data.prices[0].amount,
       priceCurrency: 'USD',
       description: o.data.prices[0].label,
@@ -81,7 +81,7 @@ const motifs = [
 <Base
   title={`${s.title} — 1:1 Sessions, Liberate the Pelvis`}
   description={s.description}
-  schema={[catalog, crumbs(s.title, '/offerings/')]}
+  schema={[catalog, crumbs(s.title, '/services/')]}
 >
   <ChapterRail />
 
