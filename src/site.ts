@@ -65,6 +65,19 @@ export const kit = {
    * this null and have Kit deliver the recording by email instead.
    */
   audio: 'red-rose-visualization.mp3' as string | null,
+  /**
+   * TODO-KIT-WAITLIST: a Kit form for the This Very Body Program waitlist.
+   * Paste its action URL (from the form's HTML embed) here and the card's
+   * Join the Waitlist becomes an email field that adds people to it. Until
+   * then the card opens the application form.
+   */
+  waitlistAction: null as string | null,
+  /**
+   * TODO-KIT-NEWS: a Kit form for the general mailing list. Paste its
+   * action URL here and a small "stay in touch" field appears in the
+   * closing pane at the foot of every page.
+   */
+  newsletterAction: null as string | null,
   freebie: 'Red Rose Visualization',
   freebieSub: 'A doorway for the inner eye',
   freebieBody:
@@ -112,6 +125,8 @@ export const contact = {
   substack: 'https://eroticbecoming.substack.com',
   art: 'https://joangutz.com',
   ethics: 'https://www.sexologicalbodyworkers.org/ethics',
+  /** Stu Pender, who composed the Red Rose soundscape. */
+  stu: 'https://beingsound.studio',
 } as const;
 
 /**

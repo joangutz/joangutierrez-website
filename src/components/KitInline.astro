@@ -1,0 +1,182 @@
+---
+/**
+ * A single email field that adds the reader to a Kit form, in place: no
+ * page change, a short word once it's done. Used for the This Very Body
+ * waitlist and for "stay in touch" at the foot of every page.
+ *
+ * Without scripting the form posts straight to Kit, which shows its own
+ * confirmation.
+ */
+interface Props {
+  action: string;
+  /** A small label above the field, or none. */
+  label?: string;
+  /** The button's word. */
+  button?: string;
+  /** Light type and fields, for a dark ground. */
+  dark?: boolean;
+  class?: string;
+}
+
+const { action, label, button = 'Send', dark = false, class: className = '' } = Astro.props;
+const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<form class:list={['ki', { 'ki-dark': dark }, className]} action={action} method="post" data-kit-inline>
+  {label && <label class="ki-label" for={uid}>{label}</label>}
+  {!label && <label class="visually-hidden" for={uid}>Email address</label>}
+  <div class="ki-row">
+    <input
+      class="ki-input"
+      id={uid}
+      type="email"
+      name="email_address"
+      autocomplete="email"
+      placeholder="Email address"
+      required
+    />
+    <button class="ki-send" type="submit">{button}</button>
+  </div>
+  <p class="ki-status" role="status" data-ki-status></p>
+</form>
+
+<style>
+  .ki {
+    max-width: 26rem;
+  }
+
+  .ki-label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--font-label);
+    font-size: 0.64rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+  }
+
+  .ki-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .ki-input {
+    flex: 1 1 12rem;
+    min-width: 0;
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    color: var(--color-cochineal);
+    background: rgb(var(--ch-bract) / 0.3);
+    border: 1px solid var(--rule);
+    padding: 0.6rem 0.8rem;
+  }
+
+  .ki-input::placeholder {
+    color: var(--color-ink-2);
+    opacity: 0.6;
+  }
+
+  .ki-input:focus-visible {
+    border-color: var(--color-quick);
+  }
+
+  .ki-send {
+    flex: none;
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-bract);
+    background: rgb(var(--ch-glass) / 0.9);
+    border: 0;
+    padding: 0.7rem 1.1rem;
+    cursor: pointer;
+    transition: background-color 300ms var(--ease-open);
+  }
+
+  .ki-send:hover,
+  .ki-send:focus-visible {
+    background: var(--color-plumstone);
+  }
+
+  .ki-send:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .ki-status {
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-ink-2);
+  }
+
+  .ki-status:empty {
+    display: none;
+  }
+
+  /* On a dark ground. */
+  .ki-dark .ki-label,
+  .ki-dark .ki-status {
+    color: rgb(var(--ch-bract) / 0.8);
+  }
+
+  .ki-dark .ki-input {
+    color: var(--color-bract);
+    background: rgb(var(--ch-plum) / 0.4);
+    border-color: rgb(var(--ch-bract) / 0.28);
+  }
+
+  .ki-dark .ki-input::placeholder {
+    color: rgb(var(--ch-bract) / 0.55);
+  }
+
+  .ki-dark .ki-input:focus-visible {
+    border-color: var(--color-bract);
+  }
+
+  .ki-dark .ki-send {
+    color: var(--color-plumstone);
+    background: var(--color-bract);
+  }
+
+  .ki-dark .ki-send:hover,
+  .ki-dark .ki-send:focus-visible {
+    background: #fff;
+  }
+
+  .ki.is-done .ki-row {
+    display: none;
+  }
+</style>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-kit-inline]')) {
+    const status = form.querySelector<HTMLElement>('[data-ki-status]');
+    const send = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (status) status.textContent = '';
+      if (send) send.disabled = true;
+      const body = new FormData(form);
+      let ok = false;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/json' } });
+        ok = res.ok;
+      } catch {
+        // Kit may not answer across origins; send it anyway, unread.
+        try {
+          await fetch(form.action, { method: 'POST', body, mode: 'no-cors' });
+          ok = true;
+        } catch {
+          ok = false;
+        }
+      }
+      if (send) send.disabled = false;
+      if (ok) form.classList.add('is-done');
+      if (status) status.textContent = ok ? 'Sent.' : 'Not sent.';
+    });
+  }
+</script>

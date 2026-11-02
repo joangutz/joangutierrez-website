@@ -86,6 +86,12 @@ SEO.md); the rest are the open items above.
 
 ### Waiting on Joan
 
+- Two more **Kit forms**, each pasted into `src/site.ts`: a **This Very
+  Body waitlist** form (`waitlistAction`, TODO-KIT-WAITLIST), which turns the
+  card's Join the Waitlist into an email field; and a general **mailing
+  list** form (`newsletterAction`, TODO-KIT-NEWS), which adds a small "Stay
+  in touch" field to the closing pane on every page. Both are built and
+  tested; they appear the moment their form addresses are set.
 - A **Formspree address**, so the application form sends directly
   (TODO-FORM).
 - The **soundscape file** from Stu Pender (TODO-SOUND).

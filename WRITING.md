@@ -150,6 +150,7 @@ These are not sentences, but they are words, and they are mine. Rename any:
 
 - **Art** (the card for joangutz.com on Resources), **Substack**
 - **Download** and the **Email address** field on the gift card
+- **Stay in touch** (the mailing-list field at the foot of each page, once switched on), **Play** / **Pause** and **Position** (read aloud by screen readers on the player)
 - **Menu**, **Back** (on a turned card), **Open** (on the gift card),
   **Send**
 - Form fields: **Name**, **Email**, **Pronouns**, **Location**, **Message**,

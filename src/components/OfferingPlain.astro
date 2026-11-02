@@ -1,5 +1,6 @@
 ---
 import Collage from './Collage.astro';
+import KitInline from './KitInline.astro';
 
 /**
  * An offering that has its name and nothing more written yet: the front of
@@ -17,13 +18,17 @@ interface Props {
   collage: string;
   register: 'one' | 'program' | 'gathering' | 'plumstone' | 'cochineal' | 'brick' | 'clay';
   action?: { href: string; label: string; subject?: string; external?: boolean };
+  /** A Kit form to join right on the card, in place of the action link. */
+  kitAction?: string | null;
+  /** The button's word on that form. */
+  kitButton?: string;
 }
 
-const { id, title, note, collage, register, action } = Astro.props;
+const { id, title, note, collage, register, action, kitAction, kitButton } = Astro.props;
 
 /* With nothing yet to say or do, a card is only its picture and its name:
    a compact tile rather than a wide card with an empty pale side. */
-const compact = !action;
+const compact = !action && !kitAction;
 ---
 
 <article class:list={['plain-card', { compact }]} id={id} data-register={register}>
@@ -44,7 +49,14 @@ const compact = !action;
     </div>
     {note && <span class="label">{note}</span>}
     {
-      action && (
+      kitAction && (
+        <div class="front-foot">
+          <KitInline action={kitAction} button={kitButton} />
+        </div>
+      )
+    }
+    {
+      action && !kitAction && (
         <div class="front-foot">
           <a
             class="turn"

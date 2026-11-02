@@ -1,7 +1,8 @@
 ---
 import PhotoGround from './PhotoGround.astro';
 import Link from './Link.astro';
-import { booking } from '../site';
+import { booking, kit } from '../site';
+import KitInline from './KitInline.astro';
 
 /**
  * The close at the foot of a page: Joan's "Get in Touch" section from her
@@ -28,6 +29,10 @@ const paired = Astro.slots.has('default');
           Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.
         </p>
         <Link variant="action" href={booking.url}>{booking.label}</Link>
+        {/* For anyone not ready to book or write: the mailing list. */}
+        {kit.newsletterAction && (
+          <KitInline action={kit.newsletterAction} label="Stay in touch" dark class="close-news" />
+        )}
       </div>
       {/* A page can set something beside it — the application form on Work
           with me — so the two ways to begin sit together. */}
@@ -85,6 +90,12 @@ const paired = Astro.slots.has('default');
       border-left: 0;
       border-top: 1px solid rgb(var(--ch-bract) / 0.16);
     }
+  }
+
+  .close-lead :global(.close-news) {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: clamp(1.25rem, 3vw, 1.75rem);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
   }
 
   .close-body {

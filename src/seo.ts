@@ -91,7 +91,7 @@ export const gift = {
   description: kit.freebieBody,
   url: abs('/resources/#gift'),
   creator: { '@id': PERSON_ID },
-  contributor: { '@type': 'Person', name: 'Stu Pender' },
+  contributor: { '@type': 'Person', name: 'Stu Pender', url: contact.stu },
   isAccessibleForFree: true,
 };
 
