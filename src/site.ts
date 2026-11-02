@@ -54,7 +54,8 @@ export const booking = {
  * live site ever looks broken.
  */
 export const kit = {
-  formAction: null as string | null,
+  // Joan's Kit form for the Red Rose Visualization.
+  formAction: 'https://app.kit.com/forms/10134888/subscriptions' as string | null,
   /**
    * TODO-AUDIO: the recording, revealed (a player and a download link) on
    * the gift card once someone has given their email. Upload the MP3 to

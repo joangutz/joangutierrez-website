@@ -7,7 +7,6 @@ import OfferingCard from '../../components/OfferingCard.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
 import PriceGrid from '../../components/PriceGrid.astro';
 import { getCollection, getEntry } from 'astro:content';
-import KitSignup from '../../components/KitSignup.astro';
 import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
 import { withBase, beginHere, kit, contact } from '../../site';
@@ -188,11 +187,6 @@ const motifs = [
         </div>
       )}
 
-      {kit.formAction && (
-        <div class="not-ready">
-          <KitSignup />
-        </div>
-      )}
     </div>
   </section>
 
