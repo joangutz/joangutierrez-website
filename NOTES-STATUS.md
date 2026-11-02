@@ -15,7 +15,7 @@ and the choice is Joan's.
 | Delete the Roots page and its CV; a simple About page | **Done** — old /roots address forwards to About |
 | An image banner to open Work with me (now Services) / About / Resources / Begin | **Done** — each now opens full-screen, like the homepage: the page's name large on the photograph, Joan's line beside it |
 | Drop-down tabs under Work with me and Resource | **Clash** — later replaced, in a build session, by four plain tabs. Every offering is a card on Work with me; the gift and Substack are cards on Resources (renamed from Resource) |
-| The Red Rose Visualization as a gift that collects emails | **Done** as a card that turns over. **Open:** collecting emails needs the Kit form address (TODO-KIT in `src/site.ts`); until then the card offers Joan's email |
+| The Red Rose Visualization as a gift that collects emails | **Done** — the card turns over to an email form (Kit form 10134888); after signing up, a player and a download link appear |
 | "Recorded for my w.s at CPR" | **Open** — not stated on the site (an earlier guess at "CPR" was removed). WRITING.md asks where and for whom |
 | Burnt / sepia salmon colour | **Clash** — superseded by later choices: a linen ground (Joan picked "D Linen") and now the **Driftwood** palette. The salmon-era Wine palette is saved and can be tried at `?palette=wine` |
 | Stu Pender soundscape while browsing | **Open** — needs the audio file (TODO-SOUND in `src/site.ts`) |
@@ -86,10 +86,6 @@ SEO.md); the rest are the open items above.
 
 ### Waiting on Joan
 
-- The **recording** (MP3), uploaded to `public/audio/` with its name set in
-  `kit.audio` (TODO-AUDIO). The Kit form is connected (form 10134888): the
-  gift card already takes emails; once the recording is in, a player and a
-  download link appear after someone signs up.
 - A **Formspree address**, so the application form sends directly
   (TODO-FORM).
 - The **soundscape file** from Stu Pender (TODO-SOUND).

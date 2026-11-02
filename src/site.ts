@@ -64,7 +64,7 @@ export const kit = {
    * the email form is a gentle gate, not a lock. For a true gate, leave
    * this null and have Kit deliver the recording by email instead.
    */
-  audio: null as string | null,
+  audio: 'red-rose-visualization.mp3' as string | null,
   freebie: 'Red Rose Visualization',
   freebieSub: 'A doorway for the inner eye',
   freebieBody:
