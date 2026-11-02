@@ -16,8 +16,12 @@ const year = new Date().getFullYear();
     ends on its own close rather than on a directory. */}
 <footer class:list={['footer on-dark', { grained: !onGround, 'footer-on-ground': onGround }]}>
   <div class="band">
-    <div class="wide">
+    <div class="wide footer-line">
       <p class="credit">© {year} {site.name}</p>
+      <a class="to-top" href="#top">
+        <span>Top</span>
+        <svg viewBox="0 0 10 16" aria-hidden="true" focusable="false"><path d="M5 15.5 V1.5 M1 5.5 L5 1.5 L9 5.5" /></svg>
+      </a>
     </div>
   </div>
 </footer>
@@ -38,6 +42,51 @@ const year = new Date().getFullYear();
   .footer-on-ground {
     background: transparent;
     padding-top: 0;
+  }
+
+  .footer-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  /* Back to the top: the same small letterspaced voice as the credit, a
+     hairline arrow rising beside it. */
+  .to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-label);
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 300ms var(--ease-open);
+  }
+
+  .to-top svg {
+    width: 9px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: translate 300ms var(--ease-open);
+  }
+
+  .to-top:hover,
+  .to-top:focus-visible {
+    opacity: 1;
+  }
+
+  .to-top:hover svg,
+  .to-top:focus-visible svg {
+    translate: 0 -3px;
   }
 
   .credit {

@@ -108,14 +108,14 @@ import GetInTouch from '../components/GetInTouch.astro';
       })();
     </script>
   </head>
-  <body>
+  <body id="top">
     <a class="skip" href="#main">Skip to content</a>
     <Nav />
     <main id="main">
       <slot />
     </main>
     {!selfClosing && (
-    <div class:list={['closing has-ground on-dark', { 'closing-bare': !close && !Astro.slots.has('close') }]}>
+    <div id="get-in-touch" class:list={['closing has-ground on-dark', { 'closing-bare': !close && !Astro.slots.has('close') }]}>
       <PhotoGround src={CLOSING_PHOTO} />
       <span class="closing-deep" aria-hidden="true" />
       {/* A page may put its own close here (slot="close"); otherwise

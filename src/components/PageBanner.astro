@@ -67,7 +67,13 @@ const {
       )}
     </div>
   </div>
-  {cinema && <span class="banner-cue" aria-hidden="true" />}
+  {/* The breathing line is also the way down: to Get in Touch at the
+      foot of the page. */}
+  {cinema && (
+    <a class="banner-cue" href="#get-in-touch" aria-label="To Get in Touch, at the end of the page">
+      <span aria-hidden="true" />
+    </a>
+  )}
 </section>
 
 <style>
@@ -172,20 +178,37 @@ const {
   }
 
   /* A short line at the foot, breathing, pointing on into the page. */
+  /* A generous target around a hairline. */
   .banner-cue {
     position: absolute;
     left: 50%;
-    bottom: clamp(1rem, 3vh, 1.75rem);
+    bottom: clamp(0.5rem, 2vh, 1.25rem);
+    translate: -50% 0;
+    display: flex;
+    justify-content: center;
+    width: 3rem;
+    padding: 0.5rem 0;
+    color: inherit;
+  }
+
+  .banner-cue span {
+    display: block;
     width: 1px;
     height: clamp(2rem, 6vh, 3rem);
-    translate: -50% 0;
     background: currentColor;
     opacity: 0.6;
     transform-origin: top;
+    transition: opacity 300ms var(--ease-open);
+  }
+
+  .banner-cue:hover span,
+  .banner-cue:focus-visible span {
+    opacity: 1;
+    width: 2px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .banner-cue {
+    .banner-cue span {
       animation: cue 3.2s var(--ease-open) infinite;
     }
 
