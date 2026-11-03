@@ -31,8 +31,11 @@ const file = sound.file;
         </span>
       </button>
 
-      {/* Never `autoplay`. The script starts it only on a real click. */}
-      <audio data-sound-el loop preload="none" src={withBase(`/audio/${file}`)} />
+      {/* Never `autoplay`. The script starts it only on a real click.
+          transition:persist keeps this one element alive across page
+          changes, so the soundscape plays on as the reader moves through
+          the site. */}
+      <audio data-sound-el loop preload="none" src={withBase(`/audio/${file}`)} transition:persist="soundscape" />
     </div>
   )
 }
@@ -105,22 +108,33 @@ const file = sound.file;
 </style>
 
 <script>
-  const btn = document.querySelector<HTMLButtonElement>('[data-sound-toggle]');
-  const el = document.querySelector<HTMLAudioElement>('[data-sound-el]');
-  const label = document.querySelector<HTMLElement>('[data-sound-label]');
 
-  if (btn && el) {
+  import { onPage } from '../lib/onPage';
+
+
+  onPage(() => {
+    const btn = document.querySelector<HTMLButtonElement>('[data-sound-toggle]');
+    const el = document.querySelector<HTMLAudioElement>('[data-sound-el]');
+    const label = document.querySelector<HTMLElement>('[data-sound-label]');
+    if (!btn || !el) return;
+
     const KEY = 'ma-sound';
     // Fades rather than cuts: a soundscape that stops dead is a jolt, which
     // is the one thing this is here to avoid.
     const FADE = 700;
 
+    // Each fade carries a number, kept on the audio element (which outlives
+    // every page); the newest fade wins, so an old fade — even one started on
+    // the previous page — can never pause a sound that was just turned on.
     const ramp = (to: number, done?: () => void) => {
+      const id = String(Number(el.dataset.fade || 0) + 1);
+      el.dataset.fade = id;
       const from = el.volume;
       const t0 = performance.now();
       const step = (now: number) => {
+        if (el.dataset.fade !== id) return;
         const k = Math.min(1, (now - t0) / FADE);
-        el.volume = from + (to - from) * k;
+        el.volume = Math.max(0, Math.min(1, from + (to - from) * k));
         if (k < 1) requestAnimationFrame(step);
         else done?.();
       };
@@ -132,41 +146,56 @@ const file = sound.file;
       if (label) label.textContent = on ? 'Sound on' : 'Sound';
     };
 
-    btn.addEventListener('click', () => {
-      const on = btn.getAttribute('aria-pressed') === 'true';
-      if (on) {
-        ramp(0, () => el.pause());
-        try { localStorage.removeItem(KEY); } catch {}
-        setState(false);
-      } else {
-        el.volume = 0;
-        // A blocked play() is not an error worth showing anyone — the control
-        // simply stays off, which is the honest state.
-        el.play().then(
-          () => {
-            ramp(0.35);
-            try { localStorage.setItem(KEY, '1'); } catch {}
-            setState(true);
-          },
-          () => setState(false)
-        );
-      }
-    });
+    // A new page brings a new button, but the sound may already be playing
+    // (the audio element itself carries over from the last page).
+    const playing = () => !el.paused && el.dataset.fading !== 'out';
+    setState(playing());
+
+    const turnOn = () => {
+      el.dataset.fading = '';
+      if (el.paused) el.volume = 0;
+      // A blocked play() is not an error worth showing anyone — the control
+      // simply stays off, which is the honest state.
+      el.play().then(
+        () => {
+          ramp(0.35);
+          try { localStorage.setItem(KEY, '1'); } catch {}
+          setState(true);
+        },
+        () => setState(false)
+      );
+    };
+
+    const turnOff = () => {
+      el.dataset.fading = 'out';
+      ramp(0, () => { el.pause(); el.dataset.fading = ''; });
+      try { localStorage.removeItem(KEY); } catch {}
+      setState(false);
+    };
+
+    btn.addEventListener('click', () => (playing() ? turnOff() : turnOn()));
 
     // A reader who turned it on last visit still has to touch the page once
     // before a browser will make sound, so the choice is restored on the
-    // first interaction rather than on load.
+    // first interaction rather than on load. A touch on the button itself
+    // is left to the button.
     let remembered = false;
     try { remembered = localStorage.getItem(KEY) === '1'; } catch {}
 
-    if (remembered) {
-      const resume = () => {
-        btn.click();
-        document.removeEventListener('pointerdown', resume);
-        document.removeEventListener('keydown', resume);
-      };
-      document.addEventListener('pointerdown', resume, { once: true });
-      document.addEventListener('keydown', resume, { once: true });
+    const resume = (e: Event) => {
+      off();
+      if (btn.contains(e.target as Node)) return;
+      if (el.paused) turnOn();
+    };
+    const off = () => {
+      document.removeEventListener('pointerdown', resume);
+      document.removeEventListener('keydown', resume);
+    };
+    if (remembered && el.paused) {
+      document.addEventListener('pointerdown', resume);
+      document.addEventListener('keydown', resume);
     }
-  }
+    return off;
+  });
+
 </script>

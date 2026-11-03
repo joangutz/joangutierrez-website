@@ -118,46 +118,54 @@ const PALETTES = [
 </style>
 
 <script>
-  const box = document.querySelector<HTMLElement>('[data-trial]');
-  if (box) {
-    const get = (k: string) => {
-      try {
-        return localStorage.getItem(k);
-      } catch {
-        return null;
-      }
-    };
-    const set = (k: string, v: string | null) => {
-      try {
-        if (v === null) localStorage.removeItem(k);
-        else localStorage.setItem(k, v);
-      } catch {
-        /* private mode: the choice lasts this page only */
-      }
-    };
-    const sync = () => {
-      const now = document.documentElement.dataset.palette ?? 'driftwood';
-      for (const b of box.querySelectorAll<HTMLButtonElement>('[data-palette-pick]')) {
-        b.setAttribute('aria-pressed', String(b.dataset.palettePick === now));
-      }
-    };
-    if (get('ms-trial') === '1' || new URLSearchParams(location.search).has('palette')) {
-      box.hidden = false;
-      sync();
-    }
-    box.addEventListener('click', (e) => {
-      const pick = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-palette-pick]');
-      if (pick) {
-        const id = pick.dataset.palettePick as string;
-        if (id === 'driftwood') delete document.documentElement.dataset.palette;
-        else document.documentElement.dataset.palette = id;
-        set('ms-palette', id === 'driftwood' ? null : id);
+
+  import { onPage } from '../lib/onPage';
+
+
+  onPage(() => {
+    const box = document.querySelector<HTMLElement>('[data-trial]');
+    if (box) {
+      const get = (k: string) => {
+        try {
+          return localStorage.getItem(k);
+        } catch {
+          return null;
+        }
+      };
+      const set = (k: string, v: string | null) => {
+        try {
+          if (v === null) localStorage.removeItem(k);
+          else localStorage.setItem(k, v);
+        } catch {
+          /* private mode: the choice lasts this page only */
+        }
+      };
+      const sync = () => {
+        const now = document.documentElement.dataset.palette ?? 'driftwood';
+        for (const b of box.querySelectorAll<HTMLButtonElement>('[data-palette-pick]')) {
+          b.setAttribute('aria-pressed', String(b.dataset.palettePick === now));
+        }
+      };
+      if (get('ms-trial') === '1' || new URLSearchParams(location.search).has('palette')) {
+        box.hidden = false;
         sync();
       }
-      if ((e.target as HTMLElement).closest('[data-trial-hide]')) {
-        box.hidden = true;
-        set('ms-trial', null);
-      }
-    });
-  }
+      box.addEventListener('click', (e) => {
+        const pick = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-palette-pick]');
+        if (pick) {
+          const id = pick.dataset.palettePick as string;
+          if (id === 'driftwood') delete document.documentElement.dataset.palette;
+          else document.documentElement.dataset.palette = id;
+          set('ms-palette', id === 'driftwood' ? null : id);
+          sync();
+        }
+        if ((e.target as HTMLElement).closest('[data-trial-hide]')) {
+          box.hidden = true;
+          set('ms-trial', null);
+        }
+      });
+    }
+
+  });
+
 </script>

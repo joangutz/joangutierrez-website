@@ -683,315 +683,328 @@ const AT = [
 </style>
 
 <script>
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /**
-   * Water. Each bubble's photograph is drawn to a canvas, and while a
-   * ripple is passing, every pixel is pushed along the line from the centre
-   * by a travelling wave — a crest bends the image outward, a trough inward —
-   * and lit a little where the surface tilts toward the eye. That is the
-   * whole trick of refraction through ripples, done by hand on a small
-   * image; a frame costs a few milliseconds, and nothing redraws between
-   * ripples.
-   */
-  const water = (() => {
-    const CYCLE = 30000; // the breath round, as in the CSS
-    const LEAD = 4500; // the wave begins this long before the outer rings
-    const RUN = 6500; // how long a wave takes to cross and settle
-    const CLICK_RUN = 4200;
+  import { onPage } from '../lib/onPage';
 
-    interface Pool {
-      orb: HTMLElement;
-      canvas: HTMLCanvasElement;
-      ctx: CanvasRenderingContext2D;
-      img: HTMLImageElement;
-      src?: ImageData;
-      out?: ImageData;
-      size: number;
-      ring?: Animation;
-      clickAt: number;
-      still: boolean;
-    }
-    const pools: Pool[] = [];
-    let visible = true;
-    let running = false;
 
-    const prepare = (p: Pool) => {
-      const size = Math.max(64, Math.round(p.orb.clientWidth));
-      if (!p.img.complete || !p.img.naturalWidth) return;
-      p.size = size;
-      p.canvas.width = size;
-      p.canvas.height = size;
-      p.ctx.drawImage(p.img, 0, 0, size, size);
-      p.src = p.ctx.getImageData(0, 0, size, size);
-      p.out = p.ctx.createImageData(size, size);
-      p.still = true;
-    };
+  onPage(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    /** 0..1 progress of the wave now passing, or -1 for none. */
-    const progress = (p: Pool, now: number) => {
-      // A click starts the wave already under way, so the image answers
-      // the touch at once rather than after the front has gathered.
-      if (now - p.clickAt < CLICK_RUN) return 0.24 + 0.76 * ((now - p.clickAt) / CLICK_RUN);
-      const a = p.ring;
-      if (!a || a.playState !== 'running' || a.currentTime == null) return -1;
-      if (p.orb.closest('.is-open')) return -1;
-      const delay = Number(a.effect?.getTiming().delay ?? 0);
-      const t = ((((Number(a.currentTime) - delay + LEAD) % CYCLE) + CYCLE) % CYCLE);
-      return t < RUN ? t / RUN : -1;
-    };
+    /**
+     * Water. Each bubble's photograph is drawn to a canvas, and while a
+     * ripple is passing, every pixel is pushed along the line from the centre
+     * by a travelling wave — a crest bends the image outward, a trough inward —
+     * and lit a little where the surface tilts toward the eye. That is the
+     * whole trick of refraction through ripples, done by hand on a small
+     * image; a frame costs a few milliseconds, and nothing redraws between
+     * ripples.
+     */
+    const water = (() => {
+      const CYCLE = 30000; // the breath round, as in the CSS
+      const LEAD = 4500; // the wave begins this long before the outer rings
+      const RUN = 6500; // how long a wave takes to cross and settle
+      const CLICK_RUN = 4200;
 
-    const draw = (p: Pool, k: number) => {
-      const { src, out, size } = p;
-      if (!src || !out) return;
-      const S = src.data;
-      const O = out.data;
-      const R = size / 2;
-      const front = k * 1.35 * R; // where the leading crest has reached
-      const wl = 0.3 * R; // wavelength
-      const width = 0.42 * R; // how many crests ride together
-      const amp = 0.085 * R * Math.pow(1 - k, 0.7); // fades as it spreads
-      for (let y = 0; y < size; y++) {
-        const dy0 = y - R + 0.5;
-        for (let x = 0; x < size; x++) {
-          const dx0 = x - R + 0.5;
-          const r = Math.sqrt(dx0 * dx0 + dy0 * dy0);
-          const o = (y * size + x) * 4;
-          const behind = front - r;
-          if (r > R || behind < 0 || behind > width * 2.4) {
-            O[o] = S[o];
-            O[o + 1] = S[o + 1];
-            O[o + 2] = S[o + 2];
-            O[o + 3] = S[o + 3];
-            continue;
-          }
-          const env = Math.exp(-((behind - width) ** 2) / (width * width * 0.5));
-          const phase = (behind / wl) * Math.PI * 2;
-          const d = amp * env * Math.sin(phase);
-          const ux = r > 0.001 ? dx0 / r : 0;
-          const uy = r > 0.001 ? dy0 / r : 0;
-          // Sample between pixels, so a bent edge stays smooth.
-          let fx = x - ux * d;
-          let fy = y - uy * d;
-          fx = fx < 0 ? 0 : fx > size - 1.001 ? size - 1.001 : fx;
-          fy = fy < 0 ? 0 : fy > size - 1.001 ? size - 1.001 : fy;
-          const x0 = fx | 0;
-          const y0 = fy | 0;
-          const tx = fx - x0;
-          const ty = fy - y0;
-          const a0 = (y0 * size + x0) * 4;
-          const a1 = a0 + 4;
-          const b0 = a0 + size * 4;
-          const b1 = b0 + 4;
-          const light = 1 + 0.16 * env * Math.cos(phase) * (1 - k);
-          for (let c = 0; c < 3; c++) {
-            const top = S[a0 + c] + (S[a1 + c] - S[a0 + c]) * tx;
-            const bot = S[b0 + c] + (S[b1 + c] - S[b0 + c]) * tx;
-            O[o + c] = (top + (bot - top) * ty) * light;
-          }
-          O[o + 3] = 255;
-        }
+      interface Pool {
+        orb: HTMLElement;
+        canvas: HTMLCanvasElement;
+        ctx: CanvasRenderingContext2D;
+        img: HTMLImageElement;
+        src?: ImageData;
+        out?: ImageData;
+        size: number;
+        ring?: Animation;
+        clickAt: number;
+        still: boolean;
       }
-      p.ctx.putImageData(out, 0, 0);
-      p.still = false;
-    };
+      const pools: Pool[] = [];
+      let visible = true;
+      let running = false;
 
-    const frame = (now: number) => {
-      let any = false;
-      for (const p of pools) {
-        const k = progress(p, now);
-        if (k >= 0) {
-          draw(p, k);
-          any = true;
-        } else if (!p.still && p.src) {
-          p.ctx.putImageData(p.src, 0, 0);
-          p.still = true;
+      const prepare = (p: Pool) => {
+        const size = Math.max(64, Math.round(p.orb.clientWidth));
+        if (!p.img.complete || !p.img.naturalWidth) return;
+        p.size = size;
+        p.canvas.width = size;
+        p.canvas.height = size;
+        p.ctx.drawImage(p.img, 0, 0, size, size);
+        p.src = p.ctx.getImageData(0, 0, size, size);
+        p.out = p.ctx.createImageData(size, size);
+        p.still = true;
+      };
+
+      /** 0..1 progress of the wave now passing, or -1 for none. */
+      const progress = (p: Pool, now: number) => {
+        // A click starts the wave already under way, so the image answers
+        // the touch at once rather than after the front has gathered.
+        if (now - p.clickAt < CLICK_RUN) return 0.24 + 0.76 * ((now - p.clickAt) / CLICK_RUN);
+        const a = p.ring;
+        if (!a || a.playState !== 'running' || a.currentTime == null) return -1;
+        if (p.orb.closest('.is-open')) return -1;
+        const delay = Number(a.effect?.getTiming().delay ?? 0);
+        const t = ((((Number(a.currentTime) - delay + LEAD) % CYCLE) + CYCLE) % CYCLE);
+        return t < RUN ? t / RUN : -1;
+      };
+
+      const draw = (p: Pool, k: number) => {
+        const { src, out, size } = p;
+        if (!src || !out) return;
+        const S = src.data;
+        const O = out.data;
+        const R = size / 2;
+        const front = k * 1.35 * R; // where the leading crest has reached
+        const wl = 0.3 * R; // wavelength
+        const width = 0.42 * R; // how many crests ride together
+        const amp = 0.085 * R * Math.pow(1 - k, 0.7); // fades as it spreads
+        for (let y = 0; y < size; y++) {
+          const dy0 = y - R + 0.5;
+          for (let x = 0; x < size; x++) {
+            const dx0 = x - R + 0.5;
+            const r = Math.sqrt(dx0 * dx0 + dy0 * dy0);
+            const o = (y * size + x) * 4;
+            const behind = front - r;
+            if (r > R || behind < 0 || behind > width * 2.4) {
+              O[o] = S[o];
+              O[o + 1] = S[o + 1];
+              O[o + 2] = S[o + 2];
+              O[o + 3] = S[o + 3];
+              continue;
+            }
+            const env = Math.exp(-((behind - width) ** 2) / (width * width * 0.5));
+            const phase = (behind / wl) * Math.PI * 2;
+            const d = amp * env * Math.sin(phase);
+            const ux = r > 0.001 ? dx0 / r : 0;
+            const uy = r > 0.001 ? dy0 / r : 0;
+            // Sample between pixels, so a bent edge stays smooth.
+            let fx = x - ux * d;
+            let fy = y - uy * d;
+            fx = fx < 0 ? 0 : fx > size - 1.001 ? size - 1.001 : fx;
+            fy = fy < 0 ? 0 : fy > size - 1.001 ? size - 1.001 : fy;
+            const x0 = fx | 0;
+            const y0 = fy | 0;
+            const tx = fx - x0;
+            const ty = fy - y0;
+            const a0 = (y0 * size + x0) * 4;
+            const a1 = a0 + 4;
+            const b0 = a0 + size * 4;
+            const b1 = b0 + 4;
+            const light = 1 + 0.16 * env * Math.cos(phase) * (1 - k);
+            for (let c = 0; c < 3; c++) {
+              const top = S[a0 + c] + (S[a1 + c] - S[a0 + c]) * tx;
+              const bot = S[b0 + c] + (S[b1 + c] - S[b0 + c]) * tx;
+              O[o + c] = (top + (bot - top) * ty) * light;
+            }
+            O[o + 3] = 255;
+          }
         }
-      }
-      if (visible) requestAnimationFrame(frame);
-      else running = false;
-      void any;
-    };
+        p.ctx.putImageData(out, 0, 0);
+        p.still = false;
+      };
 
-    const start = () => {
-      if (running || !visible || reduce.matches) return;
-      running = true;
-      requestAnimationFrame(frame);
-    };
+      const frame = (now: number) => {
+        let any = false;
+        for (const p of pools) {
+          const k = progress(p, now);
+          if (k >= 0) {
+            draw(p, k);
+            any = true;
+          } else if (!p.still && p.src) {
+            p.ctx.putImageData(p.src, 0, 0);
+            p.still = true;
+          }
+        }
+        if (visible) requestAnimationFrame(frame);
+        else running = false;
+        void any;
+      };
 
-    return {
-      add(orb: HTMLElement) {
-        const canvas = orb.querySelector<HTMLCanvasElement>('canvas[data-tex]');
-        const ctx = canvas?.getContext('2d', { willReadFrequently: true });
-        if (!canvas || !ctx) return;
-        const img = new Image();
-        img.decoding = 'async';
-        img.src = canvas.dataset.tex as string;
-        const ring =
-          orb.parentElement?.querySelector<HTMLElement>('.ripples i')?.getAnimations()[0];
-        const p: Pool = { orb, canvas, ctx, img, size: 0, ring, clickAt: -1e9, still: true };
-        pools.push(p);
-        img.addEventListener('load', () => prepare(p));
-        if ('ResizeObserver' in window) new ResizeObserver(() => prepare(p)).observe(orb);
-      },
-      watch(el: HTMLElement) {
-        if (!('IntersectionObserver' in window)) return start();
-        new IntersectionObserver(([e]) => {
-          visible = e.isIntersecting;
+      const start = () => {
+        if (running || !visible || reduce.matches) return;
+        running = true;
+        requestAnimationFrame(frame);
+      };
+
+      return {
+        add(orb: HTMLElement) {
+          const canvas = orb.querySelector<HTMLCanvasElement>('canvas[data-tex]');
+          const ctx = canvas?.getContext('2d', { willReadFrequently: true });
+          if (!canvas || !ctx) return;
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = canvas.dataset.tex as string;
+          const ring =
+            orb.parentElement?.querySelector<HTMLElement>('.ripples i')?.getAnimations()[0];
+          const p: Pool = { orb, canvas, ctx, img, size: 0, ring, clickAt: -1e9, still: true };
+          pools.push(p);
+          img.addEventListener('load', () => prepare(p));
+          if ('ResizeObserver' in window) new ResizeObserver(() => prepare(p)).observe(orb);
+        },
+        watch(el: HTMLElement) {
+          if (!('IntersectionObserver' in window)) return start();
+          new IntersectionObserver(([e]) => {
+            visible = e.isIntersecting;
+            start();
+          }).observe(el);
+        },
+        splash(orb: HTMLElement) {
+          const p = pools.find((q) => q.orb === orb);
+          if (!p) return;
+          p.clickAt = performance.now();
           start();
-        }).observe(el);
-      },
-      splash(orb: HTMLElement) {
-        const p = pools.find((q) => q.orb === orb);
-        if (!p) return;
-        p.clickAt = performance.now();
-        start();
-      },
-    };
-  })();
+        },
+        /** Leaving the page: let the loop run out. */
+        stop() {
+          visible = false;
+        },
+      };
+    })();
 
-  for (const root of document.querySelectorAll<HTMLElement>('[data-realms]')) {
-    const orbs = [...root.querySelectorAll<HTMLButtonElement>('[data-orb]')];
-    for (const o of orbs) water.add(o);
-    water.watch(root);
-    const views = [...root.querySelectorAll<HTMLElement>('[data-view]')];
-    const panel = root.querySelector<HTMLElement>('[data-panel]');
-    if (!panel) continue;
+    for (const root of document.querySelectorAll<HTMLElement>('[data-realms]')) {
+      const orbs = [...root.querySelectorAll<HTMLButtonElement>('[data-orb]')];
+      for (const o of orbs) water.add(o);
+      water.watch(root);
+      const views = [...root.querySelectorAll<HTMLElement>('[data-view]')];
+      const panel = root.querySelector<HTMLElement>('[data-panel]');
+      if (!panel) continue;
 
-    const show = (id: string) => {
-      for (const v of views) v.classList.toggle('is-shown', v.dataset.view === id);
-      for (const o of orbs) o.setAttribute('aria-pressed', String(o.dataset.orb === id));
-      if (id !== 'intro') root.classList.add('has-opened');
-      root.classList.toggle('is-open', id !== 'intro');
+      const show = (id: string) => {
+        for (const v of views) v.classList.toggle('is-shown', v.dataset.view === id);
+        for (const o of orbs) o.setAttribute('aria-pressed', String(o.dataset.orb === id));
+        if (id !== 'intro') root.classList.add('has-opened');
+        root.classList.toggle('is-open', id !== 'intro');
 
-      // On a phone the panel sits below all three bubbles, so a press near
-      // the top would change text the reader cannot see.
-      const r = panel.getBoundingClientRect();
-      if (r.top > window.innerHeight * 0.85 || r.bottom < 0) {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
-      }
-    };
-
-    // Each swell lies along its leg: its angle is the leg's true angle on
-    // screen, which depends on the figure's proportions.
-    const glowBox = root.querySelector<HTMLElement>('[data-glows]');
-    const glows = [...root.querySelectorAll<HTMLElement>('.glow')];
-    const angle = (g: HTMLElement) => {
-      if (!glowBox) return 0;
-      const cs = getComputedStyle(g);
-      const n = (v: string) => parseFloat(cs.getPropertyValue(v));
-      const dx = ((n('--x2') - n('--x1')) / 100) * glowBox.clientWidth;
-      const dy = ((n('--y2') - n('--y1')) / 100) * glowBox.clientHeight;
-      return (Math.atan2(dy, dx) * 180) / Math.PI;
-    };
-    const aim = () => {
-      for (const g of glows) g.style.setProperty('--angle', `${angle(g)}deg`);
-    };
-    aim();
-    if (glowBox && 'ResizeObserver' in window) new ResizeObserver(aim).observe(glowBox);
-
-    // A press sends the swell racing in along both legs that meet at the
-    // bubble — quicker and more urgent than the breath.
-    const shoot = (o: HTMLElement) => {
-      // No legs on a phone, where the bubbles stack.
-      if (!glowBox || glows.length !== 3 || !glowBox.offsetParent) return;
-      const i = orbs.indexOf(o as HTMLButtonElement);
-      if (i < 0) return;
-      // The leg that ends at this bubble runs forward; the one that starts
-      // there runs backward, so both arrive.
-      for (const [leg, back] of [
-        [glows[(i + 2) % 3], false],
-        [glows[i], true],
-      ] as const) {
-        const cs = getComputedStyle(leg);
-        const v = (k: string) => cs.getPropertyValue(k).trim();
-        const from = { left: `${v('--x1')}%`, top: `${v('--y1')}%` };
-        const to = { left: `${v('--x2')}%`, top: `${v('--y2')}%` };
-        const shot = document.createElement('span');
-        // Carry the stylesheet's scoping attribute so the swell is styled.
-        for (const a of leg.getAttributeNames()) {
-          if (a.startsWith('data-astro-cid')) shot.setAttribute(a, '');
+        // On a phone the panel sits below all three bubbles, so a press near
+        // the top would change text the reader cannot see.
+        const r = panel.getBoundingClientRect();
+        if (r.top > window.innerHeight * 0.85 || r.bottom < 0) {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
         }
-        shot.className = 'shot';
-        shot.style.cssText = leg.style.cssText;
-        glowBox.parentElement?.appendChild(shot);
-        // Outside the box that fades under the pointer, so give it the same
-        // inset by hand.
-        shot.style.margin = '0';
-        const a0 = back ? to : from;
-        const a1 = back ? from : to;
-        const box = glowBox.getBoundingClientRect();
-        const host = glowBox.parentElement!.getBoundingClientRect();
-        const px = (pt: { left: string; top: string }) => ({
-          left: `${box.left - host.left + (parseFloat(pt.left) / 100) * box.width}px`,
-          top: `${box.top - host.top + (parseFloat(pt.top) / 100) * box.height}px`,
+      };
+
+      // Each swell lies along its leg: its angle is the leg's true angle on
+      // screen, which depends on the figure's proportions.
+      const glowBox = root.querySelector<HTMLElement>('[data-glows]');
+      const glows = [...root.querySelectorAll<HTMLElement>('.glow')];
+      const angle = (g: HTMLElement) => {
+        if (!glowBox) return 0;
+        const cs = getComputedStyle(g);
+        const n = (v: string) => parseFloat(cs.getPropertyValue(v));
+        const dx = ((n('--x2') - n('--x1')) / 100) * glowBox.clientWidth;
+        const dy = ((n('--y2') - n('--y1')) / 100) * glowBox.clientHeight;
+        return (Math.atan2(dy, dx) * 180) / Math.PI;
+      };
+      const aim = () => {
+        for (const g of glows) g.style.setProperty('--angle', `${angle(g)}deg`);
+      };
+      aim();
+      if (glowBox && 'ResizeObserver' in window) new ResizeObserver(aim).observe(glowBox);
+
+      // A press sends the swell racing in along both legs that meet at the
+      // bubble — quicker and more urgent than the breath.
+      const shoot = (o: HTMLElement) => {
+        // No legs on a phone, where the bubbles stack.
+        if (!glowBox || glows.length !== 3 || !glowBox.offsetParent) return;
+        const i = orbs.indexOf(o as HTMLButtonElement);
+        if (i < 0) return;
+        // The leg that ends at this bubble runs forward; the one that starts
+        // there runs backward, so both arrive.
+        for (const [leg, back] of [
+          [glows[(i + 2) % 3], false],
+          [glows[i], true],
+        ] as const) {
+          const cs = getComputedStyle(leg);
+          const v = (k: string) => cs.getPropertyValue(k).trim();
+          const from = { left: `${v('--x1')}%`, top: `${v('--y1')}%` };
+          const to = { left: `${v('--x2')}%`, top: `${v('--y2')}%` };
+          const shot = document.createElement('span');
+          // Carry the stylesheet's scoping attribute so the swell is styled.
+          for (const a of leg.getAttributeNames()) {
+            if (a.startsWith('data-astro-cid')) shot.setAttribute(a, '');
+          }
+          shot.className = 'shot';
+          shot.style.cssText = leg.style.cssText;
+          glowBox.parentElement?.appendChild(shot);
+          // Outside the box that fades under the pointer, so give it the same
+          // inset by hand.
+          shot.style.margin = '0';
+          const a0 = back ? to : from;
+          const a1 = back ? from : to;
+          const box = glowBox.getBoundingClientRect();
+          const host = glowBox.parentElement!.getBoundingClientRect();
+          const px = (pt: { left: string; top: string }) => ({
+            left: `${box.left - host.left + (parseFloat(pt.left) / 100) * box.width}px`,
+            top: `${box.top - host.top + (parseFloat(pt.top) / 100) * box.height}px`,
+          });
+          shot
+            .animate(
+              [
+                { ...px(a0), opacity: 0 },
+                { opacity: 1, offset: 0.1 },
+                { opacity: 1, offset: 0.78 },
+                { ...px(a1), opacity: 0 },
+              ],
+              { duration: 760, easing: 'cubic-bezier(0.4, 0.15, 0.3, 1)', fill: 'both' }
+            )
+            .finished.then(
+              () => shot.remove(),
+              () => shot.remove()
+            );
+        }
+      };
+
+      // A drop landing: three quick rings from the bubble that was pressed.
+      const splash = (o: HTMLElement) => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        shoot(o);
+        water.splash(o);
+        // In the slot, not among the ambient rings, which step aside under the
+        // pointer.
+        const host = o.parentElement;
+        if (!host) return;
+        for (let k = 0; k < 3; k++) {
+          const ring = document.createElement('i');
+          ring.className = 'splash';
+          for (const a of host.getAttributeNames()) {
+            if (a.startsWith('data-astro-cid')) ring.setAttribute(a, '');
+          }
+          host.appendChild(ring);
+          ring
+            .animate(
+              [
+                { opacity: 0.9, scale: 1 },
+                { opacity: 0, scale: 1.5 },
+              ],
+              { duration: 2200, delay: k * 320, easing: 'cubic-bezier(0.2, 0.6, 0.35, 1)', fill: 'backwards' }
+            )
+            .finished.then(() => ring.remove());
+        }
+      };
+
+      for (const o of orbs) {
+        o.addEventListener('click', () => {
+          splash(o);
+          const open = o.getAttribute('aria-pressed') === 'true';
+          show(open ? 'intro' : (o.dataset.orb as string));
         });
-        shot
-          .animate(
-            [
-              { ...px(a0), opacity: 0 },
-              { opacity: 1, offset: 0.1 },
-              { opacity: 1, offset: 0.78 },
-              { ...px(a1), opacity: 0 },
-            ],
-            { duration: 760, easing: 'cubic-bezier(0.4, 0.15, 0.3, 1)', fill: 'both' }
-          )
-          .finished.then(
-            () => shot.remove(),
-            () => shot.remove()
-          );
       }
-    };
 
-    // A drop landing: three quick rings from the bubble that was pressed.
-    const splash = (o: HTMLElement) => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      shoot(o);
-      water.splash(o);
-      // In the slot, not among the ambient rings, which step aside under the
-      // pointer.
-      const host = o.parentElement;
-      if (!host) return;
-      for (let k = 0; k < 3; k++) {
-        const ring = document.createElement('i');
-        ring.className = 'splash';
-        for (const a of host.getAttributeNames()) {
-          if (a.startsWith('data-astro-cid')) ring.setAttribute(a, '');
+      for (const c of root.querySelectorAll<HTMLButtonElement>('[data-close]')) {
+        c.addEventListener('click', () => {
+          const was = orbs.find((o) => o.getAttribute('aria-pressed') === 'true');
+          show('intro');
+          was?.focus();
+        });
+      }
+
+      root.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && orbs.some((o) => o.getAttribute('aria-pressed') === 'true')) {
+          show('intro');
         }
-        host.appendChild(ring);
-        ring
-          .animate(
-            [
-              { opacity: 0.9, scale: 1 },
-              { opacity: 0, scale: 1.5 },
-            ],
-            { duration: 2200, delay: k * 320, easing: 'cubic-bezier(0.2, 0.6, 0.35, 1)', fill: 'backwards' }
-          )
-          .finished.then(() => ring.remove());
-      }
-    };
-
-    for (const o of orbs) {
-      o.addEventListener('click', () => {
-        splash(o);
-        const open = o.getAttribute('aria-pressed') === 'true';
-        show(open ? 'intro' : (o.dataset.orb as string));
       });
     }
 
-    for (const c of root.querySelectorAll<HTMLButtonElement>('[data-close]')) {
-      c.addEventListener('click', () => {
-        const was = orbs.find((o) => o.getAttribute('aria-pressed') === 'true');
-        show('intro');
-        was?.focus();
-      });
-    }
+    return () => water.stop();
+  });
 
-    root.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && orbs.some((o) => o.getAttribute('aria-pressed') === 'true')) {
-        show('intro');
-      }
-    });
-  }
 </script>

@@ -667,60 +667,75 @@ const isCurrent = (href: string) => {
 </style>
 
 <script>
-  const panel = document.querySelector<HTMLElement>('[data-menu]');
-  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
-  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
 
-  if (panel && openBtn && closeBtn) {
-    const FOCUSABLE = 'a[href], button:not([disabled])';
-    let lastFocused: HTMLElement | null = null;
+  import { onPage } from '../lib/onPage';
 
-    const open = () => {
-      lastFocused = document.activeElement as HTMLElement;
-      panel.hidden = false;
-      // A frame between unhiding and the class, or the transition has no
-      // start state to move from and the panel simply appears.
-      requestAnimationFrame(() => panel.classList.add('is-open'));
-      openBtn.setAttribute('aria-expanded', 'true');
-      document.documentElement.style.overflow = 'hidden';
-      closeBtn.focus({ preventScroll: true });
-    };
 
-    const close = () => {
-      panel.classList.remove('is-open');
-      panel.hidden = true;
-      openBtn.setAttribute('aria-expanded', 'false');
-      document.documentElement.style.overflow = '';
-      (lastFocused ?? openBtn).focus({ preventScroll: true });
-    };
+  onPage(() => {
+    const panel = document.querySelector<HTMLElement>('[data-menu]');
+    const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+    const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
 
-    openBtn.addEventListener('click', open);
-    closeBtn.addEventListener('click', close);
+    if (panel && openBtn && closeBtn) {
+      const FOCUSABLE = 'a[href], button:not([disabled])';
+      let lastFocused: HTMLElement | null = null;
 
-    document.addEventListener('keydown', (e) => {
-      if (panel.hidden) return;
+      const open = () => {
+        lastFocused = document.activeElement as HTMLElement;
+        panel.hidden = false;
+        // A frame between unhiding and the class, or the transition has no
+        // start state to move from and the panel simply appears.
+        requestAnimationFrame(() => panel.classList.add('is-open'));
+        openBtn.setAttribute('aria-expanded', 'true');
+        document.documentElement.style.overflow = 'hidden';
+        closeBtn.focus({ preventScroll: true });
+      };
 
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        close();
-        return;
-      }
+      const close = () => {
+        panel.classList.remove('is-open');
+        panel.hidden = true;
+        openBtn.setAttribute('aria-expanded', 'false');
+        document.documentElement.style.overflow = '';
+        (lastFocused ?? openBtn).focus({ preventScroll: true });
+      };
 
-      // Keep Tab inside the panel while it covers the page, or focus walks
-      // onto the links behind it with nothing on screen to show where it went.
-      if (e.key === 'Tab') {
-        const items = [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)];
-        if (!items.length) return;
-        const first = items[0];
-        const last = items[items.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
+      openBtn.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
+
+      const onKey = (e: KeyboardEvent) => {
+        if (panel.hidden) return;
+
+        if (e.key === 'Escape') {
           e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
+          close();
+          return;
         }
-      }
-    });
-  }
+
+        // Keep Tab inside the panel while it covers the page, or focus walks
+        // onto the links behind it with nothing on screen to show where it went.
+        if (e.key === 'Tab') {
+          const items = [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)];
+          if (!items.length) return;
+          const first = items[0];
+          const last = items[items.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      };
+      document.addEventListener('keydown', onKey);
+
+      // Leaving the page (a link in the open menu): release the page's
+      // scroll and the listener.
+      return () => {
+        document.removeEventListener('keydown', onKey);
+        document.documentElement.style.overflow = '';
+      };
+    }
+  });
+
 </script>

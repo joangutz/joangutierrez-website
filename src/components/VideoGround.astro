@@ -126,41 +126,49 @@ const webm = src ? files[`/assets/video/${src.replace(/\.mp4$/, '.webm')}`] : un
 </style>
 
 <script>
-  const grounds = document.querySelectorAll<HTMLVideoElement>('[data-video-ground]');
 
-  if (grounds.length) {
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // Save-Data is a request not to spend the reader's money on decoration.
-    const conn = (navigator as any).connection;
-    const frugal = Boolean(conn?.saveData);
+  import { onPage } from '../lib/onPage';
 
-    for (const v of grounds) {
-      if (still || frugal) {
-        v.remove();
-        continue;
-      }
 
-      v.addEventListener('playing', () => v.setAttribute('data-playing', ''));
+  onPage(() => {
+    const grounds = document.querySelectorAll<HTMLVideoElement>('[data-video-ground]');
 
-      // Load only when the section is near, and stop when it is not — an
-      // offscreen video decoding is battery spent on something nobody sees.
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              if (v.preload === 'none') v.preload = 'auto';
-              v.play().catch(() => {
-                /* autoplay refused; the still is already correct */
-              });
-            } else {
-              v.pause();
+    if (grounds.length) {
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Save-Data is a request not to spend the reader's money on decoration.
+      const conn = (navigator as any).connection;
+      const frugal = Boolean(conn?.saveData);
+
+      for (const v of grounds) {
+        if (still || frugal) {
+          v.remove();
+          continue;
+        }
+
+        v.addEventListener('playing', () => v.setAttribute('data-playing', ''));
+
+        // Load only when the section is near, and stop when it is not — an
+        // offscreen video decoding is battery spent on something nobody sees.
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                if (v.preload === 'none') v.preload = 'auto';
+                v.play().catch(() => {
+                  /* autoplay refused; the still is already correct */
+                });
+              } else {
+                v.pause();
+              }
             }
-          }
-        },
-        { rootMargin: '200px 0px' }
-      );
+          },
+          { rootMargin: '200px 0px' }
+        );
 
-      io.observe(v.parentElement ?? v);
+        io.observe(v.parentElement ?? v);
+      }
     }
-  }
+
+  });
+
 </script>

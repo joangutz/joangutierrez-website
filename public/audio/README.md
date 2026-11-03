@@ -27,3 +27,7 @@ asks people to settle should not make noise at a stranger. The control sits in
 the bar at the foot of every page, silent until someone chooses otherwise; it
 fades in and out rather than cutting, and it remembers the choice between
 visits.
+
+Once it is on, it keeps playing as the reader moves around the site: pages
+change without reloading, and the one sound carries on underneath them,
+unbroken, until it is turned off.

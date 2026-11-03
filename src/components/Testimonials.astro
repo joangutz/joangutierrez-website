@@ -228,44 +228,52 @@ const items = (await getCollection('testimonials')).sort(
 </style>
 
 <script>
-  for (const root of document.querySelectorAll<HTMLElement>('[data-quotes]')) {
-    const track = root.querySelector<HTMLElement>('[data-quotes-track]');
-    const quotes = [...root.querySelectorAll<HTMLElement>('[data-quote]')];
-    const controls = root.querySelector<HTMLElement>('[data-quotes-controls]');
-    const prev = root.querySelector<HTMLButtonElement>('[data-quotes-prev]');
-    const next = root.querySelector<HTMLButtonElement>('[data-quotes-next]');
-    const count = root.querySelector<HTMLElement>('[data-quotes-count]');
 
-    if (!track || quotes.length < 2 || !controls || !prev || !next) continue;
+  import { onPage } from '../lib/onPage';
 
-    track.setAttribute('data-single', '');
-    controls.hidden = false;
 
-    let i = 0;
+  onPage(() => {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-quotes]')) {
+      const track = root.querySelector<HTMLElement>('[data-quotes-track]');
+      const quotes = [...root.querySelectorAll<HTMLElement>('[data-quote]')];
+      const controls = root.querySelector<HTMLElement>('[data-quotes-controls]');
+      const prev = root.querySelector<HTMLButtonElement>('[data-quotes-prev]');
+      const next = root.querySelector<HTMLButtonElement>('[data-quotes-next]');
+      const count = root.querySelector<HTMLElement>('[data-quotes-count]');
 
-    const show = (n: number) => {
-      // Wrap, so neither end is a dead button.
-      i = (n + quotes.length) % quotes.length;
-      quotes.forEach((q, idx) => {
-        q.hidden = idx !== i;
+      if (!track || quotes.length < 2 || !controls || !prev || !next) continue;
+
+      track.setAttribute('data-single', '');
+      controls.hidden = false;
+
+      let i = 0;
+
+      const show = (n: number) => {
+        // Wrap, so neither end is a dead button.
+        i = (n + quotes.length) % quotes.length;
+        quotes.forEach((q, idx) => {
+          q.hidden = idx !== i;
+        });
+        if (count) count.textContent = `${i + 1} / ${quotes.length}`;
+      };
+
+      prev.addEventListener('click', () => show(i - 1));
+      next.addEventListener('click', () => show(i + 1));
+
+      // Left and right arrows move the quotes while the section has focus.
+      root.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          show(i - 1);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          show(i + 1);
+        }
       });
-      if (count) count.textContent = `${i + 1} / ${quotes.length}`;
-    };
 
-    prev.addEventListener('click', () => show(i - 1));
-    next.addEventListener('click', () => show(i + 1));
+      show(0);
+    }
 
-    // Left and right arrows move the quotes while the section has focus.
-    root.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        show(i - 1);
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        show(i + 1);
-      }
-    });
+  });
 
-    show(0);
-  }
 </script>

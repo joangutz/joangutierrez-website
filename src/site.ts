@@ -111,6 +111,10 @@ export const form = {
  * site that makes noise at a stranger uninvited is a worse welcome than
  * silence. The control sits in the bottom bar, off by default, and remembers
  * the reader's choice.
+ *
+ * Setting `file` also turns on page changes without a reload (Astro's
+ * ClientRouter, in Base.astro), so the sound plays on unbroken as the reader
+ * moves from page to page. With no file, pages load the ordinary way.
  */
 export const sound = {
   file: null as string | null,

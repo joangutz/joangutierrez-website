@@ -82,58 +82,66 @@ const { Content: Lineage } = await render(lineageEntry);
 </Base>
 
 <script>
-  for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
-    const panels = [...document.querySelectorAll<HTMLElement>('[data-panel]')];
-    const show = (id: string, focus = false) => {
-      for (const t of tabs) {
-        const on = t.dataset.tab === id;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-        if (on && focus) t.focus();
-      }
-      for (const p of panels) p.hidden = p.dataset.panel !== id;
-    };
-    for (const t of tabs) {
-      t.addEventListener('click', () => {
-        show(t.dataset.tab as string);
-        history.replaceState(null, '', t.dataset.tab === 'founder' ? location.pathname : '#lineage');
-      });
-      t.addEventListener('keydown', (e) => {
-        const i = tabs.indexOf(t);
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-          const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-          show(n.dataset.tab as string, true);
+
+  import { onPage } from '../lib/onPage';
+
+
+  onPage(() => {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
+      const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+      const panels = [...document.querySelectorAll<HTMLElement>('[data-panel]')];
+      const show = (id: string, focus = false) => {
+        for (const t of tabs) {
+          const on = t.dataset.tab === id;
+          t.setAttribute('aria-selected', String(on));
+          t.tabIndex = on ? 0 : -1;
+          if (on && focus) t.focus();
         }
+        for (const p of panels) p.hidden = p.dataset.panel !== id;
+      };
+      for (const t of tabs) {
+        t.addEventListener('click', () => {
+          show(t.dataset.tab as string);
+          history.replaceState(null, '', t.dataset.tab === 'founder' ? location.pathname : '#lineage');
+        });
+        t.addEventListener('keydown', (e) => {
+          const i = tabs.indexOf(t);
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+            show(n.dataset.tab as string, true);
+          }
+        });
+      }
+      show(location.hash === '#lineage' ? 'lineage' : 'founder');
+    }
+
+    // Each modality folds: its name is the control, its text the panel. The
+    // first opens on arrival. Built from the headings in lineage.md, so the
+    // words stay in the markdown and nothing is lost without scripting.
+    for (const box of document.querySelectorAll<HTMLElement>('[data-lineage]')) {
+      const heads = [...box.querySelectorAll<HTMLElement>(':scope h2')];
+      heads.forEach((h, i) => {
+        const d = document.createElement('details');
+        d.className = 'mod';
+        if (i === 0) d.open = true;
+        const sum = document.createElement('summary');
+        sum.className = 'mod-name';
+        sum.innerHTML = `<span>${h.textContent}</span><i aria-hidden="true"></i>`;
+        const body = document.createElement('div');
+        body.className = 'mod-body';
+        let n = h.nextElementSibling;
+        while (n && n.tagName !== 'H2') {
+          const next = n.nextElementSibling;
+          body.appendChild(n);
+          n = next;
+        }
+        d.append(sum, body);
+        h.replaceWith(d);
       });
     }
-    show(location.hash === '#lineage' ? 'lineage' : 'founder');
-  }
 
-  // Each modality folds: its name is the control, its text the panel. The
-  // first opens on arrival. Built from the headings in lineage.md, so the
-  // words stay in the markdown and nothing is lost without scripting.
-  for (const box of document.querySelectorAll<HTMLElement>('[data-lineage]')) {
-    const heads = [...box.querySelectorAll<HTMLElement>(':scope h2')];
-    heads.forEach((h, i) => {
-      const d = document.createElement('details');
-      d.className = 'mod';
-      if (i === 0) d.open = true;
-      const sum = document.createElement('summary');
-      sum.className = 'mod-name';
-      sum.innerHTML = `<span>${h.textContent}</span><i aria-hidden="true"></i>`;
-      const body = document.createElement('div');
-      body.className = 'mod-body';
-      let n = h.nextElementSibling;
-      while (n && n.tagName !== 'H2') {
-        const next = n.nextElementSibling;
-        body.appendChild(n);
-        n = next;
-      }
-      d.append(sum, body);
-      h.replaceWith(d);
-    });
-  }
+  });
+
 </script>
 
 <style>

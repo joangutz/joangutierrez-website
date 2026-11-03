@@ -236,70 +236,78 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 </style>
 
 <script>
-  for (const root of document.querySelectorAll<HTMLElement>('[data-app]')) {
-    const el = root.querySelector<HTMLFormElement>('.app-form');
-    const status = root.querySelector<HTMLElement>('[data-app-status]');
-    if (!el || !status) continue;
 
-    const endpoint = el.dataset.endpoint ?? '';
-    const to = root.dataset.to ?? '';
-    // Read at the moment of sending: a page can change what the form is
-    // for (the This Very Body card on Services does), via data-subject.
-    const subjectNow = () => root.dataset.subject ?? 'Application';
+  import { onPage } from '../lib/onPage';
 
-    el.addEventListener('submit', (e) => {
-      // No endpoint: hand the answers to the reader's own mail app. The form
-      // has no action, so letting the default run would reload the page and
-      // silently lose everything they typed.
-      if (!endpoint) {
+
+  onPage(() => {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-app]')) {
+      const el = root.querySelector<HTMLFormElement>('.app-form');
+      const status = root.querySelector<HTMLElement>('[data-app-status]');
+      if (!el || !status) continue;
+
+      const endpoint = el.dataset.endpoint ?? '';
+      const to = root.dataset.to ?? '';
+      // Read at the moment of sending: a page can change what the form is
+      // for (the This Very Body card on Services does), via data-subject.
+      const subjectNow = () => root.dataset.subject ?? 'Application';
+
+      el.addEventListener('submit', (e) => {
+        // No endpoint: hand the answers to the reader's own mail app. The form
+        // has no action, so letting the default run would reload the page and
+        // silently lose everything they typed.
+        if (!endpoint) {
+          e.preventDefault();
+          if (!el.reportValidity()) return;
+
+          const data = new FormData(el);
+          const lines: string[] = [];
+          for (const [k, v] of data.entries()) {
+            if (k.startsWith('_') || typeof v !== 'string' || !v.trim()) continue;
+            lines.push(`${k.replace(/_/g, ' ')}:\n${v.trim()}\n`);
+          }
+
+          const href =
+            `mailto:${to}` +
+            `?subject=${encodeURIComponent(`Ma Somatrix — ${subjectNow()}`)}` +
+            `&body=${encodeURIComponent(lines.join('\n'))}`;
+
+          status.textContent = 'Opening your email app.';
+          window.location.href = href;
+          return;
+        }
+
+        // With an endpoint, post in the background so the reader is never
+        // thrown to a third party's thank-you page.
         e.preventDefault();
         if (!el.reportValidity()) return;
 
-        const data = new FormData(el);
-        const lines: string[] = [];
-        for (const [k, v] of data.entries()) {
-          if (k.startsWith('_') || typeof v !== 'string' || !v.trim()) continue;
-          lines.push(`${k.replace(/_/g, ' ')}:\n${v.trim()}\n`);
-        }
+        const btn = el.querySelector<HTMLButtonElement>('.app-submit');
+        if (btn) btn.disabled = true;
+        status.textContent = 'Sending…';
 
-        const href =
-          `mailto:${to}` +
-          `?subject=${encodeURIComponent(`Ma Somatrix — ${subjectNow()}`)}` +
-          `&body=${encodeURIComponent(lines.join('\n'))}`;
-
-        status.textContent = 'Opening your email app.';
-        window.location.href = href;
-        return;
-      }
-
-      // With an endpoint, post in the background so the reader is never
-      // thrown to a third party's thank-you page.
-      e.preventDefault();
-      if (!el.reportValidity()) return;
-
-      const btn = el.querySelector<HTMLButtonElement>('.app-submit');
-      if (btn) btn.disabled = true;
-      status.textContent = 'Sending…';
-
-      fetch(endpoint, {
-        method: 'POST',
-        body: new FormData(el),
-        headers: { Accept: 'application/json' },
-      })
-        .then((r) => {
-          if (!r.ok) throw new Error(String(r.status));
-          el.reset();
-          status.textContent = 'Sent.';
+        fetch(endpoint, {
+          method: 'POST',
+          body: new FormData(el),
+          headers: { Accept: 'application/json' },
         })
-        .catch(() => {
-          // Never a dead end: the fallback that works without any of this is
-          // still right there.
-          status.innerHTML =
-            `Not sent. <a href="mailto:${to}">${to}</a>`;
-        })
-        .finally(() => {
-          if (btn) btn.disabled = false;
-        });
-    });
-  }
+          .then((r) => {
+            if (!r.ok) throw new Error(String(r.status));
+            el.reset();
+            status.textContent = 'Sent.';
+          })
+          .catch(() => {
+            // Never a dead end: the fallback that works without any of this is
+            // still right there.
+            status.innerHTML =
+              `Not sent. <a href="mailto:${to}">${to}</a>`;
+          })
+          .finally(() => {
+            if (btn) btn.disabled = false;
+          });
+      });
+    }
+
+  });
+
 </script>

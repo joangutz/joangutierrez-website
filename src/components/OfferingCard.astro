@@ -541,85 +541,93 @@ const id = offering.id;
 </style>
 
 <script>
-  // Progressive enhancement: without this, both panels render in flow and
-  // every word is still readable.
-  const cards = document.querySelectorAll<HTMLElement>('[data-offering]');
 
-  for (const card of cards) {
-    const inner = card.querySelector<HTMLElement>('[data-inner]');
-    const front = card.querySelector<HTMLElement>('[data-face="front"]');
-    const back = card.querySelector<HTMLElement>('[data-face="back"]');
-    const openBtn = card.querySelector<HTMLButtonElement>('[data-turn="open"]');
-    const closeBtn = card.querySelector<HTMLButtonElement>('[data-turn="close"]');
+  import { onPage } from '../lib/onPage';
 
-    if (!inner || !front || !back || !openBtn || !closeBtn) continue;
 
-    card.classList.add('js-turn');
+  onPage(() => {
+    // Progressive enhancement: without this, both panels render in flow and
+    // every word is still readable.
+    const cards = document.querySelectorAll<HTMLElement>('[data-offering]');
 
-    const isOpen = () => card.hasAttribute('data-open');
+    for (const card of cards) {
+      const inner = card.querySelector<HTMLElement>('[data-inner]');
+      const front = card.querySelector<HTMLElement>('[data-face="front"]');
+      const back = card.querySelector<HTMLElement>('[data-face="back"]');
+      const openBtn = card.querySelector<HTMLButtonElement>('[data-turn="open"]');
+      const closeBtn = card.querySelector<HTMLButtonElement>('[data-turn="close"]');
 
-    const sizeToFace = () => {
-      const active = isOpen() ? back : front;
-      inner.style.setProperty('--card-h', `${active.offsetHeight}px`);
-    };
+      if (!inner || !front || !back || !openBtn || !closeBtn) continue;
 
-    // Keep the hidden face out of the tab order and away from screen readers.
-    const syncHidden = () => {
-      const hidden = isOpen() ? front : back;
-      const shown = isOpen() ? back : front;
-      hidden.setAttribute('inert', '');
-      hidden.setAttribute('aria-hidden', 'true');
-      shown.removeAttribute('inert');
-      shown.removeAttribute('aria-hidden');
-      openBtn.setAttribute('aria-expanded', String(isOpen()));
-    };
+      card.classList.add('js-turn');
 
-    const turn = (open: boolean) => {
-      if (open) card.setAttribute('data-open', '');
-      else card.removeAttribute('data-open');
+      const isOpen = () => card.hasAttribute('data-open');
+
+      const sizeToFace = () => {
+        const active = isOpen() ? back : front;
+        inner.style.setProperty('--card-h', `${active.offsetHeight}px`);
+      };
+
+      // Keep the hidden face out of the tab order and away from screen readers.
+      const syncHidden = () => {
+        const hidden = isOpen() ? front : back;
+        const shown = isOpen() ? back : front;
+        hidden.setAttribute('inert', '');
+        hidden.setAttribute('aria-hidden', 'true');
+        shown.removeAttribute('inert');
+        shown.removeAttribute('aria-hidden');
+        openBtn.setAttribute('aria-expanded', String(isOpen()));
+      };
+
+      const turn = (open: boolean) => {
+        if (open) card.setAttribute('data-open', '');
+        else card.removeAttribute('data-open');
+        syncHidden();
+        sizeToFace();
+        // Move focus to the face the reader just turned to, once the turn has
+        // finished: a face is hidden until the card is halfway round, and a
+        // hidden button cannot take focus.
+        const target = open ? closeBtn : openBtn;
+        const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!motion) {
+          target.focus({ preventScroll: true });
+        } else {
+          let done = false;
+          const land = () => {
+            if (done) return;
+            done = true;
+            target.focus({ preventScroll: true });
+          };
+          inner.addEventListener('transitionend', (e) => e.propertyName === 'transform' && land(), { once: true });
+          setTimeout(land, 1100);
+        }
+      };
+
+      openBtn.addEventListener('click', () => turn(true));
+      closeBtn.addEventListener('click', () => turn(false));
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen()) {
+          e.stopPropagation();
+          turn(false);
+        }
+      });
+
       syncHidden();
       sizeToFace();
-      // Move focus to the face the reader just turned to, once the turn has
-      // finished: a face is hidden until the card is halfway round, and a
-      // hidden button cannot take focus.
-      const target = open ? closeBtn : openBtn;
-      const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!motion) {
-        target.focus({ preventScroll: true });
+
+      if ('ResizeObserver' in window) {
+        const ro = new ResizeObserver(sizeToFace);
+        ro.observe(front);
+        ro.observe(back);
       } else {
-        let done = false;
-        const land = () => {
-          if (done) return;
-          done = true;
-          target.focus({ preventScroll: true });
-        };
-        inner.addEventListener('transitionend', (e) => e.propertyName === 'transform' && land(), { once: true });
-        setTimeout(land, 1100);
+        window.addEventListener('resize', sizeToFace);
       }
-    };
 
-    openBtn.addEventListener('click', () => turn(true));
-    closeBtn.addEventListener('click', () => turn(false));
-
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen()) {
-        e.stopPropagation();
-        turn(false);
-      }
-    });
-
-    syncHidden();
-    sizeToFace();
-
-    if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(sizeToFace);
-      ro.observe(front);
-      ro.observe(back);
-    } else {
-      window.addEventListener('resize', sizeToFace);
+      // Fonts landing changes face height; re-measure once they do.
+      if (document.fonts?.ready) document.fonts.ready.then(sizeToFace);
     }
 
-    // Fonts landing changes face height; re-measure once they do.
-    if (document.fonts?.ready) document.fonts.ready.then(sizeToFace);
-  }
+  });
+
 </script>

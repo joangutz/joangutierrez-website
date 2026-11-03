@@ -153,30 +153,38 @@ const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
 </style>
 
 <script>
-  for (const form of document.querySelectorAll<HTMLFormElement>('[data-kit-inline]')) {
-    const status = form.querySelector<HTMLElement>('[data-ki-status]');
-    const send = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (status) status.textContent = '';
-      if (send) send.disabled = true;
-      const body = new FormData(form);
-      let ok = false;
-      try {
-        const res = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/json' } });
-        ok = res.ok;
-      } catch {
-        // Kit may not answer across origins; send it anyway, unread.
+
+  import { onPage } from '../lib/onPage';
+
+
+  onPage(() => {
+    for (const form of document.querySelectorAll<HTMLFormElement>('[data-kit-inline]')) {
+      const status = form.querySelector<HTMLElement>('[data-ki-status]');
+      const send = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (status) status.textContent = '';
+        if (send) send.disabled = true;
+        const body = new FormData(form);
+        let ok = false;
         try {
-          await fetch(form.action, { method: 'POST', body, mode: 'no-cors' });
-          ok = true;
+          const res = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/json' } });
+          ok = res.ok;
         } catch {
-          ok = false;
+          // Kit may not answer across origins; send it anyway, unread.
+          try {
+            await fetch(form.action, { method: 'POST', body, mode: 'no-cors' });
+            ok = true;
+          } catch {
+            ok = false;
+          }
         }
-      }
-      if (send) send.disabled = false;
-      if (ok) form.classList.add('is-done');
-      if (status) status.textContent = ok ? 'Sent.' : 'Not sent.';
-    });
-  }
+        if (send) send.disabled = false;
+        if (ok) form.classList.add('is-done');
+        if (status) status.textContent = ok ? 'Sent.' : 'Not sent.';
+      });
+    }
+
+  });
+
 </script>

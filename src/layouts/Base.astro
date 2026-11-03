@@ -2,7 +2,8 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { site, withBase } from '../site';
+import { ClientRouter } from 'astro:transitions';
+import { site, withBase, sound } from '../site';
 
 interface Props {
   title: string;
@@ -83,11 +84,10 @@ import GetInTouch from '../components/GetInTouch.astro';
       // Reveals hide themselves only once we know something is here to reveal
       // them. Without this class every .rise block stays at opacity 0 forever
       // if the module script fails to run.
-      document.documentElement.classList.add('js');
-
       // Palette trial (see PaletteTrial.astro). Set before first paint so a
       // chosen palette never flashes the default.
-      (function () {
+      (function mark() {
+        document.documentElement.classList.add('js');
         // Driftwood is the default and needs no attribute.
         var ok = ['wine', 'umber', 'stone', 'mauve', 'olive', 'taupe', 'driftwood', 'fog', 'sand'];
         var q = new URLSearchParams(location.search).get('palette');
@@ -105,8 +105,17 @@ import GetInTouch from '../components/GetInTouch.astro';
         if (pick && pick !== 'driftwood' && ok.indexOf(pick) > -1) {
           document.documentElement.dataset.palette = pick;
         }
+        // Moving between pages with the soundscape on swaps in the next
+        // page's <html>, which arrives without these marks: set them again.
+        if (!window.__msMarked) {
+          window.__msMarked = true;
+          document.addEventListener('astro:after-swap', mark);
+        }
       })();
     </script>
+    {/* Page changes without a reload, so the soundscape plays on across the
+        site. Only switched on once there is a soundscape to keep playing. */}
+    {sound.file && <ClientRouter fallback="swap" />}
   </head>
   <body id="top">
     <a class="skip" href="#main">Skip to content</a>
@@ -127,34 +136,42 @@ import GetInTouch from '../components/GetInTouch.astro';
     <PaletteTrial />
 
     <script>
-      // The one orchestrated motion: things open when they arrive.
-      // Guarded so reduced-motion users get everything at rest, already open.
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      if (!reduce.matches) {
-        const targets = document.querySelectorAll('.bloom-on-view, .rise');
+      import { onPage } from '../lib/onPage';
 
-        if ('IntersectionObserver' in window) {
-          const io = new IntersectionObserver(
-            (entries) => {
-              for (const entry of entries) {
-                // Threshold 0 so any sliver counts, plus a catch for anything
-                // a fast flick carried past the viewport between samples —
-                // without it that content would stay invisible for good.
-                const scrolledPast = entry.boundingClientRect.top < 0;
-                if (entry.isIntersecting || scrolledPast) {
-                  entry.target.classList.add('in-view');
-                  io.unobserve(entry.target);
+
+      onPage(() => {
+        // The one orchestrated motion: things open when they arrive.
+        // Guarded so reduced-motion users get everything at rest, already open.
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        if (!reduce.matches) {
+          const targets = document.querySelectorAll('.bloom-on-view, .rise');
+
+          if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver(
+              (entries) => {
+                for (const entry of entries) {
+                  // Threshold 0 so any sliver counts, plus a catch for anything
+                  // a fast flick carried past the viewport between samples —
+                  // without it that content would stay invisible for good.
+                  const scrolledPast = entry.boundingClientRect.top < 0;
+                  if (entry.isIntersecting || scrolledPast) {
+                    entry.target.classList.add('in-view');
+                    io.unobserve(entry.target);
+                  }
                 }
-              }
-            },
-            { rootMargin: '0px 0px -8% 0px', threshold: 0 }
-          );
-          targets.forEach((t) => io.observe(t));
-        } else {
-          targets.forEach((t) => t.classList.add('in-view'));
+              },
+              { rootMargin: '0px 0px -8% 0px', threshold: 0 }
+            );
+            targets.forEach((t) => io.observe(t));
+          } else {
+            targets.forEach((t) => t.classList.add('in-view'));
+          }
         }
-      }
+
+      });
+
     </script>
 
     <style is:global>

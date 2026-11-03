@@ -316,315 +316,330 @@
 </style>
 
 <script>
-  const rail = document.querySelector<HTMLElement>('[data-rail]');
-  const toc = document.querySelector<HTMLElement>('[data-rail-toc]');
-  const tocList = document.querySelector<HTMLElement>('[data-rail-toc-list]');
-  const main = document.querySelector<HTMLElement>('main');
 
-  if (rail && toc && tocList && main) {
-    /**
-     * Section headings only. A card's own title is a heading too, and on
-     * Sessions each offering carries one on both of its faces — indexing those
-     * would give four cards eight entries, half pointing at copy turned away.
-     */
-    const headings = [...main.querySelectorAll<HTMLElement>('h2')].filter(
-      (h) => !h.closest('[data-offering], [data-menu]')
-    );
+  import { onPage } from '../lib/onPage';
 
-    const slug = (text: string) =>
-      text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-')
-        .slice(0, 40);
 
-    // Two or three ticks are not a chapter index, they are clutter.
-    if (headings.length >= 4) {
-      const railLinks: HTMLAnchorElement[] = [];
-      const tocLinks: HTMLAnchorElement[] = [];
+  onPage(() => {
+    // Window listeners to remove when the page is swapped out.
+    const offs: (() => void)[] = [];
+    const rail = document.querySelector<HTMLElement>('[data-rail]');
+    const toc = document.querySelector<HTMLElement>('[data-rail-toc]');
+    const tocList = document.querySelector<HTMLElement>('[data-rail-toc-list]');
+    const main = document.querySelector<HTMLElement>('main');
 
-      for (const h of headings) {
-        if (!h.id) {
-          const base = slug(h.textContent ?? '') || 'section';
-          let id = base;
-          let n = 2;
-          while (document.getElementById(id)) id = `${base}-${n++}`;
-          h.id = id;
+    if (rail && toc && tocList && main) {
+      /**
+       * Section headings only. A card's own title is a heading too, and on
+       * Sessions each offering carries one on both of its faces — indexing those
+       * would give four cards eight entries, half pointing at copy turned away.
+       */
+      const headings = [...main.querySelectorAll<HTMLElement>('h2')].filter(
+        (h) => !h.closest('[data-offering], [data-menu]')
+      );
+
+      const slug = (text: string) =>
+        text
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-')
+          .slice(0, 40);
+
+      // Two or three ticks are not a chapter index, they are clutter.
+      if (headings.length >= 4) {
+        const railLinks: HTMLAnchorElement[] = [];
+        const tocLinks: HTMLAnchorElement[] = [];
+
+        for (const h of headings) {
+          if (!h.id) {
+            const base = slug(h.textContent ?? '') || 'section';
+            let id = base;
+            let n = 2;
+            while (document.getElementById(id)) id = `${base}-${n++}`;
+            h.id = id;
+          }
+          // Clear the sticky bar, and then some — landing flush under it reads
+          // as having overshot.
+          h.style.scrollMarginTop = '6rem';
+
+          // A closing line can be a whole sentence, which is right on the page
+          // and far too long for a tick. data-rail-label names it briefly.
+          const label = h.dataset.railLabel ?? (h.textContent ?? '').trim();
+
+          const a = document.createElement('a');
+          a.href = `#${h.id}`;
+          a.innerHTML = '<span class="rail-tick"></span>';
+          const name = document.createElement('span');
+          name.className = 'rail-name';
+          name.textContent = label;
+          a.append(name);
+          rail.append(a);
+          railLinks.push(a);
+
+          const li = document.createElement('li');
+          const ta = document.createElement('a');
+          ta.href = `#${h.id}`;
+          ta.textContent = label;
+          li.append(ta);
+          tocList.append(li);
+          tocLinks.push(ta);
         }
-        // Clear the sticky bar, and then some — landing flush under it reads
-        // as having overshot.
-        h.style.scrollMarginTop = '6rem';
 
-        // A closing line can be a whole sentence, which is right on the page
-        // and far too long for a tick. data-rail-label names it briefly.
-        const label = h.dataset.railLabel ?? (h.textContent ?? '').trim();
+        rail.hidden = false;
+        toc.hidden = false;
+        document.documentElement.classList.add('has-rail');
 
-        const a = document.createElement('a');
-        a.href = `#${h.id}`;
-        a.innerHTML = '<span class="rail-tick"></span>';
-        const name = document.createElement('span');
-        name.className = 'rail-name';
-        name.textContent = label;
-        a.append(name);
-        rail.append(a);
-        railLinks.push(a);
+        // Above the prose but below the page title, where a reader looks for it.
+        const firstSection = main.querySelector('section');
+        if (firstSection) firstSection.after(toc);
 
-        const li = document.createElement('li');
-        const ta = document.createElement('a');
-        ta.href = `#${h.id}`;
-        ta.textContent = label;
-        li.append(ta);
-        tocList.append(li);
-        tocLinks.push(ta);
-      }
+        // Tapping a destination on a phone should close the list behind you.
+        for (const ta of tocLinks) {
+          ta.addEventListener('click', () => toc.removeAttribute('open'));
+        }
 
-      rail.hidden = false;
-      toc.hidden = false;
-      document.documentElement.classList.add('has-rail');
+        /**
+         * Which section am I in: the last heading whose top has passed the
+         * reading line. Scroll position rather than intersection events, so a
+         * heading scrolled past quickly, or one taller than the viewport, still
+         * resolves correctly.
+         */
+        const mark = () => {
+          const line = window.innerHeight * 0.3;
+          let active = 0;
+          headings.forEach((h, i) => {
+            if (h.getBoundingClientRect().top <= line) active = i;
+          });
+          const atBottom =
+            window.innerHeight + window.scrollY >= document.body.offsetHeight - 4;
+          if (atBottom) active = headings.length - 1;
 
-      // Above the prose but below the page title, where a reader looks for it.
-      const firstSection = main.querySelector('section');
-      if (firstSection) firstSection.after(toc);
+          [railLinks, tocLinks].forEach((set) =>
+            set.forEach((a, i) => {
+              if (i === active) a.setAttribute('aria-current', 'true');
+              else a.removeAttribute('aria-current');
+            })
+          );
+        };
 
-      // Tapping a destination on a phone should close the list behind you.
-      for (const ta of tocLinks) {
-        ta.addEventListener('click', () => toc.removeAttribute('open'));
-      }
+        const navBar = document.querySelector<HTMLElement>('.nav-bar');
+        const footer = document.querySelector('footer');
+        const FOOT_GAP = 32;
+        const MIN_SLOT = 20;
+        const MAX_LINES = 4;
+        /** Tick plus the space between it and the title. */
+        const TICK_ZONE = 42;
+        /** Air between the last of the prose and the first of the rail. */
+        const CLEAR = 40;
+        /** Below this a title is too cramped to be worth showing. */
+        const MIN_LABEL = 110;
+        /** Beyond this the rail is merely sprawling. */
+        const MAX_LABEL = 360;
 
-      /**
-       * Which section am I in: the last heading whose top has passed the
-       * reading line. Scroll position rather than intersection events, so a
-       * heading scrolled past quickly, or one taller than the viewport, still
-       * resolves correctly.
-       */
-      const mark = () => {
-        const line = window.innerHeight * 0.3;
-        let active = 0;
-        headings.forEach((h, i) => {
-          if (h.getBoundingClientRect().top <= line) active = i;
-        });
-        const atBottom =
-          window.innerHeight + window.scrollY >= document.body.offsetHeight - 4;
-        if (atBottom) active = headings.length - 1;
+        /**
+         * How wide a title may be: everything between the widest thing on the
+         * page and the rail's own right edge. Measured, because how much margin
+         * a page has depends on that page — Sessions' grids reach further right
+         * than The Work's prose does — and because guessing it from the viewport
+         * left a fifth of the screen empty while clipping the words inside it.
+         */
+        const sizeWidth = () => {
+          const first = rail.querySelector<HTMLElement>('.rail-name');
+          if (!first) return;
 
-        [railLinks, tocLinks].forEach((set) =>
-          set.forEach((a, i) => {
-            if (i === active) a.setAttribute('aria-current', 'true');
-            else a.removeAttribute('aria-current');
-          })
-        );
-      };
+          let contentRight = 0;
+          main
+            .querySelectorAll<HTMLElement>('.band > .col, .band > .wide')
+            .forEach((el) => {
+              const r = el.getBoundingClientRect();
+              if (r.width > 0) contentRight = Math.max(contentRight, r.right);
+            });
 
-      const navBar = document.querySelector<HTMLElement>('.nav-bar');
-      const footer = document.querySelector('footer');
-      const FOOT_GAP = 32;
-      const MIN_SLOT = 20;
-      const MAX_LINES = 4;
-      /** Tick plus the space between it and the title. */
-      const TICK_ZONE = 42;
-      /** Air between the last of the prose and the first of the rail. */
-      const CLEAR = 40;
-      /** Below this a title is too cramped to be worth showing. */
-      const MIN_LABEL = 110;
-      /** Beyond this the rail is merely sprawling. */
-      const MAX_LABEL = 360;
+          const offset = parseFloat(getComputedStyle(rail).right) || 24;
+          const available = window.innerWidth - offset - contentRight - CLEAR;
+          const labelW = Math.min(MAX_LABEL, available - TICK_ZONE);
 
-      /**
-       * How wide a title may be: everything between the widest thing on the
-       * page and the rail's own right edge. Measured, because how much margin
-       * a page has depends on that page — Sessions' grids reach further right
-       * than The Work's prose does — and because guessing it from the viewport
-       * left a fifth of the screen empty while clipping the words inside it.
-       */
-      const sizeWidth = () => {
-        const first = rail.querySelector<HTMLElement>('.rail-name');
-        if (!first) return;
+          if (labelW < MIN_LABEL) {
+            rail.setAttribute('data-ticks-only', '');
+            rail.style.setProperty('--rail-w', '2.2rem');
+            return;
+          }
 
-        let contentRight = 0;
-        main
-          .querySelectorAll<HTMLElement>('.band > .col, .band > .wide')
-          .forEach((el) => {
-            const r = el.getBoundingClientRect();
-            if (r.width > 0) contentRight = Math.max(contentRight, r.right);
+          rail.removeAttribute('data-ticks-only');
+          rail.style.setProperty('--rail-label-w', `${Math.floor(labelW)}px`);
+          rail.style.setProperty('--rail-w', `${Math.floor(labelW + TICK_ZONE)}px`);
+        };
+
+        /**
+         * How tall each marker's slot may be, and therefore how many lines of
+         * title it can hold.
+         *
+         * The budget is the tightest position the rail will ever be asked to
+         * hold: resting above the footer at the very end of the page. Sizing to
+         * that once means the rail never changes size while you scroll — it just
+         * knows, from the start, how much room the screen is going to give it.
+         *
+         * So a page of four sections on a tall screen wraps its titles over
+         * three lines, and The Work's sixteen on a short one stay at one. The
+         * count and the screen decide together.
+         */
+        /**
+         * How many lines each title needs, and therefore how tall a slot must
+         * be — the fewest that shows every title in full, never more.
+         *
+         * Asking for the most lines that fit was the wrong question. It spent
+         * height the rail did not need, which pushed it past the room above the
+         * footer and made it step aside at the end of pages where one line would
+         * have done. Asking what the titles actually require keeps the rail
+         * compact wherever the words are short, and only grows it where they
+         * are not.
+         */
+        const size = () => {
+          const first = rail.querySelector<HTMLElement>('.rail-name');
+          if (!first) return;
+
+          const cs = getComputedStyle(first);
+          const lineH = parseFloat(cs.lineHeight) || 14;
+
+          // With titles hidden there is nothing to wrap, so slots stay tight.
+          if (cs.display === 'none') {
+            rail.style.setProperty('--rail-slot', `${MIN_SLOT}px`);
+            rail.style.setProperty('--rail-lines', '1');
+            return;
+          }
+
+          // Let them lay out unclamped for a moment to see their true depth.
+          // They are absolutely positioned, so nothing on the page moves.
+          rail.style.setProperty('--rail-lines', '99');
+          let needed = 1;
+          rail.querySelectorAll<HTMLElement>('.rail-name').forEach((n) => {
+            needed = Math.max(needed, Math.round(n.scrollHeight / lineH));
           });
 
-        const offset = parseFloat(getComputedStyle(rail).right) || 24;
-        const available = window.innerWidth - offset - contentRight - CLEAR;
-        const labelW = Math.min(MAX_LABEL, available - TICK_ZONE);
+          const lines = Math.min(MAX_LINES, needed);
+          // 6px of breathing room inside the slot, so wrapped titles do not
+          // touch their neighbours when the whole rail is revealed at once.
+          const slot = Math.max(MIN_SLOT, lines * lineH + 6);
 
-        if (labelW < MIN_LABEL) {
-          rail.setAttribute('data-ticks-only', '');
-          rail.style.setProperty('--rail-w', '2.2rem');
-          return;
-        }
+          rail.style.setProperty('--rail-slot', `${slot}px`);
+          rail.style.setProperty('--rail-lines', String(lines));
+        };
 
-        rail.removeAttribute('data-ticks-only');
-        rail.style.setProperty('--rail-label-w', `${Math.floor(labelW)}px`);
-        rail.style.setProperty('--rail-w', `${Math.floor(labelW + TICK_ZONE)}px`);
-      };
+        /**
+         * Vertically centred, but never over the footer and never under the
+         * bar — which now sits at the foot of the window rather than the head
+         * of it, so it is a floor for the rail instead of a ceiling. As the
+         * footer rises the rail is pushed up with it, which holds it still
+         * against the page rather than letting it scroll across the dark
+         * ground.
+         */
+        const place = () => {
+          const railH = rail.offsetHeight;
+          const barTop = navBar
+            ? navBar.getBoundingClientRect().top
+            : window.innerHeight;
 
-      /**
-       * How tall each marker's slot may be, and therefore how many lines of
-       * title it can hold.
-       *
-       * The budget is the tightest position the rail will ever be asked to
-       * hold: resting above the footer at the very end of the page. Sizing to
-       * that once means the rail never changes size while you scroll — it just
-       * knows, from the start, how much room the screen is going to give it.
-       *
-       * So a page of four sections on a tall screen wraps its titles over
-       * three lines, and The Work's sixteen on a short one stay at one. The
-       * count and the screen decide together.
-       */
-      /**
-       * How many lines each title needs, and therefore how tall a slot must
-       * be — the fewest that shows every title in full, never more.
-       *
-       * Asking for the most lines that fit was the wrong question. It spent
-       * height the rail did not need, which pushed it past the room above the
-       * footer and made it step aside at the end of pages where one line would
-       * have done. Asking what the titles actually require keeps the rail
-       * compact wherever the words are short, and only grows it where they
-       * are not.
-       */
-      const size = () => {
-        const first = rail.querySelector<HTMLElement>('.rail-name');
-        if (!first) return;
+          // Whatever comes first from below — the bar, or the footer arriving.
+          let floor = barTop - FOOT_GAP;
+          if (footer) floor = Math.min(floor, footer.getBoundingClientRect().top - FOOT_GAP);
 
-        const cs = getComputedStyle(first);
-        const lineH = parseFloat(cs.lineHeight) || 14;
+          const minTop = 12;
+          let top = Math.max(minTop, (window.innerHeight - railH) / 2);
+          top = Math.min(top, floor - railH);
+          top = Math.max(minTop, top);
 
-        // With titles hidden there is nothing to wrap, so slots stay tight.
-        if (cs.display === 'none') {
-          rail.style.setProperty('--rail-slot', `${MIN_SLOT}px`);
-          rail.style.setProperty('--rail-lines', '1');
-          return;
-        }
+          // Only when even that cannot clear what is below does it step aside.
+          const collides = top + railH + 8 > floor + FOOT_GAP;
+          rail.style.opacity = collides ? '0' : '1';
+          rail.style.pointerEvents = collides ? 'none' : '';
 
-        // Let them lay out unclamped for a moment to see their true depth.
-        // They are absolutely positioned, so nothing on the page moves.
-        rail.style.setProperty('--rail-lines', '99');
-        let needed = 1;
-        rail.querySelectorAll<HTMLElement>('.rail-name').forEach((n) => {
-          needed = Math.max(needed, Math.round(n.scrollHeight / lineH));
-        });
+          rail.style.top = `${top}px`;
+        };
 
-        const lines = Math.min(MAX_LINES, needed);
-        // 6px of breathing room inside the slot, so wrapped titles do not
-        // touch their neighbours when the whole rail is revealed at once.
-        const slot = Math.max(MIN_SLOT, lines * lineH + 6);
+        /**
+         * What is under the rail right now. It is fixed, so it travels across
+         * every section the page has — including the deep grounds and the
+         * photographs, where its own ink is nearly invisible.
+         *
+         * elementsFromPoint rather than elementFromPoint: the rail is on top at
+         * its own coordinates, so the top hit is always itself.
+         */
+        const shade = () => {
+          const r = rail.getBoundingClientRect();
+          const x = Math.min(window.innerWidth - 2, r.right - 3);
+          const dark = [r.top + 3, (r.top + r.bottom) / 2, r.bottom - 3].some((y) => {
+            if (y < 0 || y > window.innerHeight) return false;
+            const under = document
+              .elementsFromPoint(x, y)
+              .find((el) => !rail.contains(el));
+            return !!under?.closest('.on-dark');
+          });
+          rail.toggleAttribute('data-over-dark', dark);
+        };
 
-        rail.style.setProperty('--rail-slot', `${slot}px`);
-        rail.style.setProperty('--rail-lines', String(lines));
-      };
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            mark();
+            place();
+            shade();
+            ticking = false;
+          });
+        };
 
-      /**
-       * Vertically centred, but never over the footer and never under the
-       * bar — which now sits at the foot of the window rather than the head
-       * of it, so it is a floor for the rail instead of a ceiling. As the
-       * footer rises the rail is pushed up with it, which holds it still
-       * against the page rather than letting it scroll across the dark
-       * ground.
-       */
-      const place = () => {
-        const railH = rail.offsetHeight;
-        const barTop = navBar
-          ? navBar.getBoundingClientRect().top
-          : window.innerHeight;
+        // Sizing is deliberately not part of the scroll handler: the rail must
+        // not change shape underneath a reader who is only moving down the page.
+        /**
+         * Mobile browsers grow and shrink the viewport as their toolbars hide
+         * and show, and they do it while you are merely scrolling — which fires
+         * resize. Re-measuring on that made the rail change shape mid-scroll on
+         * an iPad, and change back again when you scrolled the other way. Only a
+         * change of width, or a change of height far larger than any toolbar,
+         * counts as a real resize; everything else just repositions.
+         */
+        const TOOLBAR_SLACK = 160;
+        let lastW = 0;
+        let lastH = 0;
 
-        // Whatever comes first from below — the bar, or the footer arriving.
-        let floor = barTop - FOOT_GAP;
-        if (footer) floor = Math.min(floor, footer.getBoundingClientRect().top - FOOT_GAP);
+        const onResize = () => {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
 
-        const minTop = 12;
-        let top = Math.max(minTop, (window.innerHeight - railH) / 2);
-        top = Math.min(top, floor - railH);
-        top = Math.max(minTop, top);
+          if (w === lastW && Math.abs(h - lastH) < TOOLBAR_SLACK) {
+            place();
+            return;
+          }
 
-        // Only when even that cannot clear what is below does it step aside.
-        const collides = top + railH + 8 > floor + FOOT_GAP;
-        rail.style.opacity = collides ? '0' : '1';
-        rail.style.pointerEvents = collides ? 'none' : '';
+          lastW = w;
+          lastH = h;
 
-        rail.style.top = `${top}px`;
-      };
-
-      /**
-       * What is under the rail right now. It is fixed, so it travels across
-       * every section the page has — including the deep grounds and the
-       * photographs, where its own ink is nearly invisible.
-       *
-       * elementsFromPoint rather than elementFromPoint: the rail is on top at
-       * its own coordinates, so the top hit is always itself.
-       */
-      const shade = () => {
-        const r = rail.getBoundingClientRect();
-        const x = Math.min(window.innerWidth - 2, r.right - 3);
-        const dark = [r.top + 3, (r.top + r.bottom) / 2, r.bottom - 3].some((y) => {
-          if (y < 0 || y > window.innerHeight) return false;
-          const under = document
-            .elementsFromPoint(x, y)
-            .find((el) => !rail.contains(el));
-          return !!under?.closest('.on-dark');
-        });
-        rail.toggleAttribute('data-over-dark', dark);
-      };
-
-      let ticking = false;
-      const onScroll = () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
+          // Width first: how many lines a title needs depends on how wide it is
+          // allowed to be, so the horizontal budget is settled before the
+          // vertical one is spent.
+          sizeWidth();
+          size();
           mark();
           place();
           shade();
-          ticking = false;
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize, { passive: true });
+        offs.push(() => {
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('resize', onResize);
         });
-      };
-
-      // Sizing is deliberately not part of the scroll handler: the rail must
-      // not change shape underneath a reader who is only moving down the page.
-      /**
-       * Mobile browsers grow and shrink the viewport as their toolbars hide
-       * and show, and they do it while you are merely scrolling — which fires
-       * resize. Re-measuring on that made the rail change shape mid-scroll on
-       * an iPad, and change back again when you scrolled the other way. Only a
-       * change of width, or a change of height far larger than any toolbar,
-       * counts as a real resize; everything else just repositions.
-       */
-      const TOOLBAR_SLACK = 160;
-      let lastW = 0;
-      let lastH = 0;
-
-      const onResize = () => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-
-        if (w === lastW && Math.abs(h - lastH) < TOOLBAR_SLACK) {
-          place();
-          return;
-        }
-
-        lastW = w;
-        lastH = h;
-
-        // Width first: how many lines a title needs depends on how wide it is
-        // allowed to be, so the horizontal budget is settled before the
-        // vertical one is spent.
-        sizeWidth();
-        size();
-        mark();
-        place();
-        shade();
-      };
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onResize, { passive: true });
-      onResize();
-      // Web fonts landing changes both the line height and every heading's
-      // position, so everything is measured again once they arrive.
-      if (document.fonts?.ready) document.fonts.ready.then(onResize);
+        onResize();
+        // Web fonts landing changes both the line height and every heading's
+        // position, so everything is measured again once they arrive.
+        if (document.fonts?.ready) document.fonts.ready.then(onResize);
+      }
     }
-  }
+
+    return () => offs.forEach((off) => off());
+  });
+
 </script>

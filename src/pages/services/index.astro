@@ -202,18 +202,26 @@ const motifs = [
 </Base>
 
 <script>
-  // A card's link to the form says what the application is for: the form's
-  // subject (and its hidden fields) follow, so Joan's inbox shows it.
-  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-apply-subject]')) {
-    link.addEventListener('click', () => {
-      const subject = link.dataset.applySubject;
-      const app = document.querySelector<HTMLElement>('#apply [data-app]');
-      if (!subject || !app) return;
-      app.dataset.subject = subject;
-      app.querySelector<HTMLInputElement>('input[name="applying_for"]')?.setAttribute('value', subject);
-      app.querySelector<HTMLInputElement>('input[name="_subject"]')?.setAttribute('value', `Ma Somatrix — ${subject}`);
-    });
-  }
+
+  import { onPage } from '../../lib/onPage';
+
+
+  onPage(() => {
+    // A card's link to the form says what the application is for: the form's
+    // subject (and its hidden fields) follow, so Joan's inbox shows it.
+    for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-apply-subject]')) {
+      link.addEventListener('click', () => {
+        const subject = link.dataset.applySubject;
+        const app = document.querySelector<HTMLElement>('#apply [data-app]');
+        if (!subject || !app) return;
+        app.dataset.subject = subject;
+        app.querySelector<HTMLInputElement>('input[name="applying_for"]')?.setAttribute('value', subject);
+        app.querySelector<HTMLInputElement>('input[name="_subject"]')?.setAttribute('value', `Ma Somatrix — ${subject}`);
+      });
+    }
+
+  });
+
 </script>
 
 <style>
