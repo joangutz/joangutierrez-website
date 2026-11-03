@@ -157,8 +157,11 @@ const { Content: Lineage } = await render(lineageEntry);
       grid-template-columns: minmax(0, 1fr);
     }
 
+    /* Not sticky here, so no offset: the top that holds it while
+       scrolling on wide screens would only push it down into the text. */
     .about-portrait {
       position: relative;
+      top: auto;
       max-width: 18rem;
     }
   }
