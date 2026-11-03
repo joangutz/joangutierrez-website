@@ -1,52 +1,119 @@
 ---
-import { sound, withBase } from '../site';
+import { sound, kit, withBase } from '../site';
+import type { Track } from '../lib/player';
 
 /**
- * The ambient soundscape, offered rather than imposed.
+ * The site's player, in the bar.
+ *
+ * One audio element for the whole site (see lib/player.ts), carried from
+ * page to page, so whatever is playing keeps playing as the reader moves
+ * around. It plays two things:
+ *
+ *   - Stu Pender's soundscape, an ambient bed that loops (once sound.file
+ *     is set — TODO-SOUND in site.ts);
+ *   - the Red Rose Visualization, once the reader has received it.
  *
  * It never autoplays. Every browser blocks unprompted sound anyway, but the
  * deeper reason is that this site asks people to settle, and noise arriving
- * uninvited at a stranger does the opposite. So: a small control in the bar,
- * silent until someone chooses otherwise, and the choice is remembered.
+ * uninvited at a stranger does the opposite.
  *
- * Renders nothing at all until sound.file is set in site.ts (TODO-SOUND
- * there), so the bar is never cluttered by a control that can only fail.
+ * The bar shows one control — play or pause what is loaded. When there is
+ * more than one thing to play, or a meditation with a place to keep, a
+ * small tray opens beside it to choose and to scrub.
  */
-const file = sound.file;
+const list: Track[] = [];
+if (sound.file) {
+  list.push({
+    id: 'soundscape',
+    title: 'Soundscape',
+    short: 'Sound',
+    src: withBase(`/audio/${sound.file}`),
+    loop: true,
+    level: 0.35,
+  });
+}
+if (kit.audio) {
+  list.push({
+    id: 'rose',
+    title: kit.freebie,
+    short: 'Red Rose',
+    src: withBase(`/audio/${kit.audio}`),
+    loop: false,
+    level: 0.9,
+    gift: true,
+  });
+}
+const subs: Record<string, string> = { soundscape: sound.credit, rose: kit.freebieSub };
+const first = list.find((t) => !t.gift);
 ---
 
 {
-  file && (
-    <div class="snd">
-      <button
-        class="snd-btn"
-        type="button"
-        data-sound-toggle
-        aria-pressed="false"
-        title={sound.credit}
-      >
+  list.length > 0 && (
+    <div class="snd" data-snd hidden={!first}>
+      <button class="snd-btn" type="button" data-sound-toggle aria-pressed="false">
         <span class="snd-wave" aria-hidden="true"><i /><i /><i /><i /></span>
-        <span class="snd-label" data-sound-label>
-          Sound
-        </span>
+        <span class="snd-label" data-sound-label>{first?.short ?? ''}</span>
+        <span class="snd-line" aria-hidden="true"><i data-sound-progress /></span>
       </button>
 
-      {/* Never `autoplay`. The script starts it only on a real click.
-          transition:persist keeps this one element alive across page
-          changes, so the soundscape plays on as the reader moves through
-          the site. */}
-      <audio data-sound-el loop preload="none" src={withBase(`/audio/${file}`)} transition:persist="soundscape" />
+      <button
+        class="snd-more"
+        type="button"
+        data-sound-more
+        aria-expanded="false"
+        aria-controls="snd-tray"
+        aria-label="Listen"
+        hidden
+      >
+        <svg viewBox="0 0 10 6" aria-hidden="true" focusable="false"><path d="M1 5 L5 1 L9 5" /></svg>
+      </button>
+
+      <div class="snd-tray" id="snd-tray" data-sound-tray hidden>
+        <ul>
+          {
+            list.map((t) => (
+              <li class="snd-row" data-track-row={t.id} hidden={t.gift}>
+                <button class="snd-play" type="button" data-row-toggle aria-label={`Play ${t.title}`}>
+                  <svg class="i-play" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M2 1.5 L11 7 L2 12.5 Z" /></svg>
+                  <svg class="i-pause" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M3 1.5 V12.5 M9 1.5 V12.5" /></svg>
+                </button>
+                <div class="snd-row-text">
+                  <span class="snd-title">{t.title}</span>
+                  <span class="snd-sub">{subs[t.id]}</span>
+                  {!t.loop && (
+                    <div class="snd-seekbox">
+                      <input class="snd-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`Position in ${t.title}`} data-row-seek />
+                      <span class="snd-time" aria-hidden="true" data-row-time>0:00</span>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {/* Never `autoplay`. transition:persist keeps this one element alive
+          across page changes; lib/player.ts loads into it what is chosen. */}
+      <audio data-sound-el preload="none" data-tracks={JSON.stringify(list)} transition:persist="player" />
     </div>
   )
 }
 
 <style>
   .snd {
+    position: relative;
     display: flex;
     align-items: center;
+    gap: 0.35rem;
+  }
+
+  .snd[hidden] {
+    display: none;
   }
 
   .snd-btn {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
@@ -60,11 +127,70 @@ const file = sound.file;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
+    white-space: nowrap;
   }
 
   .snd-btn:hover,
   .snd-btn[aria-pressed='true'] {
     color: var(--color-cochineal);
+  }
+
+  /* A meditation's progress, as a hairline under its name. */
+  .snd-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: rgb(var(--ch-ink) / 0.12);
+    opacity: 0;
+    transition: opacity 400ms var(--ease-open);
+  }
+
+  .snd-line i {
+    display: block;
+    height: 100%;
+    width: var(--p, 0%);
+    background: currentColor;
+  }
+
+  .snd.is-once .snd-line {
+    opacity: 1;
+  }
+
+  .snd-more {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink-2);
+    cursor: pointer;
+  }
+
+  .snd-more[hidden] {
+    display: none;
+  }
+
+  .snd-more:hover {
+    color: var(--color-cochineal);
+  }
+
+  .snd-more svg {
+    width: 9px;
+    height: 6px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: rotate 300ms var(--ease-open);
+  }
+
+  .snd-more[aria-expanded='true'] svg {
+    rotate: 180deg;
   }
 
   /* Four rules that stand still when the sound is off and breathe when it is
@@ -105,97 +231,353 @@ const file = sound.file;
       height: 11px;
     }
   }
+
+  /* The tray rises out of the bar: the bar's own colour, its own rule. */
+  .snd-tray {
+    position: absolute;
+    right: -0.5rem;
+    bottom: calc(100% + 0.95rem);
+    width: min(21rem, calc(100vw - 2rem));
+    padding: 0.4rem 1.1rem;
+    background: var(--color-madder);
+    border: 1px solid var(--rule);
+    box-shadow: 0 -10px 30px rgb(var(--ch-plum) / 0.14);
+    color: var(--color-cochineal);
+  }
+
+  .snd-tray[hidden] {
+    display: none;
+  }
+
+  .snd-tray ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .snd-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.8rem 0;
+  }
+
+  .snd-row + .snd-row {
+    border-top: 1px solid var(--rule);
+  }
+
+  .snd-row[hidden] {
+    display: none;
+  }
+
+  /* The same ring as the gift card's player, smaller. */
+  .snd-play {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--ch-ink) / 0.35);
+    background: transparent;
+    color: var(--color-cochineal);
+    cursor: pointer;
+    transition:
+      background-color 300ms var(--ease-open),
+      border-color 300ms var(--ease-open);
+  }
+
+  .snd-play:hover,
+  .snd-play:focus-visible {
+    border-color: var(--color-cochineal);
+  }
+
+  .snd-play svg {
+    width: 10px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.1;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .snd-play .i-play {
+    translate: 1px 0;
+  }
+
+  .snd-play .i-pause,
+  .snd-row.is-playing .snd-play .i-play {
+    display: none;
+  }
+
+  .snd-row.is-playing .snd-play .i-pause {
+    display: block;
+  }
+
+  .snd-row.is-playing .snd-play {
+    border-color: var(--color-cochineal);
+    color: var(--color-cochineal);
+  }
+
+  .snd-row-text {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .snd-title {
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .snd-sub {
+    font-size: 0.82rem;
+    color: var(--color-ink-2);
+  }
+
+  .snd-seekbox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.2rem;
+  }
+
+  .snd-time {
+    flex: none;
+    font-family: var(--font-label);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .snd-seek {
+    --p: 0%;
+    flex: 1;
+    min-width: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    height: 16px;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .snd-seek::-webkit-slider-runnable-track {
+    height: 1px;
+    background: linear-gradient(to right, var(--color-cochineal) var(--p), rgb(var(--ch-ink) / 0.2) var(--p));
+  }
+
+  .snd-seek::-moz-range-track {
+    height: 1px;
+    background: rgb(var(--ch-ink) / 0.2);
+  }
+
+  .snd-seek::-moz-range-progress {
+    height: 1px;
+    background: var(--color-cochineal);
+  }
+
+  .snd-seek::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 8px;
+    margin-top: -3.5px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--color-cochineal);
+  }
+
+  .snd-seek::-moz-range-thumb {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--color-cochineal);
+  }
+
+  /* On a narrow screen the tray spans the bar (the bar is its containing
+     block once .snd stops being one), rising from its full width. */
+  @media (max-width: 40rem) {
+    .snd {
+      position: static;
+    }
+
+    .snd-tray {
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: calc(100% + 0.6rem);
+      width: auto;
+    }
+  }
+
+  /* On a phone the bar is tight: the breathing rules say it alone. */
+  @media (max-width: 30rem) {
+    .snd-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .snd-line {
+      bottom: 0.1rem;
+    }
+  }
 </style>
 
 <script>
-
   import { onPage } from '../lib/onPage';
-
+  import * as player from '../lib/player';
 
   onPage(() => {
+    const box = document.querySelector<HTMLElement>('[data-snd]');
     const btn = document.querySelector<HTMLButtonElement>('[data-sound-toggle]');
-    const el = document.querySelector<HTMLAudioElement>('[data-sound-el]');
     const label = document.querySelector<HTMLElement>('[data-sound-label]');
-    if (!btn || !el) return;
+    const line = document.querySelector<HTMLElement>('[data-sound-progress]');
+    const more = document.querySelector<HTMLButtonElement>('[data-sound-more]');
+    const tray = document.querySelector<HTMLElement>('[data-sound-tray]');
+    const el = player.audio();
+    if (!box || !btn || !el) return;
+    player.wire();
 
-    const KEY = 'ma-sound';
-    // Fades rather than cuts: a soundscape that stops dead is a jolt, which
-    // is the one thing this is here to avoid.
-    const FADE = 700;
+    const offs: (() => void)[] = [];
+    const on = <K extends keyof DocumentEventMap>(type: K, fn: (e: DocumentEventMap[K]) => void) => {
+      document.addEventListener(type, fn);
+      offs.push(() => document.removeEventListener(type, fn));
+    };
 
-    // Each fade carries a number, kept on the audio element (which outlives
-    // every page); the newest fade wins, so an old fade — even one started on
-    // the previous page — can never pause a sound that was just turned on.
-    const ramp = (to: number, done?: () => void) => {
-      const id = String(Number(el.dataset.fade || 0) + 1);
-      el.dataset.fade = id;
-      const from = el.volume;
-      const t0 = performance.now();
-      const step = (now: number) => {
-        if (el.dataset.fade !== id) return;
-        const k = Math.min(1, (now - t0) / FADE);
-        el.volume = Math.max(0, Math.min(1, from + (to - from) * k));
-        if (k < 1) requestAnimationFrame(step);
-        else done?.();
+    const rows = [...document.querySelectorAll<HTMLElement>('[data-track-row]')];
+
+    // A meditation's length before it has played, read from the file's
+    // header the first time the tray opens.
+    const lengths: Record<string, number> = {};
+    const measure = () => {
+      for (const t of player.tracks()) {
+        if (t.loop || t.id in lengths) continue;
+        lengths[t.id] = 0;
+        const probe = new Audio();
+        probe.preload = 'metadata';
+        probe.addEventListener('loadedmetadata', () => {
+          lengths[t.id] = probe.duration;
+          paint();
+        });
+        probe.src = t.src;
+      }
+    };
+
+    // Draw every control from the element's state. Cheap enough to run on
+    // every timeupdate.
+    const paint = () => {
+      const t = player.current();
+      const avail = player.available();
+      box.hidden = avail.length === 0;
+      const playing = player.isPlaying();
+      btn.setAttribute('aria-pressed', String(playing));
+      if (t) {
+        if (label) label.textContent = t.short;
+        btn.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} ${t.title}`);
+      }
+      const once = Boolean(t && !t.loop && el.dataset.track === t.id);
+      box.classList.toggle('is-once', once);
+      const d = el.duration || 0;
+      if (line) line.style.setProperty('--p', once && d ? `${(el.currentTime / d) * 100}%` : '0%');
+      // The tray is worth opening when there is a choice, or a place to keep.
+      const useful = avail.length > 1 || avail.some((x) => !x.loop);
+      if (more) more.hidden = !useful;
+      if (!useful) close();
+
+      for (const row of rows) {
+        const id = row.dataset.trackRow!;
+        row.hidden = !avail.some((x) => x.id === id);
+        const live = player.isPlaying(id);
+        row.classList.toggle('is-playing', live);
+        const tg = row.querySelector('[data-row-toggle]');
+        const title = row.querySelector('.snd-title')?.textContent ?? '';
+        tg?.setAttribute('aria-label', `${live ? 'Pause' : 'Play'} ${title}`);
+        const seekEl = row.querySelector<HTMLInputElement>('[data-row-seek]');
+        const time = row.querySelector<HTMLElement>('[data-row-time]');
+        if (seekEl && seekEl.dataset.dragging !== '1') {
+          const mine = el.dataset.track === id;
+          const p = mine && d ? (el.currentTime / d) * 100 : 0;
+          seekEl.value = String(p);
+          seekEl.style.setProperty('--p', `${p}%`);
+          if (time) time.textContent = mine ? `${player.clock(el.currentTime)} / ${player.clock(d)}` : player.clock(lengths[id] ?? 0);
+        }
+      }
+    };
+
+    btn.addEventListener('click', () => player.toggle());
+
+    for (const row of rows) {
+      const id = row.dataset.trackRow!;
+      row.querySelector('[data-row-toggle]')?.addEventListener('click', () => player.toggle(id));
+      const seekEl = row.querySelector<HTMLInputElement>('[data-row-seek]');
+      seekEl?.addEventListener('input', () => {
+        seekEl.dataset.dragging = '1';
+        seekEl.style.setProperty('--p', `${seekEl.value}%`);
+      });
+      seekEl?.addEventListener('change', () => {
+        seekEl.dataset.dragging = '';
+        const d = (el.dataset.track === id && el.duration) || lengths[id];
+        if (d) player.seek(id, (Number(seekEl.value) / 100) * d);
+        else player.play(id);
+      });
+    }
+
+    // The tray: opens beside the control, closes on Escape or a touch
+    // anywhere else.
+    function close() {
+      if (!tray || tray.hidden) return;
+      tray.hidden = true;
+      more?.setAttribute('aria-expanded', 'false');
+    }
+    more?.addEventListener('click', () => {
+      if (!tray) return;
+      const open = tray.hidden;
+      if (open) measure();
+      tray.hidden = !open;
+      more.setAttribute('aria-expanded', String(open));
+    });
+    on('pointerdown', (e) => {
+      if (tray && !tray.hidden && !box.contains(e.target as Node)) close();
+    });
+    on('keydown', (e) => {
+      if (e.key === 'Escape' && tray && !tray.hidden) {
+        close();
+        more?.focus();
+      }
+    });
+
+    on('ms-player' as keyof DocumentEventMap, paint);
+    paint();
+
+    // A reader who turned the soundscape on last visit still has to touch
+    // the page once before a browser will make sound, so the choice is
+    // restored on the first interaction rather than on load. A touch on the
+    // player itself is left to the player.
+    if (player.remembered() && el.paused && player.current()?.loop) {
+      const resume = (e: Event) => {
+        stop();
+        if (box.contains(e.target as Node)) return;
+        if (el.paused) player.play();
       };
-      requestAnimationFrame(step);
-    };
-
-    const setState = (on: boolean) => {
-      btn.setAttribute('aria-pressed', String(on));
-      if (label) label.textContent = on ? 'Sound on' : 'Sound';
-    };
-
-    // A new page brings a new button, but the sound may already be playing
-    // (the audio element itself carries over from the last page).
-    const playing = () => !el.paused && el.dataset.fading !== 'out';
-    setState(playing());
-
-    const turnOn = () => {
-      el.dataset.fading = '';
-      if (el.paused) el.volume = 0;
-      // A blocked play() is not an error worth showing anyone — the control
-      // simply stays off, which is the honest state.
-      el.play().then(
-        () => {
-          ramp(0.35);
-          try { localStorage.setItem(KEY, '1'); } catch {}
-          setState(true);
-        },
-        () => setState(false)
-      );
-    };
-
-    const turnOff = () => {
-      el.dataset.fading = 'out';
-      ramp(0, () => { el.pause(); el.dataset.fading = ''; });
-      try { localStorage.removeItem(KEY); } catch {}
-      setState(false);
-    };
-
-    btn.addEventListener('click', () => (playing() ? turnOff() : turnOn()));
-
-    // A reader who turned it on last visit still has to touch the page once
-    // before a browser will make sound, so the choice is restored on the
-    // first interaction rather than on load. A touch on the button itself
-    // is left to the button.
-    let remembered = false;
-    try { remembered = localStorage.getItem(KEY) === '1'; } catch {}
-
-    const resume = (e: Event) => {
-      off();
-      if (btn.contains(e.target as Node)) return;
-      if (el.paused) turnOn();
-    };
-    const off = () => {
-      document.removeEventListener('pointerdown', resume);
-      document.removeEventListener('keydown', resume);
-    };
-    if (remembered && el.paused) {
+      const stop = () => {
+        document.removeEventListener('pointerdown', resume);
+        document.removeEventListener('keydown', resume);
+      };
       document.addEventListener('pointerdown', resume);
       document.addEventListener('keydown', resume);
+      offs.push(stop);
     }
-    return off;
-  });
 
+    return () => offs.forEach((off) => off());
+  });
 </script>

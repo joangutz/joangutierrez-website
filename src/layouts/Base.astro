@@ -3,7 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { ClientRouter } from 'astro:transitions';
-import { site, withBase, sound } from '../site';
+import { site, withBase, sound, kit } from '../site';
 
 interface Props {
   title: string;
@@ -113,9 +113,9 @@ import GetInTouch from '../components/GetInTouch.astro';
         }
       })();
     </script>
-    {/* Page changes without a reload, so the soundscape plays on across the
-        site. Only switched on once there is a soundscape to keep playing. */}
-    {sound.file && <ClientRouter fallback="swap" />}
+    {/* Page changes without a reload, so whatever the player is playing
+        (lib/player.ts) plays on across the site. */}
+    {(sound.file || kit.audio) && <ClientRouter fallback="swap" />}
   </head>
   <body id="top">
     <a class="skip" href="#main">Skip to content</a>

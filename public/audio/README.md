@@ -31,3 +31,8 @@ visits.
 Once it is on, it keeps playing as the reader moves around the site: pages
 change without reloading, and the one sound carries on underneath them,
 unbroken, until it is turned off.
+
+The same player plays the Red Rose Visualization for anyone who has signed
+up for it: from the gift card on Resources, or from the small tray beside
+the bar's control (the arrow), where the two can be switched between and
+the Red Rose scrubbed. Only one thing ever plays at a time.

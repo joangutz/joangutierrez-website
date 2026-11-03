@@ -87,9 +87,11 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
               {audioSrc && (
                 <div class="take-play" data-gift-play hidden>
                   {/* A quiet player of the site's own: a ring that plays and
-                      pauses, a hairline to follow and scrub, the time. */}
-                  <div class="player" data-player>
-                    <audio preload="metadata" src={audioSrc}></audio>
+                      pauses, a hairline to follow and scrub, the time. It
+                      plays through the site's one player (lib/player.ts),
+                      so the recording carries on from page to page and
+                      can be paused from the bar. */}
+                  <div class="player" data-player data-player-track="rose" data-player-src={audioSrc}>
                     <button class="player-toggle" type="button" aria-label="Play" data-player-toggle>
                       <svg class="i-play" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M2 1.5 L11 7 L2 12.5 Z" /></svg>
                       <svg class="i-pause" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M3 1.5 V12.5 M9 1.5 V12.5" /></svg>
@@ -661,13 +663,14 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 <script>
 
   import { onPage } from '../lib/onPage';
+  import * as player from '../lib/player';
 
 
   onPage(() => {
     // Receiving the gift: the email goes to Kit, then the recording appears
     // in the form's place. Remembered in this browser, so a returning reader
     // finds it waiting.
-    const KEY = 'ms-gift-received';
+    const KEY = player.GIFT_KEY;
     const remembered = () => {
       try {
         return localStorage.getItem(KEY) === '1';
@@ -681,57 +684,68 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
       } catch {
         /* private mode: this visit only */
       }
+      // The bar's player now offers it too.
+      player.refresh();
     };
 
-    // The player: play and pause, a scrubbable hairline, elapsed and total.
-    const clock = (t: number) => {
-      if (!isFinite(t)) return '0:00';
-      const m = Math.floor(t / 60);
-      const sec = Math.floor(t % 60);
-      return `${m}:${String(sec).padStart(2, '0')}`;
-    };
+    // The player: play and pause, a scrubbable hairline, elapsed and total —
+    // all drawn from the site's one audio element.
+    const offs: (() => void)[] = [];
+    const el = player.audio();
     for (const box of document.querySelectorAll<HTMLElement>('[data-player]')) {
-      const audio = box.querySelector('audio');
+      const id = box.dataset.playerTrack!;
       const toggle = box.querySelector<HTMLButtonElement>('[data-player-toggle]');
       const seek = box.querySelector<HTMLInputElement>('[data-player-seek]');
       const now = box.querySelector<HTMLElement>('[data-player-now]');
       const total = box.querySelector<HTMLElement>('[data-player-total]');
-      if (!audio || !toggle || !seek || !now || !total) continue;
-      let dragging = false;
-      const paint = () => {
-        const d = audio.duration || 0;
-        const p = d ? (audio.currentTime / d) * 100 : 0;
-        if (!dragging) seek.value = String(p);
-        seek.style.setProperty('--p', `${dragging ? seek.value : p}%`);
-        now.textContent = clock(audio.currentTime);
-        seek.setAttribute('aria-valuetext', `${clock(audio.currentTime)} of ${clock(d)}`);
-      };
-      audio.addEventListener('loadedmetadata', () => {
-        total.textContent = clock(audio.duration);
+      if (!el || !toggle || !seek || !now || !total) continue;
+      player.wire();
+
+      // Its length before it has ever played, read from the file's header.
+      let length = 0;
+      const probe = new Audio();
+      probe.preload = 'metadata';
+      probe.addEventListener('loadedmetadata', () => {
+        length = probe.duration;
         paint();
       });
-      audio.addEventListener('timeupdate', paint);
-      audio.addEventListener('play', () => {
-        box.classList.add('is-playing');
-        toggle.setAttribute('aria-label', 'Pause');
-      });
-      const stopped = () => {
-        box.classList.remove('is-playing');
-        toggle.setAttribute('aria-label', 'Play');
+      if (box.dataset.playerSrc) probe.src = box.dataset.playerSrc;
+
+      let dragging = false;
+      const paint = () => {
+        const mine = el.dataset.track === id;
+        const d = (mine && el.duration) || length || 0;
+        const t = mine ? el.currentTime : 0;
+        const p = d ? (t / d) * 100 : 0;
+        if (!dragging) {
+          seek.value = String(p);
+          seek.style.setProperty('--p', `${p}%`);
+          now.textContent = player.clock(t);
+        }
+        total.textContent = player.clock(d);
+        seek.setAttribute('aria-valuetext', `${player.clock(t)} of ${player.clock(d)}`);
+        const live = player.isPlaying(id);
+        box.classList.toggle('is-playing', live);
+        toggle.setAttribute('aria-label', live ? 'Pause' : 'Play');
       };
-      audio.addEventListener('pause', stopped);
-      audio.addEventListener('ended', stopped);
-      toggle.addEventListener('click', () => (audio.paused ? audio.play() : audio.pause()));
+      const onChange = () => paint();
+      document.addEventListener('ms-player', onChange);
+      offs.push(() => document.removeEventListener('ms-player', onChange));
+
+      toggle.addEventListener('click', () => player.toggle(id));
       seek.addEventListener('input', () => {
         dragging = true;
         seek.style.setProperty('--p', `${seek.value}%`);
-        if (audio.duration) now.textContent = clock((Number(seek.value) / 100) * audio.duration);
+        const d = (el.dataset.track === id && el.duration) || length;
+        if (d) now.textContent = player.clock((Number(seek.value) / 100) * d);
       });
       seek.addEventListener('change', () => {
-        if (audio.duration) audio.currentTime = (Number(seek.value) / 100) * audio.duration;
         dragging = false;
+        const d = (el.dataset.track === id && el.duration) || length;
+        if (d) player.seek(id, (Number(seek.value) / 100) * d);
         paint();
       });
+      paint();
     }
 
     for (const form of document.querySelectorAll<HTMLFormElement>('[data-gift-form]')) {
@@ -834,6 +848,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
       document.fonts?.ready.then(size);
     }
 
+    return () => offs.forEach((off) => off());
   });
 
 </script>

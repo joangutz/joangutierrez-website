@@ -18,7 +18,7 @@ and the choice is Joan's.
 | The Red Rose Visualization as a gift that collects emails | **Done** — the card turns over to an email form (Kit form 10134888); after signing up, a player and a download link appear |
 | "Recorded for my w.s at CPR" | **Open** — not stated on the site (an earlier guess at "CPR" was removed). WRITING.md asks where and for whom |
 | Burnt / sepia salmon colour | **Clash** — superseded by later choices: a linen ground (Joan picked "D Linen") and now the **Driftwood** palette. The salmon-era Wine palette is saved and can be tried at `?palette=wine` |
-| Stu Pender soundscape while browsing | **Built** — Sound button in the bar; keeps playing across pages. Switches on when the audio file arrives (TODO-SOUND in `src/site.ts`) |
+| Stu Pender soundscape while browsing | **Built** — one site-wide player in the bar, playing across pages. Plays the Red Rose now (for readers who have signed up); the soundscape joins it when the audio file arrives (TODO-SOUND in `src/site.ts`) |
 | Application form that lands in joankgutz@gmail.com | **Done** for now — it opens the visitor's email app addressed to Joan. **Open:** a Formspree address would let it send directly (TODO-FORM) |
 | Homepage 1: the image, MA … SOMATRIX across the width, subtitle, Chicago and Beyond | **Done** — subtitle is now "Somatic education delivered with artistry for vibrant health" |
 | Homepage 1: egg logo a little bigger, where it was | **Clash** — a build session asked to leave the logo out of the title card "for now" |
