@@ -80,7 +80,8 @@ const contact_page = {
   /* The photograph runs under the bar, so the page ends on it. */
   .invite {
     min-height: 100svh;
-    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+    padding-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     display: flex;
     align-items: center;
     color: var(--color-bract);

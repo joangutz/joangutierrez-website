@@ -291,7 +291,8 @@ const movedAnchors = {
     flex-direction: column;
     justify-content: space-between;
     gap: clamp(3rem, 12vh, 7rem);
-    padding: clamp(2rem, 6vh, 4rem) clamp(1.25rem, 5vw, 3rem) clamp(2.5rem, 7vh, 4.5rem);
+    /* The bar sits over the top of the photograph; the name starts below it. */
+    padding: calc(clamp(1.5rem, 4vh, 3rem) + var(--bar-h) + env(safe-area-inset-top, 0px)) clamp(1.25rem, 5vw, 3rem) clamp(2.5rem, 7vh, 4.5rem);
   }
 
   /* One name, pushed to both margins, with the whole window between. */
@@ -581,7 +582,7 @@ const movedAnchors = {
   @media (min-width: 781px) {
     .story-portrait {
       position: sticky;
-      top: clamp(1.5rem, 6vh, 3rem);
+      top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + clamp(1.5rem, 6vh, 3rem));
     }
   }
 

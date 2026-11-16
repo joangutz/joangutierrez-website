@@ -58,7 +58,7 @@ const p = entry.data;
   /* The mark stays alongside the reader down the long column. */
   .rail-mark {
     position: sticky;
-    top: 3rem;
+    top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + 3rem);
   }
 
   @media (max-width: 900px) {

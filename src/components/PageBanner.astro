@@ -95,13 +95,14 @@ const {
     min-height: min(68svh, 680px);
   }
 
+  /* The bar sits over the top of the photograph; the words start below it. */
   .band {
-    padding-block: clamp(2.5rem, 7vh, 4.5rem);
+    padding-block: calc(clamp(2.5rem, 7vh, 4.5rem) + var(--bar-h)) clamp(2.5rem, 7vh, 4.5rem);
   }
 
   /* ---- Cinema ---- */
   .banner-cinema {
-    min-height: calc(100svh - var(--bar-h));
+    min-height: 100svh;
     align-items: center;
     grid-template-columns: minmax(0, 1fr);
   }
@@ -111,7 +112,7 @@ const {
   .banner-cinema .band {
     width: 100%;
     justify-self: stretch;
-    padding-block: clamp(3rem, 10vh, 6rem);
+    padding-block: calc(clamp(3rem, 10vh, 6rem) + var(--bar-h)) clamp(3rem, 10vh, 6rem);
     container-type: inline-size;
   }
 

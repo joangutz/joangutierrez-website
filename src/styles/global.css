@@ -7,6 +7,48 @@
    from the basic file instead of using the extended file's proper ī. That
    is the "matrīcis" in Joan's definition of Matrix. Declaring the extended
    file second gives it precedence for the shared marks. */
+/* Cormorant Garamond (OFL): the light, airy serif of the Services page,
+   chosen 11/16 from rendering B. */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url('./fonts/CormorantGaramond-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300;
+  src: url('./fonts/CormorantGaramond-LightItalic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/CormorantGaramond-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/CormorantGaramond-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('./fonts/CormorantGaramond-Medium.woff2') format('woff2');
+}
+
 @font-face {
   font-family: 'Newsreader Variable';
   font-style: normal;
@@ -150,6 +192,8 @@
   --color-barro: #ccb39b;
 
   --font-display: 'Sprat', 'Iowan Old Style', Georgia, serif;
+  /* Soft, open, with long italics: the voice of the Services page. */
+  --font-soft: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
   /* The small uppercase letterspaced voice — labels, nav, doors, buttons. */
   --font-label: 'Ronzino', 'Helvetica Neue', Arial, sans-serif;
@@ -566,9 +610,9 @@ html[data-palette='sand'] {
 
     --measure: 63ch;
 
-    /* The height of the fixed bar at the foot of the window. Named once so
-       the body's bottom padding, the chapter rail's lower bound and the
-       scroll offset for an anchor all come from the same number. */
+    /* The height of the fixed bar at the head of the window. Named once so
+       the openings, the chapter rail's upper bound and the scroll offset
+       for an anchor all come from the same number. */
     --bar-h: 3.6rem;
 
     /* The air between a section's content and the door that follows it.
@@ -599,8 +643,8 @@ html[data-palette='sand'] {
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    /* An anchor lands above the bar rather than behind it. */
-    scroll-padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px) + 1rem);
+    /* An anchor lands below the bar rather than behind it. */
+    scroll-padding-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + 1rem);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1136,4 +1180,10 @@ html[data-palette='sand'] {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 200px 200px;
   }
+}
+
+/* A page that does not open on a photograph (the 404) starts below the bar
+   at the head of the window. */
+main:not(:has(> :is(.on-dark, .split-open))) {
+  padding-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
 }

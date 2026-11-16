@@ -28,13 +28,12 @@ const year = new Date().getFullYear();
 
 <style>
   /* One small line, as at the foot of Begin: no rule, no mark. The bottom
-     carries the bar's height, because the bar is fixed over the foot of
-     the window. */
+     keeps clear of a phone's home indicator. */
   .footer {
     background: var(--color-plumstone);
     color: var(--color-bract);
     padding-block: clamp(1.25rem, 3vh, 1.75rem)
-      calc(clamp(1.5rem, 4vh, 2.5rem) + var(--bar-h) + env(safe-area-inset-bottom, 0px));
+      calc(clamp(1.5rem, 4vh, 2.5rem) + env(safe-area-inset-bottom, 0px));
   }
 
   /* On the closing photograph it follows straight on from what sits above

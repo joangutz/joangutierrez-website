@@ -172,7 +172,7 @@ const { Content: Lineage } = await render(lineageEntry);
 
   .about-portrait {
     position: sticky;
-    top: clamp(2rem, 6vh, 4rem);
+    top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + clamp(2rem, 6vh, 4rem));
   }
 
   @media (max-width: 860px) {
@@ -196,7 +196,8 @@ const { Content: Lineage } = await render(lineageEntry);
   /* ---- The tabs ---- */
   .tabs-band {
     position: sticky;
-    top: 0;
+    /* Held just beneath the bar at the head of the window. */
+    top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
     z-index: 5;
     background: color-mix(in srgb, var(--color-madder) 92%, transparent);
     -webkit-backdrop-filter: blur(14px);

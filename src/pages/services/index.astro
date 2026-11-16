@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ChapterRail from '../../components/ChapterRail.astro';
-import PageBanner from '../../components/PageBanner.astro';
+import Collage from '../../components/Collage.astro';
 import ApplicationForm from '../../components/ApplicationForm.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
 import OfferingCard from '../../components/OfferingCard.astro';
@@ -29,6 +29,14 @@ const anchor = (h: string) => h.split('#')[1];
 const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
 
 const money = (n: number) => `$${n}`;
+
+/* Her quote, with the two words set in italics in the rendering she chose
+   ("true", "sovereign"). Emphasis only; the words are hers, unchanged. */
+const EM = ['true', 'sovereign'];
+const quoteParts = s.quote.text
+  .split(new RegExp(`\\b(${EM.join('|')})\\b`))
+  .filter(Boolean)
+  .map((text) => ({ text, em: EM.includes(text) }));
 
 /**
  * Her text with **…** set bold, and "ACSB" linked to the code of ethics.
@@ -136,35 +144,47 @@ const catalog = {
   title={`${s.title} — 1:1 Sessions, Somatic Sexology, Holistic Pelvic Care, Shiatsu`}
   description={s.description}
   schema={[catalog, crumbs(s.title, '/services/')]}
+  closingPhoto="lake.jpg"
+  closingFocus="50% 72%"
 >
   <ChapterRail />
 
-  <PageBanner title={s.title} image="happenings.jpg" cinema />
+  {/* The page in the manner of rendering B (chosen 11/16): it moves through
+      one landscape of photographs, her words resting on them. It opens
+      split, as in A — her words on the blush, the body close beside them —
+      and ends on the lake. */}
 
-  {/* 1 · Who this is for: Joan's four groups as four even tiles, each with
-      its own mark and colour, so lists of different lengths read as a set. */}
-  <section class="band section" id="offerings">
-    <div class="wide">
-      <span class="label">{s.belong.label}</span>
-      <h2 class="section-title">{s.belong.title}</h2>
+  {/* 0 · The opening: her words on the blush, the body close beside them. */}
+  <section class="split-open">
+    <div class="split-text">
+      <span class="chapter">{s.title}</span>
+      <h1 class="split-line">
+        {quoteParts.map((part) => (part.em ? <em>{part.text}</em> : part.text))}
+      </h1>
+      <span class="split-by">— {s.quote.by}</span>
+    </div>
+    <div class="split-photo film">
+      <Collage src="hero.jpg" alt="" priority sizes="(max-width: 700px) 100vw, 44vw" />
+    </div>
+  </section>
 
-      <div class="belong">
+  {/* 1 · Who this is for: her four groups side by side across the sheets. */}
+  <section class="scene on-dark has-ground" id="offerings">
+    <div class="scene-photo film"><Collage src="close-home.jpg" alt="" sizes="100vw" /></div>
+    <div class="scene-wrap">
+      <span class="chapter">{s.belong.label}</span>
+      <h2 class="scene-title">{s.belong.title}</h2>
+      <div class="groups">
         {
-          s.belong.groups.map((g, i) => (
-            <div class={`belong-group belong-${i % 4}`}>
-              <svg class="belong-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-                <path d={BELONG_MARKS[i % BELONG_MARKS.length]} />
-              </svg>
-              <h3 class="belong-title">{g.title}</h3>
-              <ul class="belong-list">
-                {g.items.map((item) => <li>{item}</li>)}
-              </ul>
+          s.belong.groups.map((g) => (
+            <div class="group">
+              <h3>{g.title}</h3>
+              {g.items.map((item) => <p>{item}</p>)}
             </div>
           ))
         }
       </div>
-
-      <div class="belong-closing">
+      <div class="scene-closing">
         {s.belong.closing.map((line) => <p>{line}</p>)}
       </div>
     </div>
@@ -222,61 +242,55 @@ const catalog = {
     </div>
   </section>
 
-  {/* 3 · What to expect: her opening lines large, then her paragraphs as
-      boxes in a grid, each with a small line mark and her own words in bold
-      as its lead; where, her wish, and the way in close it. */}
-  <section class="band section" id="what-to-expect">
-    <div class="wide">
-      <h2 class="section-title">{s.expect.title}</h2>
-      <p class="expect-intro">{s.expect.intro}</p>
+  {/* 3 · What to expect, on a soft curve of skin: her opening lines large,
+      then her paragraphs as numbered passages, where, her wish, and the way
+      in. */}
+  <section class="scene on-dark has-ground" id="what-to-expect">
+    <div class="scene-photo film"><Collage src="about-close.jpg" alt="" sizes="100vw" /></div>
+    <div class="scene-wrap">
+      <span class="chapter">{s.expect.title}</span>
+      <h2 class="visually-hidden">{s.expect.title}</h2>
+      <p class="scene-lead">{s.expect.intro}</p>
 
-      <ul class="expect-grid">
+      <ol class="passages">
         {
-          s.expect.boxes.map((b) => (
-            <li class="expect-box">
-              <svg class="expect-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-                <path d={EXPECT_MARKS[b.icon] ?? EXPECT_MARKS.first} />
-              </svg>
-              {b.paragraphs.map((p) => (
-                <p>
-                  {rich(p).map((part) =>
-                    part.bold ? (
-                      <strong class:list={{ lead: part.lead }}>{part.text}</strong>
-                    ) : part.link ? (
-                      <Link href={contact.ethics}>{part.text}</Link>
-                    ) : (
-                      part.text
-                    )
-                  )}
-                </p>
-              ))}
+          s.expect.boxes.map((b, n) => (
+            <li class="passage">
+              <span class="passage-num">{String(n + 1).padStart(2, '0')}</span>
+              {b.paragraphs.map((p, i) => {
+                const parts = rich(p);
+                const lead = i === 0 && parts[0]?.lead ? parts[0] : null;
+                return (
+                  <>
+                    {lead && <h3>{lead.text}</h3>}
+                    <p>
+                      {(lead ? parts.slice(1) : parts).map((part) =>
+                        part.bold ? (
+                          <strong>{part.text}</strong>
+                        ) : part.link ? (
+                          <Link href={contact.ethics}>{part.text}</Link>
+                        ) : (
+                          part.text
+                        )
+                      )}
+                    </p>
+                  </>
+                );
+              })}
             </li>
           ))
         }
-      </ul>
+      </ol>
 
-      <div class="expect-where">
-        <svg class="expect-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-          <path d={EXPECT_MARKS.where} />
-        </svg>
-        <p>
-          {rich(s.expect.where).map((part) => (part.bold ? <strong class:list={{ lead: part.lead }}>{part.text}</strong> : part.text))}
-        </p>
-      </div>
+      <p class="scene-where">
+        {rich(s.expect.where).map((part) => (part.bold ? <strong>{part.text}</strong> : part.text))}
+      </p>
 
-      <div class="expect-close">
-        <p class="expect-wish">{s.expect.wish}</p>
+      <div class="scene-close">
+        <p class="scene-wish">{s.expect.wish}</p>
         <Link variant="action" href={withBase('/begin/')}>{s.expect.link}</Link>
       </div>
     </div>
-  </section>
-
-  {/* 7 · Her words to close on. */}
-  <section class="band section quote-band">
-    <figure class="wide quote">
-      <blockquote><p>“{s.quote.text}”</p></blockquote>
-      <figcaption>— {s.quote.by}</figcaption>
-    </figure>
   </section>
 
   {/* The way in: a conversation, or the Discovery Form — together on the
@@ -319,102 +333,6 @@ const catalog = {
     margin: 0.75rem 0 0;
   }
 
-  /* ---- Offerings: You belong here ---- */
-  /* Four even tiles: equal height in each row, a thin bar of colour on
-     top, a small mark, the group's name, its list. */
-  .belong {
-    margin-top: clamp(2rem, 5vw, 3rem);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1rem, 2.5vw, 1.5rem);
-  }
-
-  .belong-group {
-    --bar: var(--color-clay);
-    padding: clamp(1.5rem, 3.5vw, 2.25rem);
-    background: rgb(var(--ch-bract) / 0.55);
-    border: 1px solid var(--rule);
-    border-top: 4px solid var(--bar);
-  }
-
-  .belong-1 { --bar: var(--color-cochineal); }
-  .belong-2 { --bar: var(--color-plumstone); }
-  .belong-3 { --bar: var(--color-brick); }
-
-  .belong-mark,
-  .expect-mark {
-    display: block;
-    width: 3rem;
-    height: 3rem;
-    fill: none;
-    stroke: var(--color-quick);
-    stroke-width: 1.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .belong-title {
-    margin: 1rem 0 1.1rem;
-    font-family: var(--font-display);
-    font-size: clamp(1.3rem, 2.4vw, 1.6rem);
-    font-weight: 400;
-    line-height: 1.15;
-  }
-
-  .belong-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 0.8rem;
-  }
-
-  .belong-list li {
-    position: relative;
-    padding-left: 1.3rem;
-    font-size: 1rem;
-    line-height: 1.55;
-  }
-
-  .belong-list li::before {
-    content: '';
-    position: absolute;
-    left: 0.15rem;
-    /* A small dot, centred on the first line: half a line-height down
-       (the lh unit), less half the dot. 0.7em first, for browsers without
-       lh. */
-    top: 0.7em;
-    top: calc(0.5lh - 2.5px);
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgb(var(--ch-quick) / 0.75);
-  }
-
-  /* Her two last lines, set apart and centred. */
-  .belong-closing {
-    margin: clamp(3rem, 7vw, 4.5rem) auto 0;
-    max-width: 34rem;
-    text-align: center;
-    font-family: var(--font-display);
-    font-size: clamp(1.25rem, 2.6vw, 1.7rem);
-    line-height: 1.35;
-  }
-
-  .belong-closing p {
-    margin: 0;
-  }
-
-  @media (max-width: 760px) {
-    .belong {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
-  .services-title {
-    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
-  }
-
   /* ---- Services: a swell of tone, so the section reads as its own ---- */
   .swell {
     background: linear-gradient(
@@ -426,109 +344,8 @@ const catalog = {
     );
   }
 
-  /* ---- What to expect ---- */
-  .expect-intro {
-    margin: 1.25rem 0 0;
-    max-width: 38rem;
-    font-family: var(--font-display);
-    font-size: clamp(1.3rem, 2.6vw, 1.75rem);
-    font-weight: 300;
-    line-height: 1.35;
-  }
-
-  /* A grid of boxes divided by hairlines, like the diagram grids on the
-     old page: each a mark, then her words. */
-  .expect-grid {
-    list-style: none;
-    margin: clamp(2.25rem, 5vw, 3rem) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-
-  .expect-box {
-    padding: clamp(1.4rem, 3vw, 2rem);
-    background: var(--color-madder);
-  }
-
-  .expect-box p,
-  .expect-where p {
-    margin: 0.9rem 0 0;
-    font-size: 0.98rem;
-    line-height: 1.6;
-  }
-
-  .expect-box .expect-mark + p {
-    margin-top: 1.1rem;
-  }
-
-  .expect-box strong,
-  .expect-where strong {
-    font-weight: 600;
-  }
-
-  /* Her opening words, as the box's lead. */
-  .expect-box strong.lead,
-  .expect-where strong.lead {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 400;
-    line-height: 1.3;
-    color: var(--color-cochineal);
-  }
-
-  .expect-where {
-    margin-top: 1px;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 1.25rem;
-    align-items: center;
-    padding: clamp(1.4rem, 3vw, 2rem);
-    background: rgb(var(--ch-bract) / 0.55);
-    border: 1px solid var(--rule);
-    border-top: 0;
-  }
-
-  .expect-where p {
-    margin: 0;
-  }
-
-  .expect-close {
-    margin: clamp(3rem, 7vw, 4.5rem) auto 0;
-    max-width: 40rem;
-    text-align: center;
-  }
-
-  .expect-wish {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.2rem, 2.3vw, 1.5rem);
-    line-height: 1.45;
-  }
-
-  .expect-close :global(.lnk-action) {
-    margin-top: 2rem;
-  }
-
-  @media (max-width: 1000px) {
-    .expect-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 600px) {
-    .expect-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .expect-where {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  .services-title {
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
   }
 
   /* ---- Services: the cards ---- */
@@ -593,34 +410,292 @@ const catalog = {
     margin-top: clamp(3rem, 7vw, 4.5rem);
   }
 
-  /* ---- Her words ---- */
-  .quote {
-    margin: 0 auto;
+  /* ---- The opening: split, her words on the blush ---- */
+  .split-open {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44%;
+    min-height: 100svh;
+    background: var(--color-madder);
+    color: var(--color-cochineal);
+  }
+
+  .split-text {
+    padding: calc(var(--bar-h) + clamp(3rem, 9vh, 6rem)) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 9vh, 5.5rem) clamp(1.25rem, 3.2vw, 2.75rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* A short rule, then the chapter's name in small tracked capitals. */
+  .chapter {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .chapter::before {
+    content: '';
+    width: 2.9rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  .split-line {
+    margin: 1.6rem 0 0;
+    max-width: 17ch;
+    font-family: var(--font-soft);
+    font-size: clamp(2.1rem, 3.9vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.14;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .split-line em {
+    font-style: italic;
+  }
+
+  .split-by {
+    margin-top: 1.6rem;
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+
+  .split-photo {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* On a wide screen the bar keeps the blush over the opening, so the
+     photograph starts beneath it. */
+  @media (min-width: 701px) {
+    .split-photo {
+      margin-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+    }
+  }
+
+  .split-photo :global(.collage) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 700px) {
+    .split-open {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .split-photo {
+      order: -1;
+      height: 62svh;
+    }
+
+    .split-text {
+      padding: 2.5rem 1.25rem 4rem;
+    }
+  }
+
+  /* ---- The scenes: a photograph filling the window, her words on it ---- */
+  .scene {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .scene-photo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .scene-photo :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.82);
+  }
+
+  /* A gentle wash, deepest at the foot, so white words hold on any part of
+     the photograph. */
+  .scene-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(var(--ch-plum) / 0.22), rgb(var(--ch-plum) / 0.4));
+  }
+
+  .scene-wrap {
+    width: min(68rem, 100% - 2 * clamp(1.25rem, 5vw, 3rem));
+    margin-inline: auto;
+    padding-block: calc(var(--bar-h) + clamp(3rem, 8vh, 5rem)) clamp(4rem, 10vh, 6rem);
+    text-shadow: 0 1px 22px rgb(var(--ch-plum) / 0.35);
+  }
+
+  .scene-title {
+    margin: 1.5rem 0 0;
+    font-family: var(--font-soft);
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .groups {
+    margin-top: clamp(2.25rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .group h3 {
+    margin: 0 0 1rem;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    line-height: 1.15;
+  }
+
+  .group p {
+    margin: 0 0 0.85rem;
+    font-family: var(--font-soft);
+    font-size: 1.1rem;
+    line-height: 1.45;
+  }
+
+  .scene-closing {
+    margin-top: clamp(3rem, 7vw, 4.5rem);
+    text-align: center;
+    font-family: var(--font-soft);
+    font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+    font-weight: 300;
+    line-height: 1.35;
+  }
+
+  .scene-closing p {
+    margin: 0;
+  }
+
+  .scene-closing p + p {
+    font-style: italic;
+  }
+
+  .scene-lead {
+    margin: 1.5rem 0 0;
+    max-width: 24ch;
+    font-family: var(--font-soft);
+    font-size: clamp(1.7rem, 3.2vw, 2.75rem);
+    font-weight: 300;
+    line-height: 1.18;
+  }
+
+  .passages {
+    list-style: none;
+    margin: clamp(2.5rem, 6vw, 3.75rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2.5rem, 5vw, 3.75rem) clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .passage-num {
+    display: block;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    opacity: 0.8;
+  }
+
+  .passage h3 {
+    margin: 0.75rem 0 0.6rem;
+    font-family: var(--font-soft);
+    font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+    font-weight: 300;
+    line-height: 1.15;
+  }
+
+  .passage p {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-soft);
+    font-size: 1.15rem;
+    line-height: 1.5;
+  }
+
+  .passage-num + p {
+    margin-top: 0.75rem;
+  }
+
+  .passage strong,
+  .scene-where strong {
+    font-weight: 500;
+  }
+
+  .passage :global(a) {
+    color: inherit;
+  }
+
+  .scene-where {
+    margin: clamp(2.5rem, 6vw, 3.75rem) 0 0;
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.35);
     max-width: 46rem;
+    font-family: var(--font-soft);
+    font-size: 1.2rem;
+    line-height: 1.5;
+  }
+
+  .scene-close {
+    margin: clamp(3rem, 7vw, 4.5rem) auto 0;
+    max-width: 42rem;
     text-align: center;
   }
 
-  .quote blockquote {
+  .scene-wish {
     margin: 0;
-  }
-
-  .quote blockquote p {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.45rem, 3.4vw, 2.3rem);
+    font-family: var(--font-soft);
+    font-size: clamp(1.3rem, 2.4vw, 1.75rem);
     font-weight: 300;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
+    line-height: 1.4;
   }
 
-  .quote figcaption {
-    margin-top: 1.5rem;
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
+  .scene-close :global(.lnk-action) {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 1000px) {
+    .groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 700px) {
+    .groups,
+    .passages {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .scene-wrap {
+      padding-block: calc(var(--bar-h) + 2.5rem) 4rem;
+    }
   }
 </style>

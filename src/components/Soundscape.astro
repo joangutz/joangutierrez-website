@@ -121,7 +121,7 @@ const first = list.find((t) => !t.gift);
     border: 0;
     cursor: pointer;
     padding: 0.35rem 0;
-    color: var(--color-ink-2);
+    color: var(--bar-ink-2, var(--color-ink-2));
     font-family: var(--font-label);
     font-size: 0.66rem;
     font-weight: 600;
@@ -132,7 +132,7 @@ const first = list.find((t) => !t.gift);
 
   .snd-btn:hover,
   .snd-btn[aria-pressed='true'] {
-    color: var(--color-cochineal);
+    color: var(--bar-ink, var(--color-cochineal));
   }
 
   /* A meditation's progress, as a hairline under its name. */
@@ -166,7 +166,7 @@ const first = list.find((t) => !t.gift);
     padding: 0;
     border: 0;
     background: none;
-    color: var(--color-ink-2);
+    color: var(--bar-ink-2, var(--color-ink-2));
     cursor: pointer;
   }
 
@@ -181,6 +181,7 @@ const first = list.find((t) => !t.gift);
   .snd-more svg {
     width: 9px;
     height: 6px;
+    rotate: 180deg;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.2;
@@ -190,7 +191,7 @@ const first = list.find((t) => !t.gift);
   }
 
   .snd-more[aria-expanded='true'] svg {
-    rotate: 180deg;
+    rotate: 0deg;
   }
 
   /* Four rules that stand still when the sound is off and breathe when it is
@@ -232,16 +233,16 @@ const first = list.find((t) => !t.gift);
     }
   }
 
-  /* The tray rises out of the bar: the bar's own colour, its own rule. */
+  /* The tray drops from the bar: the bar's own colour, its own rule. */
   .snd-tray {
     position: absolute;
     right: -0.5rem;
-    bottom: calc(100% + 0.95rem);
+    top: calc(100% + 0.95rem);
     width: min(21rem, calc(100vw - 2rem));
     padding: 0.4rem 1.1rem;
     background: var(--color-madder);
     border: 1px solid var(--rule);
-    box-shadow: 0 -10px 30px rgb(var(--ch-plum) / 0.14);
+    box-shadow: 0 12px 30px rgb(var(--ch-plum) / 0.14);
     color: var(--color-cochineal);
   }
 
@@ -411,7 +412,7 @@ const first = list.find((t) => !t.gift);
     .snd-tray {
       left: 0.75rem;
       right: 0.75rem;
-      bottom: calc(100% + 0.6rem);
+      top: calc(100% + 0.6rem);
       width: auto;
     }
   }

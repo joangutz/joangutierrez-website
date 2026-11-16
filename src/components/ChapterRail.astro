@@ -584,26 +584,23 @@
 
         /**
          * Vertically centred, but never over the footer and never under the
-         * bar — which now sits at the foot of the window rather than the head
-         * of it, so it is a floor for the rail instead of a ceiling. As the
+         * bar at the head of the window. As the
          * footer rises the rail is pushed up with it, which holds it still
          * against the page rather than letting it scroll across the dark
          * ground.
          */
         const place = () => {
           const railH = rail.offsetHeight;
-          const barTop = navBar
-            ? navBar.getBoundingClientRect().top
-            : window.innerHeight;
+          // The bar is at the head of the window now: a ceiling, not a floor.
+          const ceiling = (navBar ? navBar.getBoundingClientRect().bottom : 0) + 12;
 
-          // Whatever comes first from below — the bar, or the footer arriving.
-          let floor = barTop - FOOT_GAP;
+          // The window's foot, or the footer arriving, whichever comes first.
+          let floor = window.innerHeight - FOOT_GAP;
           if (footer) floor = Math.min(floor, footer.getBoundingClientRect().top - FOOT_GAP);
 
-          const minTop = 12;
-          let top = Math.max(minTop, (window.innerHeight - railH) / 2);
+          let top = Math.max(ceiling, (window.innerHeight - railH) / 2);
           top = Math.min(top, floor - railH);
-          top = Math.max(minTop, top);
+          top = Math.max(ceiling, top);
 
           // Only when even that cannot clear what is below does it step aside.
           const collides = top + railH + 8 > floor + FOOT_GAP;

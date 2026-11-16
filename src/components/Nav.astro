@@ -5,22 +5,16 @@ import Soundscape from './Soundscape.astro';
 import { nav, site, booking, contact, withBase } from '../site';
 
 /**
- * The bar lives at the foot of the window, not the head of it.
+ * The bar sits at the head of the window (moved from the foot, 11/16, in
+ * the spirit of rendering B): the name on the left, the tabs on the right,
+ * set small in tracked capitals.
  *
- * Two things follow from that, and both were the point of moving it. It is
- * under the thumb on a phone rather than at the far end of a reach; and it is
- * a floor the page sits on rather than a lid the page slides under — which is
- * what made the top bar read as content scrolling *through* the navigation.
- * It is fully opaque, it carries its own top rule and a short shadow, and the
- * body is padded by exactly its height so nothing is ever trapped beneath it.
+ * Over a page's opening photograph it is transparent, its words in white,
+ * so the photograph runs to the top edge. Once the opening has scrolled
+ * away it settles into a solid bar of the page's own ground, its words in
+ * ink. Without scripting it is always the solid bar.
  *
- * Two tabs open a short list. Each parent is a real page first and a
- * disclosure second, so the list is an accelerator rather than the only way
- * in — tapping straight through lands on a hub that says the same thing. The
- * lists open on hover and focus-within, in CSS, so they work with scripting
- * off; they open upward, because down is the window's edge.
- *
- * Below 860px the inline bar gives way to a Menu button and a full panel.
+ * Below 860px the tabs give way to a Menu button and a full panel.
  */
 const path = Astro.url.pathname;
 // Compare against the based href — pathname includes the base in production.
@@ -121,31 +115,53 @@ const isCurrent = (href: string) => {
 </div>
 
 <style>
-  /* A floor, not a lid. Opaque, with its own rule and a short shadow so the
-     page visibly ends at it rather than sliding under it. */
+  /* At the head of the window. Solid by default — the page's own ground,
+     a hairline beneath — and transparent over an opening photograph (the
+     script adds .is-over while the opening is in view). */
   .nav-bar {
+    --bar-ink: var(--color-cochineal);
+    --bar-ink-2: var(--color-ink-2);
     position: fixed;
-    inset: auto 0 0;
+    inset: 0 0 auto;
     z-index: 60;
     background: var(--color-madder);
-    border-top: 1px solid var(--rule);
-    box-shadow: 0 -10px 24px rgb(var(--ch-plum) / 0.1);
-    /* Phones with a home indicator put a strip of unusable glass below the
-       viewport; the bar's contents sit above it. */
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-bottom: 1px solid var(--rule-soft);
+    /* Phones with a notch or island keep the bar's words below it. */
+    padding-top: env(safe-area-inset-top, 0px);
+    color: var(--bar-ink);
+    transition:
+      background-color 450ms var(--ease-open),
+      border-color 450ms var(--ease-open),
+      color 450ms var(--ease-open);
   }
 
-  /* A skirt of the bar's own colour hanging below it, so that while
-     Safari's toolbar slides away or back there is no gap for the page to
-     show through. */
-  .nav-bar::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    height: 50vh;
-    background: var(--color-madder);
+  /* Over the opening photograph: no ground, white words. */
+  .nav-bar.is-over {
+    --bar-ink: var(--color-bract);
+    --bar-ink-2: rgb(var(--ch-bract) / 0.9);
+    background: transparent;
+    border-bottom-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* Services opens split, its words on the blush at the left: the bar
+     crosses both the blush and the photograph, so its words stay in ink. */
+  @media (min-width: 701px) {
+    :global(html.split-opening) .nav-bar.is-over {
+      --bar-ink: var(--color-cochineal);
+      --bar-ink-2: var(--color-cochineal);
+      /* Its right half would sit on the photograph's shadows, so here the
+         bar keeps the blush, and the photograph begins beneath it. */
+      background: var(--color-madder);
+    }
+
+    :global(html.split-opening) .nav-bar.is-over .nav-item-action a:hover,
+    :global(html.split-opening) .nav-bar.is-over .nav-item-action a:focus-visible {
+      background: var(--color-cochineal);
+      border-color: var(--color-cochineal);
+      color: var(--color-madder);
+    }
   }
 
   /* Same box as a .band, so the wordmark sits directly below the first
@@ -158,10 +174,8 @@ const isCurrent = (href: string) => {
   .nav-inner {
     --word-rule: 0.5px;
     --word-pad: calc(0.42rem + var(--word-rule)) 0.42rem;
-    max-width: 62rem;
-    margin-inline: auto;
     min-height: var(--bar-h);
-    padding: 0.5rem clamp(1.25rem, 5vw, 3rem);
+    padding: 0.5rem clamp(1.25rem, 3.2vw, 2.75rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -174,6 +188,8 @@ const isCurrent = (href: string) => {
     gap: 0.55rem;
     text-decoration: none;
     flex: none;
+    color: var(--bar-ink);
+    transition: color 450ms var(--ease-open);
   }
 
   /* The name in the title page's face: Sprat's wide light cut, set small. */
@@ -183,9 +199,9 @@ const isCurrent = (href: string) => {
     font-weight: 300;
     line-height: 1;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.3em;
     /* Room between the two words, as on the title page. */
-    word-spacing: 0.7em;
+    word-spacing: 0.5em;
     padding-block: var(--word-pad);
     border-bottom: var(--word-rule) solid transparent;
     white-space: nowrap;
@@ -266,36 +282,37 @@ const isCurrent = (href: string) => {
     align-items: center;
     gap: 0.4em;
     font-family: var(--font-label);
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.68rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.22em;
     text-decoration: none;
     line-height: 1;
     padding-block: var(--word-pad);
     border-bottom: var(--word-rule) solid transparent;
-    color: var(--color-ink-2);
+    color: var(--bar-ink-2);
     white-space: nowrap;
+    transition: color 450ms var(--ease-open), border-color 300ms var(--ease-open);
   }
 
   .nav-inline a:hover {
-    color: var(--color-cochineal);
-    border-bottom-color: rgb(var(--ch-quick) / 0.35);
+    color: var(--bar-ink);
+    border-bottom-color: currentColor;
   }
 
   .nav-inline a[aria-current='page'] {
-    color: var(--color-cochineal);
+    color: var(--bar-ink);
     border-bottom-style: solid;
     border-bottom-width: var(--word-rule);
-    border-bottom-color: rgb(var(--ch-quick) / 0.6);
+    border-bottom-color: currentColor;
   }
 
   /* Book a Call: boxed like a button, so it reads as the one action in a
      row of places. Filled on hover and when it is the page you are on. */
   .nav-inline .nav-item-action a {
     padding: 0.62rem 0.95rem;
-    border: 1px solid rgb(var(--ch-ink) / 0.55);
-    color: var(--color-cochineal);
+    border: 1px solid currentColor;
+    color: var(--bar-ink);
     translate: none;
     transition:
       background-color 300ms var(--ease-open),
@@ -311,16 +328,24 @@ const isCurrent = (href: string) => {
     color: var(--color-madder);
   }
 
+  .nav-bar.is-over .nav-item-action a:hover,
+  .nav-bar.is-over .nav-item-action a:focus-visible,
+  .nav-bar.is-over .nav-item-action a[aria-current='page'] {
+    background: var(--color-bract);
+    border-color: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+
   /* ---- The control ---- */
   .menu-btn {
     align-items: center;
     gap: 0.6rem;
     background: none;
     border: 0;
-    color: var(--color-cochineal);
+    color: var(--bar-ink);
     font-family: var(--font-label);
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.68rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     padding: 0.35rem 0;
@@ -380,8 +405,8 @@ const isCurrent = (href: string) => {
      scrolling. */
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     @media (hover: hover) {
-      .nav-bar {
-        background: color-mix(in srgb, var(--color-madder) 74%, transparent);
+      .nav-bar:not(.is-over) {
+        background: color-mix(in srgb, var(--color-madder) 94%, transparent);
         -webkit-backdrop-filter: blur(18px) saturate(1.2);
         backdrop-filter: blur(18px) saturate(1.2);
       }
@@ -397,7 +422,7 @@ const isCurrent = (href: string) => {
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .nav-bar {
+    .nav-bar:not(.is-over) {
       background: var(--color-madder);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
@@ -717,6 +742,29 @@ const isCurrent = (href: string) => {
 
 
   onPage(() => {
+    // Over the opening photograph the bar is transparent; past it, solid.
+    // A page "opens on a photograph" when the first thing in main is a
+    // dark photographic ground (or Services' split opening).
+    const bar = document.querySelector<HTMLElement>('.nav-bar');
+    // The chapter rail renders first on some pages; it is not the opening.
+    const opening = document.querySelector<HTMLElement>('main > :not(.rail, .rail-toc, script, style)');
+    const photoOpening = opening?.matches('.on-dark, .split-open') ?? false;
+    document.documentElement.classList.toggle('split-opening', opening?.matches('.split-open') ?? false);
+    const offs: (() => void)[] = [];
+    if (bar && opening && photoOpening) {
+      const update = () => {
+        const over = opening.getBoundingClientRect().bottom - bar.offsetHeight > 0;
+        bar.classList.toggle('is-over', over);
+      };
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      offs.push(() => {
+        window.removeEventListener('scroll', update);
+        window.removeEventListener('resize', update);
+      });
+    } else bar?.classList.remove('is-over');
+
     const panel = document.querySelector<HTMLElement>('[data-menu]');
     const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
     const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
@@ -779,8 +827,10 @@ const isCurrent = (href: string) => {
       return () => {
         document.removeEventListener('keydown', onKey);
         document.documentElement.style.overflow = '';
+        offs.forEach((off) => off());
       };
     }
+    return () => offs.forEach((off) => off());
   });
 
 </script>
