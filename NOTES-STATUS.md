@@ -48,6 +48,20 @@ and the choice is Joan's.
 | HAPPENINGS: RELATIONAL → HAPPENINGS | **Done** — the heading over the two gatherings on Work with me |
 | Images "not so stretched out" | **Done in part** — no image is distorted; the Work with me banner was a tall photo cropped into a thin strip (now a wide photo), and About now keeps Joan in frame. **Open:** two originals are small for full width — `about.jpg` (1024 px) and `rose.jpg` (1062 px). Larger files (2000 px+) would make them crisp |
 
+## Joan's 11/16 notes — homepage
+
+| Note | Status |
+|---|---|
+| BOOK tab → BOOK A CALL, boxed like a button, linked to the booking page | **Done** — the last tab in the bar is a boxed **Book a Call**, filled on hover; boxed in the phone menu too. It opens the booking page (/begin/), whose label and title now read Book a Call |
+| Remove the Get in Touch banner (Book a Complimentary Call) at the foot of the homepage | **Done** — the homepage now ends on the land acknowledgment. Other pages keep Get in Touch |
+| Land acknowledgment at the very end, over an image of the lake water | **Done, image open** — her text, verbatim, on a glass pane at the foot of the page. **Open:** there is no photo of Lake Michigan in the site's images yet; until there is, it stands on the closing photo every page shares (TODO-LAKE in `src/pages/index.astro`) |
+| Intro banner: MA. SOMATRIX / new subtitle / Chicago & Beyond | **Done**, verbatim, her full stop after MA included. On phones and tablets the subtitle takes three even lines |
+| "I am Joan. Welcome." with her portrait, the welcome text, BELONG HERE → Services | **Done**, verbatim. Replaces the Founder & Educator section (her 10/31 text) on the homepage; that text remains in the source notes |
+| WHAT IS MA SOMATRIX? text, ENTER MA → Book a Call page | **Done**, verbatim. The triangle stays in this section: her last line ("You are a living doorway…") waits beside it, and Ma / Soma / Matrix still open her definitions. **Clash:** the old heading "The sacred process of embodiment" and title "Ma. Soma. Matrix." are replaced by "What is Ma Somatrix?" |
+| TESTIMONIAL | **Open** — the place is ready below What is Ma Somatrix? and appears as soon as there is a testimonial. Needs the words and the name to credit |
+| 1:1 / Immersions / Relational Integrity Labs / Spine Society / Zen Shiatsu | **Done, two links provisional** — the five cards, in her order and names. **Check with Joan:** Services has no "Immersions" section, so that card opens This Very Body (the program); there is no Zen Shiatsu offering yet, so that card opens Zen Shiatsu Bodywork in the Lineage of Modalities on About. Liberate the Pelvis is no longer on the homepage (it stays on Services) |
+| (Not in her list) "What if the reason you're here…", the Red Rose gift card | **Clash — removed from the homepage** to follow her order exactly. The gift is still on Resources; either can come back in a moment |
+
 ## Build-session notes this round
 
 | Note | Status |

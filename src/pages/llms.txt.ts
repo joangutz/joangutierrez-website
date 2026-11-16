@@ -46,7 +46,7 @@ export const GET: APIRoute = async () => {
     `- [Services](${abs('/services/')}): every offering, how a session goes, how consent works, prices, and the application form.`,
     `- [About](${abs('/about/')}): Joan's biography and her Lineage of Modalities — Seki Method; Somatic Sexology – Certified Sexological Bodywork; Holistic Pelvic Care™; Zen Shiatsu Bodywork.`,
     `- [Resources](${abs('/resources/')}): ${kit.freebie} — ${kit.freebieBody}`,
-    `- [Begin](${abs('/begin/')}): ${booking.label}.`,
+    `- [Book a Call](${abs('/begin/')}): ${booking.label}.`,
     `- [The Work](${abs('/the-work/')}): Erotic Embodiment is the practice of listening again.`,
     '',
     '## Contact',

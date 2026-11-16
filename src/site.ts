@@ -142,13 +142,17 @@ export const contact = {
 export interface NavItem {
   href: string;
   label: string;
+  /** Drawn as a boxed button, set apart from the other tabs. */
+  action?: boolean;
 }
 
 export const nav: readonly NavItem[] = [
   { href: '/services/', label: 'Services' },
   { href: '/about/', label: 'About' },
   { href: '/resources/', label: 'Resources' },
-  { href: '/begin/', label: 'Begin' },
+  // Joan, 11/16: "BOOK A CALL", boxed like a button, linked to the
+  // booking page.
+  { href: '/begin/', label: 'Book a Call', action: true },
 ];
 
 /**
@@ -232,5 +236,53 @@ export const beginHere = [
     note: 'free monthly gathering',
     collage: 'roots-territories.jpg',
     register: 'gathering',
+  },
+] as const;
+
+/**
+ * The five cards on the homepage — Joan's own list and names (11/16),
+ * apart from the Services page's list above so each page can name things
+ * its own way.
+ */
+export const homeCards = [
+  // Joan's five, in her order and her words, 11/16.
+  {
+    href: '/services/#one-to-one',
+    title: '1:1',
+    note: '',
+    collage: 'erotic-embodiment.jpg',
+    register: 'one',
+  },
+  {
+    // TODO-JOAN: "Immersions" points at This Very Body, the immersive
+    // program, until Services has a section by that name.
+    href: '/services/#this-very-body',
+    title: 'Immersions',
+    note: '',
+    collage: 'desire-mapping.jpg',
+    register: 'program',
+  },
+  {
+    href: '/services/#relational-integrity-labs',
+    title: 'Relational Integrity Labs',
+    note: '',
+    collage: 'all-in-one.jpg',
+    register: 'gathering',
+  },
+  {
+    href: '/services/#spine-society',
+    title: 'Spine Society',
+    note: '',
+    collage: 'roots-territories.jpg',
+    register: 'gathering',
+  },
+  {
+    // TODO-JOAN: Services has no Zen Shiatsu offering yet; until it does,
+    // this opens her Zen Shiatsu Bodywork in the Lineage of Modalities on About.
+    href: '/about/#zen-shiatsu-bodywork',
+    title: 'Zen Shiatsu',
+    note: '',
+    collage: 'scar-tissue.jpg',
+    register: 'one',
   },
 ] as const;

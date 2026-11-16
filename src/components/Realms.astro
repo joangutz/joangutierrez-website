@@ -631,8 +631,14 @@ const AT = [
   }
 
   /* Narrow: the triangle becomes the chain Joan drew — Matrix above Ma above
-     Soma — and the panel follows beneath it. */
+     Soma — and the panel follows beneath it. Beneath, a change of height
+     moves nothing above it, so the panel holds only what is shown rather
+     than keeping room for the longest definition. */
   @media (max-width: 620px) {
+    :global(.js) .panel > .view:not(.is-shown) {
+      display: none;
+    }
+
     .triad-shape {
       aspect-ratio: auto;
       padding: 0;

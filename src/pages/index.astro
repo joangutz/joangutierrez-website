@@ -4,10 +4,9 @@ import Link from '../components/Link.astro';
 import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
-import GiftCard from '../components/GiftCard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, booking, beginHere, withBase } from '../site';
+import { site, homeCards, withBase } from '../site';
 import { person } from '../seo';
 
 const entry = await getEntry('home', 'home');
@@ -23,11 +22,43 @@ const hasQuotes = (await getCollection('testimonials')).length > 0;
 
 const subWords = h.hero.tagline.split(' ');
 
+/**
+ * TODO-LAKE: the land acknowledgment closes the page over the water of
+ * Lake Michigan. Until a photograph of the lake is in /assets/photos/, it
+ * stands on the closing photograph every page shares. Put the file's name
+ * here (e.g. 'lake.jpg').
+ */
+const LAKE_PHOTO: string | null = null;
+
 /** The kind each colour stands for, named under each card. */
 const KIND: Record<string, string> = { one: '1:1', program: 'Program', gathering: 'Happenings' };
-const subHalf = Math.ceil(subWords.length / 2);
-const subFirst = subWords.slice(0, subHalf).join(' ');
-const subSecond = subWords.slice(subHalf).join(' ');
+/**
+ * On narrow screens the subtitle takes three lines of about equal length
+ * (by letters, not words), so justifying each across the full width opens
+ * even gaps. Halves by word count were too long for a phone once Joan's
+ * line grew to eleven words.
+ */
+const subLines: string[] = (() => {
+  const total = subWords.join(' ').length;
+  const lines: string[][] = [[]];
+  let run = 0;
+  subWords.forEach((w, i) => {
+    const line = lines[lines.length - 1];
+    const target = (total * lines.length) / 3;
+    // Break before this word if its middle would fall past the line's share.
+    if (line.length && lines.length < 3 && run + w.length / 2 > target) lines.push([]);
+    lines[lines.length - 1].push(w);
+    run += w.length + (i ? 1 : 0);
+  });
+  // A short joining word (for, as, of…) reads with what follows it, so it
+  // starts the next line rather than ending this one.
+  for (let i = 0; i < lines.length - 1; i++) {
+    while (lines[i].length > 1 && lines[i][lines[i].length - 1].length <= 3) {
+      lines[i + 1].unshift(lines[i].pop()!);
+    }
+  }
+  return lines.map((l) => l.join(' '));
+})();
 
 /**
  * The site this replaces was one page behind hash anchors, and the one before
@@ -47,7 +78,7 @@ const movedAnchors = {
   title={`${site.name} — ${site.tagline}`}
   description={`${site.tagline}. Chicago, IL — in-person. Internationally — online. Open to travel.`}
   bare
-  close
+  closingPhoto={LAKE_PHOTO ?? undefined}
   schema={[person]}
 >
   {/* 1 · The title card. The name runs margin to margin, and the line under
@@ -77,7 +108,7 @@ const movedAnchors = {
             width opened gaps a word wide; halves give both lines the same
             number of gaps. */}
         <p class="subtitle">
-          {subFirst}<br class="sub-break" /> {subSecond}
+          {subLines.map((l, i) => (i ? <><br class="sub-break" /> {l}</> : l))}
         </p>
       </div>
 
@@ -96,39 +127,67 @@ const movedAnchors = {
   {/*
     Between the two photographs, one continuous ground. The sections are told
     apart by what they hold and by soft swells of tone — never by a hard edge
-    or a change of colour family. The first pass gave each section its own
-    ground and read as a stack of separate pages; this reads as one place.
+    or a change of colour family. Joan's order, 11/16:
 
       hero      photograph — the opening frame
-      realms    the ground
-      question  the ground, with a pool of light behind the words
-      begin     the ground
-      founder   a swell a shade deeper, portrait in colour
-      gift      the gift card on a swell of tone
-      close     photograph — the closing frame
+      welcome   a swell a shade deeper: her portrait and her welcome
+      realms    the ground: What is Ma Somatrix? and the triangle
+      quotes    the ground (once there are testimonials)
+      cards     the ground: her five
+      land      photograph — the lake, and her land acknowledgment
   */}
 
-  {/* 2 · Ma. Soma. Matrix. */}
-  <section class="band section">
-    <div class="wide">
-      <span class="label">{h.realms.label}</span>
-      <h2 class="section-title">{h.realms.title}</h2>
-
-      <Realms intro={h.realms.intro} class="realms-row rise" />
-    </div>
-  </section>
-
-  {/* 3 · One question, in a pool of light that dissolves into the ground
-      on every side, like the light in the flower photographs. */}
-  <section class="glow">
+  {/* 2 · I am Joan. Welcome. The portrait keeps its colour here — grey
+      reads as a record, and this is where a reader meets a person. */}
+  <section class="swell" id="welcome">
     <div class="band section">
-      <div class="wide">
-        <p class="question-text">{h.question.text}</p>
+      <div class="wide story">
+        <div class="story-portrait film rise">
+          <Portrait
+            src={h.welcome.portrait}
+            alt={h.welcome.alt}
+            colour
+            sizes="(max-width: 900px) 60vw, 26vw"
+          />
+        </div>
+        <div class="story-text rise">
+          <h2 class="section-title">{h.welcome.title}</h2>
+          {h.welcome.paragraphs.map((p) => <p>{p}</p>)}
+          <p class="story-closing">{h.welcome.closing}</p>
+          <Link variant="action" href={withBase('/services/')}>{h.welcome.link}</Link>
+        </div>
       </div>
     </div>
   </section>
 
-  {/* 4 · Begin here — the offerings, by name only. */}
+  {/* 3 · What is Ma Somatrix? Her text, then the triangle; her last line
+      waits beside it until a word is chosen. */}
+  <section class="band section" id="ma-somatrix">
+    <div class="wide">
+      <div class="realms-text rise">
+        <h2 class="section-title">{h.realms.title}</h2>
+        {h.realms.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+
+      <Realms intro={h.realms.intro} class="realms-row rise" />
+
+      <div class="realms-action">
+        <Link variant="action" href={withBase('/begin/')}>{h.realms.link}</Link>
+      </div>
+    </div>
+  </section>
+
+  {
+    hasQuotes && (
+      <section class="band section">
+        <div class="wide">
+          <Testimonials />
+        </div>
+      </section>
+    )
+  }
+
+  {/* 4 · Her five — the offerings, by name only. */}
   <section id="begin-here">
     <div class="band section">
     <div class="wide">
@@ -136,7 +195,7 @@ const movedAnchors = {
 
       <ul class="cards rise">
         {
-          beginHere.map((o) => (
+          homeCards.map((o) => (
             <li>
               <a class="card" href={withBase(o.href)} data-kind={o.register}>
                 <span class="card-art film">
@@ -162,46 +221,16 @@ const movedAnchors = {
     </div>
   </section>
 
-  {/* 5 · Founder & educator. The portrait keeps its colour here — grey reads
-      as a record, and this is the one place on the site where a reader is
-      meeting a person. */}
-  <section class="swell">
+  {/* 5 · The close: her land acknowledgment over the lake, on glass, in
+      place of Get in Touch. */}
+  <section slot="close" class="close land" aria-labelledby="land-title">
     <div class="band section">
-    <div class="wide story rise">
-      <div class="story-portrait film">
-        <Portrait
-          src={h.founder.portrait}
-          alt={h.founder.alt}
-          colour
-          sizes="(max-width: 900px) 60vw, 26vw"
-        />
-      </div>
-      <div class="story-text">
-        <span class="label">{h.founder.label}</span>
-        {h.founder.paragraphs.map((p) => <p>{p}</p>)}
-        <Link variant="door" href={withBase('/about/')}>{h.founder.link}</Link>
-      </div>
-    </div>
-    </div>
-  </section>
-
-  {
-    hasQuotes && (
-      <section class="band section">
-        <div class="wide">
-          <Testimonials />
+      <div class="wide">
+        <div class="glass-pane land-pane">
+          <h2 class="label" id="land-title">{h.land.label}</h2>
+          <p class="land-text">{h.land.text}</p>
         </div>
-      </section>
-    )
-  }
-
-  {/* 6 · A gift: the same card that turns as on Resources — the rose,
-      its name and Joan's line; turned over, her description and the way to
-      receive it. The rose ripples under the pointer. On the page's own
-      ground, with no band of tone around it. */}
-  <section class="band section gift-band">
-    <div class="wide rise">
-      <GiftCard />
+      </div>
     </div>
   </section>
 
@@ -298,13 +327,13 @@ const movedAnchors = {
   /* One string, justified edge to edge so it runs exactly the length of the
      name above it. Sized to the window so that on a wide screen it very
      nearly fills the line by itself and justification only evens out the
-     last few pixels; on a phone it takes two lines, both full width. */
+     last few pixels; narrower, it takes three lines, each full width. */
   .subtitle {
     margin: 0;
     padding-top: clamp(0.9rem, 1.8vw, 1.5rem);
     border-top: 1px solid rgb(var(--ch-bract) / 0.38);
     font-family: var(--font-label);
-    font-size: clamp(0.66rem, 1.42vw, 1.1rem);
+    font-size: clamp(0.66rem, 1.05vw, 1.1rem);
     font-weight: 500;
     line-height: 1.7;
     letter-spacing: 0.3em;
@@ -318,9 +347,9 @@ const movedAnchors = {
     display: none;
   }
 
-  /* Two lines below 720px. Any narrower and the single line has to shrink
-     past the point of being read; any wider and two lines leave gaps. */
-  @media (max-width: 720px) {
+  /* Three lines below 1000px. Any narrower and Joan's eleven words on one
+     line would shrink past the point of being read. */
+  @media (max-width: 1000px) {
     .sub-break {
       display: inline;
     }
@@ -401,38 +430,6 @@ const movedAnchors = {
   }
 
   /* ---- The ground and its swells ---- */
-  /* A pool of warmth, not a band: on the linen ground a lighter pool would
-     vanish, so it is a faint blush instead, and the ellipse is small enough
-     that it has fallen all the way back to the ground before it reaches any
-     edge, so there is no line where the section begins or ends. */
-  .glow {
-    display: grid;
-    align-items: center;
-    min-height: min(56svh, 520px);
-    background: radial-gradient(
-      ellipse 52% 46% at 50% 50%,
-      var(--pool-a) 0%,
-      var(--pool-b) 48%,
-      var(--color-madder) 100%
-    );
-  }
-
-  @media (max-width: 760px) {
-    .glow {
-      min-height: 0;
-      background: radial-gradient(
-        ellipse 90% 44% at 50% 50%,
-        var(--pool-a) 0%,
-        var(--pool-b) 50%,
-        var(--color-madder) 100%
-      );
-    }
-
-    .glow > .band {
-      padding-block: clamp(4.5rem, 18vw, 6rem);
-    }
-  }
-
   /* A shade deeper, eased in and out over the section's own padding so the
      change is felt as a swell rather than seen as an edge. On linen the
      secondary ink holds 8.94:1 at the deepest point. */
@@ -447,17 +444,6 @@ const movedAnchors = {
     );
   }
 
-  .question-text {
-    margin: 0;
-    color: var(--color-cochineal);
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 4.4vw, 3.1rem);
-    font-weight: 300;
-    line-height: 1.18;
-    letter-spacing: -0.015em;
-    text-wrap: balance;
-    max-width: 24ch;
-  }
 
   /* ---- Shared ---- */
   .section-title {
@@ -573,28 +559,45 @@ const movedAnchors = {
     color: var(--color-ink-2);
   }
 
-  /* ---- Founder ---- */
+  /* ---- Welcome ---- */
+  /* Portrait and text side by side; her welcome is long, so on a wide
+     screen the portrait stays in view beside it as it is read. */
   .story {
     display: grid;
     grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
     gap: clamp(1.75rem, 5vw, 3.5rem);
-    align-items: center;
+    align-items: start;
   }
 
-  .story-text p {
-    margin: 1.25rem 0 0;
-    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
-    line-height: 1.6;
+  @media (min-width: 781px) {
+    .story-portrait {
+      position: sticky;
+      top: clamp(1.5rem, 6vh, 3rem);
+    }
   }
 
-  .story-text .label {
-    margin-bottom: 0.5rem;
+  .story-text .section-title,
+  .realms-text .section-title {
+    margin: 0 0 0.5rem;
   }
 
-  /* Nested inside the story block rather than a direct child of the column,
-     so it needs the door gap named explicitly. */
-  .story-text :global(.lnk-door) {
-    margin-top: var(--gap-door);
+  .story-text p,
+  .realms-text p {
+    margin: 1.15rem 0 0;
+    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
+    line-height: 1.65;
+  }
+
+  /* Her last line, set apart. */
+  .story-text .story-closing {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    line-height: 1.3;
+  }
+
+  .story-text :global(.lnk-action) {
+    margin-top: var(--gap-door, 2rem);
   }
 
   @media (max-width: 780px) {
@@ -607,5 +610,26 @@ const movedAnchors = {
     }
   }
 
-  /* ---- The gift ---- */
+  /* ---- What is Ma Somatrix? ---- */
+  .realms-text {
+    max-width: 40rem;
+  }
+
+  .realms-action {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ---- Land acknowledgment ---- */
+  .land-pane {
+    max-width: min(46rem, 100%);
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .land-text {
+    margin: 1rem 0 0;
+    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
+    line-height: 1.7;
+  }
 </style>

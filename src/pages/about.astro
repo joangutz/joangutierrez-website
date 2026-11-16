@@ -115,6 +115,11 @@ const { Content: Lineage } = await render(lineageEntry);
       show(location.hash === '#lineage' ? 'lineage' : 'founder');
     }
 
+    // A link can name one modality (/about/#zen-shiatsu): open the Lineage
+    // tab, unfold that one, and bring it into view.
+    const slug = (t: string) =>
+      t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
     // Each modality folds: its name is the control, its text the panel. The
     // first opens on arrival. Built from the headings in lineage.md, so the
     // words stay in the markdown and nothing is lost without scripting.
@@ -123,6 +128,7 @@ const { Content: Lineage } = await render(lineageEntry);
       heads.forEach((h, i) => {
         const d = document.createElement('details');
         d.className = 'mod';
+        d.id = slug(h.textContent ?? '');
         if (i === 0) d.open = true;
         const sum = document.createElement('summary');
         sum.className = 'mod-name';
@@ -138,6 +144,15 @@ const { Content: Lineage } = await render(lineageEntry);
         d.append(sum, body);
         h.replaceWith(d);
       });
+    }
+
+    const hash = location.hash;
+    const named = hash.length > 1 ? document.getElementById(hash.slice(1)) : null;
+    if (named instanceof HTMLDetailsElement && named.classList.contains('mod')) {
+      document.querySelector<HTMLButtonElement>('[data-tab="lineage"]')?.click();
+      history.replaceState(null, '', hash);
+      for (const d of document.querySelectorAll<HTMLDetailsElement>('details.mod')) d.open = d === named;
+      named.scrollIntoView({ block: 'start' });
     }
 
   });

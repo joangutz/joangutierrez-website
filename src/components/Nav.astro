@@ -45,7 +45,7 @@ const isCurrent = (href: string) => {
       <ul>
         {
           nav.map((item) => (
-            <li class="nav-item">
+            <li class:list={['nav-item', { 'nav-item-action': item.action }]}>
               <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
@@ -89,7 +89,7 @@ const isCurrent = (href: string) => {
       <ul class="menu-list">
         {
           nav.map((item) => (
-            <li>
+            <li class:list={{ 'menu-item-action': item.action }}>
               <a
                 href={withBase(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
@@ -288,6 +288,27 @@ const isCurrent = (href: string) => {
     border-bottom-style: solid;
     border-bottom-width: var(--word-rule);
     border-bottom-color: rgb(var(--ch-quick) / 0.6);
+  }
+
+  /* Book a Call: boxed like a button, so it reads as the one action in a
+     row of places. Filled on hover and when it is the page you are on. */
+  .nav-inline .nav-item-action a {
+    padding: 0.62rem 0.95rem;
+    border: 1px solid rgb(var(--ch-ink) / 0.55);
+    color: var(--color-cochineal);
+    translate: none;
+    transition:
+      background-color 300ms var(--ease-open),
+      color 300ms var(--ease-open),
+      border-color 300ms var(--ease-open);
+  }
+
+  .nav-inline .nav-item-action a:hover,
+  .nav-inline .nav-item-action a:focus-visible,
+  .nav-inline .nav-item-action a[aria-current='page'] {
+    background: var(--color-cochineal);
+    border-color: var(--color-cochineal);
+    color: var(--color-madder);
   }
 
   /* ---- The control ---- */
@@ -544,6 +565,30 @@ const isCurrent = (href: string) => {
   .menu-list > li > a:hover,
   .menu-list > li > a[aria-current='page'] {
     color: var(--color-bract);
+  }
+
+  /* Book a Call, in the panel too: boxed, its words in the bar's capitals. */
+  .menu-list > li.menu-item-action > a {
+    justify-content: center;
+    margin-block: clamp(0.6rem, 1.6vh, 1rem);
+    padding: clamp(0.75rem, 1.8vh, 1rem) 1rem;
+    border: 1px solid rgb(var(--ch-bract) / 0.6);
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-bract);
+  }
+
+  .menu-list > li.menu-item-action > a:hover,
+  .menu-list > li.menu-item-action > a[aria-current='page'] {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+
+  .menu-list > li.menu-item-action > a :global(.menu-egg) {
+    display: none;
   }
 
   /* Children sit under their parent as a quiet indented row rather than a

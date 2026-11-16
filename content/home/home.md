@@ -5,39 +5,52 @@
 
 hero:
   # The wordmark splits across the full width of the window: one word at each
-  # margin, the whole first screen held open between them.
-  markLeft: Ma
+  # margin, the whole first screen held open between them. Joan's of 11/16,
+  # her full stop after Ma included.
+  markLeft: Ma.
   markRight: Somatrix
-  tagline: Somatic education delivered with artistry for vibrant health
-  place: Chicago and beyond
+  tagline: Holistic body-rooted care for liberated expression as you cross life's thresholds
+  place: Chicago & Beyond
   collage: hero.jpg
   alt: A body in low warm light, the curve of a hip and thigh with a band of sun falling across it.
 
-question:
-  text: What if the reason you're here isn't simply to accomplish something with your life but to experience being alive?
-
-realms:
-  label: The sacred process of embodiment
-  title: Ma. Soma. Matrix.
-  # What the panel beside the triangle says before a word is chosen.
-  intro:
-    - Life emerges and returns to the unmanifested womb of potential, entering between the breathing room of conscious space and light, to manifest as a living, breathing  presence in the world as Soma.
-    - "Your physical body: Soma is the crystallization of light: Ma born directly from the ultimate source of all creation: Matrix."
-    - You are a living doorway where the universe is actively making new meaning.
-
-founder:
-  label: Founder & Educator
+# Joan's text of 11/16, verbatim: her welcome, beside her portrait.
+welcome:
+  title: I am Joan. Welcome.
   paragraphs:
-    # Joan's text of 10/31, verbatim.
-    - In this very body I have touched a living matrix of meaning where reality is created and deconstructed. Crossing innumerable borders to remember the ancestral truths I carry in my pelvic root, I endeavor to not confuse the map with the territory. I approach the body as an altar, medium, and field capable of returning us to the common language of present awareness. My work as a human, artist, and somatic educator begins at the — point of a body — that knows how to listen, that responds from instinct, and that reclaims pleasure, presence, and aliveness.
-    - My name is Joan, a devoted amateur, full of love and dignity. I draw on my wounds and my strengths to return us to the pulse of life already beating within. Welcome to Ma Somatrix.
+    - Ma Somatrix is for courageous humans in the midst of delicate life transitions. I created it as a space for you to gain a deeper understanding of your body-energy-mind and how to care for it in this season of your life, through 1:1 sessions, embodiment workshops, and whole-body care education.
+    - I am dedicated to helping you nurture a source of freedom within your pelvis, the seat of your creative and erotic life, where a way of living rooted in love, compassion, and authentic expression is always available.
+    - Your body holds a whole matrix of sensation, instinct, and memory, and your sexuality moves through it like water through root and stone. It touches how you hold yourself, how you love, and how deeply you drink in your days. Your sexual wellbeing belongs to the core of who you are, and it deserves devoted care.
+    - This freedom can begin by addressing pain, discomfort, limitations, and challenges. It can also begin by fortifying what is already alive and searching for tenderness and curiosity. Tending to either can bring relief and expansion at emotional, relational, physical, and spiritual levels.
+    - Together, we co-create explorations where the stories of the mind loosen their grip and the quieter language of the body can be listened to. From there, ease opens up in feeling what is true, clarity about what you long for, permission to follow what delights you, a relationship with your body that grows more instinctive and unbound, and an intimacy with yourself and others that deepens over time.
+    - I have witnessed sacred truths reveal themselves when people irreverently follow what feels good and are willing to get curious about what they discover. When we learn the language of our senses, cultivate our attention, and take our health into our own hands, we feel what it means to be wholly alive.
+  closing: I am here in service to your wholeness.
   portrait: joan-home.jpg
   alt: Joan looking directly at the camera, a flower tucked behind one ear.
-  link: Learn more
+  link: Belong Here
+
+# Joan's text of 11/16, verbatim. Her last line stands beside the triangle,
+# where the definitions of Ma, Soma and Matrix open.
+realms:
+  title: What is Ma Somatrix?
+  paragraphs:
+    - I interpret the body as a matrix—a mother source of wisdom intricately weaving a coherent web that expresses itself through the state of your nervous system, creativity, sexuality, digestion, scar tissue, posture, and energetic field.
+    - "Your body, your soma, is a breathing presence in the world. It’s a crystallization of the light that comes through the void of space and time: Ma."
+    - The pelvic bowl holds the greatest concentration of this wisdom light. It is where dormant potential waits to awaken. Its gravitational pull also has the power to hold on to physical, emotional, and existential experiences. When left untended, it can disrupt life through pain, discomfort, disconnection, and shame. These disruptions can be held as an invitation to meet a new threshold. An invitation to alchemize a new dimension of yourself.
+    - When we work with the spaces in between, a doorway opens where new relationships and possibilities can be born.
+  intro:
+    - You are a living doorway where the universe is actively making new meaning.
+  link: Enter Ma
 
 beginHere:
   # Was Joan's "Begin Here"; renamed to match the Services page (see
   # NOTES-STATUS.md).
   label: Services
+
+# Joan's land acknowledgment of 11/16, verbatim. The last thing on the page,
+# over the lake.
+land:
+  label: Land Acknowledgment
+  text: I belong to the intersection of tallgrass prairies, eastern hardwood forests, and the Great Lakes basin where I drink and bathe in the freshwater of Lake Michigan. As a settler here, I acknowledge I move between the prairies, savannas, wetlands, and woodlands where the Council of the Three Fires, along many other tribes, such as the Miami, Ho-Chunk, Menominee, and Sac and Fox called home. I arrived from the Mexican-American Borderlands of El Paso and Ciudad Juarez, where my family settled after immigrating from my vibrant Mexico. I carry the medicine of these lands and all the others I have lived long enough to gather dreams, memories, and nourish kinship ties.
 
 ---

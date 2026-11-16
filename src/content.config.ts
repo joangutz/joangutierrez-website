@@ -112,20 +112,26 @@ const home = defineCollection({
       collage: z.string(),
       alt: z.string(),
     }),
-    question: z.object({ text: z.string() }),
-    realms: z.object({
-      label: z.string(),
+    /** Joan's welcome, beside her portrait. */
+    welcome: z.object({
       title: z.string(),
-      intro: z.array(z.string()),
-    }),
-    founder: z.object({
-      label: z.string(),
       paragraphs: z.array(z.string()),
+      closing: z.string(),
       portrait: z.string(),
       alt: z.string(),
       link: z.string(),
     }),
+    /** What is Ma Somatrix? — her text, then the triangle. */
+    realms: z.object({
+      title: z.string(),
+      paragraphs: z.array(z.string()),
+      /** What the panel beside the triangle says before a word is chosen. */
+      intro: z.array(z.string()),
+      link: z.string(),
+    }),
     beginHere: z.object({ label: z.string() }),
+    /** Her land acknowledgment, closing the page. */
+    land: z.object({ label: z.string(), text: z.string() }),
   }),
 });
 
