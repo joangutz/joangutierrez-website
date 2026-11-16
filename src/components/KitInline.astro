@@ -86,20 +86,29 @@ const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
     flex: none;
     font-family: var(--font-label);
     font-size: 0.66rem;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-bract);
-    background: rgb(var(--ch-glass) / 0.9);
-    border: 0;
-    padding: 0.7rem 1.1rem;
+    padding: 0 1.1rem;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: var(--color-cochineal);
     cursor: pointer;
-    transition: background-color 300ms var(--ease-open);
+    transition: background-color 350ms var(--ease-open), color 350ms var(--ease-open);
   }
 
-  .ki-send:hover,
-  .ki-send:focus-visible {
-    background: var(--color-plumstone);
+  .ki-send:hover:not(:disabled) {
+    background: var(--color-cochineal);
+    color: var(--color-bract);
+  }
+
+  .ki-dark .ki-send {
+    color: var(--color-bract);
+  }
+
+  .ki-dark .ki-send:hover:not(:disabled) {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
   }
 
   .ki-send:disabled {
@@ -135,16 +144,6 @@ const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
 
   .ki-dark .ki-input:focus-visible {
     border-color: var(--color-bract);
-  }
-
-  .ki-dark .ki-send {
-    color: var(--color-plumstone);
-    background: var(--color-bract);
-  }
-
-  .ki-dark .ki-send:hover,
-  .ki-dark .ki-send:focus-visible {
-    background: #fff;
   }
 
   .ki.is-done .ki-row {

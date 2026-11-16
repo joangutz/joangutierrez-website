@@ -191,25 +191,40 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
     border-color: var(--color-quick);
   }
 
+  /* The same hairline frame as the site's other actions. */
   .app-submit {
     font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-bract);
-    background: var(--color-quick);
-    border: 0;
-    padding: 0.95rem 1.5rem;
+    letter-spacing: 0.24em;
+    color: var(--color-cochineal);
+    background: transparent;
+    border: 1px solid currentColor;
+    padding: 1rem 1.6rem;
     cursor: pointer;
+    transition:
+      background-color 350ms var(--ease-open),
+      color 350ms var(--ease-open),
+      border-color 350ms var(--ease-open);
   }
 
-  .app-submit:hover {
-    background: var(--color-plumstone);
+  .app-submit:hover,
+  .app-submit:focus-visible {
+    background: var(--color-cochineal);
+    border-color: var(--color-cochineal);
+    color: var(--color-bract);
   }
 
-  :global(.on-dark) .app-submit:hover {
+  :global(.on-dark) .app-submit {
+    color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.06);
+  }
+
+  :global(.on-dark) .app-submit:hover,
+  :global(.on-dark) .app-submit:focus-visible {
     background: var(--color-bract);
+    border-color: var(--color-bract);
     color: var(--color-plumstone);
   }
 

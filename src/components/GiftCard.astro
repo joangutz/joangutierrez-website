@@ -285,18 +285,26 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     border-color: var(--color-bract);
   }
 
+  /* A hairline frame on the wine glass, like the site's other actions. */
   .take-send {
     flex: none;
     font-family: var(--font-label);
     font-size: 0.68rem;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-plumstone);
-    background: var(--color-bract);
-    border: 0;
+    letter-spacing: 0.24em;
+    color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.06);
+    border: 1px solid currentColor;
     padding: 0.8rem 1.3rem;
     cursor: pointer;
+    transition: background-color 350ms var(--ease-open), color 350ms var(--ease-open);
+  }
+
+  .take-send:hover:not(:disabled),
+  .take-send:focus-visible {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
   }
 
   .take-send:disabled {

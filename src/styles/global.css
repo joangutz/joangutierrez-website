@@ -831,26 +831,46 @@ html[data-palette='sand'] {
     border-bottom-color: var(--color-bract);
   }
 
-  /* The one thing to do. */
+  /* The one thing to do: a hairline frame of tracked capitals rather than a
+     filled block (11/16), so it belongs to whatever it sits on. On paper,
+     ink; on a photograph or a dark ground, white, over a breath of frosted
+     glass. It fills softly when pointed at. */
   .lnk-action {
     display: inline-flex;
     align-items: baseline;
-    background: var(--color-quick);
-    color: var(--color-bract);
+    border: 1px solid currentColor;
+    background: transparent;
+    color: var(--color-cochineal);
     font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    padding: 0.95rem 1.5rem;
+    letter-spacing: 0.24em;
+    padding: 1rem 1.6rem;
+    transition:
+      background-color 350ms var(--ease-open),
+      color 350ms var(--ease-open),
+      border-color 350ms var(--ease-open);
   }
 
-  .lnk-action:hover {
-    background: var(--color-plumstone);
+  .lnk-action:hover,
+  .lnk-action:focus-visible {
+    background: var(--color-cochineal);
+    border-color: var(--color-cochineal);
+    color: var(--color-bract);
   }
 
-  .on-dark .lnk-action:hover {
+  .on-dark .lnk-action {
+    color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.06);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .on-dark .lnk-action:hover,
+  .on-dark .lnk-action:focus-visible {
     background: var(--color-bract);
+    border-color: var(--color-bract);
     color: var(--color-plumstone);
   }
 
