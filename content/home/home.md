@@ -5,9 +5,8 @@
 
 hero:
   # The wordmark splits across the full width of the window: one word at each
-  # margin, the whole first screen held open between them. Joan's of 11/16,
-  # her full stop after Ma included.
-  markLeft: Ma.
+  # margin, the whole first screen held open between them.
+  markLeft: Ma
   markRight: Somatrix
   tagline: Holistic body-rooted care for liberated expression
   place: Chicago & Beyond
