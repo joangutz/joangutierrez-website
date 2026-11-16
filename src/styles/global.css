@@ -1164,6 +1164,13 @@ html[data-palette='sand'] {
     }
   }
 
+  /* On a photograph that fills a whole tall section (Services' scenes, the
+     homepage's What is Ma Somatrix?) the moving grain read as a glitch and
+     was heavy to repaint on an iPad: there it holds still. */
+  .film.film-still::before {
+    animation: none;
+  }
+
   .grained {
     position: relative;
     isolation: isolate;
