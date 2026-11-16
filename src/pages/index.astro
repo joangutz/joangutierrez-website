@@ -157,7 +157,7 @@ const movedAnchors = {
         {
           homeCards.map((o) => (
             <li>
-              <a class="card" href={withBase(o.href)} data-kind={o.register}>
+              <a class="card cardstock" href={withBase(o.href)} data-register={o.register}>
                 <span class="card-art film">
                   <Collage
                     src={o.collage}
@@ -167,6 +167,7 @@ const movedAnchors = {
                   />
                 </span>
                 <span class="card-meta">
+                  <span class="card-key card-rule" aria-hidden="true"></span>
                   <span class="card-title">{o.title}</span>
                   {o.note && <span class="card-container">{o.note}</span>}
                 </span>
@@ -435,34 +436,39 @@ const movedAnchors = {
     }
   }
 
+  /* Each a small sheet of cardstock, the photograph mounted in it, the
+     name beneath led by a fine rule in the card's colour — the same card
+     as on Services. */
   .card {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 1rem;
+    height: 100%;
+    padding: clamp(0.55rem, 1vw, 0.75rem) clamp(0.55rem, 1vw, 0.75rem) clamp(1rem, 1.8vw, 1.35rem);
     text-decoration: none;
+    box-shadow: 0 1px 2px rgb(var(--ch-plum) / 0.08), 0 12px 28px rgb(var(--ch-plum) / 0.08);
+    transition: box-shadow 450ms var(--ease-open), translate 450ms var(--ease-open);
+  }
+
+  .card:hover,
+  .card:focus-visible {
+    translate: 0 -3px;
+    box-shadow: 0 2px 4px rgb(var(--ch-plum) / 0.1), 0 18px 38px rgb(var(--ch-plum) / 0.12);
   }
 
   .card-art {
     display: block;
     aspect-ratio: 3 / 4;
     overflow: hidden;
-    border: 1px solid var(--rule);
-    border-bottom: 5px solid var(--kind, var(--rule));
   }
 
-  .card[data-kind='one'] { --kind: var(--kind-one); --kind-text: var(--kind-one); }
-  .card[data-kind='program'] { --kind: var(--kind-program); --kind-text: var(--kind-program-text); }
-  .card[data-kind='gathering'] { --kind: var(--kind-gathering); --kind-text: var(--kind-gathering); }
+  .card-rule {
+    gap: 0;
+    margin-bottom: 0.55rem;
+  }
 
-  .card-kind {
-    display: block;
-    margin-top: 0.45rem;
-    font-family: var(--font-label);
-    font-size: 0.6rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--kind-text, var(--color-ink-2));
+  .card-rule::before {
+    width: 1.6rem;
   }
 
   .card-art :global(.collage) {
@@ -476,6 +482,7 @@ const movedAnchors = {
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .card,
     .card-art :global(.collage) {
       transition: none;
     }
@@ -489,12 +496,15 @@ const movedAnchors = {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    padding-inline: 0.2rem;
   }
 
   .card-title {
     font-family: var(--font-soft);
-    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
-    line-height: 1.15;
+    font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.12;
+    color: var(--color-cochineal);
   }
 
   .card-container {
