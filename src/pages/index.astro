@@ -204,7 +204,11 @@ const movedAnchors = {
   .hero {
     position: relative;
     isolation: isolate;
-    min-height: min(92svh, 940px);
+    /* The whole window, sized like the welcome portrait to the large
+       viewport (Safari's toolbars hidden), so no strip of the next section
+       shows beneath it at any point. */
+    min-height: 100vh;
+    min-height: 100lvh;
     display: grid;
     overflow: hidden;
     background: var(--color-plumstone);
@@ -257,6 +261,9 @@ const movedAnchors = {
     gap: clamp(3rem, 12vh, 7rem);
     /* The bar sits over the top of the photograph; the name starts below it. */
     padding: calc(clamp(1.5rem, 4vh, 3rem) + var(--bar-h) + env(safe-area-inset-top, 0px)) clamp(1.25rem, 5vw, 3rem) clamp(2.5rem, 7vh, 4.5rem);
+    /* Lifted by the toolbars' height while they show, so Chicago & Beyond
+       stays in sight above them rather than under them. */
+    padding-bottom: calc(clamp(2.5rem, 7vh, 4.5rem) + 100lvh - 100svh);
   }
 
   /* One name, pushed to both margins, with the whole window between. */
