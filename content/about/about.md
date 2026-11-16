@@ -5,7 +5,7 @@
 
 name: Joan Gutierrez
 roles: Founder | Artist | Somatic Sexologist
-line: Partnering with people who are curious about the potentials of embodied living rooted in holistic pelvic, womb, and erotic compassionate care.
+line: Partnering with people who are curious about the potentials of embodied living.
 more: Learn more
 portrait: joan-roots.jpg
 alt: Joan seated, in a black dress embroidered with flowers, smiling toward the camera.
