@@ -263,7 +263,9 @@ export const homeCards = [
     register: 'program',
   },
   {
-    href: '/services/#relational-integrity-labs',
+    // TODO-JOAN: not on Services (her Events / Workshops lists only Spine
+    // Society), so this opens Events / Workshops.
+    href: '/services/#events',
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',

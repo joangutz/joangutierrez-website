@@ -18,10 +18,10 @@ const s = entry.data;
 
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 
-/* The two gatherings keep their names, notes and collages in one list
-   (site.ts), shared with the homepage. */
+/* The gathering keeps its name, note and collage in one list (site.ts),
+   shared with the homepage. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-const events = [byHref('/services/#spine-society'), byHref('/services/#relational-integrity-labs')];
+const events = [byHref('/services/#spine-society')];
 const anchor = (h: string) => h.split('#')[1];
 
 /* A collage for each modality — texture and colour, not illustration. */
@@ -87,7 +87,7 @@ const catalog = {
 >
   <ChapterRail />
 
-  <PageBanner title={s.title} lede={s.lede} image="happenings.jpg" cinema />
+  <PageBanner title={s.title} image="happenings.jpg" cinema />
 
   {/* 1 · Offerings: who this is for, in Joan's four groups. */}
   <section class="band section" id="offerings">
@@ -139,46 +139,34 @@ const catalog = {
     </div>
   </section>
 
-  {/* 3 · 1:1 Sessions: the lengths and prices, and beside them the note
-      that holds every plan. */}
+  {/* 3 · 1:1 Sessions: her lengths and prices, line by line, as she
+      wrote them. */}
   <section class="band section" id="one-to-one">
-    <div class="wide price-grid">
-      <div>
-        <h2 class="section-title">{s.oneToOne.title}</h2>
-        <table class="prices">
-          <thead>
-            <tr>
-              <th scope="col"><span class="visually-hidden">Length</span></th>
-              <th scope="col">Online</th>
-              <th scope="col">In-person</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              s.oneToOne.rows.map((r) => (
-                <tr>
-                  <th scope="row">{r.minutes} minutes</th>
-                  <td>{r.online !== undefined ? money(r.online) : <span class="none" aria-label="Not offered">—</span>}</td>
-                  <td>{r.inPerson !== undefined ? money(r.inPerson) : <span class="none" aria-label="Not offered">—</span>}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <aside class="ground-note" aria-labelledby="note-title">
-        <span class="label" id="note-title">{s.note.title}</span>
-        {s.note.paragraphs.map((p) => <p>{p}</p>)}
-        <p class="note-ethics"><Link href={contact.ethics}>sexologicalbodyworkers.org/ethics</Link></p>
-      </aside>
+    <div class="wide">
+      <h2 class="section-title">{s.oneToOne.title}</h2>
+      <dl class="prices">
+        {
+          s.oneToOne.rows.map((r) => (
+            <div class="price-row">
+              <dt>{r.minutes} minutes</dt>
+              <dd>
+                {[
+                  r.online !== undefined ? `${money(r.online)} online` : '',
+                  r.inPerson !== undefined ? `${money(r.inPerson)} in-person` : '',
+                ]
+                  .filter(Boolean)
+                  .join(' / ')}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
   </section>
 
   {/* 4 · The modalities, as cards like the homepage's. */}
   <section class="band section" id="modalities">
     <div class="wide">
-      <h2 class="label">Modalities</h2>
       <ul class="modalities">
         {
           s.modalities.map((m) => (
@@ -199,7 +187,7 @@ const catalog = {
       </ul>
 
       {/* 5 · Events and workshops. */}
-      <h2 class="label events-label">{s.events.title}</h2>
+      <h2 class="label events-label" id="events">{s.events.title}</h2>
       <div class="tile-row">
         {events.map((h) => <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />)}
       </div>
@@ -386,97 +374,46 @@ const catalog = {
   }
 
   /* ---- 1:1 Sessions ---- */
-  .price-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: start;
-  }
-
   .prices {
-    width: 100%;
-    margin-top: 1.75rem;
-    border-collapse: collapse;
-    font-variant-numeric: tabular-nums;
+    margin: 1.75rem 0 0;
+    max-width: 34rem;
   }
 
-  .prices th,
-  .prices td {
-    padding: 0.95rem 0.5rem;
+  .price-row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.95rem 0;
     border-bottom: 1px solid var(--rule);
-    text-align: left;
   }
 
-  .prices thead th {
-    padding-top: 0;
-    font-family: var(--font-label);
-    font-size: 0.66rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
+  .price-row:first-child {
+    border-top: 1px solid var(--rule);
   }
 
-  .prices tbody th {
+  .price-row dt {
     font-family: var(--font-display);
-    font-weight: 400;
     font-size: clamp(1.05rem, 2vw, 1.25rem);
   }
 
-  .prices td {
-    font-size: 1.1rem;
+  .price-row dd {
+    margin: 0;
+    font-size: 1.08rem;
+    font-variant-numeric: tabular-nums;
   }
 
-  .prices .none {
-    color: rgb(var(--ch-ink) / 0.35);
-  }
-
-  .prices th:first-child {
-    padding-left: 0;
-  }
-
-  /* The note is a boundary statement, so it stands as its own pane — the
-     wine glass of the turned cards, over the card texture's colour. */
-  .ground-note {
-    padding: clamp(1.5rem, 3.5vw, 2.25rem);
-    background: rgb(var(--ch-glass) / 0.92);
-    color: var(--color-bract);
-    box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.14);
-  }
-
-  .ground-note .label {
-    color: rgb(var(--ch-bract) / 0.82);
-  }
-
-  .ground-note p {
-    margin: 1rem 0 0;
-    font-size: 0.98rem;
-    line-height: 1.65;
-  }
-
-  .ground-note p:first-of-type {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    line-height: 1.35;
-  }
-
-  .ground-note .note-ethics {
-    margin-top: 1.5rem;
-    padding-top: 1.1rem;
-    border-top: 1px solid rgb(var(--ch-bract) / 0.18);
-    font-size: 0.92rem;
-  }
-
-  @media (max-width: 860px) {
-    .price-grid {
+  @media (max-width: 420px) {
+    .price-row {
       grid-template-columns: minmax(0, 1fr);
+      gap: 0.2rem;
     }
   }
 
   /* ---- Modalities ---- */
   .modalities {
     list-style: none;
-    margin: 1.25rem 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));

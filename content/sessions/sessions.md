@@ -4,12 +4,13 @@
 # apostrophes, as in "we´ll", are set as apostrophes.) The page before this
 # one — the session arc, "How consent works here", the Three-Month Study and
 # Liberate the Pelvis — is kept in /content/_source/ and in git history.
-# The "Note on all plans" is verbatim and must stay that way — it is a
-# professional boundary statement, not a disclaimer.
+# Only her words from these notes are on the page. (The earlier "Note on all
+# plans" is kept in the source file named above.)
 
 title: Services
-lede: Every session is collaborative and shaped by your intention — a simple, spoken statement of what you're choosing to explore.
-description: Somatic sexology, sexological bodywork, Holistic Pelvic Care™, ancestral nutrition and Zen Shiatsu with Joan Gutiérrez — 1:1 sessions online or in person in Edgewater, Chicago.
+# The description search engines show: her own opening lines of What to
+# Expect.
+description: Every session is its own living encounter. Each one is shaped by what is present, alive, and wanting attention in you that day.
 
 belong:
   label: Offerings
@@ -112,12 +113,5 @@ archive:
 quote:
   text: The body is the road back to what is true. Pause. Sense. Feel. Then dare to tend, with integrity, the deepest needs and desires you find there. This is how we become sovereign.
   by: Joan
-
-note:
-  title: Note on all plans
-  paragraphs:
-    - All work is client-led, consent-forward, and educational.
-    - I am a somatic sex educator, an artist, and a student of Zen Shiatsu. I am not a therapist nor medical provider. I don't diagnose or treat; I teach practices you carry out in your own body, at your own pace. These plans complement (and pair beautifully with) psychotherapy, pelvic floor physical therapy, licensed therapeutic bodywork, and medical care.
-    - Each month ends the way every session ends — with time to savor, reflect, and celebrate somatic openings.
 
 ---

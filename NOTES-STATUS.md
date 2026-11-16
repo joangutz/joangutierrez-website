@@ -64,21 +64,23 @@ and the choice is Joan's.
 
 ## Joan's 11/16 notes — Services
 
+**Standing rule (11/16):** no text on the site that Joan has not given — no labels, headings or lines of our own. Removed under it: the "Services" label and the kind labels (1:1 / Program / Happenings) on the homepage cards, the "Modalities" label, the price-table headings, and a search description written for Services (now her own opening line).
+
 Her notes as sent are kept in `content/_source/joan-2026-11-16-services.md`; the page before this one in `content/_source/services-before-2026-11-16.md`.
 
 | Note | Status |
 |---|---|
 | OFFERINGS: You belong here if you want to: | **Done**, verbatim — her second, grouped list (Body and belonging / Pleasure and desire / Healing and transition / Boundaries and agency), with her two closing lines set apart. **Check with Joan:** she sent two versions of this list; the first, ungrouped one is saved in the source file |
 | WHAT TO EXPECT, GET IN TOUCH → Book a Call page | **Done**, verbatim; "ACSB" links to the code of ethics. Her accent marks standing in for apostrophes ("we´ll") are set as apostrophes. Her closing wish is set apart, then the Get in Touch button |
-| 1:1 SESSIONS prices | **Done** — 60 min $120 online; 75 min $150 online / $180 in-person; 90 min $250 in-person; 120 min $320 online / $350 in-person, as a table. Search engines and llms.txt read the same prices |
-| Somatic Sexology, Holistic Pelvic Care, Ancestral Nutrition, Shiatsu | **Done**, verbatim, as four cards under "Modalities" (an interface word). The homepage Zen Shiatsu card now opens Shiatsu here |
-| EVENTS / WORKSHOPS: Spine Society (free monthly gathering) | **Done.** **Check with Joan:** Relational Integrity Labs is not in this list but is one of her five on the homepage, so it stays here beside Spine Society, so that card has somewhere to go |
+| 1:1 SESSIONS prices | **Done** — line by line exactly as she wrote them (no added column headings). Search engines and llms.txt read the same prices |
+| Somatic Sexology, Holistic Pelvic Care, Ancestral Nutrition, Shiatsu | **Done**, verbatim, as four cards, with no heading of our own above them. The homepage Zen Shiatsu card now opens Shiatsu here |
+| EVENTS / WORKSHOPS: Spine Society (free monthly gathering) | **Done**, Spine Society only. **Check with Joan:** Relational Integrity Labs is one of her five on the homepage but not on Services; that card opens Events / Workshops for now |
 | This Very Body: Movement Archive (coming soon), five bodies | **Done** — with Join the Waitlist (Kit when its form is set, the form below until then). The homepage Immersions card opens it |
 | "Discovery Form —" | **Done as understood** — the form at the foot of the page is now headed Discovery Form |
 | Her quote ("The body is the road back to what is true…") – Joan | **Done** — set large before the close |
 | The notes after the Movement Archive: the "– breath, mindfulness practices…" line; "What is Erotic Embodiment" / "What is Sexological Bodywork"; "What our sessions can include" | **Held, not on the page** — they read as drafts: two are questions with no answer yet, and the list overlaps What to Expect. **Check with Joan** which, if any, she wants and where |
 | (Not in her outline) Three-Month Study ($1,800), Liberate the Pelvis ($580), the session arc, How consent works here | **Clash — removed** to follow her outline; the new prices replace the old plans, and What to Expect now speaks to consent. All kept in `content/` and git, and can return |
-| (Not in her outline) Note on all plans | **Kept** beside the prices, verbatim — her scope-of-practice statement (not a therapist nor medical provider). **Check with Joan:** it still speaks of "plans" and "each month", which belonged to the monthly plans now removed |
+| (Not in her outline) Note on all plans; the banner line "Every session is collaborative…" | **Removed** at her request: only text she has given is on the page. Both are kept in `content/_source/services-before-2026-11-16.md` |
 
 ## Build-session notes this round
 

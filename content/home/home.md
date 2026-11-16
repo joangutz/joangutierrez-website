@@ -41,11 +41,6 @@ realms:
     - You are a living doorway where the universe is actively making new meaning.
   link: Enter Ma
 
-beginHere:
-  # Was Joan's "Begin Here"; renamed to match the Services page (see
-  # NOTES-STATUS.md).
-  label: Services
-
 # Joan's land acknowledgment of 11/16, verbatim. The last thing on the page,
 # over the lake.
 land:

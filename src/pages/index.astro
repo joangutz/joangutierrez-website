@@ -29,8 +29,6 @@ const subWords = h.hero.tagline.split(' ');
  */
 const LAKE_PHOTO: string | null = 'lake.jpg';
 
-/** The kind each colour stands for, named under each card. */
-const KIND: Record<string, string> = { one: '1:1', program: 'Program', gathering: 'Happenings' };
 /**
  * On narrow screens the subtitle breaks into lines of about equal length
  * (by letters, not words), so justifying each across the full width opens
@@ -191,8 +189,6 @@ const movedAnchors = {
   <section id="begin-here">
     <div class="band section">
     <div class="wide">
-      <h2 class="label">{h.beginHere.label}</h2>
-
       <ul class="cards rise">
         {
           homeCards.map((o) => (
@@ -209,7 +205,6 @@ const movedAnchors = {
                 <span class="card-meta">
                   <span class="card-title">{o.title}</span>
                   {o.note && <span class="card-container">{o.note}</span>}
-                  <span class="card-kind">{KIND[o.register]}</span>
                 </span>
               </a>
             </li>
@@ -475,7 +470,7 @@ const movedAnchors = {
   /* ---- Begin here ---- */
   .cards {
     list-style: none;
-    margin: 2.5rem 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     /* Five, so five columns — auto-fit wrapped them 4 + 1. */

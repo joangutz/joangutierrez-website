@@ -129,7 +129,6 @@ const home = defineCollection({
       intro: z.array(z.string()),
       link: z.string(),
     }),
-    beginHere: z.object({ label: z.string() }),
     /** Her land acknowledgment, closing the page. */
     land: z.object({ label: z.string(), text: z.string() }),
   }),
@@ -140,7 +139,6 @@ const sessionsPage = defineCollection({
   loader: glob({ base: './content/sessions', pattern: '**/*.md' }),
   schema: z.object({
     title: z.string(),
-    lede: z.string(),
     description: z.string(),
     belong: z.object({
       label: z.string(),
@@ -165,8 +163,6 @@ const sessionsPage = defineCollection({
     events: z.object({ title: z.string() }),
     archive: z.object({ title: z.string(), note: z.string(), bodies: z.array(z.string()) }),
     quote: z.object({ text: z.string(), by: z.string() }),
-    /** Verbatim scope-of-practice text. A professional boundary, not fine print. */
-    note: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
   }),
 });
 

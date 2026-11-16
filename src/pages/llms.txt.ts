@@ -48,7 +48,7 @@ export const GET: APIRoute = async () => {
               `- [${m.title}](${abs(`/services/#${m.id}`)})${m.items ? `: ${m.intro ? `${m.intro} ` : ''}${m.items.join(', ')}` : ''}`
           ),
           ...beginHere
-            .filter((b) => b.href.endsWith('#spine-society') || b.href.endsWith('#relational-integrity-labs'))
+            .filter((b) => b.href.endsWith('#spine-society'))
             .map((b) => `- [${b.title}](${abs(b.href)})${b.note ? `: ${b.note}` : ''}`),
           `- [${sessions.data.archive.title}](${abs('/services/#this-very-body')}): ${sessions.data.archive.note} — ${sessions.data.archive.bodies.join(', ')}.`,
           '',
