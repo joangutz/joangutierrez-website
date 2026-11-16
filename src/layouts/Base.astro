@@ -235,8 +235,11 @@ import GetInTouch from '../components/GetInTouch.astro';
     padding-bottom: 0;
   }
 
+  /* The credit sits with equal air above it (from the pane) and below it
+     (to the page's end). */
   .closing :global(.footer-on-ground) {
-    padding-top: clamp(1rem, 2.5vh, 1.5rem);
+    padding-top: clamp(1.75rem, 4.5vh, 2.75rem);
+    padding-bottom: calc(clamp(1.75rem, 4.5vh, 2.75rem) + env(safe-area-inset-bottom, 0px));
   }
 
   /* With nothing above it, the credit opens on a short band of the photo. */

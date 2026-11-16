@@ -187,7 +187,7 @@ const movedAnchors = {
     <div class="band section">
       <div class="wide">
         <div class="glass-pane land-pane">
-          <h2 class="label" id="land-title">{h.land.label}</h2>
+          <h2 class="land-label" id="land-title">{h.land.label}</h2>
           <p class="land-text">{h.land.text}</p>
         </div>
       </div>
@@ -662,16 +662,45 @@ const movedAnchors = {
   }
 
   /* ---- Land acknowledgment ---- */
-  /* Centred on the lake, as Get in Touch is on Services. */
+  /* The full width of the page's measure, so its edges line up with the
+     credit and Top beneath it; the words inside held to a reading measure
+     by generous padding. */
+  .land {
+    padding-top: clamp(3rem, 10vh, 6.5rem);
+  }
+
   .land-pane {
-    max-width: min(46rem, 100%);
-    margin-inline: auto;
-    padding: clamp(1.5rem, 4vw, 2.75rem);
+    padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 7.5vw, 6.5rem);
+  }
+
+  /* A fine rule, then the label in tracked capitals, as the chapters on the
+     pages begin. */
+  .land-label {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgb(var(--ch-bract) / 0.85);
+  }
+
+  .land-label::before {
+    content: '';
+    width: 2.9rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
   }
 
   .land-text {
-    margin: 1rem 0 0;
-    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
-    line-height: 1.7;
+    margin: 1.5rem 0 0;
+    font-family: var(--font-soft);
+    font-size: clamp(1.25rem, 1.9vw, 1.5rem);
+    font-weight: 400;
+    line-height: 1.55;
   }
 </style>
