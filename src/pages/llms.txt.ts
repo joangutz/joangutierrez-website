@@ -27,7 +27,7 @@ export const GET: APIRoute = async () => {
     '',
     `${site.name} is the practice of Joan Gutiérrez: somatic educator, artist, and founder of Ma Somatrix. ${firstPara}`,
     '',
-    'Where: Chicago, IL — in-person. Internationally — online. Open to travel.',
+    'Where: Chicago, IL — in-person. Internationally — online. Available to Travel.',
     '',
     '## Services',
     '',

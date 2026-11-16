@@ -29,7 +29,7 @@ export const site = {
   locations: [
     { place: 'Chicago, IL', mode: 'in-person' },
     { place: 'Internationally', mode: 'online' },
-    { place: 'Open to travel', mode: '' },
+    { place: 'Available to Travel', mode: '' },
   ],
 } as const;
 

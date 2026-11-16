@@ -89,6 +89,7 @@ Her notes as sent are kept in `content/_source/joan-2026-11-16-services.md`; the
 | No more free call: a $15 call, the fee applied; buttons say "Book a Discovery Call" | **Done** — every booking button now reads **Book a Discovery Call** (Get in Touch on every page, the Booking page, the phone menu, The Work). **Open:** the buttons still go to her old free 20-minute Cal.com link (cal.com/joan.gutierrez/20min). The new 30-minute, $15 event needs setting up in Cal.com (with payment), and its link put in `src/site.ts` (TODO-JOAN there) |
 | BOOK A SESSION page text | **Done**, verbatim: Book a Session, her three opening lines, the button, then her paragraph on the 30-minute Zoom call and the $15 fee, and "I look forward to meeting you where you are." Still one screen, no scrolling, at every size. Her email, number and where stay beside it. The nav tab still reads Book a Call (her earlier homepage note) |
 | Delete "Cheers to being alive" | **Done** |
+| "Available to Travel" in place of "Open to Travel" | **Done** — on the Booking page, and everywhere the same line appears (the phone menu, search descriptions, llms.txt) |
 | Pricing on the back side of the cards | **Done** — the hourly 1:1 prices are on the turned side of the 1:1 Sessions and Liberate the Pelvis cards, under "1:1 Sessions", one line per price; the price tiles are gone from the front of the page |
 
 ## Build-session notes this round
