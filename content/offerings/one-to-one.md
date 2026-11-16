@@ -1,24 +1,23 @@
 ---
 title: 1:1 Sessions
-container: Three-Month Study
+# Joan, 11/17: "NOT a 3 month study – PLEASE delete this out of the service
+# card." The label is gone; the rest is left as it was, at her request.
 order: 1
 register: one
 collage: erotic-embodiment.jpg
 alt: Collage — a face in profile, cut from grey photograph, with a halved cantaloupe where the body would be.
 prices:
-  # The hourly 1:1 prices (Joan, 11/16), shared by both offerings.
+  # Her 1:1 prices of 11/17.
   - label: 60 minutes, online
-    amount: 120
+    amount: 100
   - label: 75 minutes, online
-    amount: 150
+    amount: 120
   - label: 75 minutes, in-person
-    amount: 180
+    amount: 150
   - label: 90 minutes, in-person
-    amount: 250
-  - label: 120 minutes, online
-    amount: 320
+    amount: 200
   - label: 120 minutes, in-person
-    amount: 350
+    amount: 250
 includes:
   - 'Initial session: 75–90 minute somatic intake. Together we gather your history with your body, pleasure, touch, and eroticism; your breath, arousal, and stress patterns; where sensation is vivid and where it''s quiet; and your intentions for engaging this work now.'
   - 'Six hours of session time each month, arranged to fit your life: two 3-hour immersions, three 2-hour sessions, or one full 6-hour day.'

@@ -7,11 +7,27 @@ import { glob } from 'astro/loaders';
  * the underscore keeps Astro's loader out of it.
  */
 
+/** A block of a card's turned side: a heading over paragraphs, a list of
+    items (each with an optional lead), tiers, prices, or the waitlist form. */
+const cardBlock = z.object({
+  title: z.string().optional(),
+  paragraphs: z.array(z.string()).optional(),
+  items: z.array(z.object({ lead: z.string().optional(), text: z.string() })).optional(),
+  tiers: z.array(z.object({ label: z.string(), title: z.string(), text: z.string() })).optional(),
+  prices: z.array(z.object({ label: z.string(), amount: z.string() })).optional(),
+  form: z.literal('waitlist').optional(),
+});
+
 const offerings = defineCollection({
   loader: glob({ base: './content/offerings', pattern: '**/*.md' }),
   schema: z.object({
     title: z.string(),
-    container: z.string(),
+    /** Small label over the name, front and back. */
+    kicker: z.string().optional(),
+    /** Joan's line under the name on the front. */
+    line: z.string().optional(),
+    /** The word on the button that turns the card. */
+    turn: z.string().default('Includes'),
     order: z.number(),
     /** The kind of offering, which sets its colour: one (1:1), program,
         gathering (Happenings). Older red registers still accepted. */
@@ -19,33 +35,21 @@ const offerings = defineCollection({
     /** Filename in /assets/collage/. Renders a tinted placeholder until the file exists. */
     collage: z.string(),
     alt: z.string(),
-    /**
-     * True for the offering that combines the others. It is a different kind of
-     * thing from the single-focus offerings, so it gets its own hierarchy in
-     * the price grid rather than sitting in the row as a fourth peer.
-     */
     combined: z.boolean().default(false),
-    prices: z.array(
-      z.object({
-        label: z.string(),
-        amount: z.number(),
-        note: z.string().optional(),
-      })
-    ),
-    /** Left panel — what you get. */
-    includes: z.array(z.string()),
-    /** Left panel, second block — only Erotic Embodiment has this. */
-    entails: z
-      .array(z.object({ lead: z.string(), text: z.string() }))
+    prices: z
+      .array(z.object({ label: z.string(), amount: z.number(), note: z.string().optional() }))
       .optional(),
-    /** Right panel — why the approach works. */
-    why: z.object({
-      title: z.string(),
-      paragraphs: z.array(z.string()),
-    }),
-    /** Scar Tissue Care states its own limits; they belong with the offering. */
-    boundaries: z
-      .object({ title: z.string(), paragraphs: z.array(z.string()) })
+    /** The 1:1 card's turned side: Includes / Entails, and why. */
+    includes: z.array(z.string()).optional(),
+    entails: z.array(z.object({ lead: z.string(), text: z.string() })).optional(),
+    why: z.object({ title: z.string(), paragraphs: z.array(z.string()) }).optional(),
+    boundaries: z.object({ title: z.string(), paragraphs: z.array(z.string()) }).optional(),
+    /** The other cards' turned side, as blocks in two columns. */
+    left: z.array(cardBlock).optional(),
+    right: z.array(cardBlock).optional(),
+    /** The card's own way in, at the foot of its turned side. */
+    action: z
+      .object({ lead: z.string().optional(), label: z.string(), href: z.string(), subject: z.string().optional() })
       .optional(),
   }),
 });

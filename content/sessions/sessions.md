@@ -79,17 +79,17 @@ expect:
 
 oneToOne:
   title: 1:1 Sessions
+  # Joan's prices of 11/17.
   rows:
     - minutes: 60
-      online: 120
+      online: 100
     - minutes: 75
-      online: 150
-      inPerson: 180
+      online: 120
+      inPerson: 150
     - minutes: 90
-      inPerson: 250
+      inPerson: 200
     - minutes: 120
-      online: 320
-      inPerson: 350
+      inPerson: 250
 
 quote:
   text: The body is the road back to what is true. Pause. Sense. Feel. Then dare to tend, with integrity, the deepest needs and desires you find there. This is how we become sovereign.

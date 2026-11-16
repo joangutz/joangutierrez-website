@@ -22,8 +22,8 @@ const hasQuotes = (await getCollection('testimonials')).length > 0;
    homepage's, so their names, notes, collages and swatches never drift
    apart. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-const program = byHref('/services/#this-very-body');
-const happenings = [byHref('/services/#relational-integrity-labs'), byHref('/services/#spine-society')];
+// Spine Society, left as it was (Joan, 11/17), is the one gathering still a tile.
+const happenings = [byHref('/services/#spine-society')];
 const anchor = (h: string) => h.split('#')[1];
 
 const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
@@ -123,15 +123,15 @@ const catalog = {
     ...offerings.map((o) => ({
       '@type': 'Offer',
       url: abs(`/services/#${o.id}`),
-      description: o.data.container,
+      description: o.data.kicker ?? o.data.line ?? o.data.title,
       itemOffered: {
         '@type': 'Service',
         name: o.data.title,
-        description: o.data.includes[0],
+        description: o.data.line ?? o.data.includes?.[0] ?? o.data.title,
         provider: { '@id': abs('/#organization') },
       },
     })),
-    ...[program, ...happenings].map((h) => ({
+    ...happenings.map((h) => ({
       '@type': 'Offer',
       url: abs(h.href),
       itemOffered: { '@type': 'Service', name: h.title, ...(h.note ? { description: h.note } : {}) },
@@ -217,17 +217,11 @@ const catalog = {
 
       <div class="card-stack">
         {/* Prices on the turned side of each card (Joan: "too up-front"). */}
-        {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} prices={s.oneToOne} /></div>)}
-        <OfferingPlain
-          id={anchor(program.href)}
-          title={program.title}
-          note={program.note}
-          collage={program.collage}
-          register={program.register}
-          action={{ href: '#apply', label: 'Join the Waitlist', subject: 'This Very Body Program (waitlist)' }}
-          kitAction={kit.waitlistAction}
-          kitButton="Join the Waitlist"
-        />
+        {/* The 1:1 card carries the hourly prices on its turned side; the
+            others carry their own (Relational Integrity Labs) or none. */}
+        {offerings.map((o) => (
+          <div id={o.id}><OfferingCard offering={o} prices={o.id === 'one-to-one' ? s.oneToOne : undefined} /></div>
+        ))}
       </div>
 
       {/* Joan's heading for the two gatherings, shortened at her request. */}

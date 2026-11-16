@@ -1,6 +1,7 @@
 ---
 import Collage from './Collage.astro';
 import type { CollectionEntry } from 'astro:content';
+import { kit, form as formSettings, withBase } from '../site';
 
 /**
  * An offering at rest is a collage form carrying only its title. Turning it
@@ -21,6 +22,8 @@ interface Props {
 }
 
 const { offering, prices } = Astro.props;
+/** A link within the page (#apply) stays as written; a page of the site gets the base. */
+const href = (h: string) => (h.startsWith('#') || h.startsWith('http') ? h : withBase(h));
 const money = (n: number) => `$${n}`;
 const o = offering.data;
 const id = offering.id;
@@ -44,12 +47,13 @@ const id = offering.id;
       </div>
 
       <div class="front-text">
-        <span class="card-key">{o.container}</span>
-        <h2 class="card-name">{o.title}</h2>
+        {o.kicker && <span class="card-key">{o.kicker}</span>}
+        <h2 class:list={['card-name', { 'card-name-long': o.title.length > 26 }]}>{o.title}</h2>
+        {o.line && <p class="card-line">{o.line}</p>}
 
         <div class="front-foot">
           <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
-            <span>Includes</span>
+            <span>{o.turn}</span>
             {/* A hairline arrow: there is more on the other side. */}
             <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
               <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
@@ -68,7 +72,7 @@ const id = offering.id;
       </div>
       <div class="back-head">
         <div>
-          <span class="label">{o.container}</span>
+          {o.kicker && <span class="label">{o.kicker}</span>}
           <h2 class="back-title">{o.title}</h2>
         </div>
         <button type="button" class="turn turn-back" data-turn="close">
@@ -79,6 +83,8 @@ const id = offering.id;
         </button>
       </div>
 
+      {/* The 1:1 card keeps its Includes / Entails / why. */}
+      {o.includes && (
       <div class="panels">
         <div class="panel panel-left">
           <span class="panel-label">Includes</span>
@@ -116,6 +122,81 @@ const id = offering.id;
           }
         </div>
       </div>
+      )}
+
+      {/* The other cards: Joan's text as blocks, in two columns. */}
+      {(o.left || o.right) && (
+        <div class="panels">
+          {[o.left ?? [], o.right ?? []].map((col, c) => (
+            <div class:list={['panel', c ? 'panel-right' : 'panel-left']}>
+              {col.map((b) => (
+                <div class="block">
+                  {b.title && <span class="panel-label">{b.title}</span>}
+                  {b.paragraphs?.map((p) => <p>{p}</p>)}
+                  {b.items && (
+                    <ul class="block-items">
+                      {b.items.map((it) => (
+                        <li>
+                          {it.lead && <span class="item-lead">{it.lead}</span>}
+                          <span class="item-text">{it.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {b.tiers && (
+                    <ol class="tiers">
+                      {b.tiers.map((t) => (
+                        <li>
+                          <span class="tier-label">{t.label}</span>
+                          <span class="tier-title">{t.title}</span>
+                          <span class="tier-text">{t.text}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  {b.prices && (
+                    <dl class="block-prices">
+                      {b.prices.map((pr) => (
+                        <div>
+                          <dt>{pr.label}</dt>
+                          <dd>{pr.amount}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                  {b.form === 'waitlist' && (
+                    /* Her fields and her button. To Kit when its waitlist
+                       form is set (site.ts); until then, an email to Joan. */
+                    <form
+                      class="waitlist"
+                      data-waitlist
+                      data-to={formSettings.to}
+                      data-subject={o.title}
+                      method="post"
+                      action={kit.waitlistAction ?? undefined}
+                    >
+                      <label><span>First name</span><input name="fields[first_name]" type="text" autocomplete="given-name" required /></label>
+                      <label><span>IG handle</span><input name="fields[ig_handle]" type="text" autocomplete="off" /></label>
+                      <label><span>Email address</span><input name="email_address" type="email" autocomplete="email" required /></label>
+                      <button class="waitlist-send" type="submit">I'm in</button>
+                      <p class="waitlist-status" role="status" data-waitlist-status></p>
+                    </form>
+                  )}
+                </div>
+              ))}
+              {c === 1 && o.action && (
+                <div class="block block-action">
+                  {o.action.lead && <p class="action-lead">{o.action.lead}</p>}
+                  <a class="back-action" href={href(o.action.href)} data-apply-subject={o.action.subject}>
+                    {o.action.label}
+                    <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" /></svg>
+                  </a>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {
         prices && (
@@ -599,6 +680,240 @@ const id = offering.id;
     box-shadow: none;
     color: var(--color-plumstone);
   }
+
+  /* A long name (This Very Body: Movement Archive) a size smaller, so it
+     keeps to two or three lines. */
+  .card-name-long {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+  }
+
+  /* ---- Joan's line on the front ---- */
+  .card-line {
+    margin: 0.85rem 0 0;
+    max-width: 30ch;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+    line-height: 1.35;
+    color: var(--color-ink-2);
+  }
+
+  /* ---- The turned side, as blocks ---- */
+  .block + .block {
+    margin-top: 2.25rem;
+  }
+
+  .block p {
+    margin: 0 0 1rem;
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .block-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .block-items li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .block-items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    top: calc(0.5lh - 2.5px);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgb(var(--ch-bract) / 0.7);
+  }
+
+  /* An item's lead, as its own line in the soft serif. */
+  .item-lead {
+    display: block;
+    font-family: var(--font-soft);
+    font-size: 1.15rem;
+    line-height: 1.25;
+    color: var(--color-bract);
+  }
+
+  .item-text {
+    color: rgb(var(--ch-bract) / 0.86);
+  }
+
+  /* Tiers: each a small label, its name, its words, between hairlines. */
+  .tiers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule-glass);
+  }
+
+  .tiers li {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule-glass);
+  }
+
+  .tier-label {
+    font-family: var(--font-label);
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(var(--ch-bract) / 0.75);
+  }
+
+  .tier-title {
+    font-family: var(--font-soft);
+    font-size: 1.45rem;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--color-bract);
+  }
+
+  .tier-text {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: rgb(var(--ch-bract) / 0.86);
+  }
+
+  .block-prices {
+    margin: 0;
+    border-top: 1px solid var(--rule-glass);
+  }
+
+  .block-prices div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--rule-glass);
+  }
+
+  .block-prices dt {
+    font-size: 0.95rem;
+  }
+
+  .block-prices dd {
+    margin: 0;
+    font-family: var(--font-soft);
+    font-size: 1.35rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The card's own way in, at the foot of its right column. */
+  .block-action {
+    margin-top: 2.5rem;
+  }
+
+  .action-lead {
+    margin: 0 0 1rem;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.3;
+  }
+
+  .back-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.95rem 1.4rem;
+    border: 1px solid var(--color-bract);
+    color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.06);
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 350ms var(--ease-open), color 350ms var(--ease-open);
+  }
+
+  .back-action:hover,
+  .back-action:focus-visible {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+
+  /* ---- The waitlist form ---- */
+  .waitlist {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .waitlist label {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .waitlist label span {
+    font-family: var(--font-label);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(var(--ch-bract) / 0.78);
+  }
+
+  .waitlist input {
+    font: inherit;
+    font-size: 1rem;
+    padding: 0.7rem 0.8rem;
+    color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.08);
+    border: 1px solid rgb(var(--ch-bract) / 0.35);
+    border-radius: 0;
+  }
+
+  .waitlist input:focus-visible {
+    outline: 1px solid var(--color-bract);
+    outline-offset: 2px;
+  }
+
+  .waitlist-send {
+    justify-self: start;
+    margin-top: 0.5rem;
+    padding: 0.95rem 1.6rem;
+    border: 1px solid var(--color-bract);
+    color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.06);
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 350ms var(--ease-open), color 350ms var(--ease-open);
+  }
+
+  .waitlist-send:hover,
+  .waitlist-send:focus-visible {
+    background: var(--color-bract);
+    color: var(--color-plumstone);
+  }
+
+  .waitlist-status {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .waitlist-status:empty {
+    display: none;
+  }
 </style>
 
 <script>
@@ -607,6 +922,35 @@ const id = offering.id;
 
 
   onPage(() => {
+    // The waitlist: to Kit when its form is set; until then an email to
+    // Joan, already written, with the reader's name, handle and address.
+    for (const form of document.querySelectorAll<HTMLFormElement>('[data-waitlist]')) {
+      const status = form.querySelector<HTMLElement>('[data-waitlist-status]');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        const data = new FormData(form);
+        if (form.getAttribute('action')) {
+          try {
+            await fetch(form.action, { method: 'POST', body: data, mode: 'no-cors' });
+            if (status) status.textContent = '\u2713';
+            form.querySelectorAll('input').forEach((i) => (i.value = ''));
+          } catch {
+            if (status) status.textContent = 'Not sent.';
+          }
+          return;
+        }
+        const subject = `${form.dataset.subject} — waitlist`;
+        const body = [
+          `First name: ${data.get('fields[first_name]') ?? ''}`,
+          `IG handle: ${data.get('fields[ig_handle]') ?? ''}`,
+          `Email address: ${data.get('email_address') ?? ''}`,
+        ].join('\n');
+        window.location.href =
+          `mailto:${form.dataset.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      });
+    }
+
     // Progressive enhancement: without this, both panels render in flow and
     // every word is still readable.
     const cards = document.querySelectorAll<HTMLElement>('[data-offering]');

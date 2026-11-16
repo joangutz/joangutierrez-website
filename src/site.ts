@@ -205,6 +205,7 @@ export const realms = [
  * she wrote beside each name: "(waitlist)" and "(free monthly gathering)".
  */
 export const beginHere = [
+  // The Services index, in Joan's order of 11/17.
   {
     href: '/services/#one-to-one',
     title: '1:1 Sessions',
@@ -213,15 +214,15 @@ export const beginHere = [
     register: 'one',
   },
   {
-    href: '/services/#this-very-body',
-    title: 'This Very Body Program',
-    note: 'waitlist',
-    collage: 'desire-mapping.jpg',
-    register: 'program',
+    href: '/services/#spine-society',
+    title: 'Spine Society',
+    note: 'free monthly gathering',
+    collage: 'roots-territories.jpg',
+    register: 'gathering',
   },
   {
-    href: '/services/#liberate-the-pelvis',
-    title: 'Liberate the Pelvis',
+    href: '/services/#liberate-your-pelvis',
+    title: 'Liberate Your Pelvis',
     note: '',
     collage: 'scar-tissue.jpg',
     register: 'one',
@@ -234,11 +235,18 @@ export const beginHere = [
     register: 'gathering',
   },
   {
-    href: '/services/#spine-society',
-    title: 'Spine Society',
-    note: 'free monthly gathering',
-    collage: 'roots-territories.jpg',
-    register: 'gathering',
+    href: '/services/#zen-shiatsu',
+    title: 'Zen Shiatsu',
+    note: '',
+    collage: 'work-2.jpg',
+    register: 'one',
+  },
+  {
+    href: '/services/#this-very-body',
+    title: 'This Very Body: Movement Archive',
+    note: 'coming soon',
+    collage: 'desire-mapping.jpg',
+    register: 'program',
   },
 ] as const;
 
@@ -257,13 +265,12 @@ export const homeCards = [
     register: 'one',
   },
   {
-    // TODO-JOAN: "Immersions" points at This Very Body, the immersive
-    // program, until Services has a section by that name.
-    href: '/services/#this-very-body',
-    title: 'Immersions',
+    // Joan, 11/17: reads Liberate Your Pelvis, as on Services.
+    href: '/services/#liberate-your-pelvis',
+    title: 'Liberate Your Pelvis',
     note: '',
-    collage: 'desire-mapping.jpg',
-    register: 'program',
+    collage: 'scar-tissue.jpg',
+    register: 'one',
   },
   {
     href: '/services/#relational-integrity-labs',
@@ -280,13 +287,10 @@ export const homeCards = [
     register: 'gathering',
   },
   {
-    // TODO-JOAN: Services has no Zen Shiatsu offering, and About (11/16) no
-    // longer carries the Lineage of Modalities; until one of them does, this
-    // opens the Services cards.
-    href: '/services/#services',
+    href: '/services/#zen-shiatsu',
     title: 'Zen Shiatsu',
     note: '',
-    collage: 'scar-tissue.jpg',
+    collage: 'work-2.jpg',
     register: 'one',
   },
 ] as const;

@@ -40,7 +40,7 @@ export const GET: APIRoute = async () => {
               })
               .join('; ') +
             '.',
-          ...offerings.map((o) => `- [${o.data.title}](${abs(`/services/#${o.id}`)}): ${o.data.container}. ${o.data.includes[0]}`),
+          ...offerings.map((o) => `- [${o.data.title}](${abs(`/services/#${o.id}`)})${o.data.line ? `: ${o.data.line}` : o.data.includes ? `: ${o.data.includes[0]}` : ''}`),
           ...beginHere
             .filter((b) => !offerings.some((o) => b.href.endsWith(`#${o.id}`)))
             .map((b) => `- [${b.title}](${abs(b.href)})${b.note ? `: ${b.note}` : ''}`),
