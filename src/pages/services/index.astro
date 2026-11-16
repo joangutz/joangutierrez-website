@@ -317,11 +317,16 @@ const catalog = {
   .belong-list li::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0.82em;
-    width: 0.7rem;
-    height: 1px;
-    background: rgb(var(--ch-quick) / 0.7);
+    left: 0.15rem;
+    /* A small dot, centred on the first line: half a line-height down
+       (the lh unit), less half the dot. 0.7em first, for browsers without
+       lh. */
+    top: 0.7em;
+    top: calc(0.5lh - 2.5px);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgb(var(--ch-quick) / 0.75);
   }
 
   /* Her two last lines, set apart and centred. */
@@ -523,11 +528,16 @@ const catalog = {
   .modality-items li::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0.75em;
-    width: 0.55rem;
-    height: 1px;
-    background: rgb(var(--ch-quick) / 0.7);
+    left: 0.1rem;
+    /* A small dot, centred on the first line: half a line-height down
+       (the lh unit), less half the dot. 0.7em first, for browsers without
+       lh. */
+    top: 0.7em;
+    top: calc(0.5lh - 2.5px);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgb(var(--ch-quick) / 0.75);
   }
 
   @media (max-width: 1000px) {

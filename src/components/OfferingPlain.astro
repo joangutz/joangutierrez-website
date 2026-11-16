@@ -180,14 +180,17 @@ const compact = !action && !kitAction && !hasBody;
     padding-left: 1.1rem;
   }
 
-  /* A short hairline for each item, in the card's own colour. */
+  /* A small dot for each item, centred on its first line (half a
+     line-height down, less half the dot; 0.7em without the lh unit). */
   .front-body :global(li)::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0.8em;
-    width: 0.55rem;
-    height: 1px;
+    left: 0.1rem;
+    top: 0.7em;
+    top: calc(0.5lh - 2.5px);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
     background: currentColor;
     opacity: 0.6;
   }
