@@ -547,7 +547,11 @@ const movedAnchors = {
     position: sticky;
     top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
     align-self: start;
-    height: calc(100svh - var(--bar-h) - env(safe-area-inset-top, 0px));
+    /* The large viewport (lvh): the window with Safari's toolbars hidden.
+       Sized to the small one, the photograph stopped short once the
+       toolbars slid away, leaving a strip of blush beneath it. */
+    height: calc(100vh - var(--bar-h) - env(safe-area-inset-top, 0px));
+    height: calc(100lvh - var(--bar-h) - env(safe-area-inset-top, 0px));
     overflow: hidden;
   }
 
