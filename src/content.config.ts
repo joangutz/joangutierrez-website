@@ -142,13 +142,29 @@ const sessionsPage = defineCollection({
     title: z.string(),
     lede: z.string(),
     description: z.string(),
-    arc: z.object({
+    belong: z.object({
+      label: z.string(),
       title: z.string(),
-      intro: z.string(),
-      steps: z.array(z.object({ lead: z.string(), rest: z.string() })),
-      after: z.string(),
+      groups: z.array(z.object({ title: z.string(), items: z.array(z.string()) })),
+      closing: z.array(z.string()),
     }),
-    consent: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
+    expect: z.object({
+      title: z.string(),
+      paragraphs: z.array(z.string()),
+      wish: z.string(),
+      link: z.string(),
+    }),
+    /** Prices in US dollars, by session length; a missing price is not offered. */
+    oneToOne: z.object({
+      title: z.string(),
+      rows: z.array(z.object({ minutes: z.number(), online: z.number().optional(), inPerson: z.number().optional() })),
+    }),
+    modalities: z.array(
+      z.object({ id: z.string(), title: z.string(), intro: z.string().optional(), items: z.array(z.string()).optional() })
+    ),
+    events: z.object({ title: z.string() }),
+    archive: z.object({ title: z.string(), note: z.string(), bodies: z.array(z.string()) }),
+    quote: z.object({ text: z.string(), by: z.string() }),
     /** Verbatim scope-of-practice text. A professional boundary, not fine print. */
     note: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
   }),

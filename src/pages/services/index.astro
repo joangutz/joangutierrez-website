@@ -3,9 +3,8 @@ import Base from '../../layouts/Base.astro';
 import ChapterRail from '../../components/ChapterRail.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import ApplicationForm from '../../components/ApplicationForm.astro';
-import OfferingCard from '../../components/OfferingCard.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
-import PriceGrid from '../../components/PriceGrid.astro';
+import Collage from '../../components/Collage.astro';
 import { getCollection, getEntry } from 'astro:content';
 import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
@@ -19,66 +18,70 @@ const s = entry.data;
 
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 
-/* The offerings with only a name so far, from the same list as Begin Here
-   so their names, notes, collages and swatches never drift apart. */
+/* The two gatherings keep their names, notes and collages in one list
+   (site.ts), shared with the homepage. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-const program = byHref('/services/#this-very-body');
-const happenings = [byHref('/services/#relational-integrity-labs'), byHref('/services/#spine-society')];
+const events = [byHref('/services/#spine-society'), byHref('/services/#relational-integrity-labs')];
 const anchor = (h: string) => h.split('#')[1];
 
-const offerings = (await getCollection('offerings')).sort(
-  (a, b) => a.data.order - b.data.order
-);
+/* A collage for each modality — texture and colour, not illustration. */
+const MODALITY_ART: Record<string, string> = {
+  'somatic-sexology': 'erotic-embodiment.jpg',
+  'holistic-pelvic-care': 'scar-tissue.jpg',
+  'ancestral-nutrition': 'work-1.jpg',
+  shiatsu: 'work-2.jpg',
+};
+
+const money = (n: number) => `$${n}`;
+
+/* "I adhere to the code of ethics of the ACSB": the initials link to the
+   code itself. */
+const ACSB = 'ACSB';
 
 /* What is offered, and at what price, for search engines and AI
-   assistants: each offering with its own words, and the two named
-   gatherings and the waitlist alongside. */
+   assistants: each length of 1:1 session, online and in person. */
 const catalog = {
   '@type': 'OfferCatalog',
   name: s.title,
   url: abs('/services/'),
   itemListElement: [
-    ...offerings.map((o) => ({
+    ...s.oneToOne.rows.flatMap((r) =>
+      (
+        [
+          ['online', r.online],
+          ['in person', r.inPerson],
+        ] as const
+      )
+        .filter(([, price]) => price !== undefined)
+        .map(([mode, price]) => ({
+          '@type': 'Offer',
+          url: abs('/services/#one-to-one'),
+          price,
+          priceCurrency: 'USD',
+          description: `${s.oneToOne.title}, ${r.minutes} minutes, ${mode}`,
+          itemOffered: {
+            '@type': 'Service',
+            name: `${s.oneToOne.title} — ${r.minutes} minutes`,
+            provider: { '@id': abs('/#organization') },
+          },
+        }))
+    ),
+    ...s.modalities.map((m) => ({
       '@type': 'Offer',
-      url: abs(`/services/#${o.id}`),
-      price: o.data.prices[0].amount,
-      priceCurrency: 'USD',
-      description: o.data.prices[0].label,
-      itemOffered: {
-        '@type': 'Service',
-        name: o.data.title,
-        description: o.data.includes[0],
-        provider: { '@id': abs('/#organization') },
-      },
+      url: abs(`/services/#${m.id}`),
+      itemOffered: { '@type': 'Service', name: m.title, provider: { '@id': abs('/#organization') } },
     })),
-    ...[program, ...happenings].map((h) => ({
+    ...events.map((h) => ({
       '@type': 'Offer',
       url: abs(h.href),
       itemOffered: { '@type': 'Service', name: h.title, ...(h.note ? { description: h.note } : {}) },
     })),
   ],
 };
-
-/**
- * One abstract line mark per step of the arc, in the manner of the labelled
- * diagram grids on the Cosmos board. Diagram marks, not illustration — each
- * encodes the shape of its step, and the words carry the meaning.
- */
-const motifs = [
-  'M32,44 L32,20 M32,16 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0',
-  'M14,16 L14,48 M50,16 L50,48 M20,32 L44,32',
-  'M12,22 H52 M12,32 H52 M12,42 H52 M22,18 V46 M42,18 V46',
-  'M32,32 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0 M32,32 m-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0 M32,32 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0',
-  'M18,42 C18,24 30,18 32,32 C34,46 46,40 46,22',
-  'M10,32 C18,16 26,48 34,32 C42,16 50,48 56,32',
-  'M16,32 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0 M24,23 A12,12 0 0,1 24,41 M32,17 A20,20 0 0,1 32,47 M40,11 A28,28 0 0,1 40,53',
-  'M32,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M32,32 m-21,0 a21,21 0 1,0 42,0 a21,21 0 1,0 -42,0',
-  'M44,20 a16,16 0 1,1 -12,-6 M44,20 l-1,-8 M44,20 l-8,2',
-];
 ---
 
 <Base
-  title={`${s.title} — 1:1 Sessions, Liberate the Pelvis`}
+  title={`${s.title} — 1:1 Sessions, Somatic Sexology, Holistic Pelvic Care, Shiatsu`}
   description={s.description}
   schema={[catalog, crumbs(s.title, '/services/')]}
 >
@@ -86,117 +89,161 @@ const motifs = [
 
   <PageBanner title={s.title} lede={s.lede} image="happenings.jpg" cinema />
 
-  <!-- The cards carry depth. -->
-  <section class="band section">
+  {/* 1 · Offerings: who this is for, in Joan's four groups. */}
+  <section class="band section" id="offerings">
     <div class="wide">
-      {/* The four registers read as one range — until now they only ever
-          appeared separately, one per offering. Doubles as a key. */}
-      <ol class="range">
+      <span class="label">{s.belong.label}</span>
+      <h2 class="section-title">{s.belong.title}</h2>
+
+      <div class="belong">
         {
-          beginHere.map((o) => (
-            <li class={`range-step reg-${o.register}`}>
-              <a class="range-name" href={withBase(o.href)}>{o.title}</a>
+          s.belong.groups.map((g) => (
+            <div class="belong-group">
+              <h3 class="belong-title">{g.title}</h3>
+              <ul class="belong-list">
+                {g.items.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="belong-closing">
+        {s.belong.closing.map((line) => <p>{line}</p>)}
+      </div>
+    </div>
+  </section>
+
+  {/* 2 · What to expect, on a swell of tone; her wish set apart at the end,
+      and the way to begin under it. */}
+  <section class="swell" id="what-to-expect">
+    <div class="band section">
+      <div class="wide expect">
+        <h2 class="section-title">{s.expect.title}</h2>
+        {
+          s.expect.paragraphs.map((p) =>
+            p.includes(ACSB) ? (
+              <p>
+                {p.split(ACSB)[0]}
+                <Link href={contact.ethics}>{ACSB}</Link>
+                {p.split(ACSB).slice(1).join(ACSB)}
+              </p>
+            ) : (
+              <p>{p}</p>
+            )
+          )
+        }
+        <p class="expect-wish">{s.expect.wish}</p>
+        <Link variant="action" href={withBase('/begin/')}>{s.expect.link}</Link>
+      </div>
+    </div>
+  </section>
+
+  {/* 3 · 1:1 Sessions: the lengths and prices, and beside them the note
+      that holds every plan. */}
+  <section class="band section" id="one-to-one">
+    <div class="wide price-grid">
+      <div>
+        <h2 class="section-title">{s.oneToOne.title}</h2>
+        <table class="prices">
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">Length</span></th>
+              <th scope="col">Online</th>
+              <th scope="col">In-person</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              s.oneToOne.rows.map((r) => (
+                <tr>
+                  <th scope="row">{r.minutes} minutes</th>
+                  <td>{r.online !== undefined ? money(r.online) : <span class="none" aria-label="Not offered">—</span>}</td>
+                  <td>{r.inPerson !== undefined ? money(r.inPerson) : <span class="none" aria-label="Not offered">—</span>}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="ground-note" aria-labelledby="note-title">
+        <span class="label" id="note-title">{s.note.title}</span>
+        {s.note.paragraphs.map((p) => <p>{p}</p>)}
+        <p class="note-ethics"><Link href={contact.ethics}>sexologicalbodyworkers.org/ethics</Link></p>
+      </aside>
+    </div>
+  </section>
+
+  {/* 4 · The modalities, as cards like the homepage's. */}
+  <section class="band section" id="modalities">
+    <div class="wide">
+      <h2 class="label">Modalities</h2>
+      <ul class="modalities">
+        {
+          s.modalities.map((m) => (
+            <li class="modality" id={m.id}>
+              <span class="modality-art film">
+                <Collage src={MODALITY_ART[m.id] ?? 'all-in-one.jpg'} alt="" register="one" sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 22vw" />
+              </span>
+              <h3 class="modality-title">{m.title}</h3>
+              {m.intro && <p class="modality-intro">{m.intro}</p>}
+              {m.items && (
+                <ul class="modality-items">
+                  {m.items.map((i) => <li>{i}</li>)}
+                </ul>
+              )}
             </li>
           ))
         }
-      </ol>
+      </ul>
 
-      <div class="card-stack">
-        {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
+      {/* 5 · Events and workshops. */}
+      <h2 class="label events-label">{s.events.title}</h2>
+      <div class="tile-row">
+        {events.map((h) => <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />)}
+      </div>
+
+      {/* 6 · This Very Body: Movement Archive — coming soon, with its five
+          bodies and the waitlist. */}
+      <div class="archive">
         <OfferingPlain
-          id={anchor(program.href)}
-          title={program.title}
-          note={program.note}
-          collage={program.collage}
-          register={program.register}
-          action={{ href: '#apply', label: 'Join the Waitlist', subject: 'This Very Body Program (waitlist)' }}
+          id="this-very-body"
+          title={s.archive.title}
+          note={s.archive.note}
+          collage="desire-mapping.jpg"
+          register="program"
+          action={{ href: '#apply', label: 'Join the Waitlist', subject: 'This Very Body: Movement Archive (waitlist)' }}
           kitAction={kit.waitlistAction}
           kitButton="Join the Waitlist"
-        />
+        >
+          <ul>
+            {s.archive.bodies.map((b) => <li>{b}</li>)}
+          </ul>
+        </OfferingPlain>
       </div>
 
-      {/* Joan's heading for the two gatherings, shortened at her request. */}
-      <h2 class="label happenings-label">Happenings</h2>
-      <div class="tile-row">
-        {
-          happenings.map((h) => (
-            <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- The arc. A real sequence, so the numbers are earned. -->
-  <section class="band section" id="arc">
-    <div class="wide">
-      <h2 class="section-title">{s.arc.title}</h2>
-      <p class="arc-intro">{s.arc.intro}</p>
-
-      <ol class="arc">
-        {
-          s.arc.steps.map((step, i) => (
-            <li>
-              <svg class="arc-motif" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-                <path d={motifs[i]} />
-              </svg>
-              <span class="arc-text">
-                <strong>{step.lead}</strong>{step.rest}
-              </span>
-            </li>
-          ))
-        }
-      </ol>
-
-      <p class="arc-after">{s.arc.after}</p>
-    </div>
-  </section>
-
-  {/* The ground the work stands on: how consent works, and the note that
-      holds every plan — side by side across the page, one section, rather
-      than two stray columns. */}
-  <section class="ground-band" id="consent">
-    <div class="band section">
-      <div class="wide ground-grid">
-        <div class="ground-consent">
-          <h2 class="section-title">{s.consent.title}</h2>
-          {s.consent.paragraphs.map((p) => <p class="body-text">{p}</p>)}
-        </div>
-
-        <aside class="ground-note" aria-labelledby="note-title">
-          <span class="label" id="note-title">{s.note.title}</span>
-          {s.note.paragraphs.map((p) => <p>{p}</p>)}
-          {/* The code of ethics the work is held to, next to its scope. */}
-          <p class="note-ethics"><Link href={contact.ethics}>sexologicalbodyworkers.org/ethics</Link></p>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  {/* What it costs, read last, once the work is understood — directly
-      above the two ways to begin. */}
-  <section class="band section">
-    <div class="wide">
-      <PriceGrid />
-
-      {/* Other people's experience, at the moment a price has just been read. */}
-      {/* Both of these render nothing until their content exists, and an
-          empty wrapper still keeps its margin — together they were 128px of
-          blank under the price grid. The wrapper goes when the contents do. */}
       {hasQuotes && (
         <div class="after-prices">
           <Testimonials />
         </div>
       )}
-
     </div>
   </section>
 
-  {/* The way in: a conversation, or an application — together on the
+  {/* 7 · Her words to close on. */}
+  <section class="band section quote-band">
+    <figure class="wide quote">
+      <blockquote><p>“{s.quote.text}”</p></blockquote>
+      <figcaption>— {s.quote.by}</figcaption>
+    </figure>
+  </section>
+
+  {/* The way in: a conversation, or the Discovery Form — together on the
       closing photograph, running straight into the footer. */}
   <GetInTouch slot="close">
     <div id="apply">
-      <ApplicationForm subject="1:1 Sessions" />
+      <ApplicationForm subject="1:1 Sessions" heading="Discovery Form" />
     </div>
   </GetInTouch>
 </Base>
@@ -225,23 +272,162 @@ const motifs = [
 </script>
 
 <style>
-  /* ---- The ground: consent and the note ---- */
-  .ground-band {
-    background: var(--swell-ground);
+  .section-title {
+    font-size: clamp(1.75rem, 3.8vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0.75rem 0 0;
   }
 
-  /* Two equal columns: the consent text runs longer and the note shorter,
-     so they end close together rather than one trailing a blank. */
-  .ground-grid {
+  /* ---- Offerings: You belong here ---- */
+  .belong {
+    margin-top: clamp(2rem, 5vw, 3rem);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: center;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 5vw, 3.5rem) clamp(2rem, 6vw, 4.5rem);
   }
 
-  .ground-consent .body-text {
-    margin-top: 1.5rem;
-    max-width: var(--measure);
+  .belong-title {
+    margin: 0 0 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+  }
+
+  .belong-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .belong-list li {
+    position: relative;
+    padding-left: 1.4rem;
+    font-size: 1.04rem;
+    line-height: 1.6;
+  }
+
+  .belong-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.82em;
+    width: 0.7rem;
+    height: 1px;
+    background: rgb(var(--ch-quick) / 0.7);
+  }
+
+  /* Her two last lines, set apart and centred. */
+  .belong-closing {
+    margin: clamp(3rem, 7vw, 4.5rem) auto 0;
+    max-width: 34rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+    line-height: 1.35;
+  }
+
+  .belong-closing p {
+    margin: 0;
+  }
+
+  @media (max-width: 760px) {
+    .belong {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- What to expect ---- */
+  .swell {
+    background: linear-gradient(
+      to bottom,
+      var(--color-madder) 0%,
+      var(--swell-ground) 18%,
+      var(--swell-ground) 82%,
+      var(--color-madder) 100%
+    );
+  }
+
+  .expect {
+    max-width: 42rem;
+  }
+
+  .expect p {
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.02rem, 1.6vw, 1.12rem);
+    line-height: 1.68;
+  }
+
+  .expect .section-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .expect .expect-wish {
+    margin-top: 2.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+    line-height: 1.4;
+  }
+
+  .expect :global(.lnk-action) {
+    margin-top: 2rem;
+  }
+
+  /* ---- 1:1 Sessions ---- */
+  .price-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .prices {
+    width: 100%;
+    margin-top: 1.75rem;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prices th,
+  .prices td {
+    padding: 0.95rem 0.5rem;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+  }
+
+  .prices thead th {
+    padding-top: 0;
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
+  }
+
+  .prices tbody th {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+  }
+
+  .prices td {
+    font-size: 1.1rem;
+  }
+
+  .prices .none {
+    color: rgb(var(--ch-ink) / 0.35);
+  }
+
+  .prices th:first-child {
+    padding-left: 0;
   }
 
   /* The note is a boundary statement, so it stands as its own pane — the
@@ -263,6 +449,12 @@ const motifs = [
     line-height: 1.65;
   }
 
+  .ground-note p:first-of-type {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.35;
+  }
+
   .ground-note .note-ethics {
     margin-top: 1.5rem;
     padding-top: 1.1rem;
@@ -270,67 +462,94 @@ const motifs = [
     font-size: 0.92rem;
   }
 
-  .ground-note p:first-of-type {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    line-height: 1.35;
-  }
-
   @media (max-width: 860px) {
-    .ground-grid {
+    .price-grid {
       grid-template-columns: minmax(0, 1fr);
     }
   }
 
-  .section-title {
-    font-size: clamp(1.75rem, 3.8vw, 2.6rem);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
-  }
-
-
-  .range {
+  /* ---- Modalities ---- */
+  .modalities {
     list-style: none;
-    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    margin: 1.25rem 0 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rule);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .modality-art {
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
     border: 1px solid var(--rule);
+    border-bottom: 5px solid var(--kind-one);
   }
 
-  .range-step {
-    min-height: 4.5rem;
-    display: flex;
-    align-items: flex-end;
-    padding: 0.75rem;
+  .modality-art :global(.collage) {
+    width: 100%;
+    height: 100%;
   }
 
-  .range-name {
-    font-family: var(--font-label);
-    font-size: 0.6rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    line-height: 1.35;
-    color: var(--color-bract);
+  .modality-title {
+    margin: 1rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1.15;
   }
 
-  .reg-plumstone { background: var(--color-plumstone); }
-  .reg-cochineal { background: var(--color-cochineal); }
-  .reg-brick { background: var(--color-brick); }
-  .reg-clay { background: var(--color-clay); }
+  .modality-intro {
+    margin: 0.6rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
 
-  @media (max-width: 560px) {
-    .range {
+  .modality-items {
+    list-style: none;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .modality-items li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .modality-items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.55rem;
+    height: 1px;
+    background: rgb(var(--ch-quick) / 0.7);
+  }
+
+  @media (max-width: 1000px) {
+    .modalities {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  .happenings-label {
+  @media (max-width: 520px) {
+    .modalities {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .modality-art {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  /* ---- Events and the archive ---- */
+  .events-label {
     display: block;
-    margin: clamp(3rem, 7vw, 4.5rem) 0 1.25rem;
+    margin: clamp(3.5rem, 8vw, 5rem) 0 1.25rem;
   }
 
   /* Cards with only a name sit side by side as tiles. */
@@ -340,111 +559,42 @@ const motifs = [
     gap: clamp(1.25rem, 3vw, 2rem);
   }
 
-  .card-stack {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(2rem, 5vw, 3.5rem);
+  .archive {
+    margin-top: clamp(3.5rem, 8vw, 5rem);
   }
 
-  /* ---- The arc ---- */
-  .arc-intro {
-    margin: 1.5rem 0 2rem;
+  .after-prices {
+    margin-top: clamp(3rem, 7vw, 4.5rem);
   }
 
-  /* A labelled diagram grid rather than a list — the arc is a real sequence,
-     so the numbers stay earned, and each cell carries the shape of its step. */
-  .arc {
-    list-style: none;
-    counter-reset: arc;
+  /* ---- Her words ---- */
+  .quote {
+    margin: 0 auto;
+    max-width: 46rem;
+    text-align: center;
+  }
+
+  .quote blockquote {
     margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rule-soft);
-    border: 1px solid var(--rule-soft);
   }
 
-  .arc li {
-    counter-increment: arc;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding: clamp(1rem, 2.2vw, 1.5rem);
-    background: var(--color-madder);
-  }
-
-  .arc li::before {
-    content: counter(arc, decimal-leading-zero);
+  .quote blockquote p {
+    margin: 0;
     font-family: var(--font-display);
-    font-size: 0.7rem;
+    font-size: clamp(1.45rem, 3.4vw, 2.3rem);
+    font-weight: 300;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .quote figcaption {
+    margin-top: 1.5rem;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
-    color: var(--color-quick);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .arc-motif {
-    display: block;
-    width: 44px;
-    height: 44px;
-  }
-
-  .arc-motif path {
-    fill: none;
-    stroke: var(--color-cochineal);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .arc-text {
-    line-height: 1.55;
-    font-size: 0.93rem;
-  }
-
-  .arc-intro,
-  .arc-after {
-    max-width: var(--measure);
-  }
-
-  @media (max-width: 780px) {
-    .arc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-
-  @media (max-width: 460px) {
-    .arc { grid-template-columns: minmax(0, 1fr); }
-  }
-
-  .arc-text strong {
-    font-weight: 500;
-    color: var(--color-plumstone);
-  }
-
-  .arc-after {
-    margin-top: 2rem;
-  }
-
-  .body-text {
-    margin: 1.5rem 0 0;
-  }
-
-  /* ---- Note on all plans ---- */
-  /* Fill, border and padding all come from .pane now. */
-
-  .after-prices,
-  .not-ready {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
-  }
-
-
-
-
-
-
-
-  .arc-intro,
-  .arc-after {
-    max-width: var(--measure);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-2);
   }
 </style>

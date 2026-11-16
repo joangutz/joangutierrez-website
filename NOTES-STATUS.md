@@ -62,6 +62,24 @@ and the choice is Joan's.
 | 1:1 / Immersions / Relational Integrity Labs / Spine Society / Zen Shiatsu | **Done, two links provisional** — the five cards, in her order and names. **Check with Joan:** Services has no "Immersions" section, so that card opens This Very Body (the program); there is no Zen Shiatsu offering yet, so that card opens Zen Shiatsu Bodywork in the Lineage of Modalities on About. Liberate the Pelvis is no longer on the homepage (it stays on Services) |
 | (Not in her list) "What if the reason you're here…", the Red Rose gift card | **Clash — removed from the homepage** to follow her order exactly. The gift is still on Resources; either can come back in a moment |
 
+## Joan's 11/16 notes — Services
+
+Her notes as sent are kept in `content/_source/joan-2026-11-16-services.md`; the page before this one in `content/_source/services-before-2026-11-16.md`.
+
+| Note | Status |
+|---|---|
+| OFFERINGS: You belong here if you want to: | **Done**, verbatim — her second, grouped list (Body and belonging / Pleasure and desire / Healing and transition / Boundaries and agency), with her two closing lines set apart. **Check with Joan:** she sent two versions of this list; the first, ungrouped one is saved in the source file |
+| WHAT TO EXPECT, GET IN TOUCH → Book a Call page | **Done**, verbatim; "ACSB" links to the code of ethics. Her accent marks standing in for apostrophes ("we´ll") are set as apostrophes. Her closing wish is set apart, then the Get in Touch button |
+| 1:1 SESSIONS prices | **Done** — 60 min $120 online; 75 min $150 online / $180 in-person; 90 min $250 in-person; 120 min $320 online / $350 in-person, as a table. Search engines and llms.txt read the same prices |
+| Somatic Sexology, Holistic Pelvic Care, Ancestral Nutrition, Shiatsu | **Done**, verbatim, as four cards under "Modalities" (an interface word). The homepage Zen Shiatsu card now opens Shiatsu here |
+| EVENTS / WORKSHOPS: Spine Society (free monthly gathering) | **Done.** **Check with Joan:** Relational Integrity Labs is not in this list but is one of her five on the homepage, so it stays here beside Spine Society, so that card has somewhere to go |
+| This Very Body: Movement Archive (coming soon), five bodies | **Done** — with Join the Waitlist (Kit when its form is set, the form below until then). The homepage Immersions card opens it |
+| "Discovery Form —" | **Done as understood** — the form at the foot of the page is now headed Discovery Form |
+| Her quote ("The body is the road back to what is true…") – Joan | **Done** — set large before the close |
+| The notes after the Movement Archive: the "– breath, mindfulness practices…" line; "What is Erotic Embodiment" / "What is Sexological Bodywork"; "What our sessions can include" | **Held, not on the page** — they read as drafts: two are questions with no answer yet, and the list overlaps What to Expect. **Check with Joan** which, if any, she wants and where |
+| (Not in her outline) Three-Month Study ($1,800), Liberate the Pelvis ($580), the session arc, How consent works here | **Clash — removed** to follow her outline; the new prices replace the old plans, and What to Expect now speaks to consent. All kept in `content/` and git, and can return |
+| (Not in her outline) Note on all plans | **Kept** beside the prices, verbatim — her scope-of-practice statement (not a therapist nor medical provider). **Check with Joan:** it still speaks of "plans" and "each month", which belonged to the monthly plans now removed |
+
 ## Build-session notes this round
 
 | Note | Status |

@@ -28,7 +28,8 @@ const { id, title, note, collage, register, action, kitAction, kitButton } = Ast
 
 /* With nothing yet to say or do, a card is only its picture and its name:
    a compact tile rather than a wide card with an empty pale side. */
-const compact = !action && !kitAction;
+const hasBody = Astro.slots.has('default');
+const compact = !action && !kitAction && !hasBody;
 ---
 
 <article class:list={['plain-card', { compact }]} id={id} data-register={register}>
@@ -48,6 +49,8 @@ const compact = !action && !kitAction;
       <Collage src={collage} alt="" register={register} sizes="30vw" />
     </div>
     {note && <span class="label">{note}</span>}
+    {/* What it holds, when Joan has listed it (a modality's parts). */}
+    {hasBody && <div class="front-body"><slot /></div>}
     {
       kitAction && (
         <div class="front-foot">
@@ -153,6 +156,40 @@ const compact = !action && !kitAction;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+  }
+
+  .front-body {
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+
+  .front-body :global(p) {
+    margin: 0 0 0.6rem;
+  }
+
+  .front-body :global(ul) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .front-body :global(li) {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+
+  /* A short hairline for each item, in the card's own colour. */
+  .front-body :global(li)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.55rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
   }
 
   .front-glass {
