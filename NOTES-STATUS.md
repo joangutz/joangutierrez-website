@@ -102,6 +102,20 @@ Her notes as sent are kept in `content/_source/joan-2026-11-16-services.md`; the
 | The homepage in the same style | **Done** — her subtitle in the soft serif's italic, centred under MA SOMATRIX; I am Joan. Welcome. split, her welcome on the blush and her portrait beside it, held in view while it is read; What is Ma Somatrix? on light through leaves, softened, the triangle and its definitions working as before; the five cards with their names in the soft serif; the land acknowledgment on the lake as before |
 | About and Resources in the same style | **Rendered, waiting** — mockups saved in `design/renderings/` to look at again |
 
+## Joan's 11/16 notes — About
+
+Her text is in `content/about/about.md`, verbatim (her ¨ marks around "spirit of a child…" set as quotation marks). Her notes are kept in `content/_source/joan-2026-11-16-about.md`.
+
+| Note | Status |
+|---|---|
+| Page design like "The Middle Path" by Sima Kumar | **Done** — the opening: Joan Gutierrez large in the soft serif, Founder \| Artist \| Somatic Sexologist, her line, and Learn more →, on the ground, with a tall portrait set in beside them (not run to the edge). The bar stays solid over it |
+| Her letter, signed | **Done**, verbatim — its first line a little larger; the sign-off in italics |
+| Background | **Done**, verbatim — her path through the arts, then a photograph (by the sea), then her line "My first and most profound teacher has been my own body." set apart, and the rest of her story |
+| My Work With You | **Done**, verbatim |
+| Band at the bottom (like creativeliving.world): her question and GET IN TOUCH → Discovery Call scheduling | **Done** — her question large on a field of colour (the 1:1 swatch red, one setting to change), and a white pill button to the booking link. **Open:** the booking link is still the old free 20-minute Cal.com call until the new $15 Discovery Call link arrives (TODO-JOAN in `src/site.ts`) |
+| Membership stamps: ACSB, ASIS, Trusted Bodywork | **Done as names** — each set as a round stamp. **Open:** the stamps' artwork (logo files) and the address each should link to (TODO-JOAN in `content/about/about.md`) |
+| (Not in her outline) "Hello, I am Joan.", the 10/31 bio, the Founder / Lineage of Modalities tabs | **Clash — removed** to follow her outline. The Lineage of Modalities text is kept in `content/pages/lineage.md`; the homepage Zen Shiatsu card, which opened it, now opens the Services cards. **Check with Joan** whether the Lineage should return somewhere |
+
 ## Build-session notes this round
 
 | Note | Status |

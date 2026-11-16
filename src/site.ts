@@ -280,9 +280,10 @@ export const homeCards = [
     register: 'gathering',
   },
   {
-    // TODO-JOAN: Services has no Zen Shiatsu offering; this opens her Zen
-    // Shiatsu Bodywork in the Lineage of Modalities on About.
-    href: '/about/#zen-shiatsu-bodywork',
+    // TODO-JOAN: Services has no Zen Shiatsu offering, and About (11/16) no
+    // longer carries the Lineage of Modalities; until one of them does, this
+    // opens the Services cards.
+    href: '/services/#services',
     title: 'Zen Shiatsu',
     note: '',
     collage: 'scar-tissue.jpg',

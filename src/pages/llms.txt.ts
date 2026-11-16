@@ -12,13 +12,9 @@ import { site, booking, contact, kit, beginHere } from '../site';
 export const GET: APIRoute = async () => {
   const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
   const sessions = await getEntry('sessionsPage', 'sessions');
-  const about = await getEntry('pages', 'about');
+  const about = await getEntry('aboutPage', 'about');
   const money = (n: number) => `$${n.toLocaleString('en-US')}`;
-  const firstPara = (about?.body ?? '')
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .trim()
-    .split(/\n\s*\n/)[0]
-    .trim();
+  const firstPara = about?.data.letter[0] ?? '';
 
   const lines = [
     `# ${site.name}`,
@@ -56,7 +52,7 @@ export const GET: APIRoute = async () => {
     '## Pages',
     '',
     `- [Services](${abs('/services/')}): who the work is for, what to expect, 1:1 session prices, every offering, and the Discovery Form.`,
-    `- [About](${abs('/about/')}): Joan's biography and her Lineage of Modalities — Seki Method; Somatic Sexology – Certified Sexological Bodywork; Holistic Pelvic Care™; Zen Shiatsu Bodywork.`,
+    `- [About](${abs('/about/')}): ${about ? `${about.data.name} — ${about.data.roles}. ${about.data.line}` : ''}`,
     `- [Resources](${abs('/resources/')}): ${kit.freebie} — ${kit.freebieBody}`,
     `- [Book a Session](${abs('/begin/')}): ${booking.label}.`,
     `- [The Work](${abs('/the-work/')}): Erotic Embodiment is the practice of listening again.`,

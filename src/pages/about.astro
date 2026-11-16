@@ -1,391 +1,369 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageBanner from '../components/PageBanner.astro';
 import Portrait from '../components/Portrait.astro';
+import Collage from '../components/Collage.astro';
 import Link from '../components/Link.astro';
-import { contact } from '../site';
+import { booking } from '../site';
 import { person, crumbs } from '../seo';
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 
 /**
- * One page about Joan, and only that.
+ * About — Joan's page of 11/16, in her order:
  *
- * What was here before was Roots: a long page ending in a complete
- * credential list, groups and dates and all. The list is gone — the two
- * trainings that matter are named in the first line of her own writing, and
- * a CV on a page like this asks a reader to assess rather than to meet
- * someone.
+ *   the opening   her name, her roles and her line on the ground, a tall
+ *                 portrait set in beside them (after "The Middle Path" by
+ *                 Sima Kumar, her reference)
+ *   her letter    signed
+ *   Background    with her line "My first and most profound teacher…"
+ *                 set apart where her story turns
+ *   My Work With You
+ *   the band      her question on a field of colour, and Get in Touch
+ *                 (after the band at the foot of creativeliving.world)
+ *   the stamps    her memberships
+ *
+ * Every word is hers.
  */
-const entry = await getEntry('pages', 'about');
-if (!entry) throw new Error('Missing /content/pages/about.md');
-const { Content } = await render(entry);
-const p = entry.data;
-
-const lineageEntry = await getEntry('pages', 'lineage');
-if (!lineageEntry) throw new Error('Missing /content/pages/lineage.md');
-const { Content: Lineage } = await render(lineageEntry);
+const entry = await getEntry('aboutPage', 'about');
+if (!entry) throw new Error('Missing /content/about/about.md');
+const a = entry.data;
 ---
 
 <Base
-  title="Joan Gutiérrez — Somatic educator, artist, and founder"
-  description={`${p.lede}. Chicago, IL — in-person. Internationally — online. Available to Travel.`}
-  close
+  title={`${a.name} — ${a.roles.replaceAll(' | ', ', ')}`}
+  description={a.line}
   schema={[person, crumbs('About', '/about/')]}
 >
-  {/* Joan: no "About" over the picture — the banner reads her greeting. */}
-  {/* "I am Joan." held together, so a two-line greeting breaks after
-      "Hello," — the words unchanged, only the spaces made non-breaking. */}
-  <PageBanner title={p.title.replace('I am Joan', 'I\u00a0am\u00a0Joan')} lede={p.lede} image="about.jpg" cinema />
+  {/* 1 · The opening: her name, roles and line on the ground; the portrait
+      set in beside them, not run to the edge. */}
+  <section class="intro">
+    <div class="intro-text">
+      <h1 class="intro-name">{a.name}</h1>
+      <p class="intro-roles">{a.roles}</p>
+      <p class="intro-line">{a.line}</p>
+      <a class="intro-more" href="#letter">{a.more} <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="intro-photo film">
+      <Portrait src={a.portrait} alt={a.alt} colour priority sizes="(max-width: 780px) 90vw, 36vw" />
+    </div>
+  </section>
 
-  {/* Her two tabs, "Founder" and "Lineage of Modalities". She asked for them
-      as a drop-down under ABOUT; the bar no longer has drop-downs, so they
-      are tabs at the head of the page instead. /about/#lineage opens the
-      second. Without scripting both simply follow one another. */}
-  <div class="tabs-band" data-tabs>
-    <div class="band">
-      <div class="wide tabs" role="tablist" aria-label="About">
-        <button class="tab" type="button" role="tab" id="tab-founder" aria-controls="founder" aria-selected="true" data-tab="founder">Founder</button>
-        <button class="tab" type="button" role="tab" id="tab-lineage" aria-controls="lineage" aria-selected="false" data-tab="lineage">Lineage of Modalities</button>
+  {/* 2 · Her letter, signed. */}
+  <section class="letter" id="letter">
+    <div class="read">
+      {a.letter.map((p) => <p>{p}</p>)}
+      <div class="signoff">
+        {a.signoff.map((line, i) => <p class:list={{ 'signoff-name': i === a.signoff.length - 1 }}>{line}</p>)}
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="tab-panel" id="founder" role="tabpanel" aria-labelledby="tab-founder" data-panel="founder">
-    <section class="band section">
-      <div class="wide about-grid">
-        <div class="about-portrait film">
-          <Portrait
-            src="joan-roots.jpg"
-            alt="Joan seated and laughing, one arm resting over the back of a chair."
-            colour
-            sizes="(max-width: 900px) 70vw, 30vw"
-          />
-        </div>
+  {/* 3 · Background: her path through the arts; then, set apart, the line
+      where her story turns to her own body, and the rest of it. */}
+  <section class="background" id="background">
+    <div class="read">
+      <h2 class="about-title">{a.background.title}</h2>
+      {a.background.arts.map((p) => <p>{p}</p>)}
+    </div>
 
-        <div class="col prose about-prose">
-          <Content />
-          {/* Her art, beside the writing that names her an artist. */}
-          <p class="about-art"><Link href={contact.art}>joangutz.com</Link></p>
-        </div>
-      </div>
-    </section>
+    <figure class="break film">
+      <Collage src="about.jpg" alt="" sizes="(max-width: 900px) 100vw, 70vw" />
+    </figure>
 
-  </div>
+    <div class="read">
+      <p class="turn">{a.background.turn}</p>
+      {a.background.body.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
 
-  <div class="tab-panel" id="lineage" role="tabpanel" aria-labelledby="tab-lineage" data-panel="lineage">
-    <section class="band section">
-      <div class="wide lineage" data-lineage>
-        <Lineage />
-      </div>
-    </section>
-  </div>
+  {/* 4 · My Work With You. */}
+  <section class="work" id="work">
+    <div class="read">
+      <h2 class="about-title">{a.work.title}</h2>
+      {a.work.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  {/* 5 · Her question on a field of colour, and the way to begin. */}
+  <section class="band-call" aria-label={a.banner.button}>
+    <p class="band-question">{a.banner.question}</p>
+    <a class="band-button" href={booking.url} target="_blank" rel="noopener noreferrer">
+      {a.banner.button}<span class="visually-hidden"> (opens in a new tab)</span>
+    </a>
+  </section>
+
+  {/* 6 · Her memberships, as stamps. */}
+  <section class="stamps">
+    <ul>
+      {a.memberships.map((m) => <li class="stamp"><span>{m}</span></li>)}
+    </ul>
+  </section>
 </Base>
 
-<script>
-
-  import { onPage } from '../lib/onPage';
-
-
-  onPage(() => {
-    for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
-      const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
-      const panels = [...document.querySelectorAll<HTMLElement>('[data-panel]')];
-      const show = (id: string, focus = false) => {
-        for (const t of tabs) {
-          const on = t.dataset.tab === id;
-          t.setAttribute('aria-selected', String(on));
-          t.tabIndex = on ? 0 : -1;
-          if (on && focus) t.focus();
-        }
-        for (const p of panels) p.hidden = p.dataset.panel !== id;
-      };
-      for (const t of tabs) {
-        t.addEventListener('click', () => {
-          show(t.dataset.tab as string);
-          history.replaceState(null, '', t.dataset.tab === 'founder' ? location.pathname : '#lineage');
-        });
-        t.addEventListener('keydown', (e) => {
-          const i = tabs.indexOf(t);
-          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-            const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-            show(n.dataset.tab as string, true);
-          }
-        });
-      }
-      show(location.hash === '#lineage' ? 'lineage' : 'founder');
-    }
-
-    // A link can name one modality (/about/#zen-shiatsu): open the Lineage
-    // tab, unfold that one, and bring it into view.
-    const slug = (t: string) =>
-      t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-    // Each modality folds: its name is the control, its text the panel. The
-    // first opens on arrival. Built from the headings in lineage.md, so the
-    // words stay in the markdown and nothing is lost without scripting.
-    for (const box of document.querySelectorAll<HTMLElement>('[data-lineage]')) {
-      const heads = [...box.querySelectorAll<HTMLElement>(':scope h2')];
-      heads.forEach((h, i) => {
-        const d = document.createElement('details');
-        d.className = 'mod';
-        d.id = slug(h.textContent ?? '');
-        if (i === 0) d.open = true;
-        const sum = document.createElement('summary');
-        sum.className = 'mod-name';
-        sum.innerHTML = `<span>${h.textContent}</span><i aria-hidden="true"></i>`;
-        const body = document.createElement('div');
-        body.className = 'mod-body';
-        let n = h.nextElementSibling;
-        while (n && n.tagName !== 'H2') {
-          const next = n.nextElementSibling;
-          body.appendChild(n);
-          n = next;
-        }
-        d.append(sum, body);
-        h.replaceWith(d);
-      });
-    }
-
-    const hash = location.hash;
-    const named = hash.length > 1 ? document.getElementById(hash.slice(1)) : null;
-    if (named instanceof HTMLDetailsElement && named.classList.contains('mod')) {
-      document.querySelector<HTMLButtonElement>('[data-tab="lineage"]')?.click();
-      history.replaceState(null, '', hash);
-      for (const d of document.querySelectorAll<HTMLDetailsElement>('details.mod')) d.open = d === named;
-      named.scrollIntoView({ block: 'start' });
-    }
-
-  });
-
-</script>
-
 <style>
-  /* The portrait sits beside the opening of the writing rather than above
-     it, and leaves the column once the measure is the only thing that
-     matters. */
-  .about-grid {
+  /* ---- The opening ---- */
+  .intro {
     display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-    gap: clamp(1.75rem, 5vw, 3.5rem);
-    align-items: start;
-  }
-
-  .about-portrait {
-    position: sticky;
-    top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + clamp(2rem, 6vh, 4rem));
-  }
-
-  @media (max-width: 860px) {
-    .about-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    /* Not sticky here, so no offset: the top that holds it while
-       scrolling on wide screens would only push it down into the text. */
-    .about-portrait {
-      position: relative;
-      top: auto;
-      max-width: 18rem;
-    }
-  }
-
-  .about-art {
-    margin-top: 2rem;
-  }
-
-  /* ---- The tabs ---- */
-  .tabs-band {
-    position: sticky;
-    /* Held just beneath the bar at the head of the window. */
-    top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
-    z-index: 5;
-    background: color-mix(in srgb, var(--color-madder) 92%, transparent);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--rule-soft);
-  }
-
-  :global(html:not(.js)) .tabs-band {
-    display: none;
-  }
-
-  .tabs {
-    display: flex;
-    gap: clamp(1.5rem, 4vw, 2.75rem);
-  }
-
-  .tab {
-    position: relative;
-    padding: 1.15rem 0 1.05rem;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
-    text-box: trim-both cap alphabetic;
-  }
-
-  .tab::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: transparent;
-    transition: background-color 250ms var(--ease-open);
-  }
-
-  .tab:hover {
-    color: var(--color-cochineal);
-  }
-
-  .tab[aria-selected='true'] {
-    color: var(--color-cochineal);
-  }
-
-  .tab[aria-selected='true']::after {
-    background: var(--color-cochineal);
-  }
-
-  /* ---- Joan's quote, within the bio ----
-     A magazine pull-quote: larger type between two hairlines, breaking
-     slightly out past the text column on wide screens, with a small mark
-     to open it. The words and her own quotation marks are untouched. */
-  .about-prose :global(blockquote) {
-    position: relative;
-    margin: clamp(2.5rem, 6vw, 3.75rem) 0;
-    padding: clamp(1.75rem, 4vw, 2.5rem) 0;
-    border: 0;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .about-prose :global(blockquote::before) {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0;
-    width: 3.5rem;
-    height: 1px;
-    background: var(--color-quick);
-  }
-
-  .about-prose :global(blockquote p) {
-    margin: 0;
-    max-width: none;
-    font-family: var(--font-display);
-    font-size: clamp(1.45rem, 3vw, 2.05rem);
-    font-style: normal;
-    font-weight: 300;
-    line-height: 1.28;
-    letter-spacing: -0.012em;
-    text-wrap: balance;
-    color: var(--color-cochineal);
-  }
-
-  @media (min-width: 1100px) {
-    .about-prose :global(blockquote) {
-      margin-right: -4rem;
-    }
-  }
-
-  /* ---- The lineage ---- */
-  .lineage {
-    max-width: 52rem;
-  }
-
-  .lineage :global(.mod) {
-    border-top: 1px solid var(--rule);
-  }
-
-  .lineage :global(.mod:last-child) {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .lineage :global(.mod-name) {
-    display: flex;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: clamp(2rem, 5vw, 5rem);
     align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding: clamp(1.25rem, 3vw, 1.75rem) 0;
-    cursor: pointer;
-    list-style: none;
-    font-family: var(--font-display);
-    font-size: clamp(1.35rem, 3vw, 2rem);
-    line-height: 1.15;
+    min-height: calc(100svh - var(--bar-h));
+    padding: clamp(2rem, 5vh, 3rem) clamp(1.25rem, 6vw, 6rem);
+    background: var(--color-madder);
     color: var(--color-cochineal);
   }
 
-  .lineage :global(.mod-name::-webkit-details-marker) {
-    display: none;
+  .intro-name {
+    margin: 0;
+    font-family: var(--font-soft);
+    font-size: clamp(3rem, 7.4vw, 6.4rem);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    text-transform: none;
   }
 
-  /* A hairline plus that folds to a minus, as the bar's tabs once did. */
-  .lineage :global(.mod-name i) {
-    position: relative;
-    flex: none;
-    width: 14px;
-    height: 14px;
+  .intro-roles {
+    margin: 0.9rem 0 0;
+    font-family: var(--font-soft);
+    font-size: clamp(1.3rem, 2.2vw, 1.85rem);
+    line-height: 1.2;
   }
 
-  .lineage :global(.mod-name i::before),
-  .lineage :global(.mod-name i::after) {
-    content: '';
-    position: absolute;
-    background: currentColor;
+  .intro-line {
+    margin: clamp(2rem, 5vh, 3.25rem) 0 0;
+    max-width: 24ch;
+    font-family: var(--font-soft);
+    font-size: clamp(1.6rem, 2.9vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.15;
   }
 
-  .lineage :global(.mod-name i::before) {
-    left: 0;
-    right: 0;
-    top: calc(50% - 0.5px);
-    height: 1px;
-  }
-
-  .lineage :global(.mod-name i::after) {
-    top: 0;
-    bottom: 0;
-    left: calc(50% - 0.5px);
-    width: 1px;
-    transition: scale 250ms var(--ease-open);
-  }
-
-  .lineage :global(.mod[open] .mod-name i::after) {
-    scale: 1 0;
-  }
-
-  .lineage :global(.mod-body) {
-    padding-bottom: clamp(1.75rem, 4vw, 2.5rem);
-    max-width: var(--measure);
-  }
-
-  .lineage :global(.mod-body p) {
-    margin: 0 0 1.1em;
-  }
-
-  .lineage :global(.mod-body h3),
-  .lineage :global(h3) {
-    margin: 2rem 0 1rem;
+  .intro-more {
+    display: inline-block;
+    margin-top: clamp(1.75rem, 4vh, 2.5rem);
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid currentColor;
     font-family: var(--font-label);
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    text-decoration: none;
+    color: var(--color-cochineal);
+  }
+
+  .intro-more span {
+    display: inline-block;
+    margin-left: 0.35rem;
+    transition: translate 300ms var(--ease-open);
+  }
+
+  .intro-more:hover span {
+    translate: 0.25rem 0;
+  }
+
+  .intro-photo {
+    justify-self: end;
+    width: 100%;
+    max-width: 30rem;
+    aspect-ratio: 1 / 1.25;
+    overflow: hidden;
+  }
+
+  .intro-photo :global(.portrait) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 780px) {
+    .intro {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+      padding-block: 2.5rem 3.5rem;
+    }
+
+    .intro-photo {
+      justify-self: stretch;
+      max-width: none;
+      order: 2;
+    }
+  }
+
+  /* ---- The reading column, shared by the letter and the sections ---- */
+  .read {
+    max-width: 40rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 0rem);
+  }
+
+  .read p {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-soft);
+    font-size: clamp(1.2rem, 1.7vw, 1.38rem);
+    line-height: 1.6;
     color: var(--color-ink-2);
   }
 
-  /* Without scripting the headings stay headings. */
-  .lineage :global(h2) {
-    margin: 2.5rem 0 1rem;
-    font-size: clamp(1.35rem, 3vw, 2rem);
+  .about-title {
+    margin: 0 0 1.75rem;
+    font-family: var(--font-soft);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-cochineal);
   }
 
-  .lineage :global(p) {
-    max-width: var(--measure);
+  .letter {
+    padding-block: clamp(5rem, 12vh, 8rem) clamp(4rem, 10vh, 6rem);
+    background: var(--color-bract);
+  }
+
+  /* The first line of the letter, a little larger: it opens the voice. */
+  .letter .read > p:first-child {
+    font-size: clamp(1.45rem, 2.3vw, 1.8rem);
+    line-height: 1.45;
+    color: var(--color-cochineal);
+  }
+
+  .signoff {
+    margin-top: 2.5rem;
+  }
+
+  .signoff p {
+    margin: 0 0 0.3rem;
+    font-style: italic;
+    color: var(--color-cochineal);
+  }
+
+  .signoff .signoff-name {
+    margin-top: 1rem;
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-weight: 300;
+  }
+
+  .background {
+    padding-block: clamp(5rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
+    background: var(--color-madder);
+  }
+
+  /* A photograph between her two halves: the arts, then her body. */
+  .break {
+    margin: clamp(3rem, 8vh, 5rem) auto;
+    width: min(64rem, 100% - 2 * clamp(1.25rem, 5vw, 3rem));
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .break :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Her line where the story turns, set apart and larger. */
+  .read .turn {
+    margin: 0 0 2.25rem;
+    font-size: clamp(1.8rem, 3.4vw, 2.7rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--color-cochineal);
+  }
+
+  .work {
+    padding-block: clamp(3rem, 8vh, 5rem) clamp(5rem, 12vh, 8rem);
+    background: var(--color-madder);
+  }
+
+  .work .read {
+    padding-top: clamp(3rem, 8vh, 5rem);
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  /* ---- The band: her question on a field of colour ---- */
+  .band-call {
+    display: grid;
+    justify-items: center;
+    gap: clamp(2rem, 5vh, 3rem);
+    padding: clamp(5rem, 14vh, 9rem) clamp(1.25rem, 8vw, 8rem);
+    background: var(--kind-one);
+    color: var(--color-bract);
+    text-align: center;
+  }
+
+  .band-question {
+    margin: 0;
+    max-width: 30ch;
+    font-family: var(--font-soft);
+    font-size: clamp(1.9rem, 4.4vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  /* A pill, as in her reference. */
+  .band-button {
+    display: inline-block;
+    padding: 1.15rem 2.1rem;
+    border-radius: 999px;
+    background: var(--color-bract);
+    color: var(--color-cochineal);
+    font-family: var(--font-label);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 300ms var(--ease-open), color 300ms var(--ease-open);
+  }
+
+  .band-button:hover,
+  .band-button:focus-visible {
+    background: var(--color-cochineal);
+    color: var(--color-bract);
+  }
+
+  /* ---- The stamps ---- */
+  .stamps {
+    padding: clamp(3.5rem, 9vh, 5rem) 1.25rem;
+    background: var(--color-madder);
+  }
+
+  .stamps ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  /* Until their artwork arrives, each membership is its name set as a
+     round stamp. */
+  .stamp {
+    display: grid;
+    place-items: center;
+    width: 7.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--ch-ink) / 0.45);
+    box-shadow: inset 0 0 0 5px var(--color-madder), inset 0 0 0 6px rgb(var(--ch-ink) / 0.25);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stamp span {
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
   }
 </style>

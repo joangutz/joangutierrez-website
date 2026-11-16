@@ -164,7 +164,32 @@ const sessionsPage = defineCollection({
   }),
 });
 
+/** The About page — Joan's text of 11/16, structured by section. */
+const aboutPage = defineCollection({
+  loader: glob({ base: './content/about', pattern: '**/*.md' }),
+  schema: z.object({
+    name: z.string(),
+    roles: z.string(),
+    line: z.string(),
+    more: z.string(),
+    portrait: z.string(),
+    alt: z.string(),
+    letter: z.array(z.string()),
+    signoff: z.array(z.string()),
+    background: z.object({
+      title: z.string(),
+      arts: z.array(z.string()),
+      turn: z.string(),
+      body: z.array(z.string()),
+    }),
+    work: z.object({ title: z.string(), paragraphs: z.array(z.string()) }),
+    banner: z.object({ question: z.string(), button: z.string() }),
+    memberships: z.array(z.string()),
+  }),
+});
+
 export const collections = {
+  aboutPage,
   offerings,
   testimonials,
   territories,
