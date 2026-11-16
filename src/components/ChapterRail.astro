@@ -196,6 +196,48 @@
     color: var(--color-cochineal);
   }
 
+  /* With only ticks showing (too little margin for titles beside them), the
+     tick under the pointer still names its section: the title appears beside
+     it as a small label on its own ground, so it reads over whatever is
+     beneath — prose, a card, a photograph. */
+  .rail[data-ticks-only] :global(a:hover .rail-name),
+  .rail[data-ticks-only] :global(a:focus-visible .rail-name) {
+    display: block;
+    opacity: 1;
+    translate: 0 -50%;
+    right: 2.6rem;
+    width: max-content;
+    max-width: 16rem;
+    -webkit-line-clamp: none;
+    line-clamp: none;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-madder);
+    border: 1px solid var(--rule);
+    box-shadow: 0 8px 22px rgb(var(--ch-plum) / 0.14);
+    color: var(--color-cochineal);
+    text-align: left;
+  }
+
+  @media (max-width: 1023px) {
+    .rail :global(a:hover .rail-name),
+    .rail :global(a:focus-visible .rail-name) {
+      display: block;
+      opacity: 1;
+      translate: 0 -50%;
+      right: 2.6rem;
+      width: max-content;
+      max-width: 16rem;
+      -webkit-line-clamp: none;
+      line-clamp: none;
+      padding: 0.5rem 0.75rem;
+      background: var(--color-madder);
+      border: 1px solid var(--rule);
+      box-shadow: 0 8px 22px rgb(var(--ch-plum) / 0.14);
+      color: var(--color-cochineal);
+      text-align: left;
+    }
+  }
+
   /* The rail is fixed, so it crosses whatever the page puts under it — and
      the page now puts photographs and deep grounds there. Its ink follows. */
   .rail[data-over-dark] :global(a) {
@@ -210,6 +252,20 @@
   .rail[data-over-dark] :global(a:hover .rail-name),
   .rail[data-over-dark] :global(a:focus-visible .rail-name) {
     color: var(--color-bract);
+  }
+
+  /* The hover label carries its own light ground, so its ink stays dark
+     even where the rail's has turned light. */
+  .rail[data-ticks-only][data-over-dark] :global(a:hover .rail-name),
+  .rail[data-ticks-only][data-over-dark] :global(a:focus-visible .rail-name) {
+    color: var(--color-cochineal);
+  }
+
+  @media (max-width: 1023px) {
+    .rail[data-over-dark] :global(a:hover .rail-name),
+    .rail[data-over-dark] :global(a:focus-visible .rail-name) {
+      color: var(--color-cochineal);
+    }
   }
 
   /* ---- The narrow-screen disclosure ---- */
