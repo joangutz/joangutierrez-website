@@ -157,11 +157,6 @@ const sessionsPage = defineCollection({
       title: z.string(),
       rows: z.array(z.object({ minutes: z.number(), online: z.number().optional(), inPerson: z.number().optional() })),
     }),
-    modalities: z.array(
-      z.object({ id: z.string(), title: z.string(), intro: z.string().optional(), items: z.array(z.string()).optional() })
-    ),
-    events: z.object({ title: z.string() }),
-    archive: z.object({ title: z.string(), note: z.string(), bodies: z.array(z.string()) }),
     quote: z.object({ text: z.string(), by: z.string() }),
   }),
 });

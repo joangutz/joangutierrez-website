@@ -75,41 +75,6 @@ oneToOne:
       online: 320
       inPerson: 350
 
-modalities:
-  - id: somatic-sexology
-    title: Somatic Sexology
-    items:
-      - Erotic Embodiment Coaching
-      - Sexological Bodywork
-  - id: holistic-pelvic-care
-    title: Holistic Pelvic Care
-  - id: ancestral-nutrition
-    title: Ancestral Nutrition
-    intro: 'Personalized coaching in Mindful Eating and Whole foods scratch cooking. Integrating principles from:'
-    items:
-      - Macrobiotics
-      - Ayurveda
-      - Ancient Chinese Medicine
-      - GAPS
-  - id: shiatsu
-    title: Shiatsu
-    items:
-      - Zen Shiatsu
-      - Pelvic Shiatsu – inspired by Holistic Pelvic Care and Sexological Bodywork
-
-events:
-  title: Events / Workshops
-
-archive:
-  title: 'This Very Body: Movement Archive'
-  note: coming soon
-  bodies:
-    - Hanging Body
-    - Water Bag Body
-    - Erotic Body
-    - Expressive Body
-    - Still Body
-
 quote:
   text: The body is the road back to what is true. Pause. Sense. Feel. Then dare to tend, with integrity, the deepest needs and desires you find there. This is how we become sovereign.
   by: Joan

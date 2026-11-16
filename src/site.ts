@@ -263,9 +263,7 @@ export const homeCards = [
     register: 'program',
   },
   {
-    // TODO-JOAN: not on Services (her Events / Workshops lists only Spine
-    // Society), so this opens Events / Workshops.
-    href: '/services/#events',
+    href: '/services/#relational-integrity-labs',
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',
@@ -279,8 +277,9 @@ export const homeCards = [
     register: 'gathering',
   },
   {
-    // Shiatsu, among the modalities on Services.
-    href: '/services/#shiatsu',
+    // TODO-JOAN: Services has no Zen Shiatsu offering; this opens her Zen
+    // Shiatsu Bodywork in the Lineage of Modalities on About.
+    href: '/about/#zen-shiatsu-bodywork',
     title: 'Zen Shiatsu',
     note: '',
     collage: 'scar-tissue.jpg',

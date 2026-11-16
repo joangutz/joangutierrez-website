@@ -21,8 +21,37 @@ Rediscover food as a source of pleasure, vitality, and ancient wisdom, and trust
 
 (The second, grouped version of the list — Body and belonging / Pleasure and
 desire / Healing and transition / Boundaries and agency — followed, then What
-to Expect, 1:1 Sessions prices, the modalities, Events / Workshops and This
-Very Body: Movement Archive. Those are on the page, verbatim.)
+to Expect and the 1:1 Sessions prices. Those are on the page, verbatim.)
+
+Then these, which were on the page for a day as four cards and are off it
+now (the old cards came back in their place, at the site owner's request):
+
+SOMATIC SEXOLOGY
+Erotic Embodiment Coaching
+Sexological Bodywork
+
+HOLISTIC PELVIC CARE
+
+ANCESTRAL NUTRITION
+º Personalized coaching in Mindful Eating and Whole foods scratch cooking. Integrating principles from:
+Macrobiotics
+Ayurveda
+Ancient Chinese Medicine
+GAPS
+
+SHIATSU
+Zen Shiatsu
+Pelvic Shiatsu – inspired by Holistic Pelvic Care and Sexological Bodywork
+
+EVENTS / WORKSHOPS
+Spine Society (free monthly gathering)
+
+This Very Body: Movement Archive (coming soon)
+Hanging Body
+Water Bag Body
+Erotic Body
+Expressive Body
+Still Body
 
 After the Movement Archive, these notes followed:
 

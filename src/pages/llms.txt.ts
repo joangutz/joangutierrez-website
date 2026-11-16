@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { abs } from '../seo';
 import { site, booking, contact, kit, beginHere } from '../site';
 
@@ -10,6 +10,7 @@ import { site, booking, contact, kit, beginHere } from '../site';
  * Joan's own text; only the short notes on what each page holds are not.
  */
 export const GET: APIRoute = async () => {
+  const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
   const sessions = await getEntry('sessionsPage', 'sessions');
   const about = await getEntry('pages', 'about');
   const money = (n: number) => `$${n.toLocaleString('en-US')}`;
@@ -32,7 +33,7 @@ export const GET: APIRoute = async () => {
     '',
     ...(sessions
       ? [
-          `- [${sessions.data.oneToOne.title}](${abs('/services/#one-to-one')}): ` +
+          `- [${sessions.data.oneToOne.title}](${abs('/services/#prices')}): ` +
             sessions.data.oneToOne.rows
               .map((r) => {
                 const modes = [
@@ -43,14 +44,13 @@ export const GET: APIRoute = async () => {
               })
               .join('; ') +
             '.',
-          ...sessions.data.modalities.map(
-            (m) =>
-              `- [${m.title}](${abs(`/services/#${m.id}`)})${m.items ? `: ${m.intro ? `${m.intro} ` : ''}${m.items.join(', ')}` : ''}`
-          ),
+          ...offerings.map((o) => {
+            const p = o.data.prices[0];
+            return `- [${o.data.title}](${abs(`/services/#${o.id}`)}): ${p.label}, ${money(p.amount)}${p.note ? ` (${p.note})` : ''}. ${o.data.includes[0]}`;
+          }),
           ...beginHere
-            .filter((b) => b.href.endsWith('#spine-society'))
+            .filter((b) => !offerings.some((o) => b.href.endsWith(`#${o.id}`)))
             .map((b) => `- [${b.title}](${abs(b.href)})${b.note ? `: ${b.note}` : ''}`),
-          `- [${sessions.data.archive.title}](${abs('/services/#this-very-body')}): ${sessions.data.archive.note} — ${sessions.data.archive.bodies.join(', ')}.`,
           '',
           sessions.data.expect.paragraphs[sessions.data.expect.paragraphs.length - 1],
         ]
@@ -58,7 +58,7 @@ export const GET: APIRoute = async () => {
     '',
     '## Pages',
     '',
-    `- [Services](${abs('/services/')}): who the work is for, what to expect, 1:1 session prices, the modalities, events, and the Discovery Form.`,
+    `- [Services](${abs('/services/')}): who the work is for, what to expect, 1:1 session prices, every offering, and the Discovery Form.`,
     `- [About](${abs('/about/')}): Joan's biography and her Lineage of Modalities — Seki Method; Somatic Sexology – Certified Sexological Bodywork; Holistic Pelvic Care™; Zen Shiatsu Bodywork.`,
     `- [Resources](${abs('/resources/')}): ${kit.freebie} — ${kit.freebieBody}`,
     `- [Book a Call](${abs('/begin/')}): ${booking.label}.`,

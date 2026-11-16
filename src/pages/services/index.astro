@@ -4,7 +4,7 @@ import ChapterRail from '../../components/ChapterRail.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import ApplicationForm from '../../components/ApplicationForm.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
-import Collage from '../../components/Collage.astro';
+import OfferingCard from '../../components/OfferingCard.astro';
 import { getCollection, getEntry } from 'astro:content';
 import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
@@ -18,19 +18,15 @@ const s = entry.data;
 
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 
-/* The gathering keeps its name, note and collage in one list (site.ts),
-   shared with the homepage. */
+/* The offerings with only a name so far, from the same list as the
+   homepage's, so their names, notes, collages and swatches never drift
+   apart. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-const events = [byHref('/services/#spine-society')];
+const program = byHref('/services/#this-very-body');
+const happenings = [byHref('/services/#relational-integrity-labs'), byHref('/services/#spine-society')];
 const anchor = (h: string) => h.split('#')[1];
 
-/* A collage for each modality — texture and colour, not illustration. */
-const MODALITY_ART: Record<string, string> = {
-  'somatic-sexology': 'erotic-embodiment.jpg',
-  'holistic-pelvic-care': 'scar-tissue.jpg',
-  'ancestral-nutrition': 'work-1.jpg',
-  shiatsu: 'work-2.jpg',
-};
+const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
 
 const money = (n: number) => `$${n}`;
 
@@ -55,7 +51,7 @@ const catalog = {
         .filter(([, price]) => price !== undefined)
         .map(([mode, price]) => ({
           '@type': 'Offer',
-          url: abs('/services/#one-to-one'),
+          url: abs('/services/#prices'),
           price,
           priceCurrency: 'USD',
           description: `${s.oneToOne.title}, ${r.minutes} minutes, ${mode}`,
@@ -66,12 +62,20 @@ const catalog = {
           },
         }))
     ),
-    ...s.modalities.map((m) => ({
+    ...offerings.map((o) => ({
       '@type': 'Offer',
-      url: abs(`/services/#${m.id}`),
-      itemOffered: { '@type': 'Service', name: m.title, provider: { '@id': abs('/#organization') } },
+      url: abs(`/services/#${o.id}`),
+      price: o.data.prices[0].amount,
+      priceCurrency: 'USD',
+      description: o.data.prices[0].label,
+      itemOffered: {
+        '@type': 'Service',
+        name: o.data.title,
+        description: o.data.includes[0],
+        provider: { '@id': abs('/#organization') },
+      },
     })),
-    ...events.map((h) => ({
+    ...[program, ...happenings].map((h) => ({
       '@type': 'Offer',
       url: abs(h.href),
       itemOffered: { '@type': 'Service', name: h.title, ...(h.note ? { description: h.note } : {}) },
@@ -141,7 +145,7 @@ const catalog = {
 
   {/* 3 · 1:1 Sessions: her lengths and prices, line by line, as she
       wrote them. */}
-  <section class="band section" id="one-to-one">
+  <section class="band section" id="prices">
     <div class="wide">
       <h2 class="section-title">{s.oneToOne.title}</h2>
       <dl class="prices">
@@ -164,51 +168,45 @@ const catalog = {
     </div>
   </section>
 
-  {/* 4 · The modalities, as cards like the homepage's. */}
-  <section class="band section" id="modalities">
+  {/* 4 · Services: the cards, as before — the swatch row on top doubles as
+      the key to their colours. */}
+  <section class="band section" id="services">
     <div class="wide">
-      <ul class="modalities">
+      {/* Joan, 11/16: "Say Services." */}
+      <h2 class="section-title services-title">{s.title}</h2>
+
+      <ol class="range">
         {
-          s.modalities.map((m) => (
-            <li class="modality" id={m.id}>
-              <span class="modality-art film">
-                <Collage src={MODALITY_ART[m.id] ?? 'all-in-one.jpg'} alt="" register="one" sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 22vw" />
-              </span>
-              <h3 class="modality-title">{m.title}</h3>
-              {m.intro && <p class="modality-intro">{m.intro}</p>}
-              {m.items && (
-                <ul class="modality-items">
-                  {m.items.map((i) => <li>{i}</li>)}
-                </ul>
-              )}
+          beginHere.map((o) => (
+            <li class={`range-step reg-${o.register}`}>
+              <a class="range-name" href={withBase(o.href)}>{o.title}</a>
             </li>
           ))
         }
-      </ul>
+      </ol>
 
-      {/* 5 · Events and workshops. */}
-      <h2 class="label events-label" id="events">{s.events.title}</h2>
-      <div class="tile-row">
-        {events.map((h) => <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />)}
-      </div>
-
-      {/* 6 · This Very Body: Movement Archive — coming soon, with its five
-          bodies and the waitlist. */}
-      <div class="archive">
+      <div class="card-stack">
+        {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
         <OfferingPlain
-          id="this-very-body"
-          title={s.archive.title}
-          note={s.archive.note}
-          collage="desire-mapping.jpg"
-          register="program"
-          action={{ href: '#apply', label: 'Join the Waitlist', subject: 'This Very Body: Movement Archive (waitlist)' }}
+          id={anchor(program.href)}
+          title={program.title}
+          note={program.note}
+          collage={program.collage}
+          register={program.register}
+          action={{ href: '#apply', label: 'Join the Waitlist', subject: 'This Very Body Program (waitlist)' }}
           kitAction={kit.waitlistAction}
           kitButton="Join the Waitlist"
-        >
-          <ul>
-            {s.archive.bodies.map((b) => <li>{b}</li>)}
-          </ul>
-        </OfferingPlain>
+        />
+      </div>
+
+      {/* Joan's heading for the two gatherings, shortened at her request. */}
+      <h2 class="label happenings-label">Happenings</h2>
+      <div class="tile-row">
+        {
+          happenings.map((h) => (
+            <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />
+          ))
+        }
       </div>
 
       {hasQuotes && (
@@ -411,92 +409,59 @@ const catalog = {
   }
 
   /* ---- Modalities ---- */
-  .modalities {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(1.25rem, 3vw, 2rem);
+  .services-title {
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
   }
 
-  .modality-art {
-    display: block;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
+  /* ---- Services: the cards ---- */
+  .range {
+    list-style: none;
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
     border: 1px solid var(--rule);
-    border-bottom: 5px solid var(--kind-one);
   }
 
-  .modality-art :global(.collage) {
-    width: 100%;
-    height: 100%;
+  .range-step {
+    min-height: 4.5rem;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.75rem;
   }
 
-  .modality-title {
-    margin: 1rem 0 0;
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-weight: 400;
-    line-height: 1.15;
+  .range-name {
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    color: var(--color-bract);
   }
 
-  .modality-intro {
-    margin: 0.6rem 0 0;
-    font-size: 0.98rem;
-    line-height: 1.55;
-  }
+  .reg-plumstone { background: var(--color-plumstone); }
+  .reg-cochineal { background: var(--color-cochineal); }
+  .reg-brick { background: var(--color-brick); }
+  .reg-clay { background: var(--color-clay); }
 
-  .modality-items {
-    list-style: none;
-    margin: 0.7rem 0 0;
-    padding: 0;
-    display: grid;
-    gap: 0.35rem;
-  }
-
-  .modality-items li {
-    position: relative;
-    padding-left: 1.1rem;
-    font-size: 0.98rem;
-    line-height: 1.5;
-  }
-
-  .modality-items li::before {
-    content: '';
-    position: absolute;
-    left: 0.1rem;
-    /* A small dot, centred on the first line: half a line-height down
-       (the lh unit), less half the dot. 0.7em first, for browsers without
-       lh. */
-    top: 0.7em;
-    top: calc(0.5lh - 2.5px);
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgb(var(--ch-quick) / 0.75);
-  }
-
-  @media (max-width: 1000px) {
-    .modalities {
+  @media (max-width: 560px) {
+    .range {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 520px) {
-    .modalities {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .modality-art {
-      aspect-ratio: 16 / 9;
-    }
+  .card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 5vw, 3.5rem);
   }
 
-  /* ---- Events and the archive ---- */
-  .events-label {
+  .happenings-label {
     display: block;
-    margin: clamp(3.5rem, 8vw, 5rem) 0 1.25rem;
+    margin: clamp(3rem, 7vw, 4.5rem) 0 1.25rem;
   }
 
   /* Cards with only a name sit side by side as tiles. */
@@ -504,10 +469,6 @@ const catalog = {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
     gap: clamp(1.25rem, 3vw, 2rem);
-  }
-
-  .archive {
-    margin-top: clamp(3.5rem, 8vw, 5rem);
   }
 
   .after-prices {
