@@ -148,7 +148,10 @@ const sessionsPage = defineCollection({
     }),
     expect: z.object({
       title: z.string(),
-      paragraphs: z.array(z.string()),
+      intro: z.string(),
+      /** Her paragraphs grouped into boxes; **…** marks her words set bold. */
+      boxes: z.array(z.object({ icon: z.string(), paragraphs: z.array(z.string()) })),
+      where: z.string(),
       wish: z.string(),
       link: z.string(),
     }),

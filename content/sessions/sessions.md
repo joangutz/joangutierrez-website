@@ -46,18 +46,33 @@ belong:
 
 expect:
   title: What to Expect
-  paragraphs:
-    - Every session is its own living encounter. Each one is shaped by what is present, alive, and wanting attention in you that day.
-    - Your first session is 2 hours. We begin with client forms and a verbal intake, so I can come close to your current situation and what you hope for from our work together. We’ll walk through all aspects of your life to create a panoramic view of your health and intentions. Questions are encouraged and welcome.
-    - Together, we’ll explore your specific concerns or curiosities, and I may recommend a series of 2–8 sessions. Toward the end of our series, we’ll pause together to ask and notice what's changed, what’s still tender, and does continuing to work together still feel alive and supportive? You have a choice to continue, pause, or complete.
-    - Follow-up sessions are 1, 1.5, or 2 hours, depending on the nature of our work.
-    - Each one begins with time to arrive and notice what is present.
-    - From there, we may move into conversation, somatic practice and inquiry, breath, movement, or hands-on bodywork and education.
-    - This is a trauma-responsive, consent-forward practice. Sexological bodywork includes one-way, client-directed touch. You choose if, when, and how touch is part of our work. You are always in your choice. I adhere to the code of ethics of the ACSB.
-    - The support you receive is woven from all of my training, including Somatic Sexology, Body-Mind Centering®, Sexological Bodywork, Seki Method, Zen Shiatsu, Ancient Wisdom Nutrition, post-lineage Yoga, Butoh, Holistic Pelvic Care™, fine arts, and Dharma teachings.
-    - Depending on your intentions, our work may include breathwork, movement, art practice, bodywork, guided imagery, acupressure and meridian exercises, scar remediation, body mapping, anatomy education, and nutrition coaching.
-    - All of it is in service of best meeting you where you are at and discovering remedies and rituals that are truly yours.
-    - Sessions are available online via Zoom or in person, either at my office near the lake in Edgewater, Chicago, IL, or, when agreed upon, at a private outdoor location or your kitchen.
+  # Her text, verbatim, grouped into boxes. **…** marks the words set in
+  # bold as each box's lead — her own words, never a heading of ours. Each
+  # box has a small line icon (by name; see the page).
+  intro: Every session is its own living encounter. Each one is shaped by what is present, alive, and wanting attention in you that day.
+  boxes:
+    - icon: first
+      paragraphs:
+        - '**Your first session is 2 hours.** We begin with client forms and a verbal intake, so I can come close to your current situation and what you hope for from our work together. We’ll walk through all aspects of your life to create a panoramic view of your health and intentions. Questions are encouraged and welcome.'
+    - icon: series
+      paragraphs:
+        - 'Together, we’ll explore your specific concerns or curiosities, and **I may recommend a series of 2–8 sessions.** Toward the end of our series, we’ll pause together to ask and notice what''s changed, what’s still tender, and does continuing to work together still feel alive and supportive? You have a choice to continue, pause, or complete.'
+    - icon: follow
+      paragraphs:
+        - '**Follow-up sessions are 1, 1.5, or 2 hours,** depending on the nature of our work.'
+        - Each one begins with time to arrive and notice what is present.
+        - From there, we may move into conversation, somatic practice and inquiry, breath, movement, or hands-on bodywork and education.
+    - icon: consent
+      paragraphs:
+        - '**This is a trauma-responsive, consent-forward practice.** Sexological bodywork includes one-way, client-directed touch. You choose if, when, and how touch is part of our work. You are always in your choice. I adhere to the code of ethics of the ACSB.'
+    - icon: woven
+      paragraphs:
+        - '**The support you receive is woven from all of my training,** including Somatic Sexology, Body-Mind Centering®, Sexological Bodywork, Seki Method, Zen Shiatsu, Ancient Wisdom Nutrition, post-lineage Yoga, Butoh, Holistic Pelvic Care™, fine arts, and Dharma teachings.'
+    - icon: include
+      paragraphs:
+        - '**Depending on your intentions, our work may include** breathwork, movement, art practice, bodywork, guided imagery, acupressure and meridian exercises, scar remediation, body mapping, anatomy education, and nutrition coaching.'
+        - All of it is in service of best meeting you where you are at and discovering remedies and rituals that are truly yours.
+  where: '**Sessions are available online via Zoom or in person,** either at my office near the lake in Edgewater, Chicago, IL, or, when agreed upon, at a private outdoor location or your kitchen.'
   wish: Through these encounters, my deepest wish is that you may remember belonging, honor desire, release shame, cultivate meaningful relationships, alchemize pain, meet suffering courageously, move through grief, delight in sexuality, reclaim sensation, pleasure, and creative agency, and nourish ways of living that bring you joy.
   link: Get in Touch
 

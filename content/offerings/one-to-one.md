@@ -6,9 +6,19 @@ register: one
 collage: erotic-embodiment.jpg
 alt: Collage — a face in profile, cut from grey photograph, with a halved cantaloupe where the body would be.
 prices:
-  - label: Three-Month Study
-    amount: 1800
-    note: Monthly payment plans available
+  # The hourly 1:1 prices (Joan, 11/16), shared by both offerings.
+  - label: 60 minutes, online
+    amount: 120
+  - label: 75 minutes, online
+    amount: 150
+  - label: 75 minutes, in-person
+    amount: 180
+  - label: 90 minutes, in-person
+    amount: 250
+  - label: 120 minutes, online
+    amount: 320
+  - label: 120 minutes, in-person
+    amount: 350
 includes:
   - 'Initial session: 75–90 minute somatic intake. Together we gather your history with your body, pleasure, touch, and eroticism; your breath, arousal, and stress patterns; where sensation is vivid and where it''s quiet; and your intentions for engaging this work now.'
   - 'Six hours of session time each month, arranged to fit your life: two 3-hour immersions, three 2-hour sessions, or one full 6-hour day.'

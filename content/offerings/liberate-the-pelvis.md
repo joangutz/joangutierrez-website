@@ -6,9 +6,19 @@ register: one
 collage: scar-tissue.jpg
 alt: Collage — pale arms and open hands reaching across a grey ground, holding something small and lit.
 prices:
-  - label: Monthly Practice
-    amount: 580
-    note: Payment plans available
+  # The hourly 1:1 prices (Joan, 11/16), shared by both offerings.
+  - label: 60 minutes, online
+    amount: 120
+  - label: 75 minutes, online
+    amount: 150
+  - label: 75 minutes, in-person
+    amount: 180
+  - label: 90 minutes, in-person
+    amount: 250
+  - label: 120 minutes, online
+    amount: 320
+  - label: 120 minutes, in-person
+    amount: 350
 includes:
   - 'Initial session: 75–90 minute intake of your history with the scar — how it came to be, how it has changed your sensation, movement, and relationship with that part of your body, and what you hope to reclaim.'
   - 'Instruction in self-palpation: learning to feel your scar with educated hands. Sensing restriction between scar and surrounding tissue, noticing sensation and its absence.'

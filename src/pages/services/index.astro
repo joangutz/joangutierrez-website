@@ -30,6 +30,56 @@ const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order
 
 const money = (n: number) => `$${n}`;
 
+/**
+ * Her text with **…** set bold, and "ACSB" linked to the code of ethics.
+ * Splits a paragraph into parts; nothing is added to her words.
+ */
+const rich = (text: string) =>
+  text.split('**').flatMap((chunk, i, all) =>
+    i % 2
+      ? // Bold that opens the paragraph is its lead; bold mid-sentence stays
+        // in the line.
+        [{ text: chunk, bold: true, lead: i === 1 && all[0] === '', link: false }]
+      : chunk
+          .split(/(ACSB)/)
+          .filter(Boolean)
+          .map((t) => ({ text: t, bold: false, lead: false, link: t === 'ACSB' }))
+  );
+
+/**
+ * Small line marks, in the manner of the labelled diagram grids on the
+ * Cosmos board: they encode the shape of each box, and the words carry the
+ * meaning.
+ */
+const EXPECT_MARKS: Record<string, string> = {
+  // The first meeting: a full circle, time held.
+  first: 'M32,32 m-18,0 a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0 M32,20 V32 L40,38',
+  // A series: points along a line, the last one open.
+  series: 'M10,32 H54 M14,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M26,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M38,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M50,26 v12',
+  // Follow-ups: a returning wave.
+  follow: 'M8,36 C16,20 24,20 32,32 C40,44 48,44 56,28 M50,26 L56,28 L56,34',
+  // Consent: two open hands of a circle, a space between them.
+  consent: 'M28,14 A18,18 0 0,0 28,50 M36,14 A18,18 0 0,1 36,50 M32,26 v12',
+  // Woven: three strands crossing.
+  woven: 'M10,20 C24,20 24,44 38,44 S52,20 54,20 M10,44 C24,44 24,20 38,20 S52,44 54,44 M10,32 H54',
+  // What it may include: a constellation.
+  include: 'M18,22 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M44,18 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M30,40 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M50,44 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M20,24 L28,38 M33,39 L47,43 M42,20 L32,37',
+  // Where: water under a horizon.
+  where: 'M8,24 H56 M10,34 C16,30 22,30 28,34 S40,38 46,34 S54,30 56,32 M10,44 C16,40 22,40 28,44 S40,48 46,44 S54,40 56,42',
+};
+
+/* A mark for each of the four groups of "You belong here". */
+const BELONG_MARKS = [
+  // Body and belonging: a vessel.
+  'M32,10 C20,22 16,32 16,40 A16,14 0 0,0 48,40 C48,32 44,22 32,10 Z',
+  // Pleasure and desire: a flame.
+  'M32,10 C40,22 48,28 48,40 A16,16 0 0,1 16,40 C16,32 22,28 26,22 C28,30 32,32 34,30 C36,24 32,18 32,10 Z',
+  // Healing and transition: a spiral.
+  'M32,32 m0,-3 a3,3 0 1,1 -3,3 a7,7 0 1,1 7,7 a11,11 0 1,1 -11,-11 a15,15 0 1,1 15,15',
+  // Boundaries and agency: a circle with an opening.
+  'M40,15 A18,18 0 1,0 50,32 M50,22 V32 H40',
+];
+
 /* "I adhere to the code of ethics of the ACSB": the initials link to the
    code itself. */
 const ACSB = 'ACSB';
@@ -51,7 +101,7 @@ const catalog = {
         .filter(([, price]) => price !== undefined)
         .map(([mode, price]) => ({
           '@type': 'Offer',
-          url: abs('/services/#prices'),
+          url: abs('/services/#services'),
           price,
           priceCurrency: 'USD',
           description: `${s.oneToOne.title}, ${r.minutes} minutes, ${mode}`,
@@ -65,9 +115,7 @@ const catalog = {
     ...offerings.map((o) => ({
       '@type': 'Offer',
       url: abs(`/services/#${o.id}`),
-      price: o.data.prices[0].amount,
-      priceCurrency: 'USD',
-      description: o.data.prices[0].label,
+      description: o.data.container,
       itemOffered: {
         '@type': 'Service',
         name: o.data.title,
@@ -93,7 +141,8 @@ const catalog = {
 
   <PageBanner title={s.title} image="happenings.jpg" cinema />
 
-  {/* 1 · Offerings: who this is for, in Joan's four groups. */}
+  {/* 1 · Who this is for: Joan's four groups as four even tiles, each with
+      its own mark and colour, so lists of different lengths read as a set. */}
   <section class="band section" id="offerings">
     <div class="wide">
       <span class="label">{s.belong.label}</span>
@@ -101,8 +150,11 @@ const catalog = {
 
       <div class="belong">
         {
-          s.belong.groups.map((g) => (
-            <div class="belong-group">
+          s.belong.groups.map((g, i) => (
+            <div class={`belong-group belong-${i % 4}`}>
+              <svg class="belong-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <path d={BELONG_MARKS[i % BELONG_MARKS.length]} />
+              </svg>
               <h3 class="belong-title">{g.title}</h3>
               <ul class="belong-list">
                 {g.items.map((item) => <li>{item}</li>)}
@@ -118,59 +170,10 @@ const catalog = {
     </div>
   </section>
 
-  {/* 2 · What to expect, on a swell of tone; her wish set apart at the end,
-      and the way to begin under it. */}
-  <section class="swell" id="what-to-expect">
-    <div class="band section">
-      <div class="wide expect">
-        <h2 class="section-title">{s.expect.title}</h2>
-        {
-          s.expect.paragraphs.map((p) =>
-            p.includes(ACSB) ? (
-              <p>
-                {p.split(ACSB)[0]}
-                <Link href={contact.ethics}>{ACSB}</Link>
-                {p.split(ACSB).slice(1).join(ACSB)}
-              </p>
-            ) : (
-              <p>{p}</p>
-            )
-          )
-        }
-        <p class="expect-wish">{s.expect.wish}</p>
-        <Link variant="action" href={withBase('/begin/')}>{s.expect.link}</Link>
-      </div>
-    </div>
-  </section>
-
-  {/* 3 · 1:1 Sessions: her lengths and prices, line by line, as she
-      wrote them. */}
-  <section class="band section" id="prices">
-    <div class="wide">
-      <h2 class="section-title">{s.oneToOne.title}</h2>
-      <dl class="prices">
-        {
-          s.oneToOne.rows.map((r) => (
-            <div class="price-row">
-              <dt>{r.minutes} minutes</dt>
-              <dd>
-                {[
-                  r.online !== undefined ? `${money(r.online)} online` : '',
-                  r.inPerson !== undefined ? `${money(r.inPerson)} in-person` : '',
-                ]
-                  .filter(Boolean)
-                  .join(' / ')}
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
-  </section>
-
-  {/* 4 · Services: the cards, as before — the swatch row on top doubles as
-      the key to their colours. */}
-  <section class="band section" id="services">
+  {/* 2 · Services: the swatch row (the key to the colours), the 1:1 prices,
+      the cards, and Happenings — everything that can be booked, together. */}
+  <section class="swell" id="services">
+  <div class="band section">
     <div class="wide">
       {/* Joan, 11/16: "Say Services." */}
       <h2 class="section-title services-title">{s.title}</h2>
@@ -184,6 +187,22 @@ const catalog = {
           ))
         }
       </ol>
+
+      {/* Her 1:1 prices, line by line as she wrote them. */}
+      <div class="prices" aria-labelledby="prices-title">
+        <h3 class="label prices-title" id="prices-title">{s.oneToOne.title}</h3>
+        <dl class="price-tiles">
+          {
+            s.oneToOne.rows.map((r) => (
+              <div class="price-tile">
+                <dt>{r.minutes} minutes</dt>
+                {r.online !== undefined && <dd>{money(r.online)} online</dd>}
+                {r.inPerson !== undefined && <dd>{money(r.inPerson)} in-person</dd>}
+              </div>
+            ))
+          }
+        </dl>
+      </div>
 
       <div class="card-stack">
         {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
@@ -214,6 +233,56 @@ const catalog = {
           <Testimonials />
         </div>
       )}
+    </div>
+    </div>
+  </section>
+
+  {/* 3 · What to expect: her opening lines large, then her paragraphs as
+      boxes in a grid, each with a small line mark and her own words in bold
+      as its lead; where, her wish, and the way in close it. */}
+  <section class="band section" id="what-to-expect">
+    <div class="wide">
+      <h2 class="section-title">{s.expect.title}</h2>
+      <p class="expect-intro">{s.expect.intro}</p>
+
+      <ul class="expect-grid">
+        {
+          s.expect.boxes.map((b) => (
+            <li class="expect-box">
+              <svg class="expect-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <path d={EXPECT_MARKS[b.icon] ?? EXPECT_MARKS.first} />
+              </svg>
+              {b.paragraphs.map((p) => (
+                <p>
+                  {rich(p).map((part) =>
+                    part.bold ? (
+                      <strong class:list={{ lead: part.lead }}>{part.text}</strong>
+                    ) : part.link ? (
+                      <Link href={contact.ethics}>{part.text}</Link>
+                    ) : (
+                      part.text
+                    )
+                  )}
+                </p>
+              ))}
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="expect-where">
+        <svg class="expect-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <path d={EXPECT_MARKS.where} />
+        </svg>
+        <p>
+          {rich(s.expect.where).map((part) => (part.bold ? <strong class:list={{ lead: part.lead }}>{part.text}</strong> : part.text))}
+        </p>
+      </div>
+
+      <div class="expect-close">
+        <p class="expect-wish">{s.expect.wish}</p>
+        <Link variant="action" href={withBase('/begin/')}>{s.expect.link}</Link>
+      </div>
     </div>
   </section>
 
@@ -266,23 +335,45 @@ const catalog = {
   }
 
   /* ---- Offerings: You belong here ---- */
+  /* Four even tiles: equal height in each row, a thin bar of colour on
+     top, a small mark, the group's name, its list. */
   .belong {
     margin-top: clamp(2rem, 5vw, 3rem);
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(2rem, 5vw, 3.5rem) clamp(2rem, 6vw, 4.5rem);
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .belong-group {
+    --bar: var(--color-clay);
+    padding: clamp(1.5rem, 3.5vw, 2.25rem);
+    background: rgb(var(--ch-bract) / 0.55);
+    border: 1px solid var(--rule);
+    border-top: 4px solid var(--bar);
+  }
+
+  .belong-1 { --bar: var(--color-cochineal); }
+  .belong-2 { --bar: var(--color-plumstone); }
+  .belong-3 { --bar: var(--color-brick); }
+
+  .belong-mark,
+  .expect-mark {
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    fill: none;
+    stroke: var(--color-quick);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .belong-title {
-    margin: 0 0 1rem;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--rule);
-    font-family: var(--font-label);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
+    margin: 1rem 0 1.1rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.15;
   }
 
   .belong-list {
@@ -290,14 +381,14 @@ const catalog = {
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.85rem;
+    gap: 0.8rem;
   }
 
   .belong-list li {
     position: relative;
-    padding-left: 1.4rem;
-    font-size: 1.04rem;
-    line-height: 1.6;
+    padding-left: 1.3rem;
+    font-size: 1rem;
+    line-height: 1.55;
   }
 
   .belong-list li::before {
@@ -335,82 +426,169 @@ const catalog = {
     }
   }
 
-  /* ---- What to expect ---- */
+  .services-title {
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  /* ---- Services: a swell of tone, so the section reads as its own ---- */
   .swell {
     background: linear-gradient(
       to bottom,
       var(--color-madder) 0%,
-      var(--swell-ground) 18%,
-      var(--swell-ground) 82%,
+      var(--swell-ground) 10%,
+      var(--swell-ground) 90%,
       var(--color-madder) 100%
     );
   }
 
-  .expect {
-    max-width: 42rem;
-  }
-
-  .expect p {
-    margin: 1.1rem 0 0;
-    font-size: clamp(1.02rem, 1.6vw, 1.12rem);
-    line-height: 1.68;
-  }
-
-  .expect .section-title {
-    margin-bottom: 0.5rem;
-  }
-
-  .expect .expect-wish {
-    margin-top: 2.25rem;
-    font-family: var(--font-display);
-    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
-    line-height: 1.4;
-  }
-
-  .expect :global(.lnk-action) {
-    margin-top: 2rem;
-  }
-
-  /* ---- 1:1 Sessions ---- */
+  /* The 1:1 prices: one tile per length, her words in each. */
   .prices {
-    margin: 1.75rem 0 0;
-    max-width: 34rem;
+    margin: 0 0 clamp(2.5rem, 6vw, 3.5rem);
   }
 
-  .price-row {
-    display: grid;
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: 1rem;
-    align-items: baseline;
-    padding: 0.95rem 0;
-    border-bottom: 1px solid var(--rule);
+  .prices-title {
+    display: block;
+    margin: 0 0 1rem;
   }
 
-  .price-row:first-child {
-    border-top: 1px solid var(--rule);
-  }
-
-  .price-row dt {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 2vw, 1.25rem);
-  }
-
-  .price-row dd {
+  .price-tiles {
     margin: 0;
-    font-size: 1.08rem;
-    font-variant-numeric: tabular-nums;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
   }
 
-  @media (max-width: 420px) {
-    .price-row {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.2rem;
+  .price-tile {
+    padding: clamp(1rem, 2.5vw, 1.4rem);
+    background: var(--color-madder);
+  }
+
+  .price-tile dt {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.9vw, 1.35rem);
+    white-space: nowrap;
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+
+  .price-tile dd {
+    margin: 0.2rem 0 0;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-2);
+  }
+
+  @media (max-width: 640px) {
+    .price-tiles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  /* ---- Modalities ---- */
-  .services-title {
-    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  /* ---- What to expect ---- */
+  .expect-intro {
+    margin: 1.25rem 0 0;
+    max-width: 38rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+    font-weight: 300;
+    line-height: 1.35;
+  }
+
+  /* A grid of boxes divided by hairlines, like the diagram grids on the
+     old page: each a mark, then her words. */
+  .expect-grid {
+    list-style: none;
+    margin: clamp(2.25rem, 5vw, 3rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .expect-box {
+    padding: clamp(1.4rem, 3vw, 2rem);
+    background: var(--color-madder);
+  }
+
+  .expect-box p,
+  .expect-where p {
+    margin: 0.9rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .expect-box .expect-mark + p {
+    margin-top: 1.1rem;
+  }
+
+  .expect-box strong,
+  .expect-where strong {
+    font-weight: 600;
+  }
+
+  /* Her opening words, as the box's lead. */
+  .expect-box strong.lead,
+  .expect-where strong.lead {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--color-cochineal);
+  }
+
+  .expect-where {
+    margin-top: 1px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: center;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    background: rgb(var(--ch-bract) / 0.55);
+    border: 1px solid var(--rule);
+    border-top: 0;
+  }
+
+  .expect-where p {
+    margin: 0;
+  }
+
+  .expect-close {
+    margin: clamp(3rem, 7vw, 4.5rem) auto 0;
+    max-width: 40rem;
+    text-align: center;
+  }
+
+  .expect-wish {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.3vw, 1.5rem);
+    line-height: 1.45;
+  }
+
+  .expect-close :global(.lnk-action) {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 1000px) {
+    .expect-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .expect-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .expect-where {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   /* ---- Services: the cards ---- */

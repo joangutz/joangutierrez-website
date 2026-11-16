@@ -33,7 +33,7 @@ export const GET: APIRoute = async () => {
     '',
     ...(sessions
       ? [
-          `- [${sessions.data.oneToOne.title}](${abs('/services/#prices')}): ` +
+          `- [${sessions.data.oneToOne.title}](${abs('/services/#services')}): ` +
             sessions.data.oneToOne.rows
               .map((r) => {
                 const modes = [
@@ -44,15 +44,12 @@ export const GET: APIRoute = async () => {
               })
               .join('; ') +
             '.',
-          ...offerings.map((o) => {
-            const p = o.data.prices[0];
-            return `- [${o.data.title}](${abs(`/services/#${o.id}`)}): ${p.label}, ${money(p.amount)}${p.note ? ` (${p.note})` : ''}. ${o.data.includes[0]}`;
-          }),
+          ...offerings.map((o) => `- [${o.data.title}](${abs(`/services/#${o.id}`)}): ${o.data.container}. ${o.data.includes[0]}`),
           ...beginHere
             .filter((b) => !offerings.some((o) => b.href.endsWith(`#${o.id}`)))
             .map((b) => `- [${b.title}](${abs(b.href)})${b.note ? `: ${b.note}` : ''}`),
           '',
-          sessions.data.expect.paragraphs[sessions.data.expect.paragraphs.length - 1],
+          sessions.data.expect.where.replaceAll('**', ''),
         ]
       : []),
     '',
