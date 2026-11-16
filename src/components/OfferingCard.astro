@@ -30,21 +30,21 @@ const id = offering.id;
 <article class="offering" data-offering data-register={o.register}>
   <div class="card-inner" data-inner>
     <!-- Resting face -->
-    <div class="face face-front" data-face="front">
+    <div class="face face-front cardstock" data-face="front">
       {/* A paint chip: the image edge to edge, its name on a swatch of the
           offering's own register directly beneath. The lotería double frame is
           gone — between it, the card border and the column divider, an image
           arrived behind three separate rules. */}
       {/* The photograph whole, its colour a thin strip along its edge; the
           name on the cardstock beside it, as on the Red Rose card. */}
-      <div class="front-art card-edge">
+      <div class="front-art">
         <div class="chip-image film">
           <Collage src={o.collage} alt={o.alt} register={o.register} />
         </div>
       </div>
 
-      <div class="front-text cardstock">
-        <span class="label">{o.container}</span>
+      <div class="front-text">
+        <span class="card-key">{o.container}</span>
         <h2 class="card-name">{o.title}</h2>
 
         <div class="front-foot">
@@ -139,6 +139,15 @@ const id = offering.id;
 </article>
 
 <style>
+  /* ---- The front: one sheet of cardstock, the photograph set into it
+     like a mounted print, the words beside it with room around them. ---- */
+  .face.face-front {
+    border: 0;
+    padding: clamp(0.7rem, 1.3vw, 1rem);
+    gap: clamp(0.7rem, 1.3vw, 1rem);
+    box-shadow: 0 1px 2px rgb(var(--ch-plum) / 0.08), 0 14px 34px rgb(var(--ch-plum) / 0.08);
+  }
+
   .offering {
     perspective: 1800px;
   }
@@ -211,18 +220,15 @@ const id = offering.id;
 
   .front-text {
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: clamp(1.5rem, 3vw, 2.25rem);
+    padding: clamp(1.5rem, 3.5vw, 3rem) clamp(1.25rem, 3vw, 2.5rem);
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    justify-content: center;
   }
 
 
   .front-foot {
-    margin-top: auto;
-    padding-top: 1.5rem;
+    padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -564,6 +570,34 @@ const id = offering.id;
     :global(.js-turn)[data-open] .face-back {
       opacity: 1;
     }
+  }
+
+  /* The way in, as a quiet line of tracked capitals over a hairline, its
+     arrow drawn in hairline too — not a filled button. */
+  .turn[data-turn='open'],
+  .turn[data-gift-turn='open'],
+  .front-foot .turn {
+    gap: 0.75rem;
+    padding: 0 0 0.45rem;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--color-cochineal);
+    font-weight: 500;
+    letter-spacing: 0.24em;
+  }
+
+  .turn[data-turn='open']:hover,
+  .turn[data-turn='open']:focus-visible,
+  .turn[data-gift-turn='open']:hover,
+  .turn[data-gift-turn='open']:focus-visible,
+  .front-foot .turn:hover,
+  .front-foot .turn:focus-visible {
+    background: none;
+    box-shadow: none;
+    color: var(--color-plumstone);
   }
 </style>
 

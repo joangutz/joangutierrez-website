@@ -20,12 +20,12 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 
 <article class="gift" id="gift" data-gift>
   <div class="gift-inner" data-gift-inner>
-    <div class="face face-front" data-gift-face="front">
-      <div class="gift-art film card-edge" data-register="cochineal">
+    <div class="face face-front cardstock" data-gift-face="front" data-register="cochineal">
+      <div class="gift-art film">
         <Collage src="rose.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
       </div>
-      <div class="front-text cardstock">
-        <span class="label">A Gift</span>
+      <div class="front-text">
+        <span class="card-key">A Gift</span>
         <h2 class="gift-title card-name">{kit.freebie}</h2>
         <p class="gift-sub">{kit.freebieSub}</p>
         <div class="front-foot">
@@ -120,6 +120,15 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 </article>
 
 <style>
+  /* ---- The front: one sheet of cardstock, the photograph set into it
+     like a mounted print, the words beside it with room around them. ---- */
+  .face.face-front {
+    border: 0;
+    padding: clamp(0.7rem, 1.3vw, 1rem);
+    gap: clamp(0.7rem, 1.3vw, 1rem);
+    box-shadow: 0 1px 2px rgb(var(--ch-plum) / 0.08), 0 14px 34px rgb(var(--ch-plum) / 0.08);
+  }
+
   .gift {
     perspective: 1800px;
     scroll-margin-top: 2rem;
@@ -159,12 +168,10 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 
   .front-text {
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    padding: clamp(1.5rem, 3.5vw, 3rem) clamp(1.25rem, 3vw, 2.5rem);
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    justify-content: center;
   }
 
   .back-glass {
@@ -195,19 +202,19 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     margin: 0.35rem 0 0;
   }
 
+  /* Her line under the name, in the soft serif's italic. */
   .gift-sub {
-    margin: 0.4rem 0 0;
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+    margin: 0.75rem 0 0;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-size: clamp(1.2rem, 1.9vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.3;
     color: var(--color-ink-2);
   }
 
   .front-foot {
-    margin-top: auto;
-    padding-top: 1.75rem;
+    padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
   }
 
   /* ---- The back ---- */
@@ -635,6 +642,34 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     .turn-arrow {
       transition: none;
     }
+  }
+
+  /* The way in, as a quiet line of tracked capitals over a hairline, its
+     arrow drawn in hairline too — not a filled button. */
+  .turn[data-turn='open'],
+  .turn[data-gift-turn='open'],
+  .front-foot .turn {
+    gap: 0.75rem;
+    padding: 0 0 0.45rem;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--color-cochineal);
+    font-weight: 500;
+    letter-spacing: 0.24em;
+  }
+
+  .turn[data-turn='open']:hover,
+  .turn[data-turn='open']:focus-visible,
+  .turn[data-gift-turn='open']:hover,
+  .turn[data-gift-turn='open']:focus-visible,
+  .front-foot .turn:hover,
+  .front-foot .turn:focus-visible {
+    background: none;
+    box-shadow: none;
+    color: var(--color-plumstone);
   }
 </style>
 
