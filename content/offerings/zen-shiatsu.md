@@ -29,6 +29,6 @@ right:
   - Each week, I have two one-hour slots open for an exchange. You receive a Shiatsu treatment, and I refine my technique and my practice of Five Element Theory.
 action:
   label: Book a Free Shiatsu Treatment
-  href: '#apply'
+  href: /discovery-form/
   subject: Zen Shiatsu (free treatment)
 ---

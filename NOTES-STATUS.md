@@ -123,14 +123,15 @@ Her text is in `content/offerings/*.md` (and the 1:1 prices in `content/sessions
 
 | Note | Status |
 |---|---|
-| 1:1 SESSIONS — not a 3-month study; delete it from the card | **Done** — "Three-Month Study" is gone from the front and the back. **Check with Joan:** at her request the rest is left alone, but the back still says "Six hours of session time each month…", "A monthly practice map…" and, under On duration, "Three months is the honest container." |
+| 1:1 SESSIONS — not a 3-month study; delete it from the card | **Done** — "Three-Month Study" is gone, and (her next note) the three-month lines on the back: the 3-3-3 paragraph and "Three months is the honest container." **Check with Joan:** three lines still speak of a month — "Six hours of session time each month…", "Brief check-ins throughout the month…", "A monthly practice map…" |
 | 1:1 prices: 60 $100 online · 75 $120 online / $150 in-person · 90 $200 in-person · 120 $250 in-person | **Done** — on the card's turned side, and what search engines and llms.txt read |
 | Spine Society — leave alone | **Left alone** — still a tile, now under Happenings by itself |
 | LIBERATE YOUR PELVIS (and the homepage card, was IMMERSIONS) | **Done** — the card: HALF-DAY · FULL DAY · MULTI–DAY, the name, her line; turned over, her text, Choose your depth as three tiers, A taste of what we may compose together, Personal Ethics, where, and Begin with a conversation → Inquire here (to the Book a Call page). The homepage card reads Liberate Your Pelvis and opens it |
-| Relational Integrity Labs | **Done** — her line on the front; turned over, her text, HOW?, WHO?, the two lists, the three prices. **Open:** Join the next Lab has no link of its own yet — it opens the Discovery Form with the Lab named (TODO-JOAN) |
-| Zen Shiatsu | **Done** — a card of its own; the homepage Zen Shiatsu card now opens it. **Open:** Book a Free Shiatsu Treatment has no booking link yet — it opens the Discovery Form with the treatment named (TODO-JOAN) |
+| Relational Integrity Labs | **Done** — her line on the front; turned over, her text, HOW?, WHO?, the two lists, the three prices. **Open:** Join the next Lab has no link of its own yet — it opens the Discovery Form page with the Lab named (TODO-JOAN) |
+| Zen Shiatsu | **Done** — a card of its own; the homepage Zen Shiatsu card now opens it. **Open:** Book a Free Shiatsu Treatment has no booking link yet — it opens the Discovery Form page with the treatment named (TODO-JOAN) |
 | This Very Body: Movement Archive (coming soon), the waitlist form | **Done** — her fields (First name, IG handle, Email address) and button (I'm in) on the card's turned side, with her five elemental bodies and the 7 weeks. Until Kit's waitlist form is set (`kit.waitlistAction` in `src/site.ts`), I'm in opens an email to Joan with the three answers; once it is set, it sends to Kit (first name and IG handle as Kit fields first_name and ig_handle) |
 | The Services index | **Done** — in her order: 1:1 Sessions, Spine Society, Liberate Your Pelvis, Relational Integrity Labs, Zen Shiatsu, This Very Body: Movement Archive (coming soon) |
+| The Discovery Form as its own page | **Done** — /discovery-form/, not in the menu: one glass pane on a photograph, as Book a Session is. The cards' buttons open it with what it is about in the address, carried into the email. Services now ends on Get in Touch alone |
 | Interface word | The button that turns the new cards reads **Explore** (1:1 keeps Includes; This Very Body reads Join the waitlist, her words). **Check with Joan** for a word she prefers |
 
 ## Build-session notes this round

@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import ChapterRail from '../../components/ChapterRail.astro';
 import Collage from '../../components/Collage.astro';
-import ApplicationForm from '../../components/ApplicationForm.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
 import OfferingCard from '../../components/OfferingCard.astro';
 import { getCollection, getEntry } from 'astro:content';
@@ -296,35 +295,10 @@ const catalog = {
 
   {/* The way in: a conversation, or the Discovery Form — together on the
       closing photograph, running straight into the footer. */}
-  <GetInTouch slot="close">
-    <div id="apply">
-      <ApplicationForm subject="1:1 Sessions" heading="Discovery Form" />
-    </div>
-  </GetInTouch>
+  {/* The close: Get in Touch on the lake. The Discovery Form has its own
+      page now (/discovery-form/), reached from the cards. */}
+  <GetInTouch slot="close" />
 </Base>
-
-<script>
-
-  import { onPage } from '../../lib/onPage';
-
-
-  onPage(() => {
-    // A card's link to the form says what the application is for: the form's
-    // subject (and its hidden fields) follow, so Joan's inbox shows it.
-    for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-apply-subject]')) {
-      link.addEventListener('click', () => {
-        const subject = link.dataset.applySubject;
-        const app = document.querySelector<HTMLElement>('#apply [data-app]');
-        if (!subject || !app) return;
-        app.dataset.subject = subject;
-        app.querySelector<HTMLInputElement>('input[name="applying_for"]')?.setAttribute('value', subject);
-        app.querySelector<HTMLInputElement>('input[name="_subject"]')?.setAttribute('value', `Ma Somatrix — ${subject}`);
-      });
-    }
-
-  });
-
-</script>
 
 <style>
   .section-title {

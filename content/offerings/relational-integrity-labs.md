@@ -46,6 +46,6 @@ right:
     amount: $60
 action:
   label: Join the next Lab
-  href: '#apply'
+  href: /discovery-form/
   subject: Relational Integrity Labs
 ---

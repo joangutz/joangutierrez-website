@@ -1,7 +1,9 @@
 ---
 title: 1:1 Sessions
 # Joan, 11/17: "NOT a 3 month study – PLEASE delete this out of the service
-# card." The label is gone; the rest is left as it was, at her request.
+# card." The label is gone, and (her next note) the lines about three months
+# on the back: the 3-3-3 paragraph and "Three months is the honest container."
+# The rest is left as it was.
 order: 1
 register: one
 collage: erotic-embodiment.jpg
@@ -41,6 +43,4 @@ why:
   title: On duration
   paragraphs:
     - Long-standing patterns — numbness, tension, habitual arousal, shame-shaped touch — don't change from one powerful session. They change from recurrent practice, fine-tuned to your unique needs as you go.
-    - Signs of change are usually felt within the first month. According to the 3-3-3 rule for habits, a flexible framework that tracks milestones, the first 3 days of integrating a new habit feel like hard work, the next 3 weeks become a manageable routine, and by 3 months the practice becomes automatic.
-    - Three months is the honest container. Long enough for change that lasts, short enough to stay devoted. As an educator I serve as an honesty-keeper.
 ---
