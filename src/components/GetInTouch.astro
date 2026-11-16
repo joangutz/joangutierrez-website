@@ -60,9 +60,11 @@ const paired = Astro.slots.has('default');
      pane; paired (Services), invitation and form share one pane in two
      columns with a hairline between them, the invitation level with the
      form's middle. */
+  /* Centred on the photograph, as the paired pane on Services is. */
   .close-alone {
     width: fit-content;
     max-width: min(34rem, 100%);
+    margin-inline: auto;
     padding: clamp(1.5rem, 4vw, 2.75rem);
   }
 
