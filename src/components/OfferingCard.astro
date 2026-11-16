@@ -14,9 +14,14 @@ import type { CollectionEntry } from 'astro:content';
  */
 interface Props {
   offering: CollectionEntry<'offerings'>;
+  /** Prices for the turned side, under their heading — Joan's 1:1 lengths
+      and prices, line by line as she wrote them. Kept off the front, so the
+      price is met once the work has been read. */
+  prices?: { title: string; rows: { minutes: number; online?: number; inPerson?: number }[] };
 }
 
-const { offering } = Astro.props;
+const { offering, prices } = Astro.props;
+const money = (n: number) => `$${n}`;
 const o = offering.data;
 const id = offering.id;
 
@@ -114,6 +119,23 @@ const id = offering.id;
           }
         </div>
       </div>
+
+      {
+        prices && (
+          <div class="back-prices">
+            <span class="panel-label">{prices.title}</span>
+            <dl class="back-price-list">
+              {prices.rows.map((r) => (
+                <div class="back-price">
+                  <dt>{r.minutes} minutes</dt>
+                  {r.online !== undefined && <dd>{money(r.online)} online</dd>}
+                  {r.inPerson !== undefined && <dd>{money(r.inPerson)} in-person</dd>}
+                </div>
+              ))}
+            </dl>
+          </div>
+        )
+      }
 
     </div>
   </div>
@@ -319,6 +341,42 @@ const id = offering.id;
 
   .panel-label-2 {
     margin-top: 2rem;
+  }
+
+  /* The prices, on the turned side only: a band across the foot of the
+     card, under a hairline. */
+  .back-prices {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule-glass);
+  }
+
+  .back-price-list {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+  }
+
+  .back-price dt {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .back-price dd {
+    margin: 0.25rem 0 0;
+    white-space: nowrap;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: rgb(var(--ch-bract) / 0.85);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 760px) {
+    .back-price-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .includes,

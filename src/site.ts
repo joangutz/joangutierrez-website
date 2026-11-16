@@ -37,9 +37,12 @@ export const booking = {
   /** Existing Cal.com booking. Linked, never embedded — see /begin/. */
   calLink: 'joan.gutierrez/20min',
   url: 'https://cal.com/joan.gutierrez/20min',
-  duration: '20 minutes',
-  // Joan's wording, from her original site's navigation.
-  label: 'Book a Complimentary Call',
+  // TODO-JOAN: the discovery call is now 30 minutes with a $15 fee (her
+  // text of 11/16); the link above is still her old 20-minute free call
+  // until she sends the new Cal.com link.
+  duration: '30 minutes',
+  // Joan's wording, 11/16.
+  label: 'Book a Discovery Call',
 } as const;
 
 /**

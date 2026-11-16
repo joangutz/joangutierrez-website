@@ -188,24 +188,9 @@ const catalog = {
         }
       </ol>
 
-      {/* Her 1:1 prices, line by line as she wrote them. */}
-      <div class="prices" aria-labelledby="prices-title">
-        <h3 class="label prices-title" id="prices-title">{s.oneToOne.title}</h3>
-        <dl class="price-tiles">
-          {
-            s.oneToOne.rows.map((r) => (
-              <div class="price-tile">
-                <dt>{r.minutes} minutes</dt>
-                {r.online !== undefined && <dd>{money(r.online)} online</dd>}
-                {r.inPerson !== undefined && <dd>{money(r.inPerson)} in-person</dd>}
-              </div>
-            ))
-          }
-        </dl>
-      </div>
-
       <div class="card-stack">
-        {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} /></div>)}
+        {/* Prices on the turned side of each card (Joan: "too up-front"). */}
+        {offerings.map((o) => <div id={o.id}><OfferingCard offering={o} prices={s.oneToOne} /></div>)}
         <OfferingPlain
           id={anchor(program.href)}
           title={program.title}
@@ -439,51 +424,6 @@ const catalog = {
       var(--swell-ground) 90%,
       var(--color-madder) 100%
     );
-  }
-
-  /* The 1:1 prices: one tile per length, her words in each. */
-  .prices {
-    margin: 0 0 clamp(2.5rem, 6vw, 3.5rem);
-  }
-
-  .prices-title {
-    display: block;
-    margin: 0 0 1rem;
-  }
-
-  .price-tiles {
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-
-  .price-tile {
-    padding: clamp(1rem, 2.5vw, 1.4rem);
-    background: var(--color-madder);
-  }
-
-  .price-tile dt {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 1.9vw, 1.35rem);
-    white-space: nowrap;
-    line-height: 1.1;
-    margin-bottom: 0.6rem;
-  }
-
-  .price-tile dd {
-    margin: 0.2rem 0 0;
-    font-size: 1rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--color-ink-2);
-  }
-
-  @media (max-width: 640px) {
-    .price-tiles {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   /* ---- What to expect ---- */
