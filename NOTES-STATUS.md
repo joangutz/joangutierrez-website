@@ -113,7 +113,7 @@ Her text is in `content/about/about.md`, verbatim (her ¨ marks around "spirit o
 | Background | **Done**, verbatim — her path through the arts, then a photograph (by the sea), then her line "My first and most profound teacher has been my own body." set apart, and the rest of her story |
 | My Work With You | **Done**, verbatim |
 | Band at the bottom (like creativeliving.world): her question and GET IN TOUCH → Discovery Call scheduling | **Done** — her question large on a field of colour (the 1:1 swatch red, one setting to change), and a white pill button to the booking link. **Open:** the booking link is still the old free 20-minute Cal.com call until the new $15 Discovery Call link arrives (TODO-JOAN in `src/site.ts`) |
-| Membership stamps: ACSB, ASIS, Trusted Bodywork | **Done as names** — each set as a round stamp. **Open:** the stamps' artwork (logo files) and the address each should link to (TODO-JOAN in `content/about/about.md`) |
+| Membership stamps: ACSB, ASIS, Trusted Bodywork | **Off the page for now** (11/16, at the site owner's request). Kept in `content/about/about.md`; when they return, they'll need their artwork and links |
 | (Not in her outline) "Hello, I am Joan.", the 10/31 bio, the Founder / Lineage of Modalities tabs | **Clash — removed** to follow her outline. The Lineage of Modalities text is kept in `content/pages/lineage.md`; the homepage Zen Shiatsu card, which opened it, now opens the Services cards. **Check with Joan** whether the Lineage should return somewhere |
 
 ## Build-session notes this round
