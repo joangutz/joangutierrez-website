@@ -20,7 +20,6 @@ const h = entry.data;
  */
 const hasQuotes = (await getCollection('testimonials')).length > 0;
 
-const subWords = h.hero.tagline.split(' ');
 
 /**
  * The land acknowledgment closes the page over the water of Lake Michigan —
@@ -29,34 +28,7 @@ const subWords = h.hero.tagline.split(' ');
  */
 const LAKE_PHOTO: string | null = 'lake.jpg';
 
-/**
- * On narrow screens the subtitle breaks into lines of about equal length
- * (by letters, not words), so justifying each across the full width opens
- * even gaps: two lines for a short subtitle, three for a long one.
- */
-const subChars = subWords.join(' ').length;
-const subCount = subChars > 60 ? 3 : 2;
-const subLines: string[] = (() => {
-  const total = subChars;
-  const lines: string[][] = [[]];
-  let run = 0;
-  subWords.forEach((w, i) => {
-    const line = lines[lines.length - 1];
-    const target = (total * lines.length) / subCount;
-    // Break before this word if its middle would fall past the line's share.
-    if (line.length && lines.length < subCount && run + w.length / 2 > target) lines.push([]);
-    lines[lines.length - 1].push(w);
-    run += w.length + (i ? 1 : 0);
-  });
-  // A short joining word (for, as, of…) reads with what follows it, so it
-  // starts the next line rather than ending this one.
-  for (let i = 0; i < lines.length - 1; i++) {
-    while (lines[i].length > 1 && lines[i][lines[i].length - 1].length <= 3) {
-      lines[i + 1].unshift(lines[i].pop()!);
-    }
-  }
-  return lines.map((l) => l.join(' '));
-})();
+
 
 /**
  * The site this replaces was one page behind hash anchors, and the one before
@@ -101,13 +73,9 @@ const movedAnchors = {
           <span class="wm-a">{h.hero.markLeft}</span>
           <span class="wm-b">{h.hero.markRight}</span>
         </h1>
-        {/* Split into even lines, with breaks that exist only on narrow
-            screens. Left to wrap on its own, a phone broke it unevenly, and
-            justifying a short last line across the full width opened gaps a
-            word wide. Its size follows its length (--chars). */}
-        <p class={`subtitle sub-n${subCount}`} style={`--chars: ${subChars}`}>
-          {subLines.map((l, i) => (i ? <><br class="sub-break" /> {l}</> : l))}
-        </p>
+        {/* Her line in the soft serif's italic, centred under the name
+            (the homepage rendering chosen 11/16). */}
+        <p class="subtitle">{h.hero.tagline}</p>
       </div>
 
       {/* The mark is out of the hero for now, by Joan's choice; the bar at the
@@ -135,32 +103,27 @@ const movedAnchors = {
       land      photograph — the lake, and her land acknowledgment
   */}
 
-  {/* 2 · I am Joan. Welcome. The portrait keeps its colour here — grey
-      reads as a record, and this is where a reader meets a person. */}
-  <section class="swell" id="welcome">
-    <div class="band section">
-      <div class="wide story">
-        <div class="story-portrait film rise">
-          <Portrait
-            src={h.welcome.portrait}
-            alt={h.welcome.alt}
-            colour
-            sizes="(max-width: 900px) 60vw, 26vw"
-          />
-        </div>
-        <div class="story-text rise">
-          <h2 class="section-title">{h.welcome.title}</h2>
-          {h.welcome.paragraphs.map((p) => <p>{p}</p>)}
-          <p class="story-closing">{h.welcome.closing}</p>
-          <Link variant="action" href={withBase('/services/')}>{h.welcome.link}</Link>
-        </div>
-      </div>
+  {/* 2 · I am Joan. Welcome. Split, as on Services: her welcome on the
+      blush, her portrait beside it, one window tall, held in view while the
+      welcome is read. The portrait keeps its colour — this is where a reader
+      meets a person. */}
+  <section class="welcome" id="welcome">
+    <div class="welcome-text">
+      <h2 class="welcome-title">{h.welcome.title}</h2>
+      {h.welcome.paragraphs.map((p) => <p>{p}</p>)}
+      <p class="welcome-closing">{h.welcome.closing}</p>
+      <Link variant="action" href={withBase('/services/')}>{h.welcome.link}</Link>
+    </div>
+    <div class="welcome-photo film">
+      <Portrait src={h.welcome.portrait} alt={h.welcome.alt} colour sizes="(max-width: 780px) 100vw, 44vw" />
     </div>
   </section>
 
   {/* 3 · What is Ma Somatrix? Her text, then the triangle; her last line
       waits beside it until a word is chosen. */}
-  <section class="band section" id="ma-somatrix">
+  <section class="realms-scene on-dark has-ground" id="ma-somatrix">
+    <div class="realms-photo film"><Collage src="resource.jpg" alt="" sizes="100vw" /></div>
+    <div class="band section">
     <div class="wide">
       <div class="realms-text rise">
         <h2 class="section-title">{h.realms.title}</h2>
@@ -172,6 +135,7 @@ const movedAnchors = {
       <div class="realms-action">
         <Link variant="action" href={withBase('/begin/')}>{h.realms.link}</Link>
       </div>
+    </div>
     </div>
   </section>
 
@@ -320,54 +284,19 @@ const movedAnchors = {
     gap: clamp(0.9rem, 1.8vw, 1.5rem);
   }
 
-  /* One string, justified edge to edge so it runs exactly the length of the
-     name above it. Sized to the window so that on a wide screen it very
-     nearly fills the line by itself and justification only evens out the
-     last few pixels; narrower, it takes three lines, each full width. */
+  /* Her line in the soft serif's italic, centred under the name. */
   .subtitle {
     margin: 0;
     padding-top: clamp(0.9rem, 1.8vw, 1.5rem);
     border-top: 1px solid rgb(var(--ch-bract) / 0.38);
-    font-family: var(--font-label);
-    /* Sized so the line, at its letterspacing, just fits the window's
-       width; justification spreads the last few pixels. */
-    font-size: clamp(0.66rem, calc((100vw - 6rem) / (var(--chars) * 1.05)), 1.6rem);
-    font-weight: 500;
-    line-height: 1.7;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    text-align: justify;
-    text-align-last: justify;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+    line-height: 1.3;
+    text-align: center;
     color: var(--color-bract);
-  }
-
-  .sub-break {
-    display: none;
-  }
-
-  /* Below these widths one line would shrink past the point of being read:
-     a long subtitle takes three lines below 1000px, a short one two lines
-     below 720px. */
-  @media (max-width: 1000px) {
-    .sub-n3 .sub-break {
-      display: inline;
-    }
-
-    .sub-n3 {
-      font-size: clamp(0.6rem, 3.1vw, 1.05rem);
-      letter-spacing: 0.16em;
-    }
-  }
-
-  @media (max-width: 720px) {
-    .sub-n2 .sub-break {
-      display: inline;
-    }
-
-    .sub-n2 {
-      font-size: clamp(0.6rem, 3.1vw, 1.05rem);
-      letter-spacing: 0.16em;
-    }
+    text-wrap: balance;
   }
 
   .hero-foot {
@@ -556,8 +485,8 @@ const movedAnchors = {
   }
 
   .card-title {
-    font-family: var(--font-display);
-    font-size: 1.02rem;
+    font-family: var(--font-soft);
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
     line-height: 1.15;
   }
 
@@ -569,60 +498,140 @@ const movedAnchors = {
     color: var(--color-ink-2);
   }
 
-  /* ---- Welcome ---- */
-  /* Portrait and text side by side; her welcome is long, so on a wide
-     screen the portrait stays in view beside it as it is read. */
-  .story {
+  /* ---- Welcome: split ---- */
+  .welcome {
     display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-    gap: clamp(1.75rem, 5vw, 3.5rem);
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr) 44%;
+    background: var(--color-madder);
+    color: var(--color-cochineal);
   }
 
-  @media (min-width: 781px) {
-    .story-portrait {
-      position: sticky;
-      top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + clamp(1.5rem, 6vh, 3rem));
-    }
+  .welcome-text {
+    padding: clamp(4rem, 10vh, 7rem) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 10vh, 6rem) clamp(1.25rem, 3.2vw, 2.75rem);
   }
 
-  .story-text .section-title,
-  .realms-text .section-title {
-    margin: 0 0 0.5rem;
+  .welcome-title {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-soft);
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
-  .story-text p,
-  .realms-text p {
-    margin: 1.15rem 0 0;
-    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
-    line-height: 1.65;
+  .welcome-text p {
+    margin: 0 0 1.05rem;
+    max-width: 36rem;
+    font-family: var(--font-soft);
+    font-size: clamp(1.15rem, 1.6vw, 1.32rem);
+    line-height: 1.55;
+    color: var(--color-ink-2);
   }
 
-  /* Her last line, set apart. */
-  .story-text .story-closing {
-    margin-top: 2rem;
-    font-family: var(--font-display);
-    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  .welcome-text .welcome-closing {
+    margin-top: 1.75rem;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
     line-height: 1.3;
+    color: var(--color-cochineal);
   }
 
-  .story-text :global(.lnk-action) {
-    margin-top: var(--gap-door, 2rem);
+  .welcome-text :global(.lnk-action) {
+    margin-top: 1.75rem;
+  }
+
+  /* One window tall, held beneath the bar while the welcome is read. */
+  .welcome-photo {
+    position: sticky;
+    top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+    align-self: start;
+    height: calc(100svh - var(--bar-h) - env(safe-area-inset-top, 0px));
+    overflow: hidden;
+  }
+
+  .welcome-photo :global(.portrait) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
   }
 
   @media (max-width: 780px) {
-    .story {
+    .welcome {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .story-portrait {
-      max-width: 18rem;
+    .welcome-photo {
+      position: relative;
+      top: auto;
+      order: -1;
+      height: 72svh;
+    }
+
+    .welcome-text {
+      padding: 2.5rem 1.25rem 4rem;
     }
   }
 
-  /* ---- What is Ma Somatrix? ---- */
+  /* ---- What is Ma Somatrix? On light through leaves, softened ---- */
+  .realms-scene {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-plumstone);
+    color: var(--color-bract);
+  }
+
+  .realms-photo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .realms-photo :global(.collage) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5) blur(3px) saturate(0.65);
+    transform: scale(1.04);
+  }
+
+  .realms-scene .band {
+    padding-block: clamp(5rem, 12vh, 8rem);
+    text-shadow: 0 1px 22px rgb(var(--ch-plum) / 0.35);
+  }
+
   .realms-text {
     max-width: 40rem;
+  }
+
+  .realms-text .section-title {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-soft);
+    font-weight: 300;
+    letter-spacing: 0;
+  }
+
+  .realms-text p {
+    margin: 1.1rem 0 0;
+    font-family: var(--font-soft);
+    font-size: clamp(1.15rem, 1.6vw, 1.32rem);
+    line-height: 1.55;
+  }
+
+  /* The triangle's hairlines, light on the photograph. */
+  .realms-scene :global(.triad-lines > path) {
+    stroke: rgb(var(--ch-bract) / 0.55);
+  }
+
+  .realms-scene :global(.view-intro p) {
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.45rem, 2.4vw, 2rem);
+    line-height: 1.3;
   }
 
   .realms-action {

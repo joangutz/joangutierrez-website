@@ -99,6 +99,8 @@ Her notes as sent are kept in `content/_source/joan-2026-11-16-services.md`; the
 | "We like the home-yness, intimate-ness … like you are sitting in the sheets" — renderings | **Done** — three renderings (A In the sheets, B Through the terrain, C Beside her), then B2: B with A's split opening and B's menu, and a soft curve of skin behind What to Expect in place of the fingers photo |
 | Build B2 into Services | **Done** — opens split (her quote on the blush, the close photograph of skin beside it); You belong here across the sheets photograph; the Services cards on the blush; What to Expect as six numbered passages on the soft-skin photograph, then where, her wish and Get in Touch; the page closes on the lake with Get in Touch and the Discovery Form. A new light serif, Cormorant Garamond (OFL), carries her words on this page. "true" and "sovereign" in her quote are set in italics, as in the rendering — emphasis only |
 | B's menu, site-wide | **Done** — see the first table |
+| The homepage in the same style | **Done** — her subtitle in the soft serif's italic, centred under MA SOMATRIX; I am Joan. Welcome. split, her welcome on the blush and her portrait beside it, held in view while it is read; What is Ma Somatrix? on light through leaves, softened, the triangle and its definitions working as before; the five cards with their names in the soft serif; the land acknowledgment on the lake as before |
+| About and Resources in the same style | **Rendered, waiting** — mockups saved in `design/renderings/` to look at again |
 
 ## Build-session notes this round
 
