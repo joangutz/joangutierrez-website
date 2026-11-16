@@ -23,12 +23,11 @@ const hasQuotes = (await getCollection('testimonials')).length > 0;
 const subWords = h.hero.tagline.split(' ');
 
 /**
- * TODO-LAKE: the land acknowledgment closes the page over the water of
- * Lake Michigan. Until a photograph of the lake is in /assets/photos/, it
- * stands on the closing photograph every page shares. Put the file's name
- * here (e.g. 'lake.jpg').
+ * The land acknowledgment closes the page over the water of Lake Michigan —
+ * Joan's own photograph. Set to null to fall back to the closing photograph
+ * every page shares.
  */
-const LAKE_PHOTO: string | null = null;
+const LAKE_PHOTO: string | null = 'lake.jpg';
 
 /** The kind each colour stands for, named under each card. */
 const KIND: Record<string, string> = { one: '1:1', program: 'Program', gathering: 'Happenings' };
@@ -79,6 +78,7 @@ const movedAnchors = {
   description={`${site.tagline}. Chicago, IL — in-person. Internationally — online. Open to travel.`}
   bare
   closingPhoto={LAKE_PHOTO ?? undefined}
+  closingFocus="50% 80%"
   schema={[person]}
 >
   {/* 1 · The title card. The name runs margin to margin, and the line under

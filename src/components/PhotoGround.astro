@@ -25,14 +25,18 @@ interface Props {
 
   /** For pictures whose own colour fights the palette. */
   tinted?: boolean;
+  /** Which part of the picture to keep when it is cropped (CSS
+      object-position), e.g. '50% 80%' for the lower part. */
+  focus?: string;
 }
 
-const { src, alt, from = 'left', tinted = false } = Astro.props;
+const { src, alt, from = 'left', tinted = false, focus } = Astro.props;
 ---
 
 <div
   class:list={['ground film', `ground-${from}`, { 'ground-tinted': tinted }]}
   aria-hidden={alt ? undefined : 'true'}
+  style={focus ? `--focus: ${focus}` : undefined}
 >
   <Collage src={src} alt={alt ?? ''} register="cochineal" sizes="100vw" />
   {tinted && <span class="tone" />}
@@ -49,6 +53,7 @@ const { src, alt, from = 'left', tinted = false } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: var(--focus, 50% 50%);
   }
 
   .ground::after {

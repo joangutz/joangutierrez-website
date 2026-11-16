@@ -23,13 +23,15 @@ interface Props {
   selfClosing?: boolean;
   /** A page's own photograph for its close, in place of the shared one. */
   closingPhoto?: string;
+  /** Which part of that photograph to keep when cropped (object-position). */
+  closingFocus?: string;
   /** Extra schema.org nodes for this page (see src/seo.ts). */
   schema?: object[];
   /** Keep the page out of search (the 404). */
   noindex?: boolean;
 }
 
-const { title, description, bare = false, close = false, selfClosing = false, closingPhoto, schema = [], noindex = false } = Astro.props;
+const { title, description, bare = false, close = false, selfClosing = false, closingPhoto, closingFocus, schema = [], noindex = false } = Astro.props;
 
 /** The one photograph every page's footer stands on. */
 const CLOSING_PHOTO = 'close-home.jpg';
@@ -127,7 +129,9 @@ import GetInTouch from '../components/GetInTouch.astro';
     </main>
     {!selfClosing && (
     <div id="get-in-touch" class:list={['closing has-ground on-dark', { 'closing-bare': !close && !Astro.slots.has('close') }]}>
-      <PhotoGround src={closingPhoto ?? CLOSING_PHOTO} />
+      {/* A page's own photograph is there to be seen (the lake on the
+          homepage), so it takes the light wash made for glass panes. */}
+      <PhotoGround src={closingPhoto ?? CLOSING_PHOTO} from={closingPhoto ? 'glass' : 'left'} focus={closingFocus} />
       <span class="closing-deep" aria-hidden="true" />
       {/* A page may put its own close here (slot="close"); otherwise
           Get in Touch, when asked for. */}
