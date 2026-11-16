@@ -9,7 +9,7 @@ hero:
   # her full stop after Ma included.
   markLeft: Ma.
   markRight: Somatrix
-  tagline: Holistic body-rooted care for liberated expression as you cross life's thresholds
+  tagline: Holistic body-rooted care for liberated expression
   place: Chicago & Beyond
   collage: hero.jpg
   alt: A body in low warm light, the curve of a hip and thigh with a band of sun falling across it.

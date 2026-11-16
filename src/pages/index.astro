@@ -32,20 +32,21 @@ const LAKE_PHOTO: string | null = 'lake.jpg';
 /** The kind each colour stands for, named under each card. */
 const KIND: Record<string, string> = { one: '1:1', program: 'Program', gathering: 'Happenings' };
 /**
- * On narrow screens the subtitle takes three lines of about equal length
+ * On narrow screens the subtitle breaks into lines of about equal length
  * (by letters, not words), so justifying each across the full width opens
- * even gaps. Halves by word count were too long for a phone once Joan's
- * line grew to eleven words.
+ * even gaps: two lines for a short subtitle, three for a long one.
  */
+const subChars = subWords.join(' ').length;
+const subCount = subChars > 60 ? 3 : 2;
 const subLines: string[] = (() => {
-  const total = subWords.join(' ').length;
+  const total = subChars;
   const lines: string[][] = [[]];
   let run = 0;
   subWords.forEach((w, i) => {
     const line = lines[lines.length - 1];
-    const target = (total * lines.length) / 3;
+    const target = (total * lines.length) / subCount;
     // Break before this word if its middle would fall past the line's share.
-    if (line.length && lines.length < 3 && run + w.length / 2 > target) lines.push([]);
+    if (line.length && lines.length < subCount && run + w.length / 2 > target) lines.push([]);
     lines[lines.length - 1].push(w);
     run += w.length + (i ? 1 : 0);
   });
@@ -102,12 +103,11 @@ const movedAnchors = {
           <span class="wm-a">{h.hero.markLeft}</span>
           <span class="wm-b">{h.hero.markRight}</span>
         </h1>
-        {/* Split in half by word count, with a break that exists only on
-            narrow screens. Left to wrap on its own, a phone broke it after
-            three words of eight, and justifying three words across the full
-            width opened gaps a word wide; halves give both lines the same
-            number of gaps. */}
-        <p class="subtitle">
+        {/* Split into even lines, with breaks that exist only on narrow
+            screens. Left to wrap on its own, a phone broke it unevenly, and
+            justifying a short last line across the full width opened gaps a
+            word wide. Its size follows its length (--chars). */}
+        <p class={`subtitle sub-n${subCount}`} style={`--chars: ${subChars}`}>
           {subLines.map((l, i) => (i ? <><br class="sub-break" /> {l}</> : l))}
         </p>
       </div>
@@ -333,7 +333,9 @@ const movedAnchors = {
     padding-top: clamp(0.9rem, 1.8vw, 1.5rem);
     border-top: 1px solid rgb(var(--ch-bract) / 0.38);
     font-family: var(--font-label);
-    font-size: clamp(0.66rem, 1.05vw, 1.1rem);
+    /* Sized so the line, at its letterspacing, just fits the window's
+       width; justification spreads the last few pixels. */
+    font-size: clamp(0.66rem, calc((100vw - 6rem) / (var(--chars) * 1.05)), 1.6rem);
     font-weight: 500;
     line-height: 1.7;
     letter-spacing: 0.3em;
@@ -347,14 +349,26 @@ const movedAnchors = {
     display: none;
   }
 
-  /* Three lines below 1000px. Any narrower and Joan's eleven words on one
-     line would shrink past the point of being read. */
+  /* Below these widths one line would shrink past the point of being read:
+     a long subtitle takes three lines below 1000px, a short one two lines
+     below 720px. */
   @media (max-width: 1000px) {
-    .sub-break {
+    .sub-n3 .sub-break {
       display: inline;
     }
 
-    .subtitle {
+    .sub-n3 {
+      font-size: clamp(0.6rem, 3.1vw, 1.05rem);
+      letter-spacing: 0.16em;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .sub-n2 .sub-break {
+      display: inline;
+    }
+
+    .sub-n2 {
       font-size: clamp(0.6rem, 3.1vw, 1.05rem);
       letter-spacing: 0.16em;
     }
