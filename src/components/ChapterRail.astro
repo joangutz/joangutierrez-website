@@ -2,8 +2,8 @@
 /**
  * A chapter rail, in the manner of a book's thumb index.
  *
- * One tick per section down the right margin. The section you are in lights and
- * names itself as you scroll, so a long page stops being an undifferentiated
+ * One tick per section down the right margin. The section you are in lights
+ * as you scroll (its name shows only when the pointer comes to the rail), so a long page stops being an undifferentiated
  * scroll and becomes a set of chapters you can watch yourself move through.
  *
  * It builds itself from the headings already on the page rather than from a
@@ -166,22 +166,22 @@
     background: var(--color-quick);
   }
 
+  /* The section you are in keeps its name hidden until the pointer comes
+     to the rail: shown by default, it sat over the page's own words. */
   .rail :global(a[aria-current='true'] .rail-name) {
-    opacity: 1;
-    translate: 0 -50%;
     color: var(--color-cochineal);
   }
 
   /* Pointing at the rail opens all of it, so the contents are readable at once
      rather than one title at a time. */
   .rail:hover :global(.rail-name),
-  .rail:focus-within :global(.rail-name) {
+  .rail:has(:focus-visible) :global(.rail-name) {
     opacity: 1;
     translate: 0 -50%;
   }
 
   .rail:hover :global(.rail-tick),
-  .rail:focus-within :global(.rail-tick) {
+  .rail:has(:focus-visible) :global(.rail-tick) {
     opacity: 0.7;
   }
 

@@ -157,7 +157,6 @@ const catalog = {
   {/* 0 · The opening: her words on the blush, the body close beside them. */}
   <section class="split-open">
     <div class="split-text">
-      <span class="chapter">{s.title}</span>
       <h1 class="split-line">
         {quoteParts.map((part) => (part.em ? <em>{part.text}</em> : part.text))}
       </h1>
@@ -448,7 +447,7 @@ const catalog = {
   }
 
   .split-line {
-    margin: 1.6rem 0 0;
+    margin: 0;
     max-width: 17ch;
     font-family: var(--font-soft);
     font-size: clamp(2.1rem, 3.9vw, 3.5rem);
