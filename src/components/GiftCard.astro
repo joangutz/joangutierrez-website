@@ -21,15 +21,12 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 <article class="gift" id="gift" data-gift>
   <div class="gift-inner" data-gift-inner>
     <div class="face face-front" data-gift-face="front">
-      <div class="gift-art film">
+      <div class="gift-art film card-edge" data-register="cochineal">
         <Collage src="rose.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
       </div>
-      <div class="front-text">
-        <div class="front-glass" aria-hidden="true">
-          <Collage src="rose.jpg" alt="" register="cochineal" sizes="30vw" />
-        </div>
+      <div class="front-text cardstock">
         <span class="label">A Gift</span>
-        <h2 class="gift-title">{kit.freebie}</h2>
+        <h2 class="gift-title card-name">{kit.freebie}</h2>
         <p class="gift-sub">{kit.freebieSub}</p>
         <div class="front-foot">
           <button type="button" class="turn" data-gift-turn="open" aria-expanded="false" aria-controls="gift-back">
@@ -170,7 +167,6 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     gap: 0.6rem;
   }
 
-  .front-glass,
   .back-glass {
     position: absolute;
     inset: 0;
@@ -178,7 +174,6 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     overflow: hidden;
   }
 
-  .front-glass :global(.collage),
   .back-glass :global(.collage) {
     position: absolute;
     inset: -15%;
@@ -189,20 +184,6 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     filter: blur(40px) grayscale(1);
   }
 
-  /* The rose is soft and nearly one tone; blurred and greyed it went flat.
-     A lift of light and contrast brings back the play of shapes the
-     offering cards' collages give their glass. */
-  .front-glass :global(.collage) {
-    filter: blur(34px) grayscale(1) contrast(1.9) brightness(1.4);
-  }
-
-  .front-glass::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: color-mix(in srgb, var(--color-madder) 80%, transparent);
-  }
-
   .back-glass::after {
     content: '';
     position: absolute;
@@ -211,10 +192,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
   }
 
   .gift-title {
-    margin: 0.4rem 0 0;
-    font-size: clamp(1.75rem, 3.8vw, 2.6rem);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
+    margin: 0.35rem 0 0;
   }
 
   .gift-sub {

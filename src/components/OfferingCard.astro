@@ -35,20 +35,17 @@ const id = offering.id;
           offering's own register directly beneath. The lotería double frame is
           gone — between it, the card border and the column divider, an image
           arrived behind three separate rules. */}
-      <div class="front-art">
+      {/* The photograph whole, its colour a thin strip along its edge; the
+          name on the cardstock beside it, as on the Red Rose card. */}
+      <div class="front-art card-edge">
         <div class="chip-image film">
           <Collage src={o.collage} alt={o.alt} register={o.register} />
         </div>
-        <h2 class="chip-name">{o.title}</h2>
       </div>
 
-      <div class="front-text">
-        {/* The same picture again, blurred to a breath of colour under pale
-            glass: the light side of the card the back answers in wine. */}
-        <div class="front-glass" aria-hidden="true">
-          <Collage src={o.collage} alt="" register={o.register} sizes="30vw" />
-        </div>
+      <div class="front-text cardstock">
         <span class="label">{o.container}</span>
+        <h2 class="card-name">{o.title}</h2>
 
         <div class="front-foot">
           <button type="button" class="turn" data-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
@@ -222,35 +219,6 @@ const id = offering.id;
     gap: 0.6rem;
   }
 
-
-  .front-glass {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-  }
-
-  .front-glass :global(.collage) {
-    position: absolute;
-    inset: -15%;
-    width: 130%;
-    height: 130%;
-    /* The site caps images at their container's width, which left the
-       right-hand edge bare. */
-    max-width: none;
-    object-fit: cover;
-    /* Light and shadow only — no colour on the pale side. */
-    filter: blur(40px) grayscale(1);
-  }
-
-  /* Linen glass, mostly opaque: the page's own ground with the picture's
-     colour breathing through it. */
-  .front-glass::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: color-mix(in srgb, var(--color-madder) 80%, transparent);
-  }
 
   .front-foot {
     margin-top: auto;

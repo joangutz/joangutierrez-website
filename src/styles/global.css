@@ -1164,6 +1164,61 @@ html[data-palette='sand'] {
     }
   }
 
+  /* Cardstock: the light side of a card as heavy paper — a warm ground,
+     long soft fibres and a scatter of fine flecks, both in the ink's own
+     colour at a breath of opacity. Static (it is paper, not film). */
+  .cardstock {
+    position: relative;
+    isolation: isolate;
+    background-color: color-mix(in srgb, var(--color-bract) 70%, var(--color-madder));
+  }
+
+  .cardstock::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035 0.9' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.19 0 0 0 0 0.16 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='1' seed='9' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0.85'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.24 0 0 0 0 0.2 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23s)'/%3E%3C/svg%3E");
+    background-size: 400px 400px, 220px 220px;
+    opacity: 0.2;
+    mix-blend-mode: multiply;
+  }
+
+  /* The card's name on its cardstock, in the soft serif. */
+  .card-name {
+    margin: 0.35rem 0 0;
+    font-family: var(--font-soft);
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.005em;
+    text-transform: none;
+    color: var(--color-cochineal);
+  }
+
+  /* The card's colour, as a thin strip where the photograph meets the
+     paper (beneath it when they stack). */
+  .card-edge {
+    border-right: 6px solid var(--edge, var(--rule));
+  }
+
+  [data-register='one'] .card-edge { --edge: var(--kind-one); }
+  [data-register='program'] .card-edge { --edge: var(--kind-program); }
+  [data-register='gathering'] .card-edge { --edge: var(--kind-gathering); }
+  [data-register='cochineal'] .card-edge { --edge: var(--color-cochineal); }
+  [data-register='plumstone'] .card-edge { --edge: var(--color-plumstone); }
+  .card-edge[data-register='cochineal'] { --edge: var(--kind-one); }
+
+  @media (max-width: 780px) {
+    .card-edge {
+      border-right: 0;
+      border-bottom: 6px solid var(--edge, var(--rule));
+    }
+  }
+
   /* On a photograph that fills a whole tall section (Services' scenes, the
      homepage's What is Ma Somatrix?) the moving grain read as a glitch and
      was heavy to repaint on an iPad: there it holds still. */

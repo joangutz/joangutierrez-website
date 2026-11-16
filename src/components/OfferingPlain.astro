@@ -33,22 +33,22 @@ const compact = !action && !kitAction && !hasBody;
 ---
 
 <article class:list={['plain-card', { compact }]} id={id} data-register={register}>
-  <div class="front-art">
+  <div class:list={['front-art', { 'card-edge': !compact }]}>
     <div class="chip-image film">
       <Collage src={collage} alt="" register={register} />
     </div>
-    <h3 class="chip-name">
-      {title}
-      {compact && note && <span class="chip-note">{note}</span>}
-    </h3>
+    {compact && (
+      <h3 class="chip-name">
+        {title}
+        {note && <span class="chip-note">{note}</span>}
+      </h3>
+    )}
   </div>
 
   {!compact && (
-  <div class="front-text">
-    <div class="front-glass" aria-hidden="true">
-      <Collage src={collage} alt="" register={register} sizes="30vw" />
-    </div>
+  <div class="front-text cardstock">
     {note && <span class="label">{note}</span>}
+    <h3 class="card-name">{title}</h3>
     {/* What it holds, when Joan has listed it (a modality's parts). */}
     {hasBody && <div class="front-body"><slot /></div>}
     {
@@ -195,31 +195,6 @@ const compact = !action && !kitAction && !hasBody;
     opacity: 0.6;
   }
 
-  .front-glass {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-  }
-
-  .front-glass :global(.collage) {
-    position: absolute;
-    inset: -15%;
-    width: 130%;
-    height: 130%;
-    max-width: none;
-    object-fit: cover;
-    /* Lifted, as on the gift card, so a soft photograph still shows its
-       shapes through the glass the way the offering collages do. */
-    filter: blur(34px) grayscale(1) contrast(1.9) brightness(1.18);
-  }
-
-  .front-glass::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: color-mix(in srgb, var(--color-madder) 80%, transparent);
-  }
 
   .front-foot {
     margin-top: auto;
