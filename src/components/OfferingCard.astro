@@ -62,6 +62,15 @@ const id = offering.id;
               <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
             </svg>
           </button>
+          {o.more && (
+            <a class="more-link" href={href(o.more.href)}>
+              <span>{o.more.label}</span>
+              {/* A hairline arrow down: it goes further into the page. */}
+              <svg class="more-arrow" viewBox="0 0 10 16" aria-hidden="true" focusable="false">
+                <path d="M5 0.5 V14.5 M1 10.5 L5 14.5 L9 10.5" />
+              </svg>
+            </a>
+          )}
         </div>
       </div>
     </div>
@@ -315,8 +324,54 @@ const id = offering.id;
     padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1rem clamp(1.5rem, 3vw, 2.25rem);
     flex-wrap: wrap;
+  }
+
+  /* The link deeper into the page (1:1: What to Expect), set as the turn
+     beside it is: tracked capitals over a hairline, a hairline arrow, here
+     pointing down. */
+  .more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0 0 0.45rem;
+    border-bottom: 1px solid currentColor;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    text-decoration: none;
+    color: var(--color-cochineal);
+    transition: color 300ms var(--ease-open);
+  }
+
+  .more-link:hover,
+  .more-link:focus-visible {
+    color: var(--color-plumstone);
+  }
+
+  .more-arrow {
+    width: 9px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: translate 300ms var(--ease-open);
+  }
+
+  .more-link:hover .more-arrow,
+  .more-link:focus-visible .more-arrow {
+    translate: 0 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .more-arrow {
+      transition: none;
+    }
   }
 
   /* ---- Turned face ---- */

@@ -28,6 +28,8 @@ const offerings = defineCollection({
     line: z.string().optional(),
     /** The word on the button that turns the card. */
     turn: z.string().default('Includes'),
+    /** A second way on, beside the turn: a link deeper into the page. */
+    more: z.object({ label: z.string(), href: z.string() }).optional(),
     order: z.number(),
     /** The kind of offering, which sets its colour: one (1:1), program,
         gathering (Happenings). Older red registers still accepted. */

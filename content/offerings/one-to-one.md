@@ -5,6 +5,12 @@ title: 1:1 Sessions
 # on the back: the 3-3-3 paragraph and "Three months is the honest container."
 # The rest is left as it was.
 order: 1
+# 11/17: the turn reads Rates (was the default, Includes), and beside it a
+# link down to What to Expect.
+turn: Rates
+more:
+  label: What to Expect
+  href: '#what-to-expect'
 register: one
 collage: erotic-embodiment.jpg
 alt: Collage — a face in profile, cut from grey photograph, with a halved cantaloupe where the body would be.
