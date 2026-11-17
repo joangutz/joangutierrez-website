@@ -24,8 +24,8 @@ welcome:
     - Together, we co-create explorations where the stories of the mind loosen their grip and the quieter language of the body can be listened to. From there, ease opens up in feeling what is true, clarity about what you long for, permission to follow what delights you, a relationship with your body that grows more instinctive and unbound, and an intimacy with yourself and others that deepens over time.
     - I have witnessed sacred truths reveal themselves when people irreverently follow what feels good and are willing to get curious about what they discover. When we learn the language of our senses, cultivate our attention, and take our health into our own hands, we feel what it means to be wholly alive.
   closing: I am here in service to your wholeness.
-  portrait: joan-home.jpg
-  alt: Joan looking directly at the camera, a flower tucked behind one ear.
+  portrait: joan-laugh.jpg
+  alt: Joan laughing, eyes closed, holding a stem of white sweet peas.
   link: Belong Here
 
 # Joan's text of 11/16, verbatim. Her last line stands beside the triangle,

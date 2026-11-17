@@ -3,7 +3,8 @@
 | Filename | Slot | Assigned photo |
 |---|---|---|
 | `joan-roots.jpg` | Roots | Reading by the sea, straw hat |
-| `joan-home.jpg` | Home, beside the two sentences of story | *still needed* |
+| `joan-home.jpg` | Home portrait until 11/17 (kept) | |
+| `joan-laugh.jpg` | Home, beside I am Joan. Welcome. | in use |
 
 Portraits currently render black and white, by an earlier design decision. The
 sea photograph's colour is most of what it has — say the word and the treatment
