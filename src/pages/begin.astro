@@ -20,14 +20,14 @@ const contact_page = {
  * A single photograph fills the window, and on it a pane of glass carries
  * Joan's "Get in Touch" — her heading, her two sentences, her booking label
  * as the one large action. For anyone who would rather write, her address
- * and number sit quietly beneath it, and her WHERE list becomes one line.
+ * sits quietly beneath it, and her WHERE list becomes one line.
  * Her sign-off closes it. Every word here is hers.
  */
 ---
 
 <Base
   title="Book a Session"
-  description="Feeling tender, hopeful, messy, alive, curious? I would love to hear from you. Feel free to reach out. Collaborations are welcomed."
+  description="Feeling tender, hopeful, messy, alive, curious? I would love to hear from you."
   selfClosing
   schema={[contact_page, crumbs('Book a Session', '/begin/')]}
 >
@@ -39,26 +39,23 @@ const contact_page = {
         <div class="invite-pane">
           {/* The invitation and its one action… */}
           <div class="invite-main">
-            {/* Joan's text of 11/16, verbatim. */}
+            {/* Joan's text of 11/16, verbatim; 11/17: "Feel free to reach out",
+                "Collaborations are welcomed" and the paragraph about the
+                30-minute call removed. */}
             <h1 class="invite-title">Book a Session</h1>
             <p class="invite-lede">Feeling tender, hopeful, messy, alive, curious?</p>
-            <p class="invite-lede">I would love to hear from you. Feel free to reach out.</p>
-            <p class="invite-lede">Collaborations are welcomed.</p>
+            <p class="invite-lede">I would love to hear from you.</p>
             <div class="invite-action">
               <Link variant="action" href={booking.url}>Let's Begin</Link>{/* Was booking.label (Book a Discovery Call); 11/17: Let's Begin, on this page only */}
             </div>
-            <p class="invite-call">
-              During this 30-minute Zoom call, we can talk about what’s bringing you here and what you are longing for, ask questions, and exchange information to sense and discern whether we are a good fit to work together. If you choose to book, your $15 fee will be applied toward your first session.
-            </p>
             <p class="invite-call">I look forward to meeting you where you are.</p>
           </div>
 
           {/* …and, beside it, for anyone who would rather write: her
-              address and number, where she works, and her sign-off. */}
+              address (the phone number removed 11/17) and where she works. */}
           <div class="invite-side">
             <ul class="invite-write">
               <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
-              <li><Link href={contact.smsHref}>{contact.smsDisplay}</Link></li>
             </ul>
 
             <ul class="invite-where">

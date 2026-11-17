@@ -128,9 +128,7 @@ export const sound = {
 } as const;
 
 export const contact = {
-  sms: '9312778555',
-  smsHref: 'sms:+19312778555',
-  smsDisplay: '(931) 277-8555',
+  // Phone number removed from the site 11/17 at the client's request.
   email: 'joankgutz@gmail.com',
   substack: 'https://eroticbecoming.substack.com',
   art: 'https://joangutz.com',

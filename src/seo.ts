@@ -28,7 +28,6 @@ export const organization = {
   logo: abs('/favicon-192.png'),
   image: abs('/share.png'),
   email: contact.email,
-  telephone: '+1-931-277-8555',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Chicago',
