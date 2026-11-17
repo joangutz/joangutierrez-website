@@ -3,7 +3,8 @@
 # set as apostrophes). The page shows it on the card's turned side.
 title: Liberate Your Pelvis
 kicker: HALF-DAY · FULL DAY · MULTI–DAY
-line: A ceremonial descent into the ground substance of your pelvic root
+# 11/17: "descent" → "immersion".
+line: A ceremonial immersion into the ground substance of your pelvic root
 turn: Explore
 order: 2
 register: one
