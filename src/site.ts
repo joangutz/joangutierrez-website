@@ -157,7 +157,7 @@ export const nav: readonly NavItem[] = [
   { href: '/resources/', label: 'Resources' },
   // Joan, 11/16: "BOOK A CALL", boxed like a button, linked to the
   // booking page.
-  { href: '/begin/', label: 'Book a Call', action: true },
+  { href: '/begin/', label: 'Get In Touch', action: true },
 ];
 
 /**

@@ -23,12 +23,9 @@ const isCurrent = (href: string) => {
 };
 
 
-// The panel (phones and small tablets), 11/17: the places, then Get In Touch
-// set like them, in place of the boxed Book a Call and the contact lines.
-const menuItems = [
-  ...nav.filter((item) => !item.action),
-  { href: '/begin/', label: 'Get In Touch' },
-];
+// The panel (phones and small tablets) lists the same four, Get In Touch
+// set like the others (11/17).
+const menuItems = nav;
 ---
 
 <header class="nav-bar">
@@ -145,13 +142,6 @@ const menuItems = [
       /* Its right half would sit on the photograph's shadows, so here the
          bar keeps the blush, and the photograph begins beneath it. */
       background: var(--color-madder);
-    }
-
-    :global(html.split-opening) .nav-bar.is-over .nav-item-action a:hover,
-    :global(html.split-opening) .nav-bar.is-over .nav-item-action a:focus-visible {
-      background: var(--color-cochineal);
-      border-color: var(--color-cochineal);
-      color: var(--color-madder);
     }
   }
 
@@ -297,33 +287,18 @@ const menuItems = [
     border-bottom-color: currentColor;
   }
 
-  /* Book a Call: boxed like a button, so it reads as the one action in a
-     row of places. Filled on hover and when it is the page you are on. */
+  /* Get In Touch (11/17): no box; set apart from the places instead by
+     its voice: the site's soft serif, in italic, in its own capitals and
+     small letters. Sized so its letters stand as tall as the tabs'. */
   .nav-inline .nav-item-action a {
-    padding: 0.62rem 0.95rem;
-    border: 1px solid currentColor;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-size: 1.12rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.01em;
     color: var(--bar-ink);
     translate: none;
-    transition:
-      background-color 300ms var(--ease-open),
-      color 300ms var(--ease-open),
-      border-color 300ms var(--ease-open);
-  }
-
-  .nav-inline .nav-item-action a:hover,
-  .nav-inline .nav-item-action a:focus-visible,
-  .nav-inline .nav-item-action a[aria-current='page'] {
-    background: var(--color-cochineal);
-    border-color: var(--color-cochineal);
-    color: var(--color-madder);
-  }
-
-  .nav-bar.is-over .nav-item-action a:hover,
-  .nav-bar.is-over .nav-item-action a:focus-visible,
-  .nav-bar.is-over .nav-item-action a[aria-current='page'] {
-    background: var(--color-bract);
-    border-color: var(--color-bract);
-    color: var(--color-plumstone);
   }
 
   /* ---- The control: the lines alone, no word. A 44px square to touch,
