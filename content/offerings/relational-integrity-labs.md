@@ -26,6 +26,8 @@ left:
   - Anyone longing to align with more of who they are and wanting to tend more meaningful relationships with self, others, Earth, and cosmos.
   - No prior experience is needed, only a curious, open heart. All genders, sexual orientations, and walks of life belong.
 right:
+# The client's revised lists and prices of 11/17, verbatim (straight quotes
+# set as curly, the spaced hyphen as a dash).
 - title: 'You belong here if you want to:'
   items:
   - text: Deepen your relationships with yourself and others.
@@ -36,8 +38,9 @@ right:
 - title: 'Together we practice:'
   items:
   - text: noticing what you want
-  - text: asking for what you want
-  - text: attuning to your authentic yes and no
+  - text: asking for what you want out loud
+  - text: attuning how and where a true ‘yes’ and ‘no’ emerge
+  - text: noticing the different textures of ‘no’ — how it differs from maybe
   - text: expressing your limits clearly and compassionately
   - text: meeting negotiation with calm confidence
   - text: inspiring voice and rooting choice
@@ -45,11 +48,11 @@ right:
   - text: carrying these skills beyond intimate and nuclear relationships, into how you interact with the world around you
 - prices:
   - label: Drop-in · Single Class
-    amount: $15
+    amount: $20
   - label: Monthly · 2 Class
-    amount: $25
+    amount: $35
   - label: Quarter · 6 Classes
-    amount: $60
+    amount: $90
 action:
   label: Join the next Lab
   href: /discovery-form/
