@@ -51,7 +51,7 @@ const first = list.find((t) => !t.gift);
   list.length > 0 && (
     <div class="snd" data-snd hidden={!first}>
       <button class="snd-btn" type="button" data-sound-toggle aria-pressed="false">
-        <span class="snd-wave" aria-hidden="true"><i /><i /><i /><i /></span>
+        <span class="snd-wave" aria-hidden="true">{[0.3, 0.55, 0.85, 0.5, 1, 0.65, 0.9, 0.45, 0.25].map((h) => <i style={`--h:${h}`} />)}</span>
         <span class="snd-label" data-sound-label>{first?.short ?? ''}</span>
         <span class="snd-line" aria-hidden="true"><i data-sound-progress /></span>
       </button>
@@ -196,40 +196,76 @@ const first = list.find((t) => !t.gift);
 
   /* Four rules that stand still when the sound is off and breathe when it is
      on — the control shows its own state without a word changing. */
+  /* A small waveform: nine fine lines of differing heights, still when
+     silent. Playing, each line swells and settles at its own pace, so the
+     whole reads as sound moving, not bars keeping time. */
   .snd-wave {
     display: flex;
     align-items: center;
     gap: 2px;
-    height: 12px;
+    height: 14px;
   }
 
   .snd-wave i {
     display: block;
-    width: 2px;
-    height: 3px;
+    width: 1.5px;
+    height: 14px;
+    border-radius: 1px;
     background: currentColor;
+    transform: scaleY(calc(var(--h) * 0.75));
+    /* Composited at rest too, so the lines keep one weight still or moving. */
+    will-change: transform;
+    transition: transform 600ms var(--ease-open);
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .snd-btn[aria-pressed='true'] .snd-wave i {
-      animation: snd 1100ms var(--ease-open) infinite alternate;
+      animation: snd-a 1300ms ease-in-out infinite alternate;
     }
 
-    .snd-wave i:nth-child(2) { animation-delay: 160ms; }
-    .snd-wave i:nth-child(3) { animation-delay: 320ms; }
-    .snd-wave i:nth-child(4) { animation-delay: 480ms; }
+    .snd-btn[aria-pressed='true'] .snd-wave i:nth-child(3n + 2) {
+      animation-name: snd-b;
+      animation-duration: 1700ms;
+    }
 
-    @keyframes snd {
-      from { height: 3px; }
-      to { height: 12px; }
+    .snd-btn[aria-pressed='true'] .snd-wave i:nth-child(3n) {
+      animation-name: snd-c;
+      animation-duration: 1100ms;
+    }
+
+    .snd-wave i:nth-child(2) { animation-delay: -400ms; }
+    .snd-wave i:nth-child(3) { animation-delay: -900ms; }
+    .snd-wave i:nth-child(4) { animation-delay: -200ms; }
+    .snd-wave i:nth-child(5) { animation-delay: -1200ms; }
+    .snd-wave i:nth-child(6) { animation-delay: -600ms; }
+    .snd-wave i:nth-child(7) { animation-delay: -300ms; }
+    .snd-wave i:nth-child(8) { animation-delay: -1000ms; }
+    .snd-wave i:nth-child(9) { animation-delay: -700ms; }
+
+    @keyframes snd-a {
+      0% { transform: scaleY(calc(var(--h) * 0.35)); }
+      50% { transform: scaleY(var(--h)); }
+      100% { transform: scaleY(calc(var(--h) * 0.6)); }
+    }
+
+    @keyframes snd-b {
+      0% { transform: scaleY(calc(var(--h) * 0.9)); }
+      40% { transform: scaleY(calc(var(--h) * 0.3)); }
+      100% { transform: scaleY(var(--h)); }
+    }
+
+    @keyframes snd-c {
+      0% { transform: scaleY(calc(var(--h) * 0.5)); }
+      60% { transform: scaleY(calc(var(--h) * 0.95)); }
+      100% { transform: scaleY(calc(var(--h) * 0.25)); }
     }
   }
 
-  /* With motion off the state still has to be visible, so the rules simply
-     stand tall instead of moving. */
+  /* With motion off the state still has to be visible: playing, the
+     waveform stands at its full height. */
   @media (prefers-reduced-motion: reduce) {
     .snd-btn[aria-pressed='true'] .snd-wave i {
-      height: 11px;
+      transform: scaleY(var(--h));
     }
   }
 
