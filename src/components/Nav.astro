@@ -401,6 +401,19 @@ const menuItems = [
       }
     }
 
+    /* While the sound's glass tray is open the bar sets its own blur aside
+       (and goes fully solid, a step it barely takes from 94%): a blur
+       inside a blur sees only its parent, so the tray could not frost the
+       page beneath it. */
+    .nav-bar:has([data-sound-tray]:not([hidden])) {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .nav-bar:not(.is-over):has([data-sound-tray]:not([hidden])) {
+      background: var(--color-madder);
+    }
+
     /* 0.9, not lighter: at 0.84 a light page behind lifted the panel enough
        to drop the small sub-links to 4.2:1. */
     .menu {

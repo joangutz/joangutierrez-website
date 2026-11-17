@@ -87,7 +87,7 @@ const wave: [number, number][] = [
                   <span class="snd-title">{t.title}</span>
                   {t.id === 'soundscape' ? (
                     <a class="snd-sub snd-credit" href={sound.creditUrl} target="_blank" rel="noopener">
-                      {sound.credit}<span class="snd-credit-arrow" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span>
+                      {sound.credit}<span class="visually-hidden"> (opens in a new tab)</span>
                     </a>
                   ) : (
                     <span class="snd-sub">{subs[t.id]}</span>
@@ -178,16 +178,19 @@ const wave: [number, number][] = [
     padding: 0;
     border: 0;
     background: none;
-    color: var(--bar-ink-2, var(--color-ink-2));
+    color: var(--bar-ink, var(--color-cochineal));
+    opacity: 0.75;
     cursor: pointer;
+    transition: opacity 250ms var(--ease-open);
   }
 
   .snd-more[hidden] {
     display: none;
   }
 
-  .snd-more:hover {
-    color: var(--color-cochineal);
+  .snd-more:hover,
+  .snd-more[aria-expanded='true'] {
+    opacity: 1;
   }
 
   .snd-more svg {
@@ -206,8 +209,7 @@ const wave: [number, number][] = [
     rotate: 0deg;
   }
 
-  /* Four rules that stand still when the sound is off and breathe when it is
-     on — the control shows its own state without a word changing. */
+  /* The waveform shows the control's own state without a word changing. */
   /* A small waveform: nine fine lines of differing heights, still when
      silent. Playing, each line swells and settles at its own pace, so the
      whole reads as sound moving, not bars keeping time. */
@@ -288,17 +290,36 @@ const wave: [number, number][] = [
     }
   }
 
-  /* The tray drops from the bar: the bar's own colour, its own rule. */
+  /* The tray drops from the bar as a pane of the site's glass: the page
+     blurred behind a plum veil, a fine light edge, words in the light
+     ink. The same glass as Book a Session and the close of each page. */
   .snd-tray {
     position: absolute;
     right: -0.5rem;
     top: calc(100% + 0.95rem);
-    width: min(21rem, calc(100vw - 2rem));
-    padding: 0.4rem 1.1rem;
-    background: var(--color-madder);
-    border: 1px solid var(--rule);
-    box-shadow: 0 12px 30px rgb(var(--ch-plum) / 0.14);
-    color: var(--color-cochineal);
+    width: min(20rem, calc(100vw - 2rem));
+    padding: 0.35rem 1.25rem;
+    background: rgb(var(--ch-plum) / 0.7);
+    -webkit-backdrop-filter: blur(20px) saturate(1.1);
+    backdrop-filter: blur(20px) saturate(1.1);
+    box-shadow:
+      inset 0 0 0 1px rgb(var(--ch-bract) / 0.18),
+      0 18px 40px rgb(var(--ch-plum) / 0.18);
+    color: var(--color-bract);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .snd-tray {
+      background: rgb(var(--ch-plum) / 0.92);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .snd-tray {
+      background: var(--color-plumstone);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
   }
 
   .snd-tray[hidden] {
@@ -314,29 +335,29 @@ const wave: [number, number][] = [
   .snd-row {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    padding: 0.8rem 0;
+    gap: 1rem;
+    padding: 0.95rem 0;
   }
 
   .snd-row + .snd-row {
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
   }
 
   .snd-row[hidden] {
     display: none;
   }
 
-  /* The same ring as the gift card's player, smaller. */
+  /* A hairline ring, as the site's other quiet controls. */
   .snd-play {
     flex: none;
     display: grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.4rem;
+    height: 2.4rem;
     border-radius: 50%;
-    border: 1px solid rgb(var(--ch-ink) / 0.35);
+    border: 1px solid rgb(var(--ch-bract) / 0.45);
     background: transparent;
-    color: var(--color-cochineal);
+    color: var(--color-bract);
     cursor: pointer;
     transition:
       background-color 300ms var(--ease-open),
@@ -345,7 +366,8 @@ const wave: [number, number][] = [
 
   .snd-play:hover,
   .snd-play:focus-visible {
-    border-color: var(--color-cochineal);
+    border-color: var(--color-bract);
+    background: rgb(var(--ch-bract) / 0.08);
   }
 
   .snd-play svg {
@@ -372,51 +394,48 @@ const wave: [number, number][] = [
   }
 
   .snd-row.is-playing .snd-play {
-    border-color: var(--color-cochineal);
-    color: var(--color-cochineal);
+    border-color: var(--color-bract);
   }
 
   .snd-row-text {
     flex: 1;
     min-width: 0;
     display: grid;
-    gap: 0.15rem;
+    gap: 0.3rem;
   }
 
+  /* The title in the site's soft serif, as the cards' names are set. */
   .snd-title {
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+    font-family: var(--font-soft);
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0;
   }
 
   .snd-sub {
-    font-size: 0.82rem;
-    color: var(--color-ink-2);
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(var(--ch-bract) / 0.78);
   }
 
-  /* Stu's name, his studio a touch away: a hairline under it, the arrow
-     that says it leaves the site. */
+  /* Stu's name: a hairline beneath, as the site's text links have; his
+     studio opens in a new tab. */
   .snd-credit {
     justify-self: start;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.22em;
-    text-decoration-color: rgb(from currentColor r g b / 0.4);
-    transition: color 250ms var(--ease-open), text-decoration-color 250ms var(--ease-open);
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgb(var(--ch-bract) / 0.4);
+    text-decoration: none;
+    transition: color 250ms var(--ease-open), border-color 250ms var(--ease-open);
   }
 
   .snd-credit:hover,
   .snd-credit:focus-visible {
-    color: var(--color-cochineal);
-    text-decoration-color: currentColor;
-  }
-
-  .snd-credit-arrow {
-    display: inline-block;
-    margin-left: 0.25em;
-    font-size: 0.85em;
+    color: var(--color-bract);
+    border-bottom-color: var(--color-bract);
   }
 
   .snd-seekbox {
@@ -431,7 +450,7 @@ const wave: [number, number][] = [
     font-family: var(--font-label);
     font-size: 0.62rem;
     letter-spacing: 0.08em;
-    color: var(--color-ink-2);
+    color: rgb(var(--ch-bract) / 0.78);
     font-variant-numeric: tabular-nums;
   }
 
@@ -449,17 +468,17 @@ const wave: [number, number][] = [
 
   .snd-seek::-webkit-slider-runnable-track {
     height: 1px;
-    background: linear-gradient(to right, var(--color-cochineal) var(--p), rgb(var(--ch-ink) / 0.2) var(--p));
+    background: linear-gradient(to right, var(--color-bract) var(--p), rgb(var(--ch-bract) / 0.25) var(--p));
   }
 
   .snd-seek::-moz-range-track {
     height: 1px;
-    background: rgb(var(--ch-ink) / 0.2);
+    background: rgb(var(--ch-bract) / 0.25);
   }
 
   .snd-seek::-moz-range-progress {
     height: 1px;
-    background: var(--color-cochineal);
+    background: var(--color-bract);
   }
 
   .snd-seek::-webkit-slider-thumb {
@@ -469,7 +488,7 @@ const wave: [number, number][] = [
     margin-top: -3.5px;
     border-radius: 50%;
     border: 0;
-    background: var(--color-cochineal);
+    background: var(--color-bract);
   }
 
   .snd-seek::-moz-range-thumb {
@@ -477,7 +496,7 @@ const wave: [number, number][] = [
     height: 8px;
     border-radius: 50%;
     border: 0;
-    background: var(--color-cochineal);
+    background: var(--color-bract);
   }
 
   /* On a narrow screen the tray spans the bar (the bar is its containing
