@@ -27,7 +27,10 @@ export interface Track {
 
 export const GIFT_KEY = 'ms-gift-received';
 const SOUND_KEY = 'ma-sound';
-const FADE = 700;
+/** Coming in: quick, so a touch is answered. */
+const FADE_IN = 700;
+/** Going out: slow and sloped, all the way down, with no drop at the end. */
+const FADE_OUT = 5500;
 
 export const audio = () => document.querySelector<HTMLAudioElement>('[data-sound-el]');
 
@@ -74,19 +77,47 @@ export const refresh = announce;
 
 // Each fade carries a number on the element; the newest fade wins, so an old
 // fade — even one begun on the previous page — never undoes a newer choice.
+//
+// The shape: an S (cosine) curve, squared on the way down. It leaves gently,
+// with no step when it begins; it falls away roughly evenly to the ear (the
+// ear hears loudness logarithmically, so a straight line in volume seems to
+// hold and then drop); and it lands softly at silence, so there is no last
+// moment where the sound cuts out. Timed by the clock, not the screen's
+// frames, so a fade still finishes if the reader switches tab mid-way.
+// iPhones and iPads leave volume to the hardware buttons: a page can set it
+// but it stays at full. There a fade cannot be heard, so rather than play on
+// at full volume for the length of one, it is done at once.
+const canFade = (el: HTMLAudioElement) => {
+  if (el.dataset.canFade) return el.dataset.canFade === '1';
+  const was = el.volume;
+  el.volume = was === 0.5 ? 0.25 : 0.5;
+  const ok = el.volume !== was;
+  el.volume = was;
+  el.dataset.canFade = ok ? '1' : '0';
+  return ok;
+};
+
 const ramp = (el: HTMLAudioElement, to: number, done?: () => void) => {
   const id = String(Number(el.dataset.fade || 0) + 1);
   el.dataset.fade = id;
+  if (!canFade(el)) {
+    done?.();
+    return;
+  }
   const from = el.volume;
+  const down = to < from;
+  const dur = down ? FADE_OUT : FADE_IN;
   const t0 = performance.now();
-  const step = (now: number) => {
+  const step = () => {
     if (el.dataset.fade !== id) return;
-    const k = Math.min(1, (now - t0) / FADE);
-    el.volume = Math.max(0, Math.min(1, from + (to - from) * k));
-    if (k < 1) requestAnimationFrame(step);
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    const s = (1 - Math.cos(Math.PI * k)) / 2;
+    const v = down ? to + (from - to) * Math.pow(1 - s, 2) : from + (to - from) * s;
+    el.volume = Math.max(0, Math.min(1, v));
+    if (k < 1) setTimeout(step, 20);
     else done?.();
   };
-  requestAnimationFrame(step);
+  step();
 };
 
 const load = (el: HTMLAudioElement, t: Track) => {

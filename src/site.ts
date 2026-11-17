@@ -123,6 +123,8 @@ export const sound = {
   // are blended into its first, so the end flows on into the beginning.
   file: 'pacific-equinox.mp3' as string | null,
   credit: 'Stu Pender',
+  /** His studio, linked from his name in the player. */
+  creditUrl: 'https://beingsound.studio',
 } as const;
 
 export const contact = {

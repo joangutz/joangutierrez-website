@@ -85,7 +85,13 @@ const wave: [number, number][] = [
                 </button>
                 <div class="snd-row-text">
                   <span class="snd-title">{t.title}</span>
-                  <span class="snd-sub">{subs[t.id]}</span>
+                  {t.id === 'soundscape' ? (
+                    <a class="snd-sub snd-credit" href={sound.creditUrl} target="_blank" rel="noopener">
+                      {sound.credit}<span class="snd-credit-arrow" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span>
+                    </a>
+                  ) : (
+                    <span class="snd-sub">{subs[t.id]}</span>
+                  )}
                   {!t.loop && (
                     <div class="snd-seekbox">
                       <input class="snd-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`Position in ${t.title}`} data-row-seek />
@@ -390,6 +396,29 @@ const wave: [number, number][] = [
     color: var(--color-ink-2);
   }
 
+  /* Stu's name, his studio a touch away: a hairline under it, the arrow
+     that says it leaves the site. */
+  .snd-credit {
+    justify-self: start;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: rgb(from currentColor r g b / 0.4);
+    transition: color 250ms var(--ease-open), text-decoration-color 250ms var(--ease-open);
+  }
+
+  .snd-credit:hover,
+  .snd-credit:focus-visible {
+    color: var(--color-cochineal);
+    text-decoration-color: currentColor;
+  }
+
+  .snd-credit-arrow {
+    display: inline-block;
+    margin-left: 0.25em;
+    font-size: 0.85em;
+  }
+
   .snd-seekbox {
     display: flex;
     align-items: center;
@@ -539,8 +568,9 @@ const wave: [number, number][] = [
       box.classList.toggle('is-once', once);
       const d = el.duration || 0;
       if (line) line.style.setProperty('--p', once && d ? `${(el.currentTime / d) * 100}%` : '0%');
-      // The tray is worth opening when there is a choice, or a place to keep.
-      const useful = avail.length > 1 || avail.some((x) => !x.loop);
+      // The tray is always there to open: it names what is playing and who
+      // made it, and holds the choice and the place to keep when there are.
+      const useful = avail.length > 0;
       if (more) more.hidden = !useful;
       if (!useful) close();
 
@@ -652,7 +682,9 @@ const wave: [number, number][] = [
     const frame = () => {
       raf = 0;
       const t = player.current();
-      const wave = t && player.isPlaying() && !still.matches && !document.hidden ? waveFor(t.src) : null;
+      // Still sounding (playing, or fading out after a pause).
+      const sounding = !el.paused && el.dataset.track === t?.id;
+      const wave = t && sounding && !still.matches && !document.hidden ? waveFor(t.src) : null;
       if (!wave) {
         btn.classList.remove('is-live');
         for (const i of lines) i.style.transform = '';
@@ -660,10 +692,14 @@ const wave: [number, number][] = [
       }
       btn.classList.add('is-live');
       const at = el.currentTime * wave.fps;
+      // Fading out, the lines settle with the sound: back toward their
+      // resting shape as the volume goes, arriving as it does.
+      const f = el.dataset.fading === 'out' ? Math.min(1, el.volume / (t!.level || 1)) : 1;
       lines.forEach((i, n) => {
         const v = level(wave.bands[order[n]], at);
-        const y = Math.min(1, Math.max(0.12, rest[n] * (0.4 + 0.9 * v)));
-        const x = 1 + 0.3 * v;
+        const still0 = rest[n] * 0.75;
+        const y = still0 + (Math.min(1, Math.max(0.12, rest[n] * (0.4 + 0.9 * v))) - still0) * f;
+        const x = 1 + 0.3 * v * f;
         i.style.transform = `scale(${x.toFixed(3)}, ${y.toFixed(3)})`;
       });
       raf = requestAnimationFrame(frame);
