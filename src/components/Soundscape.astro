@@ -514,17 +514,18 @@ const wave: [number, number][] = [
     }
   }
 
-  /* On a phone the bar is tight: the breathing rules say it alone. */
-  @media (max-width: 30rem) {
-    .snd-label {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
+  /* The waveform says it alone, at every size (11/17: no written word).
+     The label stays for screen readers, which name the button by it. */
+  .snd-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 
+  @media (max-width: 30rem) {
     .snd-line {
       bottom: 0.1rem;
     }
