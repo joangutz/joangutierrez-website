@@ -91,8 +91,9 @@ oneToOne:
     - minutes: 120
       inPerson: 250
 
+# Revised by the client 11/17 ("Then dare to tend" → "Dare tend").
 quote:
-  text: The body is the road back to what is true. Pause. Sense. Feel. Then dare to tend, with integrity, the deepest needs and desires you find there. This is how we become sovereign.
+  text: The body is the road back to what is true. Pause. Sense. Feel. Dare tend, with integrity, the deepest needs and desires you find there. This is how we become sovereign.
   by: Joan
 
 ---
