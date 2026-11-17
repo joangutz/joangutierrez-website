@@ -205,7 +205,7 @@ export const realms = [
  * she wrote beside each name: "(waitlist)" and "(free monthly gathering)".
  */
 export const beginHere = [
-  // The Services index, in Joan's order of 11/17.
+  // The Offerings index, in the client's order of 11/17 (second revision).
   {
     href: '/services/#one-to-one',
     title: '1:1 Sessions',
@@ -214,17 +214,17 @@ export const beginHere = [
     register: 'one',
   },
   {
-    href: '/services/#spine-society',
-    title: 'Spine Society',
-    note: 'free monthly gathering',
-    collage: 'roots-territories.jpg',
-    register: 'gathering',
-  },
-  {
     href: '/services/#liberate-your-pelvis',
     title: 'Liberate Your Pelvis',
     note: '',
     collage: 'scar-tissue.jpg',
+    register: 'one',
+  },
+  {
+    href: '/services/#zen-shiatsu',
+    title: 'Zen Shiatsu',
+    note: '',
+    collage: 'work-2.jpg',
     register: 'one',
   },
   {
@@ -235,11 +235,11 @@ export const beginHere = [
     register: 'gathering',
   },
   {
-    href: '/services/#zen-shiatsu',
-    title: 'Zen Shiatsu',
-    note: '',
-    collage: 'work-2.jpg',
-    register: 'one',
+    href: '/services/#spine-society',
+    title: 'Spine Society',
+    note: 'free monthly gathering',
+    collage: 'roots-territories.jpg',
+    register: 'gathering',
   },
   {
     href: '/services/#this-very-body',
