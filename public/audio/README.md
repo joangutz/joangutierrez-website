@@ -4,6 +4,21 @@
 |---|---|
 | `pacific-equinox.mp3` | Stu Pender's Pacific Equinox, the soundscape. `sound.file` in `/src/site.ts` names it |
 | `red-rose-visualization.mp3` | The Red Rose Visualization, for those who sign up for it |
+| `*.wave.json` | Beside each recording: how nine bands of its sound rise and fall, ten times a second. The bar's little waveform reads it to move with the sound |
+
+## The waveform files
+
+The lines in the bar follow the recording that is playing. Rather than
+listening to the sound live (which on an iPhone would stop it when the
+screen locks), each recording has a small file made from it in advance;
+the bar reads it at the track's current moment. A new or replaced recording
+needs its file made again, from the project folder:
+
+```sh
+python3 scripts/wave-envelope.py public/audio/NAME.mp3 public/audio/NAME.wave.json
+```
+
+Without one, the lines simply keep their gentle motion.
 
 ## How the soundscape loops
 
