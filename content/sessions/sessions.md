@@ -73,8 +73,9 @@ expect:
         - All of it is in service of best meeting you where you are at and discovering remedies and rituals that are truly yours.
   where: '**Sessions are available online via Zoom or in person,** either at my office near the lake in Edgewater, Chicago, IL, or, when agreed upon, at a private outdoor location or your kitchen.'
   wish: Through these encounters, my deepest wish is that you may remember belonging, honor desire, release shame, cultivate meaningful relationships, alchemize pain, meet suffering courageously, move through grief, delight in sexuality, reclaim sensation, pleasure, and creative agency, and nourish ways of living that bring you joy.
-  # The button opens the Book a Call page, so it says so (11/16).
-  link: Book a Call
+  # The button opens the Book a Session page. Was Book a Call (11/16);
+  # 11/17: Start a Conversation, less of a sale.
+  link: Start a Conversation
 
 oneToOne:
   title: 1:1 Sessions
