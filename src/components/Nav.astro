@@ -1,8 +1,7 @@
 ---
 import Vessel from './Vessel.astro';
-import Link from './Link.astro';
 import Soundscape from './Soundscape.astro';
-import { nav, site, booking, contact, withBase } from '../site';
+import { nav, site, withBase } from '../site';
 
 /**
  * The bar sits at the head of the window (moved from the foot, 11/16, in
@@ -23,6 +22,13 @@ const isCurrent = (href: string) => {
   return path === target || path === target.replace(/\/$/, '');
 };
 
+
+// The panel (phones and small tablets), 11/17: the places, then Get In Touch
+// set like them, in place of the boxed Book a Call and the contact lines.
+const menuItems = [
+  ...nav.filter((item) => !item.action),
+  { href: '/begin/', label: 'Get In Touch' },
+];
 ---
 
 <header class="nav-bar">
@@ -81,8 +87,8 @@ const isCurrent = (href: string) => {
     <nav class="menu-nav" aria-label="All pages">
       <ul class="menu-list">
         {
-          nav.map((item) => (
-            <li class:list={{ 'menu-item-action': item.action }}>
+          menuItems.map((item) => (
+            <li>
               <a
                 href={withBase(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
@@ -96,20 +102,6 @@ const isCurrent = (href: string) => {
         }
       </ul>
     </nav>
-
-    <div class="menu-foot">
-      <div class="menu-col">
-        <span class="menu-label">Get in Touch</span>
-        <Link href={booking.url}>{booking.label}</Link>
-        <Link href={`mailto:${contact.email}`}>{contact.email}</Link>
-      </div>
-      <div class="menu-col">
-        <span class="menu-label">Where</span>
-        {site.locations.map((l) => (
-          <span class="menu-where">{l.mode ? `${l.place} — ${l.mode}` : l.place}</span>
-        ))}
-      </div>
-    </div>
   </div>
 </div>
 
@@ -520,7 +512,7 @@ const isCurrent = (href: string) => {
      margins collapse to nothing and the list scrolls instead. */
   .menu-nav {
     flex: 0 1 auto;
-    margin-top: auto;
+    margin-block: auto;
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -632,46 +624,6 @@ const isCurrent = (href: string) => {
   .menu-list > li > a:focus-visible :global(.menu-egg),
   .menu-list > li > a[aria-current='page'] :global(.menu-egg) {
     opacity: 1;
-  }
-
-  .menu-foot {
-    flex: none;
-    margin-bottom: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    gap: clamp(0.75rem, 2vh, 1.5rem) clamp(1.25rem, 4vw, 3rem);
-    padding-top: clamp(0.75rem, 2vh, 1.5rem);
-    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
-    font-size: 0.86rem;
-  }
-
-  /* The locations are the first thing to go on a short screen — they are on
-     every page's footer, and the panel's job is to move you, not inform you. */
-  @media (max-height: 700px) {
-    .menu-col:last-child {
-      display: none;
-    }
-  }
-
-  .menu-col {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
-  }
-
-  .menu-label {
-    font-family: var(--font-label);
-    font-size: 0.62rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: rgb(var(--ch-bract) / 0.74);
-  }
-
-  .menu-where {
-    font-size: 0.88rem;
-    color: rgb(var(--ch-bract) / 0.8);
   }
 
   /* The panel arrives from the foot of the screen, which is where the button

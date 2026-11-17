@@ -142,6 +142,7 @@ Her text is in `content/offerings/*.md` (and the 1:1 prices in `content/sessions
 | Mobile menu: the lines alone, the cross alone, no words | **Done** — screen readers still hear Menu and Close menu |
 | Offerings instead of Services | **Done** — the menu tab, the page's title and its section heading, The Work's link, what search engines and llms.txt read. The address stays /services/ so links already shared keep working. The small OFFERINGS label above You belong here is gone too, at her request |
 | No "On this page" on a phone; side bookmarks only on larger screens | **Done** |
+| Mobile menu: no Get in Touch lines at the foot, no boxed button; a Get In Touch link set like the others | **Done** — Offerings, About, Resources, Get In Touch (to the Book a Session page). The Where lines at the foot went with them; they are in every page's footer. The bar on larger screens keeps its boxed Book a Call |
 
 ## Build-session notes this round
 
