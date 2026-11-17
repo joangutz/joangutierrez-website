@@ -42,10 +42,11 @@ realms:
     - You are a living doorway where the universe is actively making new meaning.
   link: Enter Ma
 
-# Joan's land acknowledgment of 11/16, verbatim. The last thing on the page,
+# Joan's land acknowledgment of 11/16, verbatim; revised by the client 11/17
+# ("…wetlands, woodlands, and now concrete jungles…"). The last thing on the page,
 # over the lake.
 land:
   label: Land Acknowledgment
-  text: I belong to the intersection of tallgrass prairies, eastern hardwood forests, and the Great Lakes basin where I drink and bathe in the freshwater of Lake Michigan. As a settler here, I acknowledge I move between the prairies, savannas, wetlands, and woodlands where the Council of the Three Fires, along many other tribes, such as the Miami, Ho-Chunk, Menominee, and Sac and Fox called home. I arrived from the Mexican-American Borderlands of El Paso and Ciudad Juarez, where my family settled after immigrating from my vibrant Mexico. I carry the medicine of these lands and all the others I have lived long enough to gather dreams, memories, and nourish kinship ties.
+  text: I belong to the intersection of tallgrass prairies, eastern hardwood forests, and the Great Lakes basin where I drink and bathe in the freshwater of Lake Michigan. As a settler here, I acknowledge I move between the prairies, savannas, wetlands, woodlands, and now concrete jungles where the Council of the Three Fires, along many other tribes, such as the Miami, Ho-Chunk, Menominee, and Sac and Fox called home. I arrived from the Mexican-American Borderlands of El Paso and Ciudad Juarez, where my family settled after immigrating from my vibrant Mexico. I carry the medicine of these lands and all the others I have lived long enough to gather dreams, memories, and nourish kinship ties.
 
 ---
