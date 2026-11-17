@@ -213,7 +213,8 @@ const id = offering.id;
       {
         prices && (
           <div class="back-prices">
-            <span class="panel-label">{prices.title}</span>
+            {/* Headed with the word on the button that turns to it (Rates, 11/17). */}
+            <span class="panel-label">{o.turn}</span>
             <dl class="back-price-list">
               {prices.rows.map((r) => (
                 <div class="back-price">
