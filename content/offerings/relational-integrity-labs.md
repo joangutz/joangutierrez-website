@@ -9,18 +9,22 @@ register: gathering
 collage: all-in-one.jpg
 alt: Collage — a body cut from a grey photograph holding a halved melon and a watermelon, a small carved figure above.
 left:
+# The client's revised text of 11/17, verbatim, each paragraph as spaced.
 - paragraphs:
   - Boundaries can be learned with a light-heart and a light-touch. Relational Integrity Lab is a two-hour online laboratory, held twice a month, for those who want to experiment, play, and come to know themselves through and through.
-  # 11/17: a new paragraph here, with breathing space.
   - Here you can practice noticing what you want, what you are willing to give, and where your limits live, then speaking them aloud in simple, heart-centered ways.
 - title: HOW?
   paragraphs:
-  - We open with circle introductions, group agreements, and a few gentle experiments to help you land, orient, and settle. From there, we slow down enough for your yes and your no to rise from within the body, where they have been speaking all along. Then we practice giving them a voice.
-  - You may come to make requests, to connect, or to strengthen your capacity to say no. Whatever brings you, this is a field of experimentation for discovering, nourishing, and strengthening who you already are through what you desire and where you draw your lines.
+  - We open with circle introductions, group agreements, and a few gentle experiments to help you land, orient, and settle.
+  - From there, we slow down enough for your yes and your no to rise from within the body, where they have been speaking all along.
+  - Then we practice giving them a voice.
+  - You may come to make requests, to connect, or to strengthen your capacity to say no. Whatever brings you, this is a field of experimentation.
+  - May you discover, nourish, and strengthen who you already are by embracing what you desire and where you draw your lines.
   - Inspired by the dynamics of the Wheel of Consent® and The Right Use of Power™.
 - title: WHO?
   paragraphs:
-  - Anyone longing to align with more of who they are and wanting to tend more meaningful relationships with self, others, Earth, and cosmos. No prior experience is needed, only a curious, open heart. All genders, sexual orientations, and walks of life are welcome.
+  - Anyone longing to align with more of who they are and wanting to tend more meaningful relationships with self, others, Earth, and cosmos.
+  - No prior experience is needed, only a curious, open heart. All genders, sexual orientations, and walks of life belong.
 right:
 - title: 'You belong here if you want to:'
   items:
