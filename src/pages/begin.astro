@@ -40,13 +40,21 @@ const contact_page = {
           {/* The invitation and its one action… */}
           <div class="invite-main">
             {/* The client's copy of 11/17, verbatim, one word to a line as
-                written. (Replaces Joan's 11/16 lines, "I would love to hear
-                from you" and "I look forward to meeting you where you are.") */}
-            <h1 class="invite-title">Book a Session</h1>
-            <p class="invite-lede">Feeling tender,<br />hopeful,<br />messy,<br />alive,<br />curious?</p>
-            <p class="invite-lede">I would love to meet you where you are.</p>
+                written, in the site's voice: the soft serif, sizes that rise
+                and settle, a few words in italic, as in the Offerings quote.
+                The heading is kept for screen readers and search only (the
+                client removed it from view, 11/17). */}
+            <h1 class="visually-hidden">Book a Session</h1>
+            <p class="invite-words">
+              <span class="w-small">Feeling</span> <em class="w-big">tender,</em><br />
+              <span class="w-mid">hopeful,</span><br />
+              <em class="w-mid">messy,</em><br />
+              <span class="w-big">alive,</span><br />
+              <em class="w-big">curious?</em>
+            </p>
+            <p class="invite-lede">I would love to meet you <em>where you are.</em></p>
             <div class="invite-action">
-              <Link variant="action" href={booking.url}>Let's Begin</Link>{/* Was booking.label (Book a Discovery Call); 11/17: Let's Begin, on this page only */}
+              <Link variant="action" href={booking.url}>Schedule a Call</Link>{/* Was booking.label (Book a Discovery Call), then Let's Begin; 11/17: Schedule a Call, on this page only */}
             </div>
           </div>
 
@@ -122,12 +130,30 @@ const contact_page = {
     color: rgb(var(--ch-bract) / 0.82);
   }
 
-  .invite-title {
-    margin: 0.8rem 0 0;
-    font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+  /* The stacked words: the soft serif of the Offerings quote, light, each
+     line its own size so the list breathes; italics on a few. */
+  .invite-words {
+    margin: 0;
+    font-family: var(--font-soft);
     font-weight: 300;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
+    line-height: 1.04;
+    letter-spacing: -0.005em;
+  }
+
+  .invite-words em {
+    font-style: italic;
+  }
+
+  .w-small {
+    font-size: clamp(1.2rem, 1.9vw, 1.5rem);
+  }
+
+  .w-mid {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+  }
+
+  .w-big {
+    font-size: clamp(2.2rem, 4.2vw, 3.3rem);
   }
 
   .invite-lede {
@@ -138,8 +164,12 @@ const contact_page = {
   }
 
   /* The stacked words, then the line that answers them. */
-  .invite-lede + .invite-lede {
-    margin-top: 0.9rem;
+  .invite-words + .invite-lede {
+    margin-top: clamp(1rem, 2.4vh, 1.5rem);
+  }
+
+  .invite-lede em {
+    font-style: italic;
   }
 
   .invite-action {
@@ -193,9 +223,16 @@ const contact_page = {
       padding: clamp(0.9rem, 2.6vh, 1.4rem) clamp(1rem, 4.5vw, 1.4rem);
     }
 
-    .invite-title {
-      margin-top: 0.5rem;
-      font-size: clamp(1.7rem, 5.6vh, 2.4rem);
+    .w-small {
+      font-size: clamp(1rem, 2.6vh, 1.2rem);
+    }
+
+    .w-mid {
+      font-size: clamp(1.4rem, 3.9vh, 1.8rem);
+    }
+
+    .w-big {
+      font-size: clamp(1.8rem, 5vh, 2.3rem);
     }
 
     .invite-lede {
@@ -228,8 +265,8 @@ const contact_page = {
       line-height: 1.5;
     }
 
-    .invite-lede + .invite-lede {
-      margin-top: 0.5rem;
+    .invite-words + .invite-lede {
+      margin-top: 0.6rem;
     }
 
     /* Two short lines on a phone (the copyright, the credit), held close
