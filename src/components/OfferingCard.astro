@@ -227,6 +227,19 @@ const id = offering.id;
         )
       }
 
+      {/* With only the rates on its turned side (1:1, 11/17), the card ends
+          on the same way down the page as its front. */}
+      {o.more && !o.includes && !o.left && !o.right && (
+        <div class="back-more">
+          <a class="more-link" href={href(o.more.href)}>
+            <span>{o.more.label}</span>
+            <svg class="more-arrow" viewBox="0 0 10 16" aria-hidden="true" focusable="false">
+              <path d="M5 0.5 V14.5 M1 10.5 L5 14.5 L9 10.5" />
+            </svg>
+          </a>
+        </div>
+      )}
+
     </div>
   </div>
 </article>
@@ -350,6 +363,22 @@ const id = offering.id;
   .more-link:hover,
   .more-link:focus-visible {
     color: var(--color-plumstone);
+  }
+
+  /* On the turned side, on the glass. */
+  .back-more {
+    margin-top: auto;
+    padding-top: 1.75rem;
+  }
+
+  .face-back .more-link {
+    color: var(--color-bract);
+  }
+
+  .face-back .more-link:hover,
+  .face-back .more-link:focus-visible {
+    color: var(--color-bract);
+    opacity: 0.8;
   }
 
   .more-arrow {
