@@ -1,5 +1,6 @@
 ---
-# Joan's About page of 11/16, verbatim. (Her ¨ marks around "spirit of a
+# Joan's About page of 11/16, verbatim; the opening letter revised by the
+# client 11/17, verbatim. (Her ¨ marks around "spirit of a
 # child…" are set as quotation marks.) The bio before this one is kept in
 # /content/_source/joan-2026-10-31.md and /content/pages/about.md.
 
@@ -11,8 +12,8 @@ portrait: joan-roots.jpg
 alt: Joan seated, in a black dress embroidered with flowers, smiling toward the camera.
 
 letter:
-  - I am a fluid feminine bloom of the Chihuahuan desert, always crossing a new border. I embody the “spirit of a child, the body of a woman, and the soul of a crone.” I call upon all these dimensions of myself in my commitment to elevate erotic intelligence, pelvic care, and creative expression as essential parts of whole-body health.
-  - Through my practice I am here to nurture life by offering direct, lived experiences of being in your body, on your terms. Together we will thread personally relevant fragments of somatics, sexology, art, body work, science, ancestral nutrition, and ritual into client-led collaborative encounters.
+  - I am a fluid feminine bloom of the Chihuahuan desert, always crossing a new border. I carry the “spirit of a child, the body of a woman, and the soul of a crone.” I call upon these and many other dimensions of myself in my commitment to elevate erotic intelligence, pelvic care, and creative expression as essential parts of whole-body health.
+  - I am here to nurture life by offering direct, lived experiences of being in your body, on your terms. Together we will thread personally relevant fragments of somatics, sexology, art, body work, science, ancestral nutrition, and ritual into client-led collaborative encounters.
   - I believe that the body, perceived from within, is a channel for vibrant health, sexual vitality, and boundless expression when met with attention, intention, and attunement. Even on the brink of death, life force keeps pulsing within us, and it's most readily reached through our pelvic root. Until our final breath, that flame deserves to be tended.
   - Allow me to accompany you as we walk this terrain.
 signoff:
