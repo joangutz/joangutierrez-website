@@ -13,16 +13,17 @@ hero:
   collage: hero.jpg
   alt: A body in low warm light, the curve of a hip and thigh with a band of sun falling across it.
 
-# Joan's text of 11/16, verbatim: her welcome, beside her portrait.
+# The welcome, beside her portrait: the client's revised text of 11/17,
+# verbatim (replaces Joan's 11/16 version; the paragraph beginning "This
+# freedom can begin by addressing pain" is gone).
 welcome:
   title: I am Joan. Welcome.
   paragraphs:
     - Ma Somatrix is for courageous humans in the midst of delicate life transitions. I created it as a space for you to gain a deeper understanding of your body-energy-mind and how to care for it in this season of your life, through 1:1 sessions, embodiment workshops, and whole-body care education.
     - I am dedicated to helping you nurture a source of freedom within your pelvis, the seat of your creative and erotic life, where a way of living rooted in love, compassion, and authentic expression is always available.
-    - Your body holds a whole matrix of sensation, instinct, and memory, and your sexuality moves through it like water through root and stone. It touches how you hold yourself, how you love, and how deeply you drink in your days. Your sexual wellbeing belongs to the core of who you are, and it deserves devoted care.
-    - This freedom can begin by addressing pain, discomfort, limitations, and challenges. It can also begin by fortifying what is already alive and searching for tenderness and curiosity. Tending to either can bring relief and expansion at emotional, relational, physical, and spiritual levels.
-    - Together, we co-create explorations where the stories of the mind loosen their grip and the quieter language of the body can be listened to. From there, ease opens up in feeling what is true, clarity about what you long for, permission to follow what delights you, a relationship with your body that grows more instinctive and unbound, and an intimacy with yourself and others that deepens over time.
-    - I have witnessed sacred truths reveal themselves when people irreverently follow what feels good and are willing to get curious about what they discover. When we learn the language of our senses, cultivate our attention, and take our health into our own hands, we feel what it means to be wholly alive.
+    - Your body holds a whole matrix of sensation, instinct, and memory, and your sexuality moves through it like water through root and stone. It touches how you hold yourself, how you love, and how deeply you drink in your days. Your sexual wellbeing belongs to the core of who you are, and it deserves deep care.
+    - Together, we co-create explorations where the stories of the mind can lighten so the quieter language of the body can express. Possibility opens up in feeling what is true, clarity about what you long for, permission to follow what delights you, a relationship with your body that grows more instinctive and unbound, and an intimacy with yourself and others that deepens over time.
+    - I have witnessed sacred truths reveal themselves when people irreverently follow what feels true and are willing to get curious about what they discover. When we learn the language of our senses, cultivate our attention, and take our health into our own hands, we feel what it means to be wholly alive.
   closing: I am here in service to your wholeness.
   portrait: joan-laugh.jpg
   alt: Joan laughing, eyes closed, holding a stem of white sweet peas.
