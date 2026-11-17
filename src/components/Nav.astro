@@ -14,7 +14,7 @@ import { nav, site, booking, contact, withBase } from '../site';
  * away it settles into a solid bar of the page's own ground, its words in
  * ink. Without scripting it is always the solid bar.
  *
- * Below 860px the tabs give way to a Menu button and a full panel.
+ * Below 860px the tabs give way to a menu button (the lines alone) and a full panel.
  */
 const path = Astro.url.pathname;
 // Compare against the based href — pathname includes the base in production.
@@ -58,9 +58,9 @@ const isCurrent = (href: string) => {
         data-menu-open
         aria-expanded="false"
         aria-controls="site-menu"
+        aria-label="Menu"
       >
         <span class="menu-rules" aria-hidden="true"><i></i><i></i></span>
-        <span>Menu</span>
       </button>
     </div>
   </div>
@@ -73,9 +73,8 @@ const isCurrent = (href: string) => {
         <Vessel size="26px" open={0.7} />
         <span>{site.name}</span>
       </a>
-      <button class="menu-btn menu-close" type="button" data-menu-close>
+      <button class="menu-btn menu-close" type="button" data-menu-close aria-label="Close menu">
         <span class="menu-rules menu-rules-x" aria-hidden="true"><i></i><i></i></span>
-        <span>Close</span>
       </button>
     </div>
 
@@ -212,8 +211,7 @@ const isCurrent = (href: string) => {
   }
 
   .brand-name,
-  .nav-inline > ul > li > a,
-  .menu-btn > span:last-child {
+  .nav-inline > ul > li > a {
     text-box: trim-both cap alphabetic;
   }
 
@@ -336,19 +334,18 @@ const isCurrent = (href: string) => {
     color: var(--color-plumstone);
   }
 
-  /* ---- The control ---- */
+  /* ---- The control: the lines alone, no word. A 44px square to touch,
+     the lines set at its right edge so they line up with the bar's margin. */
   .menu-btn {
     align-items: center;
-    gap: 0.6rem;
+    justify-content: flex-end;
+    width: 44px;
+    height: 44px;
+    margin-right: -4px;
     background: none;
     border: 0;
     color: var(--bar-ink);
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    padding: 0.35rem 0;
+    padding: 0 4px;
     cursor: pointer;
   }
 
@@ -356,9 +353,9 @@ const isCurrent = (href: string) => {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
-    width: 20px;
-    height: 12px;
+    gap: 6px;
+    width: 24px;
+    height: 14px;
   }
 
   .menu-rules i {
