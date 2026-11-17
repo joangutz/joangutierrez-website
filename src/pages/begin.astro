@@ -1,11 +1,11 @@
 ---
+import Credits from '../components/Credits.astro';
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import { contact, booking, site } from '../site';
 import { abs, crumbs } from '../seo';
 
-const year = new Date().getFullYear();
 
 const contact_page = {
   '@type': 'ContactPage',
@@ -69,7 +69,7 @@ const contact_page = {
         </div>
 
         {/* The page's own close: the footer's one line, on the photograph. */}
-        <p class="invite-credit">© {year} {site.name}</p>
+        <Credits class="invite-credit" />
       </div>
     </div>
   </section>
@@ -193,13 +193,8 @@ const contact_page = {
     color: rgb(var(--ch-bract) / 0.78);
   }
 
-  .invite-credit {
+  .invite :global(.invite-credit) {
     margin: clamp(1rem, 2.5vh, 1.5rem) 0 0;
-    font-family: var(--font-label);
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    opacity: 0.7;
   }
 
   /* Phones: everything still fits one screen, down to the shortest. The
@@ -264,8 +259,11 @@ const contact_page = {
       margin-top: 0.35rem;
     }
 
-    .invite-credit {
-      margin-top: clamp(0.5rem, 1.5vh, 1rem);
+    /* Two short lines on a phone (the copyright, the credit), held close
+       so the page still fits one screen. */
+    .invite :global(.invite-credit) {
+      margin-top: clamp(0.25rem, 0.8vh, 0.75rem);
+      row-gap: 0.2rem;
     }
   }
 

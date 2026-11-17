@@ -1,5 +1,5 @@
 ---
-import { site } from '../site';
+import Credits from './Credits.astro';
 
 interface Props {
   /** Sitting on the closing photograph with Get in Touch (see Base). */
@@ -7,7 +7,6 @@ interface Props {
 }
 
 const { onGround = false } = Astro.props;
-const year = new Date().getFullYear();
 ---
 
 {/* One quiet line. Everything the footer used to list now lives where it
@@ -17,7 +16,7 @@ const year = new Date().getFullYear();
 <footer class:list={['footer on-dark', { grained: !onGround, 'footer-on-ground': onGround }]}>
   <div class="band">
     <div class="wide footer-line">
-      <p class="credit">© {year} {site.name}</p>
+      <Credits />
       <a class="to-top" href="#top">
         <span>Top</span>
         <svg viewBox="0 0 10 16" aria-hidden="true" focusable="false"><path d="M5 15.5 V1.5 M1 5.5 L5 1.5 L9 5.5" /></svg>
@@ -88,12 +87,4 @@ const year = new Date().getFullYear();
     translate: 0 -3px;
   }
 
-  .credit {
-    margin: 0;
-    font-family: var(--font-label);
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    opacity: 0.7;
-  }
 </style>

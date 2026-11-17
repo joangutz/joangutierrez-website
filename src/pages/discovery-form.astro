@@ -1,8 +1,9 @@
 ---
+import Credits from '../components/Credits.astro';
 import Base from '../layouts/Base.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import ApplicationForm from '../components/ApplicationForm.astro';
-import { site } from '../site';
+
 import { crumbs } from '../seo';
 
 /**
@@ -13,7 +14,6 @@ import { crumbs } from '../seo';
  *
  * One pane of glass on a photograph, as Book a Session is.
  */
-const year = new Date().getFullYear();
 ---
 
 <Base
@@ -30,7 +30,7 @@ const year = new Date().getFullYear();
           <h1 class="visually-hidden">Discovery Form</h1>
           <ApplicationForm subject="1:1 Sessions" heading="Discovery Form" />
         </div>
-        <p class="discovery-credit">© {year} {site.name}</p>
+        <Credits class="discovery-credit" />
       </div>
     </div>
   </section>
@@ -71,13 +71,8 @@ const year = new Date().getFullYear();
     padding: clamp(1.75rem, 5vw, 3.25rem);
   }
 
-  .discovery-credit {
+  :global(.discovery-credit) {
     max-width: 40rem;
     margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
-    font-family: var(--font-label);
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    opacity: 0.7;
   }
 </style>
