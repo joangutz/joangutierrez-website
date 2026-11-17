@@ -108,9 +108,7 @@ export const form = {
 /**
  * The ambient soundscape — warm water and oil over the bones.
  *
- * TODO-SOUND: drop a looping file at /public/audio/soundscape.mp3 (and
- * ideally soundscape.ogg beside it), then set `file` to its name. The player
- * renders nothing until then. It never autoplays: browsers block that, and a
+ * The file is in /public/audio (see its README for how the loop was made). It never autoplays: browsers block that, and a
  * site that makes noise at a stranger uninvited is a worse welcome than
  * silence. The control sits in the bottom bar, off by default, and remembers
  * the reader's choice.
@@ -121,7 +119,9 @@ export const form = {
  * whatever is playing plays on as the reader moves from page to page.
  */
 export const sound = {
-  file: null as string | null,
+  // Stu Pender's Pacific Equinox, made to loop: its last fifteen seconds
+  // are blended into its first, so the end flows on into the beginning.
+  file: 'pacific-equinox.mp3' as string | null,
   credit: 'Stu Pender',
 } as const;
 

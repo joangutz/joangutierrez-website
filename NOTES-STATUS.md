@@ -143,6 +143,7 @@ Her text is in `content/offerings/*.md` (and the 1:1 prices in `content/sessions
 | Offerings instead of Services | **Done** — the menu tab, the page's title and its section heading, The Work's link, what search engines and llms.txt read. The address stays /services/ so links already shared keep working. The small OFFERINGS label above You belong here is gone too, at her request |
 | No "On this page" on a phone; side bookmarks only on larger screens | **Done** |
 | Mobile menu: no Get in Touch lines at the foot, no boxed button; a Get In Touch link set like the others | **Done** — Offerings, About, Resources, Get In Touch (to the Book a Session page). The Where lines at the foot went with them; they are in every page's footer. The bar on larger screens keeps its boxed Book a Call |
+| The soundscape: Stu Pender's Pacific Equinox, a sound button, on repeat | **Done** — the control in the bar (SOUND on larger screens, the moving lines alone on a phone); never plays by itself; keeps playing from page to page; remembers the choice. Made to loop without a seam: the last fifteen seconds (the fade) blended into the first fifteen, so the end flows on into the beginning (details in `public/audio/README.md`). Her upload is kept in `content/_source/audio/` |
 
 ## Build-session notes this round
 
