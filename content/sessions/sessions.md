@@ -13,7 +13,6 @@ title: Offerings
 description: Every session is its own living encounter. Each one is shaped by what is present, alive, and wanting attention in you that day.
 
 belong:
-  label: Offerings
   title: 'You belong here if you want to:'
   groups:
     - title: Body and belonging

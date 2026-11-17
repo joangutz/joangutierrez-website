@@ -170,7 +170,7 @@ const catalog = {
   <section class="scene on-dark has-ground" id="offerings">
     <div class="scene-photo film film-still"><Collage src="close-home.jpg" alt="" sizes="100vw" /></div>
     <div class="scene-wrap">
-      <span class="chapter">{s.belong.label}</span>
+      {s.belong.label && <span class="chapter">{s.belong.label}</span>}
       <h2 class="scene-title">{s.belong.title}</h2>
       <div class="groups">
         {

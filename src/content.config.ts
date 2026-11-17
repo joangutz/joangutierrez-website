@@ -145,7 +145,7 @@ const sessionsPage = defineCollection({
     title: z.string(),
     description: z.string(),
     belong: z.object({
-      label: z.string(),
+      label: z.string().optional(),
       title: z.string(),
       groups: z.array(z.object({ title: z.string(), items: z.array(z.string()) })),
       closing: z.array(z.string()),

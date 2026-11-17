@@ -140,7 +140,7 @@ Her text is in `content/offerings/*.md` (and the 1:1 prices in `content/sessions
 |---|---|
 | Try the laughing photograph (white sweet peas) as the homepage portrait | **Done** — `assets/portraits/joan-laugh.jpg`, in colour, beside I am Joan. Welcome. The earlier portrait, `joan-home.jpg`, is kept; set `portrait: joan-home.jpg` in `content/home/home.md` to go back |
 | Mobile menu: the lines alone, the cross alone, no words | **Done** — screen readers still hear Menu and Close menu |
-| Offerings instead of Services | **Done** — the menu tab, the page's title and its section heading, The Work's link, what search engines and llms.txt read. The address stays /services/ so links already shared keep working. **Note:** the small OFFERINGS label above You belong here (her 11/16 text) now shares its word with the section heading below it |
+| Offerings instead of Services | **Done** — the menu tab, the page's title and its section heading, The Work's link, what search engines and llms.txt read. The address stays /services/ so links already shared keep working. The small OFFERINGS label above You belong here is gone too, at her request |
 | No "On this page" on a phone; side bookmarks only on larger screens | **Done** |
 
 ## Build-session notes this round
