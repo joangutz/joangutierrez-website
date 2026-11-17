@@ -6,6 +6,7 @@ either — the filename decides which slot, the folder decides how it is credite
 | Filename | Slot |
 |---|---|
 | `hero.jpg` | Home hero |
+| `offerings-hands.jpg` | Offerings, beside the quote (11/17; chosen from seven) |
 | `erotic-embodiment.jpg` | Sessions card 1 |
 | `desire-mapping.jpg` | Sessions card 2 |
 | `scar-tissue.jpg` | Sessions card 3 |
