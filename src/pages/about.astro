@@ -6,6 +6,7 @@ import Link from '../components/Link.astro';
 import { booking } from '../site';
 import { person, crumbs } from '../seo';
 import { getEntry } from 'astro:content';
+import { inline } from '../lib/inline';
 
 /**
  * About — Joan's page of 11/16, in her order:
@@ -62,7 +63,7 @@ const a = entry.data;
   <section class="background" id="background">
     <div class="read">
       <h2 class="about-title">{a.background.title}</h2>
-      {a.background.arts.map((p) => <p>{p}</p>)}
+      {a.background.arts.map((p) => <p set:html={inline(p)} />)}
     </div>
 
     <figure class="break film">
@@ -71,7 +72,7 @@ const a = entry.data;
 
     <div class="read">
       <p class="turn">{a.background.turn}</p>
-      {a.background.body.map((p) => <p>{p}</p>)}
+      {a.background.body.map((p) => <p set:html={inline(p)} />)}
     </div>
   </section>
 
@@ -328,4 +329,22 @@ const a = entry.data;
     color: var(--color-bract);
   }
 
+  /* Her teachers and trainings, linked (11/17): hidden in the prose, told
+     apart only by a lighter earth tone (Quick, 7.38:1 on the ground); a
+     hairline appears under the name on hover or keyboard focus. */
+  .background :global(.name-link) {
+    color: var(--color-quick);
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 400ms var(--ease-open), color 300ms var(--ease-open);
+  }
+
+  .background :global(.name-link:hover),
+  .background :global(.name-link:focus-visible) {
+    color: var(--color-cochineal);
+    background-size: 100% 1px;
+  }
 </style>
