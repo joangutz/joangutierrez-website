@@ -134,11 +134,14 @@ Her text is in `content/offerings/*.md` (and the 1:1 prices in `content/sessions
 | The Discovery Form as its own page | **Done** — /discovery-form/, not in the menu: one glass pane on a photograph, as Book a Session is. The cards' buttons open it with what it is about in the address, carried into the email. Services now ends on Get in Touch alone |
 | Interface word | The button that turns the new cards reads **Explore** (1:1 keeps Includes; This Very Body reads Join the waitlist, her words). **Check with Joan** for a word she prefers |
 
-## Homepage portrait (11/17)
+## Homepage and site-wide (11/17)
 
 | Note | Status |
 |---|---|
 | Try the laughing photograph (white sweet peas) as the homepage portrait | **Done** — `assets/portraits/joan-laugh.jpg`, in colour, beside I am Joan. Welcome. The earlier portrait, `joan-home.jpg`, is kept; set `portrait: joan-home.jpg` in `content/home/home.md` to go back |
+| Mobile menu: the lines alone, the cross alone, no words | **Done** — screen readers still hear Menu and Close menu |
+| Offerings instead of Services | **Done** — the menu tab, the page's title and its section heading, The Work's link, what search engines and llms.txt read. The address stays /services/ so links already shared keep working. **Note:** the small OFFERINGS label above You belong here (her 11/16 text) now shares its word with the section heading below it |
+| No "On this page" on a phone; side bookmarks only on larger screens | **Done** |
 
 ## Build-session notes this round
 

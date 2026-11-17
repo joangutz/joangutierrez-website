@@ -14,7 +14,7 @@
  *
  *   wide      ticks with titles, all of them revealed on hover
  *   medium    ticks alone — the position indicator without the vocabulary
- *   narrow    no rail at all; an "On this page" disclosure above the prose
+ *   narrow    nothing (Joan, 11/17: no "On this page" list on a phone)
  *
  * The narrow form is what nearly every site with this pattern does — MDN,
  * Stripe, GitHub's docs, Astro's own — because a rail on a phone takes width
@@ -69,10 +69,11 @@
     }
   }
 
-  @media (min-width: 900px) {
-    .rail-toc {
-      display: none;
-    }
+  /* Joan, 11/17: on a phone, no "On this page" list at all; the rail is for
+     the larger screens only. The list is still built (it costs nothing) but
+     never shown. */
+  .rail-toc {
+    display: none !important;
   }
 
   /* Every item is exactly one slot tall whatever its title's length, which is

@@ -150,7 +150,7 @@ export interface NavItem {
 }
 
 export const nav: readonly NavItem[] = [
-  { href: '/services/', label: 'Services' },
+  { href: '/services/', label: 'Offerings' },
   { href: '/about/', label: 'About' },
   { href: '/resources/', label: 'Resources' },
   // Joan, 11/16: "BOOK A CALL", boxed like a button, linked to the

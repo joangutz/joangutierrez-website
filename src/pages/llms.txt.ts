@@ -25,7 +25,7 @@ export const GET: APIRoute = async () => {
     '',
     'Where: Chicago, IL — in-person. Internationally — online. Available to Travel.',
     '',
-    '## Services',
+    '## Offerings',
     '',
     ...(sessions
       ? [
@@ -51,7 +51,7 @@ export const GET: APIRoute = async () => {
     '',
     '## Pages',
     '',
-    `- [Services](${abs('/services/')}): who the work is for, what to expect, 1:1 session prices, and every offering.`,
+    `- [Offerings](${abs('/services/')}): who the work is for, what to expect, 1:1 session prices, and every offering.`,
     `- [Discovery Form](${abs('/discovery-form/')}): a short form to Joan, about any of the services.`,
     `- [About](${abs('/about/')}): ${about ? `${about.data.name} — ${about.data.roles}. ${about.data.line}` : ''}`,
     `- [Resources](${abs('/resources/')}): ${kit.freebie} — ${kit.freebieBody}`,

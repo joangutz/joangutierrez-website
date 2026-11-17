@@ -7,7 +7,7 @@
 # Only her words from these notes are on the page. (The earlier "Note on all
 # plans" is kept in the source file named above.)
 
-title: Services
+title: Offerings
 # The description search engines show: her own opening lines of What to
 # Expect.
 description: Every session is its own living encounter. Each one is shaped by what is present, alive, and wanting attention in you that day.
