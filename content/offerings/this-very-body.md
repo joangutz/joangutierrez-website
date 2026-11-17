@@ -25,7 +25,8 @@ left:
   - lead: Metal
     text: Still Body
 - paragraphs:
-  - Over 7 weeks we will move through the 5 elements with time to enter and integrate.
+  # 11/17 revision: 7 weeks → 7 months.
+  - Over 7 months we will move through the 5 elements with time to enter and integrate.
   - We will gather over ritual movement, recipes, practices, and circles to report on our inner weather as we go on remembering ourselves as the Earth.
 right:
 - title: Join the waitlist. Be first to know.
