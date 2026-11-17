@@ -4,7 +4,7 @@
 title: Zen Shiatsu
 line: Fully clothed, hands-on bodywork rooted in the same foundation as acupuncture
 turn: Explore
-order: 3
+order: 4
 register: one
 collage: work-2.jpg
 alt: Collage — a body cut from a grey photograph, a watermelon and a slice of it above, with small figures of a girl.

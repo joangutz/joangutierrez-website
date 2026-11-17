@@ -4,7 +4,7 @@
 title: Relational Integrity Labs
 line: A play room for learning to ask, to refuse, and to intimately know your own yes.
 turn: Explore
-order: 4
+order: 3
 register: gathering
 collage: all-in-one.jpg
 alt: Collage — a body cut from a grey photograph holding a halved melon and a watermelon, a small carved figure above.

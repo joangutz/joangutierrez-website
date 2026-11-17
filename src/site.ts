@@ -221,18 +221,18 @@ export const beginHere = [
     register: 'one',
   },
   {
-    href: '/services/#zen-shiatsu',
-    title: 'Zen Shiatsu',
-    note: '',
-    collage: 'work-2.jpg',
-    register: 'one',
-  },
-  {
     href: '/services/#relational-integrity-labs',
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',
     register: 'gathering',
+  },
+  {
+    href: '/services/#zen-shiatsu',
+    title: 'Zen Shiatsu',
+    note: '',
+    collage: 'work-2.jpg',
+    register: 'one',
   },
   {
     href: '/services/#spine-society',
