@@ -10,7 +10,9 @@ collage: all-in-one.jpg
 alt: Collage — a body cut from a grey photograph holding a halved melon and a watermelon, a small carved figure above.
 left:
 - paragraphs:
-  - Boundaries can be learned with a light-heart and a light-touch. Relational Integrity Lab is a two-hour online laboratory, held twice a month, for those who want to experiment, play, and come to know themselves through and through. Here you can practice noticing what you want, what you are willing to give, and where your limits live, then speaking them aloud in simple, heart-centered ways.
+  - Boundaries can be learned with a light-heart and a light-touch. Relational Integrity Lab is a two-hour online laboratory, held twice a month, for those who want to experiment, play, and come to know themselves through and through.
+  # 11/17: a new paragraph here, with breathing space.
+  - Here you can practice noticing what you want, what you are willing to give, and where your limits live, then speaking them aloud in simple, heart-centered ways.
 - title: HOW?
   paragraphs:
   - We open with circle introductions, group agreements, and a few gentle experiments to help you land, orient, and settle. From there, we slow down enough for your yes and your no to rise from within the body, where they have been speaking all along. Then we practice giving them a voice.
