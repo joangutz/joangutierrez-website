@@ -237,7 +237,7 @@ export const beginHere = [
   {
     href: '/services/#spine-society',
     title: 'Spine Society',
-    note: 'free monthly gathering',
+    note: 'pay-from-the-heart monthly gathering', // 11/17: was free
     collage: 'roots-territories.jpg',
     register: 'gathering',
   },
