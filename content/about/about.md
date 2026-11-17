@@ -4,7 +4,7 @@
 # child…" are set as quotation marks.) The bio before this one is kept in
 # /content/_source/joan-2026-10-31.md and /content/pages/about.md.
 
-name: Joan Gutierrez
+name: Joan Gutiérrez
 roles: Founder | Artist | Somatic Sexologist
 line: Partnering with people who are curious about the potentials of embodied living.
 more: Learn more

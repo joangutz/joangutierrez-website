@@ -7,6 +7,16 @@
    from the basic file instead of using the extended file's proper ī. That
    is the "matrīcis" in Joan's definition of Matrix. Declaring the extended
    file second gives it precedence for the shared marks. */
+/* Ms Madi (OFL): a handwritten script, used only for Joan's signature at
+   the end of her letter on About (11/17). */
+@font-face {
+  font-family: 'Ms Madi';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/MsMadi-Regular.woff2') format('woff2');
+}
+
 /* Cormorant Garamond (OFL): the light, airy serif of the Services page,
    chosen 11/16 from rendering B. */
 @font-face {
@@ -197,6 +207,7 @@
   --font-body: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
   /* The small uppercase letterspaced voice — labels, nav, doors, buttons. */
   --font-label: 'Ronzino', 'Helvetica Neue', Arial, sans-serif;
+  --font-script: 'Ms Madi', 'Snell Roundhand', cursive;
   --font-wordmark: 'Sprat Extended', 'Sprat', Georgia, serif;
 
   --ease-open: cubic-bezier(0.22, 0.61, 0.36, 1);
