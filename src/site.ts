@@ -216,7 +216,7 @@ export const beginHere = [
   {
     href: '/services/#liberate-your-pelvis',
     title: 'Liberate Your Pelvis',
-    note: '',
+    note: 'immersions', // 11/17
     collage: 'scar-tissue.jpg',
     register: 'one',
   },
