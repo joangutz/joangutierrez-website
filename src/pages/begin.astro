@@ -27,7 +27,7 @@ const contact_page = {
 
 <Base
   title="Book a Session"
-  description="Feeling tender, hopeful, messy, alive, curious? I would love to hear from you."
+  description="Feeling tender, hopeful, messy, alive, curious? I would love to meet where you are at."
   selfClosing
   schema={[contact_page, crumbs('Book a Session', '/begin/')]}
 >
@@ -39,16 +39,15 @@ const contact_page = {
         <div class="invite-pane">
           {/* The invitation and its one action… */}
           <div class="invite-main">
-            {/* Joan's text of 11/16, verbatim; 11/17: "Feel free to reach out",
-                "Collaborations are welcomed" and the paragraph about the
-                30-minute call removed. */}
+            {/* The client's copy of 11/17, verbatim, one word to a line as
+                written. (Replaces Joan's 11/16 lines, "I would love to hear
+                from you" and "I look forward to meeting you where you are.") */}
             <h1 class="invite-title">Book a Session</h1>
-            <p class="invite-lede">Feeling tender, hopeful, messy, alive, curious?</p>
-            <p class="invite-lede">I would love to hear from you.</p>
+            <p class="invite-lede">Feeling tender,<br />hopeful,<br />messy,<br />alive,<br />curious?</p>
+            <p class="invite-lede">I would love to meet where you are at.</p>
             <div class="invite-action">
               <Link variant="action" href={booking.url}>Let's Begin</Link>{/* Was booking.label (Book a Discovery Call); 11/17: Let's Begin, on this page only */}
             </div>
-            <p class="invite-call">I look forward to meeting you where you are.</p>
           </div>
 
           {/* …and, beside it, for anyone who would rather write: her
@@ -138,26 +137,13 @@ const contact_page = {
     max-width: 40ch;
   }
 
-  /* Her three short lines read as one opening. */
+  /* The stacked words, then the line that answers them. */
   .invite-lede + .invite-lede {
-    margin-top: 0.2rem;
+    margin-top: 0.9rem;
   }
 
   .invite-action {
     margin-top: clamp(1.5rem, 3.5vh, 2.25rem);
-  }
-
-  /* What the call is, under the button that books it. */
-  .invite-call {
-    margin: clamp(1.1rem, 2.6vh, 1.6rem) 0 0;
-    max-width: 46ch;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: rgb(var(--ch-bract) / 0.86);
-  }
-
-  .invite-call + .invite-call {
-    margin-top: 0.6rem;
   }
 
   /* Bigger than an ordinary action: the one thing to do here. */
@@ -243,17 +229,7 @@ const contact_page = {
     }
 
     .invite-lede + .invite-lede {
-      margin-top: 0.1rem;
-    }
-
-    .invite-call {
-      margin-top: clamp(0.6rem, 1.6vh, 1rem);
-      font-size: clamp(0.8rem, 1.9vh, 0.9rem);
-      line-height: 1.45;
-    }
-
-    .invite-call + .invite-call {
-      margin-top: 0.35rem;
+      margin-top: 0.5rem;
     }
 
     /* Two short lines on a phone (the copyright, the credit), held close
