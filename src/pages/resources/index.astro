@@ -53,6 +53,12 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
       <GiftCard id="inspiration" image="work-1.jpg" kicker="" title="Inspiration" turnLabel="Explore" focus="50% 50%">
         <p><a href={contact.art} target="_blank" rel="noopener noreferrer">Joan’s Artist Portfolio<span class="visually-hidden"> (opens in a new tab)</span></a></p>
       </GiftCard>
+
+      {/* Library Archive (11/18): a card that turns, as Inspiration. Joan's
+          copy and links to come. */}
+      <GiftCard id="library-archive" image="library-archive.jpg" kicker="" title="Library Archive" turnLabel="Explore" focus="50% 50%">
+        <span></span>
+      </GiftCard>
     </div>
   </section>
 
