@@ -22,8 +22,8 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
   <div class="gift-inner" data-gift-inner>
     <div class="face face-front cardstock" data-gift-face="front" data-register="cochineal">
       <div class="gift-art film">
-        {/* Hands offering a rose on red velvet (11/18; was rose.jpg). */}
-        <Collage src="rose-offering.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
+        {/* The rose over the waves (11/18; was rose-offering.jpg, before it rose.jpg). */}
+        <Collage src="rose-waves.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
       </div>
       <div class="front-text">
         <span class="card-key">A Gift</span>
@@ -42,7 +42,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 
     <div class="face face-back on-dark" id="gift-back" data-gift-face="back">
       <div class="back-glass" aria-hidden="true">
-        <Collage src="rose-offering.jpg" alt="" register="cochineal" sizes="40vw" />
+        <Collage src="rose-waves.jpg" alt="" register="cochineal" sizes="40vw" />
       </div>
       <div class="back-head">
         <div>
@@ -165,6 +165,8 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* Keep the whole bloom of the rose in a wide crop (11/18). */
+    object-position: 50% 28%;
   }
 
   .front-text {
