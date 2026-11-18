@@ -11,6 +11,26 @@ import { kit, contact, withBase } from '../site';
  * signup once that form exists (TODO-KIT in site.ts), her address until
  * then, so the one thing this card hands over is never a dead end.
  */
+interface Props {
+  /** The same turning card for another use (Resources' Inspiration, 11/18):
+      its own id, picture, small label, name and turn word, and what its
+      turned side holds in the default slot. Without these it is the gift. */
+  id?: string;
+  image?: string;
+  kicker?: string;
+  title?: string;
+  turnLabel?: string;
+  focus?: string;
+}
+const {
+  id = 'gift',
+  image = 'rose-waves.jpg',
+  kicker = 'A Gift',
+  title = kit.freebie,
+  turnLabel = 'Open',
+  focus,
+} = Astro.props;
+const isGift = !Astro.slots.has('default');
 const ready = Boolean(kit.formAction);
 const [bodyBefore, bodyAfter] = kit.freebieBody.includes('Stu Pender')
   ? kit.freebieBody.split('Stu Pender')
@@ -18,20 +38,21 @@ const [bodyBefore, bodyAfter] = kit.freebieBody.includes('Stu Pender')
 const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 ---
 
-<article class="gift" id="gift" data-gift>
+<article class="gift" id={id} data-gift style={focus ? `--art-focus:${focus}` : undefined}>
   <div class="gift-inner" data-gift-inner>
     <div class="face face-front cardstock" data-gift-face="front" data-register="cochineal">
       <div class="gift-art film">
-        {/* The rose over the waves (11/18; was rose-offering.jpg, before it rose.jpg). */}
-        <Collage src="rose-waves.jpg" alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
+        {/* The gift: the rose over the waves (11/18; was rose-offering.jpg,
+            before it rose.jpg). */}
+        <Collage src={image} alt="" register="cochineal" sizes="(max-width: 780px) 92vw, 40vw" />
       </div>
       <div class="front-text">
-        <span class="card-key">A Gift</span>
-        <h2 class="gift-title card-name">{kit.freebie}</h2>
-        {kit.freebieSub && <p class="gift-sub">{kit.freebieSub}</p>}
+        {kicker && <span class="card-key">{kicker}</span>}
+        <h2 class="gift-title card-name">{title}</h2>
+        {isGift && kit.freebieSub && <p class="gift-sub">{kit.freebieSub}</p>}
         <div class="front-foot">
-          <button type="button" class="turn" data-gift-turn="open" aria-expanded="false" aria-controls="gift-back">
-            <span>Open</span>
+          <button type="button" class="turn" data-gift-turn="open" aria-expanded="false" aria-controls={`${id}-back`}>
+            <span>{turnLabel}</span>
             <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
               <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
             </svg>
@@ -40,14 +61,14 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
       </div>
     </div>
 
-    <div class="face face-back on-dark" id="gift-back" data-gift-face="back">
+    <div class="face face-back on-dark" id={`${id}-back`} data-gift-face="back">
       <div class="back-glass" aria-hidden="true">
-        <Collage src="rose-waves.jpg" alt="" register="cochineal" sizes="40vw" />
+        <Collage src={image} alt="" register="cochineal" sizes="40vw" />
       </div>
       <div class="back-head">
         <div>
-          <span class="label">A Gift</span>
-          <h3 class="back-title">{kit.freebie}</h3>
+          {kicker && <span class="label">{kicker}</span>}
+          <h3 class="back-title">{title}</h3>
         </div>
         <button type="button" class="turn turn-back" data-gift-turn="close">
           <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
@@ -56,6 +77,8 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
           <span>Back</span>
         </button>
       </div>
+      {!isGift && <div class="back-slot"><slot /></div>}
+      {isGift && (<>
       {/* Joan's description, with Stu Pender's name leading to his site. */}
       <p class="back-body">
         {bodyBefore}<a class="stu" href={contact.stu} target="_blank" rel="noopener noreferrer">Stu Pender<span class="visually-hidden"> (opens in a new tab)</span></a>{bodyAfter}
@@ -116,6 +139,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
           )
         }
       </div>
+      </>)}
     </div>
   </div>
 </article>
@@ -165,8 +189,9 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Keep the whole bloom of the rose in a wide crop (11/18). */
-    object-position: 50% 28%;
+    /* Keep the whole bloom of the rose in a wide crop (11/18); another card
+       sets its own (--art-focus). */
+    object-position: var(--art-focus, 50% 28%);
   }
 
   .front-text {
@@ -259,6 +284,31 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 
   .back-take {
     margin-top: var(--gap-door);
+  }
+
+  /* Another card's turned side (Inspiration): its own lines and links. */
+  .back-slot {
+    margin-top: 1.5rem;
+    max-width: 46ch;
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    line-height: 1.6;
+  }
+
+  .back-slot :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .back-slot :global(a) {
+    color: inherit;
+    text-decoration: none;
+    padding-bottom: 0.1rem;
+    border-bottom: 1px solid rgb(var(--ch-bract) / 0.45);
+    transition: border-color 300ms var(--ease-open);
+  }
+
+  .back-slot :global(a:hover),
+  .back-slot :global(a:focus-visible) {
+    border-bottom-color: currentColor;
   }
 
   /* ---- Receiving it ---- */

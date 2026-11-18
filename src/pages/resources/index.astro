@@ -6,7 +6,6 @@ import OfferingPlain from '../../components/OfferingPlain.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, kit } from '../../site';
 import { gift, crumbs } from '../../seo';
-import { latestPosts } from '../../substack';
 
 /**
  * Resources: cards, in the same language as Services. The gift turns
@@ -24,12 +23,7 @@ const shelf = async (id: 'inspiration' | 'library') => {
 };
 
 const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).filter((s) => s.hasBody);
-const artHost = new URL(contact.art).host;
 
-// Her latest writing, read at build time; empty if Substack can't be reached.
-const posts = await latestPosts(3);
-const fmt = (d: Date | null) =>
-  d && !isNaN(d.getTime()) ? d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
 ---
 
 <Base title={`Resources — ${kit.freebie}`} description={`${kit.freebie}. ${kit.freebieBody}`} schema={[gift, crumbs('Resources', '/resources/')]} plainClose>
@@ -49,33 +43,16 @@ const fmt = (d: Date | null) =>
         action={{ href: contact.substack, label: 'Newsletter', external: true }}
       />
 
-      {/* Her latest posts, under the Substack card: title, date and her own
-          opening lines, each leading to the post. */}
-      {
-        posts.length > 0 && (
-          <ul class="posts" aria-label="Latest on Substack">
-            {posts.map((p) => (
-              <li>
-                <a class="post" href={p.link} target="_blank" rel="noopener noreferrer">
-                  {fmt(p.date) && <span class="post-date">{fmt(p.date)}</span>}
-                  <span class="post-title">{p.title}</span>
-                  {p.summary && <span class="post-summary">{p.summary}</span>}
-                  <span class="visually-hidden">(opens in a new tab)</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
+      {/* Her latest posts were listed here (from the Substack feed, at build
+          time); removed 11/18 — redundant to the Newsletter link, and
+          showing a placeholder post. */}
 
-      {/* Her art. */}
-      <OfferingPlain
-        id="art"
-        title="Art"
-        collage="work-1.jpg"
-        register="cochineal"
-        action={{ href: contact.art, label: artHost, external: true }}
-      />
+      {/* Inspiration (11/18; was Art, linked straight to her portfolio): a
+          card that turns, Explore on its front. Joan's copy and links to
+          come; for now, her artist portfolio. */}
+      <GiftCard id="inspiration" image="work-1.jpg" kicker="" title="Inspiration" turnLabel="Explore" focus="50% 50%">
+        <p><a href={contact.art} target="_blank" rel="noopener noreferrer">Joan’s Artist Portfolio<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+      </GiftCard>
     </div>
   </section>
 
@@ -100,59 +77,6 @@ const fmt = (d: Date | null) =>
     gap: clamp(2rem, 5vw, 3.5rem);
   }
 
-  /* ---- Latest posts ---- */
-  .posts {
-    list-style: none;
-    margin: calc(clamp(2rem, 5vw, 3.5rem) * -0.5) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-  }
-
-  .post {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    height: 100%;
-    padding: clamp(1.25rem, 3vw, 1.75rem);
-    background: var(--color-madder);
-    text-decoration: none;
-    transition: background-color 300ms var(--ease-open);
-  }
-
-  .post:hover,
-  .post:focus-visible {
-    background: var(--swell-ground);
-  }
-
-  .post-date {
-    font-family: var(--font-label);
-    font-size: 0.64rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-ink-2);
-  }
-
-  .post-title {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    line-height: 1.25;
-    color: var(--color-cochineal);
-  }
-
-  .post-summary {
-    font-size: 0.92rem;
-    line-height: 1.55;
-    color: var(--color-ink-2);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
 
   .res-shelf {
     border-top: 1px solid var(--rule-soft);
