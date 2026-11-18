@@ -24,7 +24,6 @@ const shelf = async (id: 'inspiration' | 'library') => {
 };
 
 const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).filter((s) => s.hasBody);
-const substackHost = new URL(contact.substack).host;
 const artHost = new URL(contact.art).host;
 
 // Her latest writing, read at build time; empty if Substack can't be reached.
@@ -43,10 +42,10 @@ const fmt = (d: Date | null) =>
 
       <OfferingPlain
         id="substack"
-        title="Substack"
+        title="Erotic Becoming"
         collage="library.jpg"
         register="plumstone"
-        action={{ href: contact.substack, label: substackHost, external: true }}
+        action={{ href: contact.substack, label: 'Substack Newsletter', external: true }}
       />
 
       {/* Her latest posts, under the Substack card: title, date and her own
