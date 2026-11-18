@@ -28,7 +28,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
       <div class="front-text">
         <span class="card-key">A Gift</span>
         <h2 class="gift-title card-name">{kit.freebie}</h2>
-        <p class="gift-sub">{kit.freebieSub}</p>
+        {kit.freebieSub && <p class="gift-sub">{kit.freebieSub}</p>}
         <div class="front-foot">
           <button type="button" class="turn" data-gift-turn="open" aria-expanded="false" aria-controls="gift-back">
             <span>Open</span>

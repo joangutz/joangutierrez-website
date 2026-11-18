@@ -90,7 +90,7 @@ const wave: [number, number][] = [
                       {sound.credit}<span class="visually-hidden"> (opens in a new tab)</span>
                     </a>
                   ) : (
-                    <span class="snd-sub">{subs[t.id]}</span>
+                    subs[t.id] && <span class="snd-sub">{subs[t.id]}</span>
                   )}
                   {!t.loop && (
                     <div class="snd-seekbox">

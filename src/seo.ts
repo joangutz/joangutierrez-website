@@ -86,7 +86,7 @@ export const website = {
 export const gift = {
   '@type': 'CreativeWork',
   name: kit.freebie,
-  alternativeHeadline: kit.freebieSub,
+  ...(kit.freebieSub ? { alternativeHeadline: kit.freebieSub } : {}),
   description: kit.freebieBody,
   url: abs('/resources/#gift'),
   creator: { '@id': PERSON_ID },
