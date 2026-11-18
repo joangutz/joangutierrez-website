@@ -7,7 +7,7 @@ import OfferingCard from '../../components/OfferingCard.astro';
 import { getCollection, getEntry } from 'astro:content';
 import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
-import { withBase, beginHere, kit, contact } from '../../site';
+import { withBase, beginHere, shown, kit, contact } from '../../site';
 import Link from '../../components/Link.astro';
 import { abs, crumbs } from '../../seo';
 
@@ -21,8 +21,10 @@ const hasQuotes = (await getCollection('testimonials')).length > 0;
    homepage's, so their names, notes, collages and swatches never drift
    apart. */
 const byHref = (h: string) => beginHere.find((b) => b.href === h)!;
-// Spine Society, left as it was (Joan, 11/17), is the one gathering still a tile.
-const happenings = [byHref('/services/#spine-society')];
+// Spine Society, left as it was (Joan, 11/17), is the one gathering still a
+// tile — out of view for now (11/18), so Happenings shows only when it has one.
+const happenings = [byHref('/services/#spine-society')].filter(shown);
+const index = beginHere.filter(shown);
 const anchor = (h: string) => h.split('#')[1];
 
 const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
@@ -146,7 +148,7 @@ const catalog = {
   closingPhoto="lake.jpg"
   closingFocus="50% 72%"
 >
-  <ChapterRail />
+  <ChapterRail min={3} />
 
   {/* The page in the manner of rendering B (chosen 11/16): it moves through
       one landscape of photographs, her words resting on them. It opens
@@ -203,7 +205,7 @@ const catalog = {
           name, Joan's note beside it, a hairline arrow down to its card. */}
       <ol class="index">
         {
-          beginHere.map((o) => (
+          index.map((o) => (
             <li data-register={o.register}>
               <a class="index-row" href={withBase(o.href)}>
                 <span class="card-key index-key" aria-hidden="true"></span>
@@ -226,14 +228,16 @@ const catalog = {
       </div>
 
       {/* Joan's heading for the two gatherings, shortened at her request. */}
-      <h2 class="label happenings-label">Happenings</h2>
-      <div class="tile-row">
-        {
-          happenings.map((h) => (
-            <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />
-          ))
-        }
-      </div>
+      {happenings.length > 0 && (
+        <>
+          <h2 class="label happenings-label">Happenings</h2>
+          <div class="tile-row">
+            {happenings.map((h) => (
+              <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />
+            ))}
+          </div>
+        </>
+      )}
 
       {hasQuotes && (
         <div class="after-prices">

@@ -6,7 +6,7 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, homeCards, withBase } from '../site';
+import { site, homeCards, shown, withBase } from '../site';
 import { person } from '../seo';
 
 const entry = await getEntry('home', 'home');
@@ -42,6 +42,8 @@ const movedAnchors = {
   '#offerings': withBase('/services/'),
   '#connect': withBase('/begin/'),
 };
+// The cards in view (Spine Society is kept but out of view, 11/18).
+const cards = homeCards.filter(shown);
 ---
 
 <Base
@@ -153,9 +155,9 @@ const movedAnchors = {
   <section id="begin-here">
     <div class="band section">
     <div class="wide">
-      <ul class="cards rise">
+      <ul class="cards rise" style={`--n:${cards.length}`} data-odd={cards.length % 2 === 1 ? '' : undefined}>
         {
-          homeCards.map((o) => (
+          cards.map((o) => (
             <li>
               <a class="card cardstock" href={withBase(o.href)} data-register={o.register}>
                 <span class="card-art film">
@@ -411,8 +413,9 @@ const movedAnchors = {
     margin: 0;
     padding: 0;
     display: grid;
-    /* Five, so five columns — auto-fit wrapped them 4 + 1. */
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    /* One row, as many columns as cards (five, now four with Spine Society
+       out of view) — auto-fit wrapped five as 4 + 1. */
+    grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr));
     gap: clamp(0.85rem, 2vw, 1.5rem);
   }
 
@@ -427,11 +430,12 @@ const movedAnchors = {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .cards > li:first-child {
+    /* With an odd number, the first runs full width above even pairs. */
+    .cards[data-odd] > li:first-child {
       grid-column: 1 / -1;
     }
 
-    .cards > li:first-child .card-art {
+    .cards[data-odd] > li:first-child .card-art {
       aspect-ratio: 16 / 10;
     }
   }

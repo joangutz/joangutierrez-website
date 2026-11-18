@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection, getEntry } from 'astro:content';
 import { abs } from '../seo';
-import { site, booking, contact, kit, beginHere } from '../site';
+import { site, booking, contact, kit, beginHere, shown } from '../site';
 
 /**
  * llms.txt — a plain-text guide to the site for AI assistants, following
@@ -42,6 +42,7 @@ export const GET: APIRoute = async () => {
             '.',
           ...offerings.map((o) => `- [${o.data.title}](${abs(`/services/#${o.id}`)})${o.data.line ? `: ${o.data.line}` : o.data.includes ? `: ${o.data.includes[0]}` : ''}`),
           ...beginHere
+            .filter(shown)
             .filter((b) => !offerings.some((o) => b.href.endsWith(`#${o.id}`)))
             .map((b) => `- [${b.title}](${abs(b.href)})${b.note ? `: ${b.note}` : ''}`),
           '',

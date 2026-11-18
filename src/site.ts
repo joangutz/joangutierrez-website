@@ -238,6 +238,9 @@ export const beginHere = [
     href: '/services/#spine-society',
     title: 'Spine Society',
     note: 'pay-from-the-heart monthly gathering', // 11/17: was free
+    // 11/18: out of view for now, at the client's request; set false to
+    // bring it back (its image and words are kept).
+    hidden: true,
     collage: 'roots-territories.jpg',
     register: 'gathering',
   },
@@ -255,6 +258,9 @@ export const beginHere = [
  * apart from the Services page's list above so each page can name things
  * its own way.
  */
+/** Whether an entry is shown (an entry can be kept but set out of view). */
+export const shown = <T extends object>(o: T) => !('hidden' in o && (o as { hidden?: boolean }).hidden);
+
 export const homeCards = [
   // Joan's five, in her order and her words, 11/16.
   {
@@ -285,6 +291,7 @@ export const homeCards = [
     note: '',
     collage: 'roots-territories.jpg',
     register: 'gathering',
+    hidden: true, // 11/18: out of view for now (see beginHere)
   },
   {
     href: '/services/#zen-shiatsu',

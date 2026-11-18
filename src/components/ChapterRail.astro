@@ -29,9 +29,15 @@
  * Nothing here renders without JavaScript, which is why it may only ever carry
  * navigation that also exists in the page itself.
  */
+interface Props {
+  /** Fewest headings for the rail to show (4 by default). Offerings sets 3
+      while Spine Society, and with it Happenings, is out of view (11/18). */
+  min?: number;
+}
+const { min = 4 } = Astro.props;
 ---
 
-<nav class="rail" aria-label="Sections on this page" data-rail hidden></nav>
+<nav class="rail" aria-label="Sections on this page" data-rail data-rail-min={min} hidden></nav>
 
 <details class="rail-toc" data-rail-toc hidden>
   <summary>On this page</summary>
@@ -404,7 +410,7 @@
           .slice(0, 40);
 
       // Two or three ticks are not a chapter index, they are clutter.
-      if (headings.length >= 4) {
+      if (headings.length >= Number(rail.dataset.railMin ?? 4)) {
         const railLinks: HTMLAnchorElement[] = [];
         const tocLinks: HTMLAnchorElement[] = [];
 
