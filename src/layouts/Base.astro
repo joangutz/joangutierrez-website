@@ -25,13 +25,16 @@ interface Props {
   closingPhoto?: string;
   /** Which part of that photograph to keep when cropped (object-position). */
   closingFocus?: string;
+  /** A veil laid over the whole close, photograph and footer alike (a CSS
+      background), when the page's own close needs one (About's fire). */
+  closingVeil?: string;
   /** Extra schema.org nodes for this page (see src/seo.ts). */
   schema?: object[];
   /** Keep the page out of search (the 404). */
   noindex?: boolean;
 }
 
-const { title, description, bare = false, close = false, selfClosing = false, closingPhoto, closingFocus, schema = [], noindex = false } = Astro.props;
+const { title, description, bare = false, close = false, selfClosing = false, closingPhoto, closingFocus, closingVeil, schema = [], noindex = false } = Astro.props;
 
 /** The one photograph every page's footer stands on. */
 const CLOSING_PHOTO = 'close-home.jpg';
@@ -132,6 +135,7 @@ import GetInTouch from '../components/GetInTouch.astro';
       {/* A page's own photograph is there to be seen (the lake on the
           homepage), so it takes the light wash made for glass panes. */}
       <PhotoGround src={closingPhoto ?? CLOSING_PHOTO} from={closingPhoto ? 'glass' : 'left'} focus={closingFocus} />
+      {closingVeil && <span class="closing-veil" aria-hidden="true" style={`background:${closingVeil}`} />}
       <span class="closing-deep" aria-hidden="true" />
       {/* A page may put its own close here (slot="close"); otherwise
           Get in Touch, when asked for. */}
@@ -250,6 +254,13 @@ import GetInTouch from '../components/GetInTouch.astro';
   /* Over the photograph's own wash, a second one that gathers toward the
      foot: Get in Touch keeps the picture, the footer's small type gets a
      deeper ground beneath it. */
+  .closing-veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
   .closing-deep {
     position: absolute;
     inset: 0;

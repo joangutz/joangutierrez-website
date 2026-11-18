@@ -32,7 +32,7 @@ const fmt = (d: Date | null) =>
   d && !isNaN(d.getTime()) ? d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
 ---
 
-<Base title={`Resources — ${kit.freebie}`} description={`${kit.freebie}. ${kit.freebieBody}`} schema={[gift, crumbs('Resources', '/resources/')]}>
+<Base title={`Resources — ${kit.freebie}`} description={`${kit.freebie}. ${kit.freebieBody}`} schema={[gift, crumbs('Resources', '/resources/')]} close>
   {/* The wing (11/17), chosen from eight; was resources-flower.jpg. */}
   <PageBanner title="Resources" image="resources-wing.jpg" cinema />
 

@@ -7,13 +7,7 @@ import { booking } from '../site';
 import { person, crumbs } from '../seo';
 import { getEntry } from 'astro:content';
 import { inline } from '../lib/inline';
-import { getImage } from 'astro:assets';
-import fireJpg from '../../assets/photos/happenings.jpg';
 
-// The closing banner's ground (11/18): the ceremonial fire under a soft plum
-// veil, so the question still reads. Two sizes, for phones and wide screens.
-const fire = await getImage({ src: fireJpg, width: 1600, format: 'webp', quality: 72 });
-const fireSmall = await getImage({ src: fireJpg, width: 800, format: 'webp', quality: 72 });
 
 /**
  * About — Joan's page of 11/16, in her order:
@@ -40,6 +34,9 @@ const a = entry.data;
   title={`${a.name} — ${a.roles.replaceAll(' | ', ', ')}`}
   description={a.line}
   schema={[person, crumbs('About', '/about/')]}
+  closingPhoto="happenings.jpg"
+  closingFocus="50% 45%"
+  closingVeil="rgb(var(--ch-plum) / 0.6)"
 >
   {/* 1 · The opening: her name, roles and line on the ground; the portrait
       set in beside them, not run to the edge. */}
@@ -91,8 +88,10 @@ const a = entry.data;
     </div>
   </section>
 
-  {/* 5 · Her question on a field of colour, and the way to begin. */}
-  <section class="band-call film film-still" aria-label={a.banner.button} style={`--fire:url(${fire.src});--fire-sm:url(${fireSmall.src})`}>
+  {/* 5 · Her question, and the way to begin, on the page's closing
+      photograph — the ceremonial fire under a soft plum veil (11/18) — with
+      the footer on the same picture, as Home and Offerings end. */}
+  <section slot="close" class="band-call" aria-label={a.banner.button}>
     <p class="band-question">{a.banner.question}</p>
     <a class="band-button" href={booking.url} target="_blank" rel="noopener noreferrer">
       {a.banner.button}<span class="visually-hidden"> (opens in a new tab)</span>
@@ -302,29 +301,9 @@ const a = entry.data;
     display: grid;
     justify-items: center;
     gap: clamp(2rem, 5vh, 3rem);
-    padding: clamp(5rem, 14vh, 9rem) clamp(1.25rem, 8vw, 8rem);
-    /* The fire under the softer plum veil (chosen 11/18 over the deep veil
-       and the plain red, var(--kind-one), it replaced). */
-    background:
-      linear-gradient(rgb(var(--ch-plum) / 0.72), rgb(var(--ch-plum) / 0.72)),
-      var(--fire-sm) center 45% / cover no-repeat,
-      var(--kind-one);
+    padding: clamp(5rem, 14vh, 9rem) clamp(1.25rem, 8vw, 8rem) clamp(1rem, 3vh, 2rem);
     color: var(--color-bract);
     text-align: center;
-  }
-
-  @media (min-width: 800px) {
-    .band-call {
-      background:
-        linear-gradient(rgb(var(--ch-plum) / 0.72), rgb(var(--ch-plum) / 0.72)),
-        var(--fire) center 45% / cover no-repeat,
-        var(--kind-one);
-    }
-  }
-
-  .band-call > * {
-    position: relative;
-    z-index: 3;
   }
 
   .band-question {
