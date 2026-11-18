@@ -82,7 +82,7 @@ export const kit = {
    */
   newsletterAction: null as string | null,
   freebie: 'Red Rose Visualization',
-  freebieSub: 'A doorway for the inner eye',
+  freebieSub: 'A doorway for softening and opening', // 11/18: was "A doorway for the inner eye"
   freebieBody:
     'A guided meditation, held within a custom soundscape composed by Stu Pender. A small ritual to settle into stillness and return softened and alive.',
 } as const;
