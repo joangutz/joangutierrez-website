@@ -6,6 +6,7 @@ either — the filename decides which slot, the folder decides how it is credite
 | Filename | Slot |
 |---|---|
 | `hero.jpg` | Home hero |
+| `resources-wing.jpg` | Resources, the opening banner (11/17; option 8 of eight). `resources-flower.jpg`, the one before, is kept |
 | `offerings-hands.jpg` | Offerings, beside the quote (11/17; chosen from seven). Toned 11/17 to a faded, grainy beige (treatment A of three); the untouched photo is in `/content/_source/photos/offerings-hands-original.jpg`. Recipe below |
 | `erotic-embodiment.jpg` | Sessions card 1 |
 | `desire-mapping.jpg` | Sessions card 2 |
