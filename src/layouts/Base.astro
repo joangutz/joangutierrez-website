@@ -21,6 +21,9 @@ interface Props {
    * the page carries its own one-line credit.
    */
   selfClosing?: boolean;
+  /** End without a closing photograph: just the footer on its own plain
+      ground (Resources, 11/18). */
+  plainClose?: boolean;
   /** A page's own photograph for its close, in place of the shared one. */
   closingPhoto?: string;
   /** Which part of that photograph to keep when cropped (object-position). */
@@ -34,7 +37,7 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description, bare = false, close = false, selfClosing = false, closingPhoto, closingFocus, closingVeil, schema = [], noindex = false } = Astro.props;
+const { title, description, bare = false, close = false, selfClosing = false, plainClose = false, closingPhoto, closingFocus, closingVeil, schema = [], noindex = false } = Astro.props;
 
 /** The one photograph every page's footer stands on. */
 const CLOSING_PHOTO = 'close-home.jpg';
@@ -130,7 +133,8 @@ import GetInTouch from '../components/GetInTouch.astro';
     <main id="main">
       <slot />
     </main>
-    {!selfClosing && (
+    {!selfClosing && plainClose && <Footer />}
+    {!selfClosing && !plainClose && (
     <div id="get-in-touch" class:list={['closing has-ground on-dark', { 'closing-bare': !close && !Astro.slots.has('close') }]}>
       {/* A page's own photograph is there to be seen (the lake on the
           homepage), so it takes the light wash made for glass panes. */}

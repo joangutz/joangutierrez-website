@@ -35,6 +35,9 @@ interface Props {
    * points down into the page.
    */
   cinema?: boolean;
+  /** Where the line points down to: Get in Touch by default; a page without
+      one (Resources, 11/18) points into its own content. */
+  cue?: { href: string; label: string };
 }
 
 const {
@@ -47,6 +50,7 @@ const {
   tall = false,
   focus,
   cinema = false,
+  cue = { href: '#get-in-touch', label: 'To Get in Touch, at the end of the page' },
 } = Astro.props;
 ---
 
@@ -70,7 +74,7 @@ const {
   {/* The breathing line is also the way down: to Get in Touch at the
       foot of the page. */}
   {cinema && (
-    <a class="banner-cue" href="#get-in-touch" aria-label="To Get in Touch, at the end of the page">
+    <a class="banner-cue" href={cue.href} aria-label={cue.label}>
       <span aria-hidden="true" />
     </a>
   )}
