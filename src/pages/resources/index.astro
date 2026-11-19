@@ -22,22 +22,32 @@ const shelf = async (id: 'inspiration' | 'library') => {
   return { id, title: entry.data.title, Content, hasBody };
 };
 
-/* Inspiration's turned side (11/19): the client's list, names only, each
-   linked. YouTube share-tracking (?is= / ?si=) trimmed from the addresses.
-   Two came without an address, so they stand as names for now. */
-const inspiration: { name: string; href?: string }[] = [
-  { name: 'Audre Lorde - Uses of the Erotic: The Erotic as Power', href: 'https://youtu.be/aWmq9gw4Rq0' },
-  { name: 'Beautiful Cervix Project', href: 'https://www.beautifulcervix.com' },
-  { name: 'The Great Wall of Vulva', href: 'https://www.thegreatwallofvulva.com' },
-  { name: 'Egg Release Magic - Ovulation', href: 'https://youtu.be/nLmg4wSHdxQ' },
-  { name: 'Hysterectomy information', href: 'https://hersfoundation.org/female-anatomy/' },
-  { name: 'Scarleteen - Queer sex ed for ALL' }, // TODO: address to come
-  { name: 'Women of Color Sexual Health Network' }, // TODO: address to come
-  { name: 'SexEd Project', href: 'https://youtu.be/bgd3m-x46JU' },
-  { name: 'Self-Obliteration - Yayoi Kusama', href: 'https://youtu.be/n6wnhLqJqVE' },
-  { name: 'My Mother - Kazuo Ohno', href: 'https://youtu.be/hzmkYu0d8rM' },
-  { name: 'Before the Dawn - Yumiko Yoshioka', href: 'https://youtu.be/TOX4u7KUtjc' },
-  { name: 'Annie Sprinkle Archive', href: 'https://anniesprinkle.org' },
+/* Inspiration's turned side (11/19): the client's list in two groups,
+   names only, each linked. YouTube share-tracking (?is= / ?si=) trimmed
+   from the addresses. */
+const inspiration: { label: string; items: { name: string; href: string }[] }[] = [
+  {
+    label: 'Education',
+    items: [
+      { name: 'Beautiful Cervix Project', href: 'https://www.beautifulcervix.com' },
+      { name: 'Egg Release Magic - Ovulation', href: 'https://youtu.be/nLmg4wSHdxQ' },
+      { name: 'Hysterectomy information', href: 'https://hersfoundation.org/female-anatomy/' },
+      { name: 'Scarleteen - Queer sex ed for ALL', href: 'https://www.scarleteen.com/read/abuse' },
+      { name: 'Women of Color Sexual Health Network', href: 'https://www.wocshn.org/home' },
+      { name: 'SexEd Project', href: 'https://youtu.be/bgd3m-x46JU' },
+    ],
+  },
+  {
+    label: 'Art',
+    items: [
+      { name: 'Audre Lorde - Uses of the Erotic: The Erotic as Power', href: 'https://youtu.be/aWmq9gw4Rq0' },
+      { name: 'The Great Wall of Vulva', href: 'https://www.thegreatwallofvulva.com' },
+      { name: 'Self-Obliteration - Yayoi Kusama', href: 'https://youtu.be/n6wnhLqJqVE' },
+      { name: 'My Mother - Kazuo Ohno', href: 'https://youtu.be/hzmkYu0d8rM' },
+      { name: 'Before the Dawn - Yumiko Yoshioka', href: 'https://youtu.be/TOX4u7KUtjc' },
+      { name: 'Annie Sprinkle', href: 'https://anniesprinkle.org' },
+    ],
+  },
 ];
 
 const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).filter((s) => s.hasBody);
@@ -71,17 +81,18 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
           card that turns, Explore on its front; on its back, the list of
           inspirations (11/19) and then her artist portfolio. */}
       <GiftCard id="inspiration" image="roots-territories.jpg" kicker="" title="Inspiration" turnLabel="Explore" focus="50% 50%">
-        <ul class="link-list">
-          {inspiration.map((i) => (
-            <li>
-              {i.href ? (
-                <a href={i.href} target="_blank" rel="noopener noreferrer">{i.name}<span class="visually-hidden"> (opens in a new tab)</span></a>
-              ) : (
-                <span>{i.name}</span>
-              )}
-            </li>
-          ))}
-        </ul>
+        {inspiration.map((g) => (
+          <div class="link-group">
+            <span class="link-label">{g.label}</span>
+            <ul class="link-list">
+              {g.items.map((i) => (
+                <li>
+                  <a href={i.href} target="_blank" rel="noopener noreferrer">{i.name}<span class="visually-hidden"> (opens in a new tab)</span></a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
         <p class="link-list-after"><a href={contact.art} target="_blank" rel="noopener noreferrer">Joan’s Artist Portfolio<span class="visually-hidden"> (opens in a new tab)</span></a></p>
       </GiftCard>
 
@@ -137,6 +148,22 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
     padding: 0;
     display: grid;
     gap: 0.7rem;
+  }
+
+  .link-group + .link-group {
+    margin-top: clamp(1.75rem, 3.5vw, 2.25rem);
+  }
+
+  /* The group's name, in the small tracked capitals of the site's labels. */
+  .link-label {
+    display: block;
+    margin-bottom: 0.9rem;
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.75;
   }
 
   .link-list-after {
