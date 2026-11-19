@@ -1,11 +1,12 @@
 /**
  * The Library Archive (Resources, 11/19): the client's book covers, in the
- * eight genres she named, in her order. Each image is in
+ * eight genres she named, in her order (Zen widened 11/19 to Asian Philosophy
+ * & Medicine, with Nourishing Destiny moved in from Nutrition). Each image is in
  * /assets/library-archive/; its title and author are the alt text.
  * Grouping: the somatic and nervous-system books sit under Neuroscience so
  * Trauma & Healing keeps to healing, justice and repair.
  */
-export const libraryGenres = ["Neuroscience", "Sexual Health", "Creativity, Expression & Art", "Trauma & Healing", "Empowerment", "Eroticism", "Zen", "Ancient Wisdom Nutrition"] as const;
+export const libraryGenres = ["Neuroscience", "Sexual Health", "Creativity, Expression & Art", "Trauma & Healing", "Empowerment", "Eroticism", "Asian Philosophy & Medicine", "Ancient Wisdom Nutrition"] as const;
 
 export const library: { file: string; title: string; author: string; genre: (typeof libraryGenres)[number] }[] = [
   { file: "emotional-anatomy.jpg", title: "Emotional Anatomy", author: "Stanley Keleman", genre: "Neuroscience" },
@@ -66,18 +67,21 @@ export const library: { file: string; title: string; author: string; genre: (typ
   { file: "love-death-in-a-queer-universe.jpg", title: "Love & Death in a Queer Universe", author: "Caffyn Jesse", genre: "Eroticism" },
   { file: "sexuality-beyond-consent.jpg", title: "Sexuality Beyond Consent", author: "Avgi Saketopoulou", genre: "Eroticism" },
   { file: "rituals-and-paradoxes.jpg", title: "Rituals and Paradoxes", author: "Andy Buru", genre: "Eroticism" },
-  { file: "zen-mind-beginner-s-mind.jpg", title: "Zen Mind, Beginner’s Mind", author: "Shunryu Suzuki", genre: "Zen" },
-  { file: "silence.jpg", title: "Silence", author: "Thich Nhat Hanh", genre: "Zen" },
-  { file: "the-shamanic-bones-of-zen.jpg", title: "The Shamanic Bones of Zen", author: "Zenju Earthlyn Manuel", genre: "Zen" },
-  { file: "the-wakeful-body.jpg", title: "The Wakeful Body", author: "Willa Blythe Baker", genre: "Zen" },
-  { file: "how-to-cook-your-life.jpg", title: "How to Cook Your Life", author: "Dogen / Uchiyama", genre: "Zen" },
-  { file: "the-five-invitations.jpg", title: "The Five Invitations", author: "Frank Ostaseski", genre: "Zen" },
+  { file: "zen-mind-beginner-s-mind.jpg", title: "Zen Mind, Beginner’s Mind", author: "Shunryu Suzuki", genre: "Asian Philosophy & Medicine" },
+  { file: "silence.jpg", title: "Silence", author: "Thich Nhat Hanh", genre: "Asian Philosophy & Medicine" },
+  { file: "the-shamanic-bones-of-zen.jpg", title: "The Shamanic Bones of Zen", author: "Zenju Earthlyn Manuel", genre: "Asian Philosophy & Medicine" },
+  { file: "the-wakeful-body.jpg", title: "The Wakeful Body", author: "Willa Blythe Baker", genre: "Asian Philosophy & Medicine" },
+  { file: "how-to-cook-your-life.jpg", title: "How to Cook Your Life", author: "Dogen / Uchiyama", genre: "Asian Philosophy & Medicine" },
+  { file: "the-five-invitations.jpg", title: "The Five Invitations", author: "Frank Ostaseski", genre: "Asian Philosophy & Medicine" },
+  { file: "nourishing-destiny.jpg", title: "Nourishing Destiny", author: "Lonny S. Jarrett", genre: "Asian Philosophy & Medicine" },
+  { file: "zen-shiatsu.jpg", title: "Zen Shiatsu: How to Harmonize Yin and Yang for Better Health", author: "Shizuto Masunaga with Wataru Ohashi", genre: "Asian Philosophy & Medicine" },
+  { file: "the-web-that-has-no-weaver.jpg", title: "The Web That Has No Weaver", author: "Ted J. Kaptchuk", genre: "Asian Philosophy & Medicine" },
+  { file: "five-spirits.jpg", title: "Five Spirits", author: "Lorie Eve Dechar", genre: "Asian Philosophy & Medicine" },
   { file: "nourishing-traditions.jpg", title: "Nourishing Traditions", author: "Sally Fallon", genre: "Ancient Wisdom Nutrition" },
   { file: "the-book-of-macrobiotics.jpg", title: "The Book of Macrobiotics", author: "Michio Kushi", genre: "Ancient Wisdom Nutrition" },
   { file: "macrobiotic-cooking-for-everyone.jpg", title: "Macrobiotic Cooking for Everyone", author: "Edward & Wendy Esko", genre: "Ancient Wisdom Nutrition" },
   { file: "ojas-a-cookbook.jpg", title: "Ojas: A Cookbook", author: "Nira Kehar", genre: "Ancient Wisdom Nutrition" },
   { file: "the-ayurvedic-cookbook.jpg", title: "The Ayurvedic Cookbook", author: "Amadea Morningstar with Urmila Desai", genre: "Ancient Wisdom Nutrition" },
-  { file: "nourishing-destiny.jpg", title: "Nourishing Destiny", author: "Lonny S. Jarrett", genre: "Ancient Wisdom Nutrition" },
   { file: "welcoming-food.jpg", title: "Welcoming Food", author: "Andrew Sterman", genre: "Ancient Wisdom Nutrition" },
   { file: "the-complete-cooking-techniques-for-the-gaps-diet.jpg", title: "The Complete Cooking Techniques for the GAPS Diet", author: "Monica Corrado", genre: "Ancient Wisdom Nutrition" },
   { file: "return-to-nature.jpg", title: "Return to Nature", author: "Carry Kim", genre: "Ancient Wisdom Nutrition" },
