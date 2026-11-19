@@ -22,9 +22,12 @@ interface Props {
   kitAction?: string | null;
   /** The button's word on that form. */
   kitButton?: string;
+  /** Set as the turning cards beside it are (Resources, 11/19): the picture
+      takes half the card and the same height. */
+  matchTurning?: boolean;
 }
 
-const { id, title, note, collage, register, action, kitAction, kitButton } = Astro.props;
+const { id, title, note, collage, register, action, kitAction, kitButton, matchTurning = false } = Astro.props;
 
 /* With nothing yet to say or do, a card is only its picture and its name:
    a compact tile rather than a wide card with an empty pale side. */
@@ -32,7 +35,7 @@ const hasBody = Astro.slots.has('default');
 const compact = !action && !kitAction && !hasBody;
 ---
 
-<article class:list={['plain-card', { compact, cardstock: !compact }]} id={id} data-register={register}>
+<article class:list={['plain-card', { compact, cardstock: !compact, 'match-turning': matchTurning }]} id={id} data-register={register}>
   <div class="front-art">
     <div class="chip-image film">
       <Collage src={collage} alt="" register={register} />
@@ -245,9 +248,43 @@ const compact = !action && !kitAction && !hasBody;
     translate: 3px 0;
   }
 
+  /* Matching the turning cards (GiftCard): half and half, 15rem tall. */
+  .plain-card.match-turning {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  }
+
+  .match-turning .chip-image {
+    min-height: 15rem;
+  }
+
+  /* In the half-width column a two-word name (Erotic Becoming) a touch
+     smaller, so it keeps to one line and the card to the others' height. */
+  .match-turning .card-name {
+    margin-top: 0;
+    font-size: clamp(2rem, 3.2vw, 2.85rem);
+    text-wrap: nowrap;
+  }
+
+  .match-turning .front-foot {
+    margin-top: 0;
+    padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
   @media (max-width: 780px) {
     .plain-card {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    .plain-card.match-turning {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .match-turning .chip-image {
+      min-height: 0;
+    }
+
+    .match-turning .card-name {
+      text-wrap: wrap;
     }
 
     .chip-image {
