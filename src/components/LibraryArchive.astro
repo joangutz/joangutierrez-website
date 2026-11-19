@@ -1,0 +1,279 @@
+---
+import { getImage } from 'astro:assets';
+import { library, libraryGenres } from '../data/library';
+
+/**
+ * The Library Archive's turned side (11/19): the client's book covers in
+ * their genres as small thumbnails. A thumbnail opens the cover large in a
+ * viewer on a dark veil: × in the top corner to close, arrows on the edges
+ * to turn through the whole collection (keys ← → and Esc, and swiping, do
+ * the same). The viewer is a <dialog>, so it rises above the turned card.
+ */
+const files = import.meta.glob<{ default: ImageMetadata }>('/assets/library-archive/*.jpg', { eager: true });
+
+const books = await Promise.all(
+  library.map(async (b, i) => {
+    const src = files[`/assets/library-archive/${b.file}`]?.default;
+    if (!src) throw new Error(`Library Archive: missing /assets/library-archive/${b.file}`);
+    const [thumb, large] = await Promise.all([
+      getImage({ src, width: 240, format: 'webp', quality: 70 }),
+      getImage({ src, width: 1080, format: 'webp', quality: 78 }),
+    ]);
+    return { ...b, i, thumb: thumb.src, large: large.src, alt: `${b.title}, by ${b.author}` };
+  }),
+);
+
+const groups = libraryGenres.map((g) => ({ genre: g, books: books.filter((b) => b.genre === g) }));
+---
+
+<div class="lib" data-lib>
+  {groups.map((g) => (
+    <section class="lib-group">
+      <h4 class="lib-label">{g.genre}</h4>
+      <ul class="lib-grid">
+        {g.books.map((b) => (
+          <li>
+            <button type="button" class="lib-thumb" data-lib-open={b.i} aria-label={`Open ${b.alt}`}>
+              <img src={b.thumb} alt="" width="240" height="300" loading="lazy" decoding="async" />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+
+  <dialog class="lib-view" data-lib-view aria-label="Library Archive">
+    <div class="lib-stage">
+      <img class="lib-large" data-lib-img alt="" />
+      <button type="button" class="lib-btn lib-close" data-lib-close aria-label="Close">
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 2 L14 14 M14 2 L2 14" /></svg>
+      </button>
+      <button type="button" class="lib-btn lib-prev" data-lib-prev aria-label="Previous">
+        <svg viewBox="0 0 10 16" aria-hidden="true" focusable="false"><path d="M8.5 1 L1.5 8 L8.5 15" /></svg>
+      </button>
+      <button type="button" class="lib-btn lib-next" data-lib-next aria-label="Next">
+        <svg viewBox="0 0 10 16" aria-hidden="true" focusable="false"><path d="M1.5 1 L8.5 8 L1.5 15" /></svg>
+      </button>
+    </div>
+    <p class="lib-count" aria-live="polite"><span data-lib-genre></span> · <span data-lib-n></span></p>
+  </dialog>
+
+  <script
+    type="application/json"
+    data-lib-data
+    set:html={JSON.stringify(books.map((b) => ({ src: b.large, alt: b.alt, genre: b.genre })))}
+  />
+</div>
+
+<style>
+  .lib {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .lib-label {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .lib-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+    gap: 0.6rem;
+  }
+
+  .lib-thumb {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgb(var(--ch-bract) / 0.18);
+    transition: box-shadow 300ms var(--ease-open), translate 300ms var(--ease-open);
+  }
+
+  .lib-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lib-thumb:hover,
+  .lib-thumb:focus-visible {
+    box-shadow: 0 0 0 1px rgb(var(--ch-bract) / 0.7);
+    translate: 0 -2px;
+  }
+
+  /* ---- The viewer ---- */
+  .lib-view {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-bract);
+    overflow: hidden;
+  }
+
+  .lib-view::backdrop {
+    background: rgb(var(--ch-plum) / 0.88);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .lib-view[open] {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.9rem;
+  }
+
+  .lib-stage {
+    position: relative;
+    line-height: 0;
+  }
+
+  .lib-large {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(88vw, 34rem);
+    max-height: calc(100dvh - 7rem);
+    aspect-ratio: 4 / 5;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgb(0 0 0 / 0.35);
+  }
+
+  .lib-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(var(--ch-plum) / 0.55);
+    color: var(--color-bract);
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transition: background-color 250ms var(--ease-open);
+  }
+
+  .lib-btn:hover,
+  .lib-btn:focus-visible {
+    background: rgb(var(--ch-plum) / 0.85);
+  }
+
+  .lib-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .lib-close {
+    top: 0.6rem;
+    right: 0.6rem;
+  }
+
+  .lib-prev,
+  .lib-next {
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  .lib-prev {
+    left: 0.6rem;
+  }
+
+  .lib-next {
+    right: 0.6rem;
+  }
+
+  .lib-count {
+    margin: 0;
+    font-family: var(--font-label);
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  import { onPage } from '../lib/onPage';
+
+  onPage(() => {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-lib]')) {
+      const view = root.querySelector<HTMLDialogElement>('[data-lib-view]');
+      const img = root.querySelector<HTMLImageElement>('[data-lib-img]');
+      const genre = root.querySelector<HTMLElement>('[data-lib-genre]');
+      const n = root.querySelector<HTMLElement>('[data-lib-n]');
+      const raw = root.querySelector<HTMLScriptElement>('[data-lib-data]')?.textContent;
+      if (!view || !img || !genre || !n || !raw) continue;
+      const books: { src: string; alt: string; genre: string }[] = JSON.parse(raw);
+      let at = 0;
+      let opener: HTMLElement | null = null;
+
+      const show = (i: number) => {
+        at = (i + books.length) % books.length;
+        const b = books[at];
+        img.src = b.src;
+        img.alt = b.alt;
+        genre.textContent = b.genre;
+        n.textContent = `${at + 1} / ${books.length}`;
+        // Have the next cover ready before it is asked for.
+        const ahead = new Image();
+        ahead.src = books[(at + 1) % books.length].src;
+      };
+
+      root.querySelectorAll<HTMLButtonElement>('[data-lib-open]').forEach((b) =>
+        b.addEventListener('click', () => {
+          opener = b;
+          show(Number(b.dataset.libOpen));
+          view.showModal();
+        }),
+      );
+      root.querySelector('[data-lib-close]')?.addEventListener('click', () => view.close());
+      root.querySelector('[data-lib-next]')?.addEventListener('click', () => show(at + 1));
+      root.querySelector('[data-lib-prev]')?.addEventListener('click', () => show(at - 1));
+      view.addEventListener('close', () => opener?.focus({ preventScroll: true }));
+      // A click on the veil, outside the cover and its controls, closes it.
+      view.addEventListener('click', (e) => {
+        if (e.target === view) view.close();
+      });
+      view.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
+      });
+      let x0: number | null = null;
+      view.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+      view.addEventListener('touchend', (e) => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0;
+        if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1));
+        x0 = null;
+      });
+    }
+  });
+</script>

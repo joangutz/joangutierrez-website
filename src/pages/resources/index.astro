@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import GiftCard from '../../components/GiftCard.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
+import LibraryArchive from '../../components/LibraryArchive.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, kit } from '../../site';
 import { gift, crumbs } from '../../seo';
@@ -98,10 +99,10 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
         <p class="link-list-after"><a href={contact.art} target="_blank" rel="noopener noreferrer">Joan’s Artist Portfolio<span class="visually-hidden"> (opens in a new tab)</span></a></p>
       </GiftCard>
 
-      {/* Library Archive (11/18): a card that turns, as Inspiration. Joan's
-          copy and links to come. */}
+      {/* Library Archive (11/18): a card that turns, as Inspiration; on its
+          back the book covers by genre, each opening large (11/19). */}
       <GiftCard id="library-archive" image="library-archive.jpg" kicker="" title="Library Archive" turnLabel="Explore" focus="50% 60%">
-        <span></span>
+        <LibraryArchive />
       </GiftCard>
     </div>
   </section>
