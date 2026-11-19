@@ -7,6 +7,7 @@ either — the filename decides which slot, the folder decides how it is credite
 |---|---|
 | `hero.jpg` | Home hero |
 | `resources-wing.jpg` | Resources, the opening banner (11/17; option 8 of eight), untouched (the client tried the Offerings treatment and chose the original, 11/18; the toned version is kept in `/content/_source/photos/resources-wing-toned.jpg`). `resources-flower.jpg`, the banner before, is kept |
+| `library-archive.jpg` | Resources, the Library Archive card (11/19; option 3 of nine), cropped low so the peony shows |
 | `rose-waves.jpg` | Resources, the Red Rose Visualization card, front and turned side (11/18, replacing `rose-offering.jpg`, which is kept) |
 | `rose-offering.jpg` | Resources, the Red Rose Visualization card, front and turned side (11/18; option 1 of two). `rose.jpg` is kept |
 | `erotic-becoming-hands.jpg` | Resources, the Erotic Becoming (Substack) card (11/18; option 2 of four). `library.jpg` is kept |
