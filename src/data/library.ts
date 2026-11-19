@@ -86,5 +86,5 @@ export const library: { file: string; title: string; author: string; genre: (typ
   { file: "the-complete-cooking-techniques-for-the-gaps-diet.jpg", title: "The Complete Cooking Techniques for the GAPS Diet", author: "Monica Corrado", genre: "Ancient Wisdom Nutrition" },
   { file: "return-to-nature.jpg", title: "Return to Nature", author: "Carry Kim", genre: "Ancient Wisdom Nutrition" },
   { file: "at-home-in-the-whole-food-kitchen.jpg", title: "At Home in the Whole Food Kitchen", author: "Amy Chaplin", genre: "Ancient Wisdom Nutrition" },
-  { file: "life-is-a-miracle.jpg", title: "Life Is a Miracle", author: "Wendell Berry", genre: "Ancient Wisdom Nutrition" },
+  { file: "life-is-a-miracle.jpg", title: "Life Is a Miracle", author: "Wendell Berry", genre: "Empowerment" },
 ];
