@@ -37,6 +37,7 @@ const inspiration: { name: string; href?: string }[] = [
   { name: 'Self-Obliteration - Yayoi Kusama', href: 'https://youtu.be/n6wnhLqJqVE' },
   { name: 'My Mother - Kazuo Ohno', href: 'https://youtu.be/hzmkYu0d8rM' },
   { name: 'Before the Dawn - Yumiko Yoshioka', href: 'https://youtu.be/TOX4u7KUtjc' },
+  { name: 'Annie Sprinkle Archive', href: 'https://anniesprinkle.org' },
 ];
 
 const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).filter((s) => s.hasBody);
