@@ -34,11 +34,11 @@ export const es: Record<string, string> = {
     'Educación somática ofrecida con arte para una salud vibrante. Chicago, IL — en persona. Internacional — en línea. Disponible para viajar.',
   '1:1': '1:1',
   '1:1 Sessions': 'Sesiones 1:1',
-  'Liberate Your Pelvis': 'Libera tu Pelvis',
-  'Relational Integrity Labs': 'Laboratorios de Integridad Relacional',
+  'Liberate Your Pelvis': 'Liberación Pélvica', // 11/20, the client's
+  'Relational Integrity Labs': 'Laboratorio: Integridad Relacional', // 11/20, the client's
   'Zen Shiatsu': 'Zen Shiatsu',
   'Spine Society': 'Spine Society',
-  'This Very Body: Movement Archive': 'Este Mismo Cuerpo: Archivo de Movimiento',
+  'This Very Body: Movement Archive': 'Este Mismo Cuerpo: Archivo de Movimiento', // confirmed 11/20
   immersions: 'inmersiones',
   'coming soon': 'próximamente',
   'pay-from-the-heart monthly gathering': 'encuentro mensual, paga desde el corazón',

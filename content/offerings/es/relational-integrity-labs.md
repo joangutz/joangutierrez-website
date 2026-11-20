@@ -1,6 +1,6 @@
 ---
 # BORRADOR (11/20) — para que Joan lo revise. Original: /content/offerings/relational-integrity-labs.md.
-title: Laboratorios de Integridad Relacional
+title: 'Laboratorio: Integridad Relacional'  # 11/20, from the client
 line: Un espacio de juego para aprender a pedir, a negarte y a conocer íntimamente tu propio sí.
 turn: Explorar
 order: 3
@@ -9,7 +9,7 @@ collage: all-in-one.jpg
 alt: Collage — un cuerpo recortado de una fotografía gris que sostiene un melón partido y una sandía, con una pequeña figura tallada arriba.
 left:
 - paragraphs:
-  - Los límites pueden aprenderse con el corazón ligero y un toque ligero. El Laboratorio de Integridad Relacional es un laboratorio en línea de dos horas, dos veces al mes, para quienes quieren experimentar, jugar y llegar a conocerse por completo.
+  - 'Los límites pueden aprenderse con el corazón ligero y un toque ligero. Laboratorio: Integridad Relacional es un laboratorio en línea de dos horas, dos veces al mes, para quienes quieren experimentar, jugar y llegar a conocerse por completo.'
   - Aquí puedes practicar notar lo que quieres, lo que estás en disposición de dar y dónde viven tus límites, y luego decirlos en voz alta de maneras sencillas y desde el corazón.
 - title: ¿CÓMO?
   paragraphs:

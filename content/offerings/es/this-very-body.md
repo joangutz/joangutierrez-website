@@ -1,6 +1,6 @@
 ---
 # BORRADOR (11/20) — para que Joan lo revise. Original: /content/offerings/this-very-body.md.
-title: 'Este Mismo Cuerpo: Archivo de Movimiento'
+title: 'Este Mismo Cuerpo: Archivo de Movimiento'  # confirmed by the client 11/20
 kicker: próximamente
 line: Únete a la lista de espera. Entérate primero.
 turn: Únete a la lista de espera

@@ -1,7 +1,7 @@
 ---
 # BORRADOR (11/20) — para que Joan lo revise y lo corrija con sus palabras.
 # Original: /content/offerings/liberate-your-pelvis.md.
-title: Libera tu Pelvis
+title: Liberación Pélvica  # 11/20, from the client
 kicker: MEDIO DÍA · DÍA COMPLETO · VARIOS DÍAS
 line: Una inmersión ceremonial en la sustancia fundamental de tu raíz pélvica
 turn: Explorar
