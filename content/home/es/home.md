@@ -14,7 +14,7 @@ hero:
 welcome:
   title: Soy Joan. Te doy la bienvenida.
   paragraphs:
-    - Ma Somatrix es para seres humanos valientes en medio de delicadas transiciones de vida. Lo creé como un espacio para que profundices en la comprensión de tu cuerpo-energía-mente y en cómo cuidarlo en esta etapa de tu vida, a través de sesiones 1:1, talleres de encarnación y educación para el cuidado de todo el cuerpo.
+    - Ma Somatrix es para seres humanos valientes en medio de delicadas transiciones de vida. Lo creé como un espacio para que profundices en la comprensión de tu cuerpo-energía-mente y en cómo cuidarlo en esta etapa de tu vida, a través de sesiones individuales, talleres de encarnación y educación para el cuidado de todo el cuerpo.
     - Me dedico a ayudarte a nutrir una fuente de libertad dentro de tu pelvis, el asiento de tu vida creativa y erótica, donde siempre está disponible una manera de vivir arraigada en el amor, la compasión y la expresión auténtica.
     - Tu cuerpo guarda toda una matriz de sensación, instinto y memoria, y tu sexualidad se mueve a través de ella como el agua entre la raíz y la piedra. Toca la manera en que te sostienes, en que te expresas y la profundidad con que bebes tus días. Tu bienestar sexual pertenece al centro de quien eres, y merece un cuidado profundo.
     - En conjunto, co-creamos exploraciones donde las historias de la mente pueden aligerarse para que el lenguaje más callado del cuerpo pueda expresarse. La posibilidad se abre al sentir lo que es verdad, en la claridad sobre lo que anhelas, en el permiso para seguir lo que te deleita, en una relación con tu cuerpo que se vuelve más instintiva y libre, y en una intimidad contigo y con otras personas que se profundiza con el tiempo.

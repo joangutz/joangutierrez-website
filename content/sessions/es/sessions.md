@@ -69,7 +69,7 @@ expect:
   link: Iniciemos una conversación
 
 oneToOne:
-  title: Sesiones 1:1
+  title: Sesiones individuales
   rows:
     - minutes: 60
       online: 100

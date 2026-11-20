@@ -1,6 +1,6 @@
 ---
 # BORRADOR (11/20) — para que Joan lo revise. Original: /content/offerings/one-to-one.md.
-title: Sesiones 1:1
+title: Sesiones individuales  # 11/20, from the client
 order: 1
 turn: Tarifas
 more:
