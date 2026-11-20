@@ -10,7 +10,7 @@ export const es: Record<string, string> = {
   Offerings: 'Servicios', // 11/20, the client's tabs
   About: 'Quién soy',
   Resources: 'Recursos',
-  'Get In Touch': 'Contáctame',
+  'Get In Touch': 'Contacto', // 11/20: back to Contacto, matching the closes
   Menu: 'Menú',
   'Close menu': 'Cerrar menú',
   'All pages': 'Todas las páginas',

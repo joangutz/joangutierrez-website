@@ -5,7 +5,7 @@
 # ACSB queda tal cual (enlaza al código de ética). Se eligieron formas sin
 # género al hablarle a quien lee.
 
-title: Ofrendas
+title: Servicios  # 11/20, matching the tab
 description: Cada sesión es su propio encuentro vivo. Cada una toma forma a partir de lo que está presente, vivo y pidiendo atención en ti ese día.
 
 belong:
