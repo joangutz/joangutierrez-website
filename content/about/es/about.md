@@ -49,7 +49,8 @@ work:
     - A medida que estas habilidades se encarnan, se abre un rango más amplio de la experiencia humana. Surgen el valor y la fuerza. La vergüenza se suelta, el duelo se mueve, la sensación y el placer regresan, y te relajas en el proceso de dejarte encender por la vida.
 
 banner:
-  question: ¿Y si la razón por la que estás aquí no es lograr algo con tu vida, sino simplemente vivir la experiencia de estar en vida?
+  # 11/20, the client's words.
+  question: '¿Y si la razón por la que estás aquí no fuera lograr algo en tu vida, sino simplemente experimentar lo que es estar vivo?'
   button: Contacto
 
 memberships:
