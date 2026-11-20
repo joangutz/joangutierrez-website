@@ -7,6 +7,8 @@ import LibraryArchive from '../../components/LibraryArchive.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, kit } from '../../site';
 import { gift, crumbs } from '../../seo';
+import { translator } from '../../i18n';
+const tr = translator(Astro.url);
 
 /**
  * Resources: cards, in the same language as Services. The gift turns
@@ -57,9 +59,9 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
 
 ---
 
-<Base title={`Resources — ${kit.freebie}`} description={`${kit.freebie}. ${kit.freebieBody}`} schema={[gift, crumbs('Resources', '/resources/')]} plainClose>
+<Base title={`${tr('Resources')} — ${tr(kit.freebie)}`} description={`${tr(kit.freebie)}. ${tr(kit.freebieBody)}`} schema={[gift, crumbs(tr('Resources'), '/resources/')]} plainClose>
   {/* The wing (11/17), chosen from eight; was resources-flower.jpg. */}
-  <PageBanner title="Resources" image="resources-wing.jpg" cinema cue={{ href: '#gift', label: 'Down to the resources' }} />
+  <PageBanner title={tr('Resources')} image="resources-wing.jpg" cinema cue={{ href: '#gift', label: tr('Down to the resources') }} />
 
   <section class="band section">
     <div class="wide res-stack">
@@ -72,7 +74,7 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
         {/* 11/18: the hands collage (was library.jpg). */}
         collage="erotic-becoming-hands.jpg"
         register="plumstone"
-        action={{ href: contact.substack, label: 'Newsletter', external: true }}
+        action={{ href: contact.substack, label: tr('Newsletter'), external: true }}
       />
 
       {/* Her latest posts were listed here (from the Substack feed, at build
@@ -83,25 +85,25 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
           Spine Society collage, roots-territories.jpg, in place of work-1.jpg): a
           card that turns, Explore on its front; on its back, the list of
           inspirations (11/19) and then her artist portfolio. */}
-      <GiftCard id="inspiration" image="roots-territories.jpg" kicker="" title="Inspiration" turnLabel="Explore" focus="50% 50%">
+      <GiftCard id="inspiration" image="roots-territories.jpg" kicker="" title={tr('Inspiration')} turnLabel={tr('Explore')} focus="50% 50%">
         {inspiration.map((g) => (
           <div class="link-group">
-            <span class="link-label">{g.label}</span>
+            <span class="link-label">{tr(g.label)}</span>
             <ul class="link-list">
               {g.items.map((i) => (
                 <li>
-                  <a href={i.href} target="_blank" rel="noopener noreferrer">{i.name}<span class="visually-hidden"> (opens in a new tab)</span></a>
+                  <a href={i.href} target="_blank" rel="noopener noreferrer">{tr(i.name)}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span></a>
                 </li>
               ))}
             </ul>
           </div>
         ))}
-        <p class="link-list-after"><a href={contact.art} target="_blank" rel="noopener noreferrer">Joan’s Artist Portfolio<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+        <p class="link-list-after"><a href={contact.art} target="_blank" rel="noopener noreferrer">{tr('Joan’s Artist Portfolio')}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span></a></p>
       </GiftCard>
 
       {/* Library Archive (11/18): a card that turns, as Inspiration; on its
           back the book covers by genre, each opening large (11/19). */}
-      <GiftCard id="library-archive" image="library-archive.jpg" kicker="" title="Library Archive" turnLabel="Explore" focus="50% 60%">
+      <GiftCard id="library-archive" image="library-archive.jpg" kicker="" title={tr('Library Archive')} turnLabel={tr('Explore')} focus="50% 60%">
         <LibraryArchive />
       </GiftCard>
     </div>

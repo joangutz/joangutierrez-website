@@ -1,5 +1,6 @@
 ---
 import { form } from '../site';
+import { translator } from '../i18n';
 
 /**
  * The application, for 1:1 work and for the This Very Body waitlist.
@@ -22,19 +23,20 @@ interface Props {
   body?: string;
 }
 
-const { subject, heading = 'Application form', body } = Astro.props;
+const tr = translator(Astro.url);
+const { subject, heading = tr('Application form'), body } = Astro.props;
 
 const fields = [
-  { name: 'name', label: 'Name', type: 'text', required: true, autocomplete: 'name' },
-  { name: 'email', label: 'Email', type: 'email', required: true, autocomplete: 'email' },
-  { name: 'pronouns', label: 'Pronouns', type: 'text', required: false, autocomplete: 'off' },
-  { name: 'location', label: 'Location', type: 'text', required: false, autocomplete: 'address-level2' },
+  { name: 'name', label: tr('Name'), type: 'text', required: true, autocomplete: 'name' },
+  { name: 'email', label: tr('Email'), type: 'email', required: true, autocomplete: 'email' },
+  { name: 'pronouns', label: tr('Pronouns'), type: 'text', required: false, autocomplete: 'off' },
+  { name: 'location', label: tr('Location'), type: 'text', required: false, autocomplete: 'address-level2' },
 ];
 
 // Plain field names only. The questions an applicant answers are Joan's to
 // write — until she does, there is one open field. WRITING.md asks for them.
 const questions = [
-  { name: 'message', label: 'Message', required: true },
+  { name: 'message', label: tr('Message'), required: true },
 ];
 
 const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
@@ -61,7 +63,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
           <p class="app-field">
             <label for={`${uid}-${f.name}`}>
               {f.label}
-              {!f.required && <span class="app-opt"> — optional</span>}
+              {!f.required && <span class="app-opt"> — {tr('optional')}</span>}
             </label>
             <input
               id={`${uid}-${f.name}`}
@@ -80,17 +82,17 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
         <p class="app-field">
           <label for={`${uid}-${q.name}`}>
             {q.label}
-            {!q.required && <span class="app-opt"> — optional</span>}
+            {!q.required && <span class="app-opt"> — {tr('optional')}</span>}
           </label>
           <textarea id={`${uid}-${q.name}`} name={q.name} rows="4" required={q.required} />
         </p>
       ))
     }
 
-    <button class="app-submit" type="submit">Send</button>
+    <button class="app-submit" type="submit">{tr('Send')}</button>
 
     {!form.endpoint && (
-      <p class="app-note" data-app-note>Opens your email app, addressed to {form.to}.</p>
+      <p class="app-note" data-app-note>{tr('Opens your email app, addressed to')} {form.to}.</p>
     )}
 
     <p class="app-status" data-app-status role="status" aria-live="polite"></p>
@@ -251,6 +253,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 </style>
 
 <script>
+  const es = document.documentElement.lang === 'es';
 
   import { onPage } from '../lib/onPage';
 
@@ -287,7 +290,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
             `?subject=${encodeURIComponent(`Ma Somatrix — ${subjectNow()}`)}` +
             `&body=${encodeURIComponent(lines.join('\n'))}`;
 
-          status.textContent = 'Opening your email app.';
+          status.textContent = es ? 'Abriendo tu app de correo.' : 'Opening your email app.';
           window.location.href = href;
           return;
         }
@@ -299,7 +302,7 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 
         const btn = el.querySelector<HTMLButtonElement>('.app-submit');
         if (btn) btn.disabled = true;
-        status.textContent = 'Sending…';
+        status.textContent = es ? 'Enviando…' : 'Sending…';
 
         fetch(endpoint, {
           method: 'POST',
@@ -309,13 +312,13 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
           .then((r) => {
             if (!r.ok) throw new Error(String(r.status));
             el.reset();
-            status.textContent = 'Sent.';
+            status.textContent = es ? 'Enviado.' : 'Sent.';
           })
           .catch(() => {
             // Never a dead end: the fallback that works without any of this is
             // still right there.
             status.innerHTML =
-              `Not sent. <a href="mailto:${to}">${to}</a>`;
+              `${es ? 'No se envió.' : 'Not sent.'} <a href="mailto:${to}">${to}</a>`;
           })
           .finally(() => {
             if (btn) btn.disabled = false;

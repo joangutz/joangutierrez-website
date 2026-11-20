@@ -1,4 +1,5 @@
 ---
+import { translator } from '../i18n';
 /**
  * Every link on the site goes through here, so a reader can tell what a link
  * will do before clicking it.
@@ -34,7 +35,8 @@ const kind = /^(https?:)?\/\//.test(href)
 
 const leaves = kind !== 'internal';
 
-const announce =
+const tr = translator(Astro.url);
+const announce = tr(
   kind === 'external'
     ? 'opens in a new tab'
     : href.startsWith('mailto:')
@@ -43,7 +45,8 @@ const announce =
         ? 'opens your messages app'
         : href.startsWith('tel:')
           ? 'starts a call'
-          : '';
+          : '',
+);
 ---
 
 <a

@@ -2,6 +2,7 @@
 import Collage from './Collage.astro';
 import type { CollectionEntry } from 'astro:content';
 import { kit, form as formSettings, withBase } from '../site';
+import { linker, plainId, translator } from '../i18n';
 
 /**
  * An offering at rest is a collage form carrying only its title. Turning it
@@ -24,12 +25,14 @@ interface Props {
 const { offering, prices } = Astro.props;
 /** A page of the site gets the base; a subject travels in the address, so
     the Discovery Form knows what it is about. */
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
 const href = (h: string, subject?: string) =>
-  (h.startsWith('#') || h.startsWith('http') ? h : withBase(h)) +
+  (h.startsWith('#') || h.startsWith('http') ? h : L(h)) +
   (subject ? `?for=${encodeURIComponent(subject)}` : '');
 const money = (n: number) => `$${n}`;
 const o = offering.data;
-const id = offering.id;
+const id = plainId(offering.id);
 
 ---
 
@@ -91,7 +94,7 @@ const id = offering.id;
           <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
             <path d="M16 5 H1.5 M5.5 1 L1.5 5 L5.5 9" />
           </svg>
-          <span>Back</span>
+          <span>{tr('Back')}</span>
         </button>
       </div>
 
@@ -99,7 +102,7 @@ const id = offering.id;
       {o.includes && (
       <div class="panels">
         <div class="panel panel-left">
-          <span class="panel-label">Includes</span>
+          <span class="panel-label">{tr('Includes')}</span>
           <ul class="includes">
             {o.includes.map((item) => <li>{item}</li>)}
           </ul>
@@ -107,7 +110,7 @@ const id = offering.id;
           {
             o.entails && (
               <>
-                <span class="panel-label panel-label-2">Entails</span>
+                <span class="panel-label panel-label-2">{tr('Entails')}</span>
                 <ul class="entails">
                   {o.entails.map((e) => (
                     <li>
@@ -187,10 +190,10 @@ const id = offering.id;
                       method="post"
                       action={kit.waitlistAction ?? undefined}
                     >
-                      <label><span>First name</span><input name="fields[first_name]" type="text" autocomplete="given-name" required /></label>
-                      <label><span>IG handle</span><input name="fields[ig_handle]" type="text" autocomplete="off" /></label>
-                      <label><span>Email address</span><input name="email_address" type="email" autocomplete="email" required /></label>
-                      <button class="waitlist-send" type="submit">I'm in</button>
+                      <label><span>{tr('First name')}</span><input name="fields[first_name]" type="text" autocomplete="given-name" required /></label>
+                      <label><span>{tr('IG handle')}</span><input name="fields[ig_handle]" type="text" autocomplete="off" /></label>
+                      <label><span>{tr('Email address')}</span><input name="email_address" type="email" autocomplete="email" required /></label>
+                      <button class="waitlist-send" type="submit">{tr("I'm in")}</button>
                       <p class="waitlist-status" role="status" data-waitlist-status></p>
                     </form>
                   )}
@@ -218,9 +221,9 @@ const id = offering.id;
             <dl class="back-price-list">
               {prices.rows.map((r) => (
                 <div class="back-price">
-                  <dt>{r.minutes} minutes</dt>
-                  {r.online !== undefined && <dd>{money(r.online)} online</dd>}
-                  {r.inPerson !== undefined && <dd>{money(r.inPerson)} in-person</dd>}
+                  <dt>{r.minutes} {tr('minutes')}</dt>
+                  {r.online !== undefined && <dd>{money(r.online)} {tr('online')}</dd>}
+                  {r.inPerson !== undefined && <dd>{money(r.inPerson)} {tr('in-person')}</dd>}
                 </div>
               ))}
             </dl>
@@ -1024,7 +1027,7 @@ const id = offering.id;
             if (status) status.textContent = '\u2713';
             form.querySelectorAll('input').forEach((i) => (i.value = ''));
           } catch {
-            if (status) status.textContent = 'Not sent.';
+            if (status) status.textContent = document.documentElement.lang === 'es' ? 'No se envió.' : 'Not sent.';
           }
           return;
         }

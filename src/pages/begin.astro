@@ -5,11 +5,14 @@ import Link from '../components/Link.astro';
 import PhotoGround from '../components/PhotoGround.astro';
 import { contact, booking, site } from '../site';
 import { abs, crumbs } from '../seo';
+import { langOf, translator } from '../i18n';
+const lang = langOf(Astro.url);
+const tr = translator(Astro.url);
 
 
 const contact_page = {
   '@type': 'ContactPage',
-  name: 'Get in Touch',
+  name: tr('Get in Touch'),
   url: abs('/begin/'),
   about: { '@id': abs('/#organization') },
 };
@@ -26,10 +29,10 @@ const contact_page = {
 ---
 
 <Base
-  title="Book a Session"
-  description="Feeling tender, hopeful, messy, alive, curious? I would love to meet you where you are."
+  title={tr('Book a Session')}
+  description={tr('Feeling tender, hopeful, messy, alive, curious? I would love to meet you where you are.')}
   selfClosing
-  schema={[contact_page, crumbs('Book a Session', '/begin/')]}
+  schema={[contact_page, crumbs(tr('Book a Session'), '/begin/')]}
 >
   <section class="invite on-dark has-ground">
     <PhotoGround src="begin.jpg" />
@@ -44,17 +47,34 @@ const contact_page = {
                 and settle, a few words in italic, as in the Offerings quote.
                 The heading is kept for screen readers and search only (the
                 client removed it from view, 11/17). */}
-            <h1 class="visually-hidden">Book a Session</h1>
-            <p class="invite-words">
-              <span class="w-small">Feeling</span> <em class="w-big">tender,</em><br />
-              <span class="w-mid">hopeful,</span><br />
-              <em class="w-mid">messy,</em><br />
-              <span class="w-big">alive,</span><br />
-              <em class="w-big">curious?</em>
-            </p>
-            <p class="invite-lede">I would love to meet you <em>where you are.</em></p>
+            <h1 class="visually-hidden">{tr('Book a Session')}</h1>
+            {lang === 'es' ? (
+              /* BORRADOR (11/20), for Joan to review: nouns rather than
+                 adjectives, so the Spanish needs no gender. */
+              <>
+                <p class="invite-words">
+                  <span class="w-small">¿Sintiendo</span> <em class="w-big">ternura,</em><br />
+                  <span class="w-mid">esperanza,</span><br />
+                  <em class="w-mid">desorden,</em><br />
+                  <span class="w-big">vida,</span><br />
+                  <em class="w-big">curiosidad?</em>
+                </p>
+                <p class="invite-lede">Me encantaría encontrarte <em>donde estás.</em></p>
+              </>
+            ) : (
+              <>
+                <p class="invite-words">
+                  <span class="w-small">Feeling</span> <em class="w-big">tender,</em><br />
+                  <span class="w-mid">hopeful,</span><br />
+                  <em class="w-mid">messy,</em><br />
+                  <span class="w-big">alive,</span><br />
+                  <em class="w-big">curious?</em>
+                </p>
+                <p class="invite-lede">I would love to meet you <em>where you are.</em></p>
+              </>
+            )}
             <div class="invite-action">
-              <Link variant="action" href={booking.url}>Schedule a Call</Link>{/* Was booking.label (Book a Discovery Call), then Let's Begin; 11/17: Schedule a Call, on this page only */}
+              <Link variant="action" href={booking.url}>{tr('Schedule a Call')}</Link>{/* Was booking.label (Book a Discovery Call), then Let's Begin; 11/17: Schedule a Call, on this page only */}
             </div>
           </div>
 
@@ -66,7 +86,7 @@ const contact_page = {
             </ul>
 
             <ul class="invite-where">
-              {site.locations.map((l) => <li>{l.mode ? `${l.place} — ${l.mode}` : l.place}</li>)}
+              {site.locations.map((l) => <li>{l.mode ? `${tr(l.place)} — ${tr(l.mode)}` : tr(l.place)}</li>)}
             </ul>
 
           </div>

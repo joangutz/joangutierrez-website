@@ -10,8 +10,12 @@ import Testimonials from '../../components/Testimonials.astro';
 import { withBase, beginHere, shown, kit, contact } from '../../site';
 import Link from '../../components/Link.astro';
 import { abs, crumbs } from '../../seo';
+import { langOf, linker, translator, entryId, inLang, plainId } from '../../i18n';
 
-const entry = await getEntry('sessionsPage', 'sessions');
+const lang = langOf(Astro.url);
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
+const entry = await getEntry('sessionsPage', entryId('sessions', lang));
 if (!entry) throw new Error('Missing /content/sessions/sessions.md');
 const s = entry.data;
 
@@ -27,13 +31,13 @@ const happenings = [byHref('/services/#spine-society')].filter(shown);
 const index = beginHere.filter(shown);
 const anchor = (h: string) => h.split('#')[1];
 
-const offerings = (await getCollection('offerings')).sort((a, b) => a.data.order - b.data.order);
+const offerings = (await getCollection('offerings', (o) => inLang(o.id, lang))).sort((a, b) => a.data.order - b.data.order);
 
 const money = (n: number) => `$${n}`;
 
 /* Her quote, with the two words set in italics in the rendering she chose
    ("true", "sovereign"). Emphasis only; the words are hers, unchanged. */
-const EM = ['true', 'sovereign'];
+const EM = lang === 'es' ? ['verdadero', 'soberanía'] : ['true', 'sovereign'];
 const quoteParts = s.quote.text
   .split(new RegExp(`\\b(${EM.join('|')})\\b`))
   .filter(Boolean)
@@ -123,7 +127,7 @@ const catalog = {
     ),
     ...offerings.map((o) => ({
       '@type': 'Offer',
-      url: abs(`/services/#${o.id}`),
+      url: abs(`/services/#${plainId(o.id)}`),
       description: o.data.kicker ?? o.data.line ?? o.data.title,
       itemOffered: {
         '@type': 'Service',
@@ -142,7 +146,7 @@ const catalog = {
 ---
 
 <Base
-  title={`${s.title} — 1:1 Sessions, Somatic Sexology, Holistic Pelvic Care, Shiatsu`}
+  title={`${s.title} — ${tr('1:1 Sessions, Somatic Sexology, Holistic Pelvic Care, Shiatsu')}`}
   description={s.description}
   schema={[catalog, crumbs(s.title, '/services/')]}
   closingPhoto="lake.jpg"
@@ -207,10 +211,10 @@ const catalog = {
         {
           index.map((o) => (
             <li data-register={o.register}>
-              <a class="index-row" href={withBase(o.href)}>
+              <a class="index-row" href={L(o.href)}>
                 <span class="card-key index-key" aria-hidden="true"></span>
-                <span class="index-name">{o.title}</span>
-                {o.note && <span class="index-note">{o.note}</span>}
+                <span class="index-name">{tr(o.title)}</span>
+                {o.note && <span class="index-note">{tr(o.note)}</span>}
                 <svg class="index-arrow" viewBox="0 0 10 16" aria-hidden="true" focusable="false"><path d="M5 0 V14.5 M1 10.5 L5 14.5 L9 10.5" /></svg>
               </a>
             </li>
@@ -223,17 +227,17 @@ const catalog = {
         {/* The 1:1 card carries the hourly prices on its turned side; the
             others carry their own (Relational Integrity Labs) or none. */}
         {offerings.map((o) => (
-          <div id={o.id}><OfferingCard offering={o} prices={o.id === 'one-to-one' ? s.oneToOne : undefined} /></div>
+          <div id={plainId(o.id)}><OfferingCard offering={o} prices={plainId(o.id) === 'one-to-one' ? s.oneToOne : undefined} /></div>
         ))}
       </div>
 
       {/* Joan's heading for the two gatherings, shortened at her request. */}
       {happenings.length > 0 && (
         <>
-          <h2 class="label happenings-label">Happenings</h2>
+          <h2 class="label happenings-label">{tr('Happenings')}</h2>
           <div class="tile-row">
             {happenings.map((h) => (
-              <OfferingPlain id={anchor(h.href)} title={h.title} note={h.note} collage={h.collage} register={h.register} />
+              <OfferingPlain id={anchor(h.href)} title={tr(h.title)} note={h.note ? tr(h.note) : h.note} collage={h.collage} register={h.register} />
             ))}
           </div>
         </>
@@ -294,7 +298,7 @@ const catalog = {
 
       <div class="scene-close">
         <p class="scene-wish">{s.expect.wish}</p>
-        <Link variant="action" href={withBase('/begin/')}>{s.expect.link}</Link>
+        <Link variant="action" href={L('/begin/')}>{s.expect.link}</Link>
       </div>
     </div>
   </section>

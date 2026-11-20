@@ -8,8 +8,12 @@ import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { site, homeCards, shown, withBase } from '../site';
 import { person } from '../seo';
+import { langOf, linker, translator, entryId } from '../i18n';
 
-const entry = await getEntry('home', 'home');
+const lang = langOf(Astro.url);
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
+const entry = await getEntry('home', entryId('home', lang));
 if (!entry) throw new Error('Missing /content/home/home.md');
 const h = entry.data;
 
@@ -47,8 +51,8 @@ const cards = homeCards.filter(shown);
 ---
 
 <Base
-  title={`${site.name} — ${site.tagline}`}
-  description={`${site.tagline}. Chicago, IL — in-person. Internationally — online. Available to Travel.`}
+  title={`${site.name} — ${tr(site.tagline)}`}
+  description={tr(`${site.tagline}. Chicago, IL — in-person. Internationally — online. Available to Travel.`)}
   bare
   closingPhoto={LAKE_PHOTO ?? undefined}
   closingFocus="50% 80%"
@@ -114,7 +118,7 @@ const cards = homeCards.filter(shown);
       <h2 class="welcome-title">{h.welcome.title}</h2>
       {h.welcome.paragraphs.map((p) => <p>{p}</p>)}
       <p class="welcome-closing">{h.welcome.closing}</p>
-      <Link variant="action" href={withBase('/services/')}>{h.welcome.link}</Link>
+      <Link variant="action" href={L('/services/')}>{h.welcome.link}</Link>
     </div>
     <div class="welcome-photo film">
       <Portrait src={h.welcome.portrait} alt={h.welcome.alt} colour sizes="(max-width: 780px) 100vw, 44vw" />
@@ -135,7 +139,7 @@ const cards = homeCards.filter(shown);
       <Realms intro={h.realms.intro} class="realms-row rise" />
 
       <div class="realms-action">
-        <Link variant="action" href={withBase('/services/')}>{h.realms.link}</Link>{/* Enter Ma → Offerings (11/19; was Book a Session) */}
+        <Link variant="action" href={L('/services/')}>{h.realms.link}</Link>{/* Enter Ma → Offerings (11/19; was Book a Session) */}
       </div>
     </div>
     </div>
@@ -159,7 +163,7 @@ const cards = homeCards.filter(shown);
         {
           cards.map((o) => (
             <li>
-              <a class="card cardstock" href={withBase(o.href)} data-register={o.register}>
+              <a class="card cardstock" href={L(o.href)} data-register={o.register}>
                 <span class="card-art film">
                   <Collage
                     src={o.collage}
@@ -170,8 +174,8 @@ const cards = homeCards.filter(shown);
                 </span>
                 <span class="card-meta">
                   <span class="card-key card-rule" aria-hidden="true"></span>
-                  <span class="card-title">{o.title}</span>
-                  {o.note && <span class="card-container">{o.note}</span>}
+                  <span class="card-title">{tr(o.title)}</span>
+                  {o.note && <span class="card-container">{tr(o.note)}</span>}
                 </span>
               </a>
             </li>

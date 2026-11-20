@@ -5,6 +5,8 @@ import PhotoGround from '../components/PhotoGround.astro';
 import ApplicationForm from '../components/ApplicationForm.astro';
 
 import { crumbs } from '../seo';
+import { translator } from '../i18n';
+const tr = translator(Astro.url);
 
 /**
  * The Discovery Form, on a page of its own (Joan, 11/17) rather than at the
@@ -17,18 +19,18 @@ import { crumbs } from '../seo';
 ---
 
 <Base
-  title="Discovery Form"
-  description="Discovery Form — Ma Somatrix."
+  title={tr('Discovery Form')}
+  description={`${tr('Discovery Form')} — Ma Somatrix.`}
   selfClosing
-  schema={[crumbs('Discovery Form', '/discovery-form/')]}
+  schema={[crumbs(tr('Discovery Form'), '/discovery-form/')]}
 >
   <section class="discovery on-dark has-ground">
     <PhotoGround src="begin.jpg" from="glass" />
     <div class="band discovery-band">
       <div class="wide">
         <div class="discovery-pane glass-pane">
-          <h1 class="visually-hidden">Discovery Form</h1>
-          <ApplicationForm subject="1:1 Sessions" heading="Discovery Form" />
+          <h1 class="visually-hidden">{tr('Discovery Form')}</h1>
+          <ApplicationForm subject="1:1 Sessions" heading={tr('Discovery Form')} />
         </div>
         <Credits class="discovery-credit" />
       </div>

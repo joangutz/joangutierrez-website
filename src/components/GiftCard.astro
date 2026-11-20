@@ -2,6 +2,8 @@
 import Collage from './Collage.astro';
 import Link from './Link.astro';
 import { kit, contact, withBase } from '../site';
+import { translator } from '../i18n';
+const tr = translator(Astro.url);
 
 /**
  * The gift, as a card that turns — the same gesture as the offerings.
@@ -25,16 +27,15 @@ interface Props {
 const {
   id = 'gift',
   image = 'rose-waves.jpg',
-  kicker = 'A Gift',
-  title = kit.freebie,
-  turnLabel = 'Open',
+  kicker = tr('A Gift'),
+  title = tr(kit.freebie),
+  turnLabel = tr('Open'),
   focus,
 } = Astro.props;
 const isGift = !Astro.slots.has('default');
 const ready = Boolean(kit.formAction);
-const [bodyBefore, bodyAfter] = kit.freebieBody.includes('Stu Pender')
-  ? kit.freebieBody.split('Stu Pender')
-  : [kit.freebieBody, ''];
+const body = tr(kit.freebieBody);
+const [bodyBefore, bodyAfter] = body.includes('Stu Pender') ? body.split('Stu Pender') : [body, ''];
 const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
 ---
 
@@ -74,14 +75,14 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
           <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
             <path d="M16 5 H1.5 M5.5 1 L1.5 5 L5.5 9" />
           </svg>
-          <span>Back</span>
+          <span>{tr('Back')}</span>
         </button>
       </div>
       {!isGift && <div class="back-slot"><slot /></div>}
       {isGift && (<>
       {/* Joan's description, with Stu Pender's name leading to his site. */}
       <p class="back-body">
-        {bodyBefore}<a class="stu" href={contact.stu} target="_blank" rel="noopener noreferrer">Stu Pender<span class="visually-hidden"> (opens in a new tab)</span></a>{bodyAfter}
+        {bodyBefore}<a class="stu" href={contact.stu} target="_blank" rel="noopener noreferrer">Stu Pender<span class="visually-hidden"> {tr('(opens in a new tab)')}</span></a>{bodyAfter}
       </p>
       <div class="back-take">
         {
@@ -90,7 +91,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
               {/* Give an email; then the recording is here to play or keep.
                   Without scripting the form posts straight to Kit. */}
               <form class="take-form" action={kit.formAction} method="post" data-gift-form>
-                <label class="visually-hidden" for="gift-email">Email address</label>
+                <label class="visually-hidden" for="gift-email">{tr('Email address')}</label>
                 <div class="take-row">
                   <input
                     class="take-input"
@@ -98,10 +99,10 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
                     type="email"
                     name="email_address"
                     autocomplete="email"
-                    placeholder="Email address"
+                    placeholder={tr('Email address')}
                     required
                   />
-                  <button class="take-send" type="submit">Send</button>
+                  <button class="take-send" type="submit">{tr('Send')}</button>
                 </div>
                 <p class="take-status" role="status" data-gift-status></p>
               </form>
@@ -113,12 +114,12 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
                       so the recording carries on from page to page and
                       can be paused from the bar. */}
                   <div class="player" data-player data-player-track="rose" data-player-src={audioSrc}>
-                    <button class="player-toggle" type="button" aria-label="Play" data-player-toggle>
+                    <button class="player-toggle" type="button" aria-label={tr('Play')} data-player-toggle>
                       <svg class="i-play" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M2 1.5 L11 7 L2 12.5 Z" /></svg>
                       <svg class="i-pause" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M3 1.5 V12.5 M9 1.5 V12.5" /></svg>
                     </button>
                     <div class="player-track">
-                      <input class="player-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="Position" data-player-seek />
+                      <input class="player-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={tr('Position')} data-player-seek />
                       <div class="player-times" aria-hidden="true">
                         <span data-player-now>0:00</span>
                         <span data-player-total>0:00</span>
@@ -126,14 +127,14 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
                     </div>
                   </div>
                   <a class="take-download" href={audioSrc} download>
-                    Download
+                    {tr('Download')}
                     <svg viewBox="0 0 10 14" aria-hidden="true" focusable="false"><path d="M5 1 V11.5 M1.5 8 L5 11.5 L8.5 8 M1 13.25 H9" /></svg>
                   </a>
                 </div>
               )}
             </>
           ) : (
-            <Link variant="action" href={`mailto:${contact.email}?subject=${encodeURIComponent(kit.freebie)}`}>
+            <Link variant="action" href={`mailto:${contact.email}?subject=${encodeURIComponent(tr(kit.freebie))}`}>
               {contact.email}
             </Link>
           )
@@ -800,7 +801,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
         seek.setAttribute('aria-valuetext', `${player.clock(t)} of ${player.clock(d)}`);
         const live = player.isPlaying(id);
         box.classList.toggle('is-playing', live);
-        toggle.setAttribute('aria-label', live ? 'Pause' : 'Play');
+        toggle.setAttribute('aria-label', document.documentElement.lang === 'es' ? (live ? 'Pausar' : 'Reproducir') : (live ? 'Pause' : 'Play'));
       };
       const onChange = () => paint();
       document.addEventListener('ms-player', onChange);
@@ -832,7 +833,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
           form.hidden = true;
           play.hidden = false;
         } else if (status) {
-          status.textContent = 'Sent.';
+          status.textContent = document.documentElement.lang === 'es' ? 'Enviado.' : 'Sent.';
         }
       };
       if (remembered() && play) reveal();
@@ -860,7 +861,7 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
           remember();
           reveal();
         } else if (status) {
-          status.textContent = 'Not sent.';
+          status.textContent = document.documentElement.lang === 'es' ? 'No se envió.' : 'Not sent.';
         }
       });
     }

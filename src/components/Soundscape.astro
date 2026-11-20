@@ -1,6 +1,8 @@
 ---
 import { sound, kit, withBase } from '../site';
 import type { Track } from '../lib/player';
+import { translator } from '../i18n';
+const tr = translator(Astro.url);
 
 /**
  * The site's player, in the bar.
@@ -26,7 +28,7 @@ if (sound.file) {
   list.push({
     id: 'soundscape',
     title: 'Pacific Equinox',
-    short: 'Sound',
+    short: tr('Sound'),
     src: withBase(`/audio/${sound.file}`),
     loop: true,
     level: 0.35,
@@ -35,7 +37,7 @@ if (sound.file) {
 if (kit.audio) {
   list.push({
     id: 'rose',
-    title: kit.freebie,
+    title: tr(kit.freebie),
     short: 'Red Rose',
     src: withBase(`/audio/${kit.audio}`),
     loop: false,
@@ -68,7 +70,7 @@ const wave: [number, number][] = [
         data-sound-more
         aria-expanded="false"
         aria-controls="snd-tray"
-        aria-label="Listen"
+        aria-label={tr('Listen')}
         hidden
       >
         <svg viewBox="0 0 10 6" aria-hidden="true" focusable="false"><path d="M1 5 L5 1 L9 5" /></svg>
@@ -79,7 +81,7 @@ const wave: [number, number][] = [
           {
             list.map((t) => (
               <li class="snd-row" data-track-row={t.id} hidden={t.gift}>
-                <button class="snd-play" type="button" data-row-toggle aria-label={`Play ${t.title}`}>
+                <button class="snd-play" type="button" data-row-toggle aria-label={`${tr('Play')} ${t.title}`}>
                   <svg class="i-play" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M2 1.5 L11 7 L2 12.5 Z" /></svg>
                   <svg class="i-pause" viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path d="M3 1.5 V12.5 M9 1.5 V12.5" /></svg>
                 </button>
@@ -87,14 +89,14 @@ const wave: [number, number][] = [
                   <span class="snd-title">{t.title}</span>
                   {t.id === 'soundscape' ? (
                     <a class="snd-sub snd-credit" href={sound.creditUrl} target="_blank" rel="noopener">
-                      {sound.credit}<span class="visually-hidden"> (opens in a new tab)</span>
+                      {sound.credit}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span>
                     </a>
                   ) : (
                     subs[t.id] && <span class="snd-sub">{subs[t.id]}</span>
                   )}
                   {!t.loop && (
                     <div class="snd-seekbox">
-                      <input class="snd-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`Position in ${t.title}`} data-row-seek />
+                      <input class="snd-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`${tr('Position in')} ${t.title}`} data-row-seek />
                       <span class="snd-time" aria-hidden="true" data-row-time>0:00</span>
                     </div>
                   )}
@@ -575,6 +577,7 @@ const wave: [number, number][] = [
     // Draw every control from the element's state. Cheap enough to run on
     // every timeupdate.
     const paint = () => {
+      const word = document.documentElement.lang === 'es' ? { play: 'Reproducir', pause: 'Pausar' } : { play: 'Play', pause: 'Pause' };
       const t = player.current();
       const avail = player.available();
       box.hidden = avail.length === 0;
@@ -582,7 +585,7 @@ const wave: [number, number][] = [
       btn.setAttribute('aria-pressed', String(playing));
       if (t) {
         if (label) label.textContent = t.short;
-        btn.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} ${t.title}`);
+        btn.setAttribute('aria-label', `${playing ? word.pause : word.play} ${t.title}`);
       }
       const once = Boolean(t && !t.loop && el.dataset.track === t.id);
       box.classList.toggle('is-once', once);
@@ -601,7 +604,7 @@ const wave: [number, number][] = [
         row.classList.toggle('is-playing', live);
         const tg = row.querySelector('[data-row-toggle]');
         const title = row.querySelector('.snd-title')?.textContent ?? '';
-        tg?.setAttribute('aria-label', `${live ? 'Pause' : 'Play'} ${title}`);
+        tg?.setAttribute('aria-label', `${live ? word.pause : word.play} ${title}`);
         const seekEl = row.querySelector<HTMLInputElement>('[data-row-seek]');
         const time = row.querySelector<HTMLElement>('[data-row-time]');
         if (seekEl && seekEl.dataset.dragging !== '1') {

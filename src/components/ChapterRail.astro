@@ -35,9 +35,10 @@ interface Props {
   min?: number;
 }
 const { min = 4 } = Astro.props;
+import { translator } from '../i18n';
 ---
 
-<nav class="rail" aria-label="Sections on this page" data-rail data-rail-min={min} hidden></nav>
+<nav class="rail" aria-label={translator(Astro.url)('Sections on this page')} data-rail data-rail-min={min} hidden></nav>
 
 <details class="rail-toc" data-rail-toc hidden>
   <summary>On this page</summary>

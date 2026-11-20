@@ -48,10 +48,17 @@ import PaletteTrial from '../components/PaletteTrial.astro';
 import { graph, website, organization } from '../seo';
 import PhotoGround from '../components/PhotoGround.astro';
 import GetInTouch from '../components/GetInTouch.astro';
+import { langOf, enPath, hasEs, t } from '../i18n';
+
+// English or Spanish, read from the page's own address (/es/… is Spanish).
+const lang = langOf(Astro.url);
+const en = enPath(Astro.url);
+const altEn = new URL(withBase(en), Astro.site).href;
+const altEs = new URL(withBase(`/es${en}`), Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     {/* viewport-fit=cover lets the bar reach the very bottom of an iPhone
@@ -64,7 +71,16 @@ import GetInTouch from '../components/GetInTouch.astro';
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={lang === 'es' ? 'es_MX' : 'en_US'} />
+    <meta property="og:locale:alternate" content={lang === 'es' ? 'en_US' : 'es_MX'} />
+    {/* The same page in the other language, for search engines. */}
+    {hasEs(en) && (
+      <>
+        <link rel="alternate" hreflang="en" href={altEn} />
+        <link rel="alternate" hreflang="es" href={altEs} />
+        <link rel="alternate" hreflang="x-default" href={altEn} />
+      </>
+    )}
     {/* Let search show large previews of the photographs, and full text
         snippets — what AI answer engines quote from too. */}
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
@@ -128,7 +144,7 @@ import GetInTouch from '../components/GetInTouch.astro';
     {(sound.file || kit.audio) && <ClientRouter fallback="swap" />}
   </head>
   <body id="top">
-    <a class="skip" href="#main">Skip to content</a>
+    <a class="skip" href="#main">{t(lang, 'Skip to content')}</a>
     <Nav />
     <main id="main">
       <slot />

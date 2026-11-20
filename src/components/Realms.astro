@@ -1,5 +1,7 @@
 ---
 import { realms } from '../site';
+import { translator } from '../i18n';
+const tr = translator(Astro.url);
 import matrixImg from '../../assets/textures/matrix.webp';
 import maImg from '../../assets/textures/ma.webp';
 import somaImg from '../../assets/textures/soma.webp';
@@ -102,7 +104,7 @@ const AT = [
               >
                 <canvas class="orb-tex" data-tex={TEXTURE[i].src} aria-hidden="true" />
                 <span class="orb-name">{r.name}</span>
-                <span class="orb-gloss">{r.gloss}</span>
+                <span class="orb-gloss">{tr(r.gloss)}</span>
               </button>
             </li>
           ))
@@ -123,10 +125,11 @@ const AT = [
               character), set in bold where it stands. The heading remains
               for screen readers. */}
           <h3 class="visually-hidden">{r.name}</h3>
-          <button class="view-close" type="button" data-close aria-label={`Close ${r.name}`}>
+          <button class="view-close" type="button" data-close aria-label={`${tr('Close')} ${r.name}`}>
             <span aria-hidden="true" />
           </button>
-          {r.paragraphs.map((p, k) => {
+          {r.paragraphs.map((p0, k) => {
+            const p = tr(p0);
             const cut = k === 0 ? p.indexOf(' : ') : -1;
             return cut > 0 ? (
               <p class="view-origin">

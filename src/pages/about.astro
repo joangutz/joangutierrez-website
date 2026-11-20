@@ -7,6 +7,7 @@ import { booking } from '../site';
 import { person, crumbs } from '../seo';
 import { getEntry } from 'astro:content';
 import { inline } from '../lib/inline';
+import { langOf, translator, entryId } from '../i18n';
 
 
 /**
@@ -25,7 +26,9 @@ import { inline } from '../lib/inline';
  *
  * Every word is hers.
  */
-const entry = await getEntry('aboutPage', 'about');
+const lang = langOf(Astro.url);
+const tr = translator(Astro.url);
+const entry = await getEntry('aboutPage', entryId('about', lang));
 if (!entry) throw new Error('Missing /content/about/about.md');
 const a = entry.data;
 // Her roles in two pairs, so on a phone they fall as two even lines and no
@@ -38,7 +41,7 @@ const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r
 <Base
   title={`${a.name} — ${a.roles.replaceAll(' | ', ', ')}`}
   description={a.line}
-  schema={[person, crumbs('About', '/about/')]}
+  schema={[person, crumbs(tr('About'), '/about/')]}
   closingPhoto="happenings.jpg"
   closingFocus="50% 45%"
   closingVeil="rgb(var(--ch-plum) / 0.6)"
@@ -112,7 +115,7 @@ const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r
   <section slot="close" class="band-call" aria-label={a.banner.button}>
     <p class="band-question">{a.banner.question}</p>
     <a class="band-button" href={booking.url} target="_blank" rel="noopener noreferrer">
-      {a.banner.button}<span class="visually-hidden"> (opens in a new tab)</span>
+      {a.banner.button}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span>
     </a>
   </section>
 

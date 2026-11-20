@@ -1,5 +1,6 @@
 ---
 import Credits from './Credits.astro';
+import { translator } from '../i18n';
 
 interface Props {
   /** Sitting on the closing photograph with Get in Touch (see Base). */
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { onGround = false } = Astro.props;
+const tr = translator(Astro.url);
 ---
 
 {/* One quiet line. Everything the footer used to list now lives where it
@@ -18,7 +20,7 @@ const { onGround = false } = Astro.props;
     <div class="wide footer-line">
       <Credits />
       <a class="to-top" href="#top">
-        <span>Top</span>
+        <span>{tr('Top')}</span>
         <svg viewBox="0 0 10 16" aria-hidden="true" focusable="false"><path d="M5 15.5 V1.5 M1 5.5 L5 1.5 L9 5.5" /></svg>
       </a>
     </div>

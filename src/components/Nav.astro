@@ -2,6 +2,7 @@
 import Vessel from './Vessel.astro';
 import Soundscape from './Soundscape.astro';
 import { nav, site, withBase } from '../site';
+import { langOf, linker, otherLang, translator } from '../i18n';
 
 /**
  * The bar sits at the head of the window (moved from the foot, 11/16, in
@@ -16,9 +17,13 @@ import { nav, site, withBase } from '../site';
  * Below 860px the tabs give way to a menu button (the lines alone) and a full panel.
  */
 const path = Astro.url.pathname;
+const lang = langOf(Astro.url);
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
+const other = otherLang(Astro.url);
 // Compare against the based href — pathname includes the base in production.
 const isCurrent = (href: string) => {
-  const target = withBase(href);
+  const target = L(href);
   return path === target || path === target.replace(/\/$/, '');
 };
 
@@ -33,18 +38,18 @@ const menuItems = nav;
     {/* Home is reached through the wordmark rather than a nav item, so the
         wordmark carries the current-page state — otherwise landing on Home
         leaves nothing in the nav marked and the reader has no anchor. */}
-    <a class="brand" href={withBase('/')} aria-current={isCurrent('/') ? 'page' : undefined}>
+    <a class="brand" href={L('/')} aria-current={isCurrent('/') ? 'page' : undefined}>
       <Vessel size="30px" open={0.7} class="brand-mark" />
       <span class="brand-name">{site.name}</span>
     </a>
 
-    <nav class="nav-inline" aria-label="Primary">
+    <nav class="nav-inline" aria-label={tr('Primary')}>
       <ul>
         {
           nav.map((item) => (
             <li class:list={['nav-item', { 'nav-item-action': item.action }]}>
-              <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-                {item.label}
+              <a href={L(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {tr(item.label)}
               </a>
             </li>
           ))
@@ -53,6 +58,14 @@ const menuItems = nav;
     </nav>
 
     <div class="nav-end">
+      {/* English | Español (11/20, design B): the language in view bright,
+          the other dimmed and a link to the same page in it. On a phone it
+          moves into the menu panel. */}
+      <div class="lang-switch" role="group" aria-label={tr('Language')}>
+        {lang === 'en' ? <span class="lang-on" aria-current="true">EN</span> : <a href={other.href} hreflang="en" lang="en" aria-label="English">EN</a>}
+        <i aria-hidden="true"></i>
+        {lang === 'es' ? <span class="lang-on" aria-current="true">ES</span> : <a href={other.href} hreflang="es" lang="es" aria-label="Español">ES</a>}
+      </div>
       <Soundscape />
 
       <button
@@ -61,7 +74,7 @@ const menuItems = nav;
         data-menu-open
         aria-expanded="false"
         aria-controls="site-menu"
-        aria-label="Menu"
+        aria-label={tr('Menu')}
       >
         <span class="menu-rules" aria-hidden="true"><i></i><i></i></span>
       </button>
@@ -72,26 +85,26 @@ const menuItems = nav;
 <div class="menu on-dark grained" id="site-menu" data-menu hidden>
   <div class="menu-inner">
     <div class="menu-top">
-      <a class="menu-brand" href={withBase('/')}>
+      <a class="menu-brand" href={L('/')}>
         <Vessel size="26px" open={0.7} />
         <span>{site.name}</span>
       </a>
-      <button class="menu-btn menu-close" type="button" data-menu-close aria-label="Close menu">
+      <button class="menu-btn menu-close" type="button" data-menu-close aria-label={tr('Close menu')}>
         <span class="menu-rules menu-rules-x" aria-hidden="true"><i></i><i></i></span>
       </button>
     </div>
 
-    <nav class="menu-nav" aria-label="All pages">
+    <nav class="menu-nav" aria-label={tr('All pages')}>
       <ul class="menu-list">
         {
           menuItems.map((item) => (
             <li>
               <a
-                href={withBase(item.href)}
+                href={L(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
               >
                 <Vessel size="0.6em" form="egg" class="menu-egg" />
-                <span>{item.label}</span>
+                <span>{tr(item.label)}</span>
               </a>
 
             </li>
@@ -99,6 +112,13 @@ const menuItems = nav;
         }
       </ul>
     </nav>
+
+    {/* On a phone the language lives here, at the foot of the panel. */}
+    <div class="menu-lang" role="group" aria-label={tr('Language')}>
+      {lang === 'en' ? <span class="lang-on" aria-current="true">English</span> : <a href={other.href} hreflang="en" lang="en">English</a>}
+      <i aria-hidden="true"></i>
+      {lang === 'es' ? <span class="lang-on" aria-current="true">Español</span> : <a href={other.href} hreflang="es" lang="es">Español</a>}
+    </div>
   </div>
 </div>
 
@@ -222,6 +242,56 @@ const menuItems = nav;
     flex: none;
   }
 
+  /* EN | ES: the menu's small tracked capitals; the language in view full,
+     the other dimmed, a short hairline between. */
+  .lang-switch,
+  .menu-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-label);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .lang-switch {
+    font-size: 0.64rem;
+    letter-spacing: 0.22em;
+    color: var(--bar-ink);
+  }
+
+  .lang-switch a,
+  .menu-lang a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.45;
+    transition: opacity 300ms var(--ease-open);
+  }
+
+  .lang-switch a:hover,
+  .lang-switch a:focus-visible,
+  .menu-lang a:hover,
+  .menu-lang a:focus-visible {
+    opacity: 1;
+  }
+
+  .lang-switch i,
+  .menu-lang i {
+    width: 1px;
+    height: 0.85em;
+    background: currentColor;
+    opacity: 0.35;
+  }
+
+  /* In the panel only, and only on a phone. */
+  .menu-lang {
+    display: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(var(--ch-bract) / 0.16);
+  }
+
   /* The four tabs stay in the bar wherever they fit. Below that width, and
      only with scripting, they move into the panel. */
   .menu-btn {
@@ -231,6 +301,14 @@ const menuItems = nav;
   @media (max-width: 860px) {
     :global(.js) .nav-inline {
       display: none;
+    }
+
+    :global(.js) .lang-switch {
+      display: none;
+    }
+
+    :global(.js) .menu-lang {
+      display: inline-flex;
     }
 
     :global(.js) .menu-btn {

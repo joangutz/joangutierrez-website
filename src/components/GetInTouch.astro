@@ -3,6 +3,7 @@ import PhotoGround from './PhotoGround.astro';
 import Link from './Link.astro';
 import { booking, kit } from '../site';
 import KitInline from './KitInline.astro';
+import { translator } from '../i18n';
 
 /**
  * The close at the foot of a page: Joan's "Get in Touch" section from her
@@ -17,6 +18,7 @@ interface Props {
 
 const { image } = Astro.props;
 const paired = Astro.slots.has('default');
+const tr = translator(Astro.url);
 ---
 
 <section class:list={['close on-dark', { 'has-ground': image, 'close-own': image }]}>
@@ -24,14 +26,14 @@ const paired = Astro.slots.has('default');
   <div class="band section">
     <div class:list={[paired ? 'wide close-pair glass-pane' : 'wide']}>
       <div class:list={['close-lead', { 'glass-pane close-alone': !paired }]}>
-        <h2 class="close-title">Get in Touch</h2>
+        <h2 class="close-title">{tr('Get in Touch')}</h2>
         <p class="close-body">
-          Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.
+          {tr('Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.')}
         </p>
-        <Link variant="action" href={booking.url}>{booking.label}</Link>
+        <Link variant="action" href={booking.url}>{tr(booking.label)}</Link>
         {/* For anyone not ready to book or write: the mailing list. */}
         {kit.newsletterAction && (
-          <KitInline action={kit.newsletterAction} label="Stay in touch" dark class="close-news" />
+          <KitInline action={kit.newsletterAction} label={tr('Stay in touch')} dark class="close-news" />
         )}
       </div>
       {/* A page can set something beside it — the application form on Work

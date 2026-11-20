@@ -1,4 +1,5 @@
 ---
+import { translator } from '../i18n';
 /**
  * A single email field that adds the reader to a Kit form, in place: no
  * page change, a short word once it's done. Used for the This Very Body
@@ -18,13 +19,14 @@ interface Props {
   class?: string;
 }
 
-const { action, label, button = 'Send', dark = false, class: className = '' } = Astro.props;
+const tr = translator(Astro.url);
+const { action, label, button = tr('Send'), dark = false, class: className = '' } = Astro.props;
 const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
 <form class:list={['ki', { 'ki-dark': dark }, className]} action={action} method="post" data-kit-inline>
   {label && <label class="ki-label" for={uid}>{label}</label>}
-  {!label && <label class="visually-hidden" for={uid}>Email address</label>}
+  {!label && <label class="visually-hidden" for={uid}>{tr('Email address')}</label>}
   <div class="ki-row">
     <input
       class="ki-input"
@@ -32,7 +34,7 @@ const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
       type="email"
       name="email_address"
       autocomplete="email"
-      placeholder="Email address"
+      placeholder={tr('Email address')}
       required
     />
     <button class="ki-send" type="submit">{button}</button>
@@ -180,7 +182,7 @@ const uid = `kit-${Math.random().toString(36).slice(2, 8)}`;
         }
         if (send) send.disabled = false;
         if (ok) form.classList.add('is-done');
-        if (status) status.textContent = ok ? 'Sent.' : 'Not sent.';
+        if (status) status.textContent = document.documentElement.lang === 'es' ? (ok ? 'Enviado.' : 'No se envió.') : (ok ? 'Sent.' : 'Not sent.');
       });
     }
 

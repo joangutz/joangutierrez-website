@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { abs } from '../seo';
+import { ES_PAGES } from '../i18n';
 
 /**
  * The site's pages, for search engines. Old addresses that forward
@@ -15,11 +16,20 @@ const PAGES = [
   { path: '/discovery-form/', priority: '0.5' },
 ];
 
+// The Spanish pages (11/20), a step below their English twins.
+const ALL = [
+  ...PAGES,
+  ...PAGES.filter((p) => ES_PAGES.includes(p.path)).map((p) => ({
+    path: `/es${p.path}`,
+    priority: (Number(p.priority) - 0.1).toFixed(1),
+  })),
+];
+
 export const GET: APIRoute = () => {
   const today = new Date().toISOString().slice(0, 10);
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${PAGES.map(
+${ALL.map(
   (p) => `  <url>
     <loc>${abs(p.path)}</loc>
     <lastmod>${today}</lastmod>

@@ -1,6 +1,8 @@
 ---
 import Collage from './Collage.astro';
 import KitInline from './KitInline.astro';
+import { translator } from '../i18n';
+const tr = translator(Astro.url);
 
 /**
  * An offering that has its name and nothing more written yet: the front of
@@ -75,7 +77,7 @@ const compact = !action && !kitAction && !hasBody;
             <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false">
               <path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" />
             </svg>
-            {action.external && <span class="visually-hidden">(opens in a new tab)</span>}
+            {action.external && <span class="visually-hidden">{tr('(opens in a new tab)')}</span>}
           </a>
         </div>
       )
