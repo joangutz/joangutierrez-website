@@ -7,10 +7,10 @@
  */
 export const es: Record<string, string> = {
   // The bar and the menu
-  Offerings: 'Ofrendas',
-  About: 'Sobre mí',
+  Offerings: 'Servicios', // 11/20, the client's tabs
+  About: 'Quién soy',
   Resources: 'Recursos',
-  'Get In Touch': 'Contacto',
+  'Get In Touch': 'Contáctame',
   Menu: 'Menú',
   'Close menu': 'Cerrar menú',
   'All pages': 'Todas las páginas',
