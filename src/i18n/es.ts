@@ -115,7 +115,7 @@ export const es: Record<string, string> = {
   // Book a Session and the Discovery Form
   'Book a Session': 'Agenda una sesión',
   'Feeling tender, hopeful, messy, alive, curious? I would love to meet you where you are.':
-    '¿Sintiendo ternura, esperanza, desorden, vida, curiosidad? Me encantaría encontrarte donde estás.',
+    '¿Sientes ternura, esperanza, desorden, pura vida, curiosidad? Me encantaría encontrarte allí donde estás.',
   'Schedule a Call': 'Agenda una llamada',
   'Chicago, IL': 'Chicago, IL',
   Internationally: 'Internacional',
