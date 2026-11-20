@@ -7,8 +7,8 @@
 # formas sin género.
 
 name: Joan Gutiérrez
-roles: Fundadora | Artista | Educadora | Sexóloga Somática
-line: Acompaño a personas que sienten curiosidad por las posibilidades de una vida encarnada.
+roles: Fundadora | Artista Multidisciplinaria | Sexóloga Somática  # 11/20, from the client
+line: Colaboro con personas que sienten curiosidad por las posibilidades que ofrece una vida centrada en el cuerpo.  # 11/20, from the client
 more: Conoce más
 portrait: joan-roots.jpg
 alt: Joan sentada, con un vestido negro bordado de flores, sonriendo hacia la cámara.
