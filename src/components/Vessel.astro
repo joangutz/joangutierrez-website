@@ -89,6 +89,12 @@ const petal = (len: number) => {
   focusable="false"
 >
   <defs>
+    {/* The egg on a light ground: a sand shell, a shade deeper than the
+        linen, so its rounded top reads above the petals (11/20, option A). */}
+    <linearGradient id="vessel-shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--shell-top, #efe3d6)"></stop>
+      <stop offset="100%" stop-color="var(--shell-base, #dcc8b4)"></stop>
+    </linearGradient>
     <radialGradient id="vessel-glow">
       <stop offset="0%" stop-color="var(--glow, var(--shell-0))" stop-opacity="0.95"></stop>
       <stop offset="52%" stop-color="var(--glow, var(--shell-0))" stop-opacity="0.26"></stop>
@@ -169,7 +175,7 @@ const petal = (len: number) => {
      reveal is carried by scale and the petals' motion, not by a long fade.
      CSS clamps opacity to [0,1], so the expression needs no clamp(). */
   .vessel .egg {
-    fill: var(--shell, var(--shell-0));
+    fill: var(--shell, url(#vessel-shell));
     opacity: calc((var(--open) - 0.18) / 0.5);
     transform-box: view-box;
     transform-origin: 50px 74.5px;

@@ -28,6 +28,11 @@ import { inline } from '../lib/inline';
 const entry = await getEntry('aboutPage', 'about');
 if (!entry) throw new Error('Missing /content/about/about.md');
 const a = entry.data;
+// Her roles in two pairs, so on a phone they fall as two even lines and no
+// rule is left hanging at a line's end.
+const roleList = a.roles.split('|').map((r) => r.trim());
+const half = Math.ceil(roleList.length / 2);
+const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r.length);
 ---
 
 <Base
@@ -43,7 +48,20 @@ const a = entry.data;
   <section class="intro">
     <div class="intro-text">
       <h1 class="intro-name">{a.name}</h1>
-      <p class="intro-roles">{a.roles}</p>
+      {/* Her roles (11/20: four), each kept whole, a fine rule between; on
+          a narrow screen they wrap as pairs rather than breaking a role. */}
+      <p class="intro-roles" aria-label={a.roles.replaceAll(' | ', ', ')}>
+        {roleRows.map((row, k) => (
+          <>
+            {k > 0 && <span class="role-sep row-sep" aria-hidden="true" />}
+            <span class="role-row">
+              {row.map((r, i) => (
+                <>{i > 0 && <span class="role-sep" aria-hidden="true" />}<span class="role">{r}</span></>
+              ))}
+            </span>
+          </>
+        ))}
+      </p>
       <p class="intro-line">{a.line}</p>
       <a class="intro-more" href="#letter">{a.more} <span aria-hidden="true">→</span></a>
     </div>
@@ -127,9 +145,40 @@ const a = entry.data;
 
   .intro-roles {
     margin: 0.9rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 0.25rem;
     font-family: var(--font-soft);
-    font-size: clamp(1.3rem, 2.2vw, 1.85rem);
+    font-size: clamp(1.2rem, 1.9vw, 1.65rem);
     line-height: 1.2;
+  }
+
+  .role-row {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  /* On a phone the two pairs stack, the rule between them dropped. */
+  @media (max-width: 600px) {
+    .intro-roles {
+      display: grid;
+      justify-content: start;
+    }
+
+    .row-sep {
+      display: none;
+    }
+  }
+
+  /* A short hairline between roles, in place of the typed bar. */
+  .role-sep {
+    width: 1px;
+    height: 0.85em;
+    margin: 0 clamp(0.6rem, 1.1vw, 0.9rem);
+    background: currentColor;
+    opacity: 0.35;
   }
 
   .intro-line {
