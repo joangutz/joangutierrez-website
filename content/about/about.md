@@ -5,7 +5,7 @@
 # /content/_source/joan-2026-10-31.md and /content/pages/about.md.
 
 name: Joan Gutiérrez
-roles: Founder | Artist | Educator | Somatic Sexologist  # 11/20: Educator added
+roles: Founder | Multidisciplinary Artist | Somatic Sexologist  # 11/20: matching the Spanish (Educator removed)
 line: Partnering with people who are curious about the potentials of embodied living.
 more: Learn more
 portrait: joan-roots.jpg
