@@ -125,6 +125,17 @@ const load = (el: HTMLAudioElement, t: Track) => {
   el.dataset.track = t.id;
   el.loop = t.loop;
   el.src = t.src;
+  // What the phone's lock screen and control centre show while it plays:
+  // the track, Ma Somatrix, and the lotus with its lit egg (11/20), rather
+  // than whatever the browser guesses.
+  if ('mediaSession' in navigator && 'MediaMetadata' in window) {
+    const base = document.querySelector<HTMLLinkElement>('link[rel="apple-touch-icon"]')?.href;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: t.title,
+      artist: 'Ma Somatrix',
+      artwork: base ? [{ src: base, sizes: '180x180', type: 'image/png' }] : [],
+    });
+  }
 };
 
 const remember = (t: Track, on: boolean) => {
