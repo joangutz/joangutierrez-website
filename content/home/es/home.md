@@ -30,11 +30,11 @@ realms:
   paragraphs:
     - Interpreto el cuerpo como una matriz—una fuente madre de sabiduría que teje con delicadeza una red coherente que se expresa a través del estado de tu sistema nervioso, tu creatividad, tu sexualidad, tu digestión, tu tejido cicatricial, tu postura y tu campo energético.
     - "Tu cuerpo, tu soma, es una presencia que respira en el mundo. Es una cristalización de la luz que llega a través del vacío del espacio y del tiempo: Ma."
-    - La cuenca pélvica alberga la mayor concentración de esta luz de sabiduría. Es allí donde el potencial latente espera despertar. Su fuerza gravitatoria también tiene el poder de retener experiencias físicas, emocionales y existenciales. Cuando se descuida, puede alterar la vida a través del dolor, el malestar, la desconexión y la vergüenza. Estas alteraciones pueden considerarse una invitación a encontrar un nuevo umbral. Una invitación a transformar alquímicamente una nueva dimensión de ti mismo.
+    - La cuenca pélvica alberga la mayor concentración de esta luz de sabiduría. Es allí donde el potencial latente espera despertar. Su fuerza gravitatoria también tiene el poder de retener experiencias físicas, emocionales y existenciales. Cuando se descuida, puede alterar la vida a través del dolor, el malestar, la desconexión y la vergüenza. Estas alteraciones pueden considerarse una invitación a encontrar un nuevo umbral. Una invitación a transformar alquímicamente una nueva dimensión de ti.
     - Cuando trabajamos con los espacios intermedios, se abre una puerta por la que pueden surgir nuevas relaciones y posibilidades.
   intro:
     - Eres una puerta viva donde el universo está creando activamente nuevos significados.
-  link: Entra en Ma
+  link: Entra Ma  # 11/21, the client's
 
 land:
   # 11/21, the client's words.
