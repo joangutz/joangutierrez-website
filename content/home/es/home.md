@@ -12,14 +12,16 @@ hero:
   alt: Un cuerpo en una luz cálida y baja, la curva de una cadera y un muslo con una franja de sol que cae sobre ellos.
 
 welcome:
+  # 11/21, the client's words (two typing slips set right: "integral el
+  # cuerpo" → "integral del cuerpo"; a doubled "lo que" once).
   title: Soy Joan. Te doy la bienvenida.
   paragraphs:
-    - Ma Somatrix es para seres humanos valientes en medio de delicadas transiciones de vida. Lo creé como un espacio para que profundices en la comprensión de tu cuerpo-energía-mente y en cómo cuidarlo en esta etapa de tu vida, a través de sesiones individuales, talleres de encarnación y educación para el cuidado de todo el cuerpo.
-    - Me dedico a ayudarte a nutrir una fuente de libertad dentro de tu pelvis, el asiento de tu vida creativa y erótica, donde siempre está disponible una manera de vivir arraigada en el amor, la compasión y la expresión auténtica.
-    - Tu cuerpo guarda toda una matriz de sensación, instinto y memoria, y tu sexualidad se mueve a través de ella como el agua entre la raíz y la piedra. Toca la manera en que te sostienes, en que te expresas y la profundidad con que bebes tus días. Tu bienestar sexual pertenece al centro de quien eres, y merece un cuidado profundo.
-    - En conjunto, co-creamos exploraciones donde las historias de la mente pueden aligerarse para que el lenguaje más callado del cuerpo pueda expresarse. La posibilidad se abre al sentir lo que es verdad, en la claridad sobre lo que anhelas, en el permiso para seguir lo que te deleita, en una relación con tu cuerpo que se vuelve más instintiva y libre, y en una intimidad contigo y con otras personas que se profundiza con el tiempo.
-    - He presenciado cómo verdades sagradas se revelan cuando las personas siguen con irreverencia lo que se siente verdadero y se atreven a sentir curiosidad por lo que descubren. Cuando aprendemos el lenguaje de nuestros sentidos, cultivamos nuestra atención y tomamos nuestra salud en nuestras propias manos, sentimos lo que significa vivir plenamente.
-  closing: Estoy aquí al servicio de tu totalidad.
+    - Ma Somatrix es pensado para personas valientes que se encuentran en medio de delicadas transiciones vitales. Lo he creado como un espacio para que puedas alcanzar una comprensión más profunda de tu cuerpo, tu energía y tu mente, y de cómo cuidarlos en esta etapa de tu vida, a través de sesiones individuales, talleres de conexión corporal y educación para el cuidado integral del cuerpo.
+    - Me dedico a ayudarte a cultivar una fuente de libertad en tu pelvis, la sede de tu vida creativa y erótica, donde siempre está a tu alcance una forma de vivir arraigada en el amor, la compasión y la expresión auténtica.
+    - Tu cuerpo alberga toda una matriz de sensaciones, instintos y recuerdos, y tu sexualidad fluye a través de él como el agua a través de las raíces y la roca. Influye en cómo te mantienes erguida, cómo te expresas y con qué intensidad disfrutas de cada día. Tu bienestar sexual forma parte del núcleo de tu ser y merece un cuidado profundo.
+    - En conjunto, creamos exploraciones en las que las historias de la mente pueden aligerarse para que el lenguaje más silencioso del cuerpo pueda expresarse. Se abren nuevas posibilidades al sentir lo que es verdadero, al tener claridad sobre lo que anhelas, al permitirte seguir lo que te deleita, al desarrollar una relación con tu cuerpo cada vez más instintiva y libre, y al profundizar con el tiempo en la intimidad contigo y con los demás.
+    - He presenciado cómo verdades sagradas se revelan cuando las personas siguen con irreverencia lo que les hace sentir bien y están dispuestxs a sentir curiosidad por lo que descubren. Cuando aprendemos el lenguaje de nuestros sentidos, cultivamos nuestra atención y tomamos las riendas de nuestra salud, sentimos lo que significa estar plenamente vivos.
+  closing: Estoy aquí al servicio de tu plenitud.
   portrait: joan-laugh.jpg
   alt: Joan riendo, con los ojos cerrados, sosteniendo un tallo de guisantes de olor blancos.
   link: Pertenece aquí
