@@ -82,7 +82,8 @@ export const es: Record<string, string> = {
   Open: 'Abrir',
   'Red Rose Visualization': 'Visualización de la Rosa Roja',
   'A guided meditation, held within a custom soundscape composed by Stu Pender. A small ritual to settle into stillness and return softened and alive.':
-    'Una meditación guiada, sostenida dentro de un paisaje sonoro compuesto especialmente por Stu Pender. Un pequeño ritual para asentarte en la quietud y regresar con suavidad y llena de vida.',
+    // 11/21, the client's words.
+    'Una meditación guiada, sostenida dentro de un paisaje sonoro compuesto por Stu Pender. Un pequeño ritual para asentarte en la quietud y regresar con suavidad y vida plena.',
   Send: 'Enviar',
   Download: 'Descargar',
   Play: 'Reproducir',
