@@ -27,11 +27,12 @@ belong:
         - Encontrarte con las diferencias de deseo y comunicar tus necesidades en la intimidad, con una pareja o con varias, en la forma que sea y con quien sea que ames.
         - Encontrar una relación más amable con el uso compulsivo de la pornografía, para que el deseo pueda sentirse tuyo.
     - title: Sanación y transición
+      # 11/21, the client's words ("la enseñanzas" set as "las enseñanzas").
       items:
         - 'Recibir acompañamiento en los cambios que reorganizan un cuerpo: el embarazo, el parto, el posparto, la pérdida de un embarazo, el aborto, la afirmación de género, la perimenopausia, la menopausia y el despertar de la mediana edad.'
-        - Atender las cicatrices de cesárea, histerectomía, afirmación de género, vasectomía y otras cirugías, y restaurar tu raíz pélvica después de que un cuerpo ha vivido un duelo, ha sanado o se ha transformado.
-        - Encontrar más soltura con el adormecimiento, la tensión crónica, la endometriosis, el dolor pélvico, la incontinencia o la sensación de que tu cabeza siempre toma el control.
-        - Soltar la vergüenza, el miedo y el trauma, junto con las huellas de la cultura de la pureza, la enseñanza religiosa y el condicionamiento temprano, para que puedas permitirte amar lo que amas y elegir desde la confianza en ti, la coherencia y la agencia.
+        - Atender las cicatrices de cesárea, histerectomía, afirmación de género, vasectomía y otras intervenciones quirúrgicas, y restaurar tu raíz pélvica después de que el cuerpo haya pasado por un proceso de duelo, sanación o transformación.
+        - Encontrar más tranquilidad ante el entumecimiento, la tensión crónica, la endometriosis, el dolor pélvico, la incontinencia o la sensación de que tu mente sigue tomando el control.
+        - Soltar la vergüenza, el miedo y el trauma, junto con las huellas de la cultura de la pureza, las enseñanzas religiosas y el condicionamiento temprano, para que puedas permitirte amar lo que amas y elegir desde la confianza en ti, la coherencia y la autonomía.
     - title: Límites y agencia
       items:
         - Explorar límites, fronteras y consentimiento que puedas sentir desde adentro y comunicar con claridad y confianza.
