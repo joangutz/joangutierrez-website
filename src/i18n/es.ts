@@ -132,6 +132,11 @@ export const es: Record<string, string> = {
   optional: 'opcional',
   'Opens your email app, addressed to': 'Abre tu app de correo, dirigido a',
 
+  // About: her three photographs, described (11/21, draft)
+  'Joan as a small child on a bench, eating watermelon.': 'Joan en su infancia, en una banca, comiendo sandía.',
+  'Joan, arms wide, among a class of schoolchildren in Japan.': 'Joan, con los brazos abiertos, entre un grupo de escolares en Japón.',
+  'Joan lying on a beach at sunset, an egg resting on her lips.': 'Joan recostada en la playa al atardecer, con un huevo sobre los labios.',
+
   // Site credits (11/21; the client's; the roles are in Credits.astro)
   'Site Credits': 'Créditos del sitio',
 

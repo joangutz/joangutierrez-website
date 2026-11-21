@@ -38,15 +38,13 @@ const roleList = a.roles.split('|').map((r) => r.trim());
 const half = Math.ceil(roleList.length / 2);
 const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r.length);
 
-// MOCK (11/21): four ways to lay her photographs into the page.
-const mock = import.meta.env.PUBLIC_ABOUT_MOCK ?? '';
-const ph = {
-  child: { src: 'about-child.jpg', alt: 'Joan as a small child on a bench, eating watermelon.' },
-  japan: { src: 'about-japan.jpg', alt: 'Joan, arms wide, among a class of schoolchildren in Japan.' },
-  sunset: { src: 'about-sunset.jpg', alt: 'Joan lying on a beach at sunset, an egg resting on her lips.' },
-  blossom: { src: 'about-blossom.jpg', alt: 'Joan reaching up into a cherry tree in blossom.' },
-  floor: { src: 'about-floor.jpg', alt: 'Joan lying on her back, her face upside down, close.' },
-};
+// Three of her photographs after her letter (11/21, option A of four),
+// laid one over another like prints: the child, the teacher, the ritual.
+const prints = [
+  { src: 'about-child.jpg', alt: tr('Joan as a small child on a bench, eating watermelon.'), w: 50, x: 46 },
+  { src: 'about-japan.jpg', alt: tr('Joan, arms wide, among a class of schoolchildren in Japan.'), w: 66, x: 0 },
+  { src: 'about-sunset.jpg', alt: tr('Joan lying on a beach at sunset, an egg resting on her lips.'), w: 62, x: 28 },
+];
 ---
 
 <Base
@@ -85,26 +83,14 @@ const ph = {
   </section>
 
   {/* 2 · Her letter, signed. */}
-  <section class:list={['letter', { 'letter-pair': mock === 'D' }]} id="letter">
-    <div class="letter-grid">
-      <div class="read">
-        {a.letter.map((p, i) => (
-          <>
-            {mock === 'B' && i === 0 && <Stack class="aside aside-left" items={[{ ...ph.child, w: 100, x: 0 }]} />}
-            <p>{p}</p>
-          </>
-        ))}
-        <div class="signoff">
-          {a.signoff.map((line, i) => <p class:list={{ 'signoff-name': i === a.signoff.length - 1 }}>{line}</p>)}
-        </div>
+  <section class="letter" id="letter">
+    <div class="read">
+      {a.letter.map((p) => <p>{p}</p>)}
+      <div class="signoff">
+        {a.signoff.map((line, i) => <p class:list={{ 'signoff-name': i === a.signoff.length - 1 }}>{line}</p>)}
       </div>
-      {mock === 'D' && (
-        <Stack class="pair" overlap={18} items={[{ ...ph.child, w: 70, x: 0 }, { ...ph.blossom, w: 78, x: 22 }]} />
-      )}
     </div>
-    {mock === 'A' && (
-      <Stack class="trio" items={[{ ...ph.child, w: 50, x: 46 }, { ...ph.japan, w: 66, x: 0 }, { ...ph.sunset, w: 62, x: 28 }]} />
-    )}
+    <Stack class="trio" items={prints} />
   </section>
 
   {/* 3 · Background: her path through the arts; then, set apart, the line
@@ -112,24 +98,14 @@ const ph = {
   <section class="background" id="background">
     <div class="read">
       <h2 class="about-title">{a.background.title}</h2>
-      {a.background.arts.map((p, i) => (
-        <>
-          {mock === 'B' && i === 2 && <Stack class="aside aside-right" items={[{ ...ph.japan, w: 100, x: 0 }]} />}
-          <p set:html={inline(p, tr('(opens in a new tab)'))} />
-        </>
-      ))}
+      {a.background.arts.map((p) => <p set:html={inline(p, tr('(opens in a new tab)'))} />)}
     </div>
 
-    {mock === 'C' ? (
-      <Stack class="trio trio-wide" items={[{ ...ph.japan, w: 58, x: 42 }, { ...ph.sunset, w: 60, x: 0 }, { ...ph.floor, w: 54, x: 34 }]} />
-    ) : (
-      <figure class="break film">
-        <Collage src="about.jpg" alt="" sizes="(max-width: 900px) 100vw, 70vw" />
-      </figure>
-    )}
+    <figure class="break film">
+      <Collage src="about.jpg" alt="" sizes="(max-width: 900px) 100vw, 70vw" />
+    </figure>
 
     <div class="read">
-      {mock === 'B' && <Stack class="aside aside-left" items={[{ ...ph.sunset, w: 100, x: 0 }]} />}
       <p class="turn">{a.background.turn}</p>
       {a.background.body.map((p) => <p set:html={inline(p, tr('(opens in a new tab)'))} />)}
     </div>
@@ -362,65 +338,10 @@ const ph = {
     object-fit: cover;
   }
 
-  /* MOCK photographs (11/21). */
-  .letter :global(.trio),
-  .background :global(.trio) {
+  /* Her three photographs after the letter (11/21). */
+  .letter :global(.trio) {
     width: min(40rem, 100% - 2.5rem);
     margin: clamp(3rem, 8vh, 5rem) auto 0;
-  }
-
-  .background :global(.trio-wide) {
-    width: min(48rem, 100% - 2.5rem);
-    margin-block: clamp(3rem, 8vh, 5rem);
-  }
-
-  .read :global(.aside) {
-    width: min(70%, 18rem);
-    margin: 0.5rem auto 2rem;
-  }
-
-  @media (min-width: 1180px) {
-    .read :global(.aside) {
-      width: 15rem;
-      margin-block: 0.4rem 1.5rem;
-    }
-    .read :global(.aside-left) {
-      float: left;
-      margin-left: -19rem;
-    }
-    .read :global(.aside-right) {
-      float: right;
-      margin-right: -19rem;
-    }
-  }
-
-  .letter-pair .letter-grid {
-    display: grid;
-    gap: 3rem;
-  }
-
-  @media (min-width: 1000px) {
-    .letter-pair .letter-grid {
-      grid-template-columns: minmax(0, 40rem) 21rem;
-      justify-content: center;
-      align-items: start;
-      gap: clamp(3rem, 6vw, 6rem);
-    }
-    .letter-pair .read {
-      margin: 0;
-    }
-    .letter-pair :global(.pair) {
-      position: sticky;
-      top: 7rem;
-      margin-top: 0.5rem;
-    }
-  }
-
-  @media (max-width: 999px) {
-    .letter-pair :global(.pair) {
-      width: min(26rem, 100% - 2.5rem);
-      margin: 0 auto;
-    }
   }
 
   /* Her line where the story turns, set apart and larger. */
