@@ -1,6 +1,6 @@
 ---
-# BORRADOR (11/20) — traducción al español para que Joan la revise y la
-# corrija con sus propias palabras. Original: /content/about/about.md.
+# Approved by the client 11/21 (her own Spanish, and the draft of Mi trabajo
+# contigo kept as it stands). Original: /content/about/about.md.
 # PARA JOAN: los títulos en español piden género (Fundadora / Fundador /
 # Fundadore…). Se dejaron en femenino siguiendo tu carta ("una flor
 # femenina y fluida"); cámbialos como prefieras. Donde se pudo, se usaron
