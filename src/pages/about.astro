@@ -88,7 +88,7 @@ const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r
   <section class="background" id="background">
     <div class="read">
       <h2 class="about-title">{a.background.title}</h2>
-      {a.background.arts.map((p) => <p set:html={inline(p)} />)}
+      {a.background.arts.map((p) => <p set:html={inline(p, tr('(opens in a new tab)'))} />)}
     </div>
 
     <figure class="break film">
@@ -97,7 +97,7 @@ const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r
 
     <div class="read">
       <p class="turn">{a.background.turn}</p>
-      {a.background.body.map((p) => <p set:html={inline(p)} />)}
+      {a.background.body.map((p) => <p set:html={inline(p, tr('(opens in a new tab)'))} />)}
     </div>
   </section>
 

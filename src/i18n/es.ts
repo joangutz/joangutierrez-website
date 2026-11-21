@@ -131,8 +131,8 @@ export const es: Record<string, string> = {
   'Opens your email app, addressed to': 'Abre tu app de correo, dirigido a',
 
   // Links that leave the page, read aloud
-  '(opens in a new tab)': '(se abre en una pestaña nueva)',
-  'opens in a new tab': 'se abre en una pestaña nueva',
+  '(opens in a new tab)': '(se abre en una nueva pestaña)',
+  'opens in a new tab': 'se abre en una nueva pestaña',
   'opens your mail app': 'abre tu app de correo',
   'opens your messages app': 'abre tu app de mensajes',
   'starts a call': 'inicia una llamada',
