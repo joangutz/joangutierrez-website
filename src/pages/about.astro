@@ -3,8 +3,6 @@ import Base from '../layouts/Base.astro';
 import Portrait from '../components/Portrait.astro';
 import Collage from '../components/Collage.astro';
 import Stack from '../components/Stack.astro';
-import Voice from '../components/Voice.astro';
-import { voices } from '../data/voices';
 import Link from '../components/Link.astro';
 import { booking } from '../site';
 import { person, crumbs } from '../seo';
@@ -42,7 +40,6 @@ const roleRows = [roleList.slice(0, half), roleList.slice(half)].filter((r) => r
 
 // MOCK (11/21): four ways to lay her photographs into the page.
 const mock = import.meta.env.PUBLIC_ABOUT_MOCK ?? '';
-const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? '';
 const ph = {
   child: { src: 'about-child.jpg', alt: 'Joan as a small child on a bench, eating watermelon.' },
   japan: { src: 'about-japan.jpg', alt: 'Joan, arms wide, among a class of schoolchildren in Japan.' },
@@ -143,7 +140,6 @@ const ph = {
     <div class="read">
       <h2 class="about-title">{a.work.title}</h2>
       {a.work.paragraphs.map((p) => <p>{p}</p>)}
-      {vmock === '4' && <Voice tone="aside" class="work-voice" lead={voices.ease.lead} quote={voices.ease.short} cite={voices.ease.cite} />}
     </div>
   </section>
 
@@ -365,8 +361,6 @@ const ph = {
     height: 100%;
     object-fit: cover;
   }
-
-  .read :global(.work-voice) { margin-top: 3.5rem; }
 
   /* MOCK photographs (11/21). */
   .letter :global(.trio),

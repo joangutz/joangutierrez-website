@@ -6,7 +6,7 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Voice from '../components/Voice.astro';
-import { voices } from '../data/voices';
+import { voicesFor } from '../data/voices';
 import { getCollection, getEntry } from 'astro:content';
 import { site, homeCards, shown, withBase } from '../site';
 import { person } from '../seo';
@@ -50,7 +50,6 @@ const movedAnchors = {
 };
 // The cards in view (Spine Society is kept but out of view, 11/18).
 const cards = homeCards.filter(shown);
-const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? '';
 ---
 
 <Base
@@ -128,11 +127,10 @@ const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? '';
     </div>
   </section>
 
-  {(vmock === '1' || vmock === '3') && (
-    <section class="voice-band">
-      <Voice lead={voices.welcome.lead} quote={voices.welcome.full} cite={voices.welcome.cite} />
-    </section>
-  )}
+  {/* A client's words after Joan's welcome (11/21). */}
+  <section class="voice-band">
+    <Voice {...voicesFor(langOf(Astro.url)).welcome} />
+  </section>
 
   {/* 3 · What is Ma Somatrix? Her text, then the triangle; her last line
       waits beside it until a word is chosen. */}
