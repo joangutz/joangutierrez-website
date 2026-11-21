@@ -98,7 +98,7 @@ export const es: Record<string, string> = {
   Art: 'Arte',
   'Hysterectomy information': 'Información sobre la histerectomía',
   'Joan’s Artist Portfolio': 'Portafolio artístico de Joan',
-  'Library Archive': 'Archivo de la Biblioteca',
+  'Book Archive': 'Archivo de Libros', // 11/21 (was Library Archive)
   Close: 'Cerrar',
   Previous: 'Anterior',
   Next: 'Siguiente',

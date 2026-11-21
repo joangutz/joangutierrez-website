@@ -101,9 +101,9 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
         <p class="link-list-after"><a href={contact.art} target="_blank" rel="noopener noreferrer">{tr('Joan’s Artist Portfolio')}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span></a></p>
       </GiftCard>
 
-      {/* Library Archive (11/18): a card that turns, as Inspiration; on its
+      {/* Book Archive (11/21; was Library Archive, 11/18): a card that turns, as Inspiration; on its
           back the book covers by genre, each opening large (11/19). */}
-      <GiftCard id="library-archive" image="library-archive.jpg" kicker="" title={tr('Library Archive')} turnLabel={tr('Explore')} focus="50% 60%">
+      <GiftCard id="library-archive" image="library-archive.jpg" kicker="" title={tr('Book Archive')} turnLabel={tr('Explore')} focus="50% 60%">
         <LibraryArchive />
       </GiftCard>
     </div>
