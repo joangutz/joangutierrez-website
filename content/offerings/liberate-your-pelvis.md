@@ -11,11 +11,16 @@ register: one
 collage: scar-tissue.jpg
 alt: Collage — pale arms and open hands reaching across a grey ground, holding something small and lit.
 left:
+# 11/21: the client's updated text, verbatim; her short lines kept as their
+# own paragraphs.
 - paragraphs:
-  - 'There is a landscape within you that deserves to be known. Muscle, fascia, nerve, blood, and bone: an intimate ecology of tissue and sensation that may have known birth, pleasure, surgery, grief, shame, or long seasons of going untended.'
+  - There is a landscape within you that deserves to be known. Muscle, fascia, nerve, blood, and bone. An intimate ecology of tissue and sensation that may have known birth, pleasure, surgery, grief, shame, or seasons of going untended.
   - An Immersion gives that landscape time. Time to listen, to tend, and to turn what we unearth into good soil.
-  - Your body has been opened, stitched, stretched, scarred, or changed. You have received touch you welcomed and touch you didn’t. Your pelvis is always speaking. When you listen, what calls your attention? What asks for tender care? You may simply be curious about what lives there and what becomes possible when you forge a close relationship with it.
-  - Each Immersion is a spacious stretch of 1:1 time, shaped around your body and your nervous system. There is no set protocol. I walk alongside you, supporting or provoking as necessary while you lead. We follow what emerges at a pace that allows your body to soften, trust, and open.
+  - Your body has been opened, stitched, stretched, scarred, or changed.
+  - You have received touch you welcomed and touch you didn’t.
+  - Your pelvis is always speaking. When you listen, what does it say? Is its language familiar or strange to you? What asks for tender care?
+  - You may simply be curious about what lives within you and what becomes possible when you forge an intimate bond with it.
+  - Each Immersion is a generous stretch of 1:1 time, shaped around your body, your nervous system, your needs and wants. There is no set protocol. I walk alongside you, supporting or provoking as necessary while you lead. We follow what emerges at a pace that allows your body to soften, trust, and open.
 - title: Choose your depth
   tiers:
   - label: HALF DAY · Three Hours
@@ -30,8 +35,8 @@ left:
 right:
 - title: A taste of what we may compose together
   items:
-  - lead: Arriving
-    text: imagine and express intention, set the space, somatic inquiry and exploration, nervous system attunement and capacitating
+  - lead: Set the Space
+    text: land and settle, imagine and express intention, somatic inquiry and exploration, nervous system attunement and capacitating
   - lead: Embodied Anatomy
     text: 'educational mapping: genital or anal, mirror work, guided self-exploration'
   - lead: Scar Tissue Education
@@ -48,7 +53,8 @@ right:
     text: ritual reflections, ancestral nourishment, aftercare recipes and practices for your body to keep using, so the healing continues long after our time together.
 - title: Personal Ethics
   paragraphs:
-  - In our encounters, you choose if, when, where, and how you receive touch, and you may change your mind, pause or stop at any time. Not everything we do involves touch nor being undressed. I am not a psychotherapist, physician, nor massage therapist. I won’t analyze, diagnose, nor position myself as an expert over your body. Though, I will stay present through whatever arises, and all of you is welcomed. When something calls for support beyond my scope of practice, I will refer you to someone who can offer it.
+  - In our encounters, you choose if, when, where, and how you receive touch, and you may change your mind, pause or stop at any time. Not everything we do involves touch nor being undressed. I am not a psychotherapist, physician, nor massage therapist. I won’t analyze, diagnose, nor position myself as an expert over your body. Though, I will stay present through whatever arises, and all of you is welcomed.
+  - When something calls for support beyond my scope of practice, I will refer you to someone who can offer it.
   - Immersions are held in Chicago, or I will be glad to travel to you if we agree on the accommodation arrangement.
 action:
   lead: Begin with a conversation.
