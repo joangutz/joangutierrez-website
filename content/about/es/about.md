@@ -16,7 +16,7 @@ alt: Joan sentada, con un vestido negro bordado de flores, sonriendo hacia la c�
 letter:
   # 11/21, the client's words.
   - 'Soy una fluida flor femenina del desierto de Chihuahua, siempre cruzando una nueva frontera. En mí conviven «el espíritu de la inocencia, el cuerpo de una mujer y el alma de una anciana sabia». Recurro a estas y a muchas otras dimensiones de mi ser en mi compromiso por potenciar la inteligencia erótica, el cuidado pélvico y la expresión creativa como partes esenciales de la salud integral del cuerpo.'
-  - Estoy aquí para nutrir la vida ofreciendo experiencias directas y vividas de estar en tu cuerpo, en tus propios términos. En conjunto, entretejeremos fragmentos personalmente relevantes de la somática, la sexología, el arte, el trabajo corporal, la ciencia, la nutrición ancestral y el ritual en encuentros colaborativos guiados por ti.
+  - 'Estoy aquí para fomentar la vida ofreciéndote experiencias directas y vividas de estar en tu cuerpo, según tus propios términos. Iremos entrelazando fragmentos de relevancia personal procedentes de la somática, la sexología, el arte, el trabajo corporal, la ciencia, la nutrición ancestral y los rituales, en encuentros colaborativos dirigidos por ti.'
   - Creo que el cuerpo, percibido desde dentro, es un canal para una salud vibrante, la vitalidad sexual y una expresión sin límites cuando se le recibe con atención, intención y sintonía. Incluso al borde de la muerte, la fuerza vital sigue latiendo en nuestro interior, y se alcanza más fácilmente a través de nuestra raíz pélvica. Hasta nuestro último aliento, esa llama merece ser cuidada.
   - Permíteme acompañarte mientras recorremos este terreno.
 signoff:
