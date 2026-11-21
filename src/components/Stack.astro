@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+
+/**
+ * A few photographs laid down one over another, each a little to one side
+ * of the last, like prints on a table (after the client's reference of
+ * 11/21). Each keeps its whole frame: nothing is cropped.
+ *
+ * `x` is how far in from the left a print sits, and `w` how wide it is,
+ * both as a share of the stack's width. Each print after the first rises
+ * over the foot of the one before.
+ */
+interface Item {
+  src: string;
+  alt: string;
+  w?: number;
+  x?: number;
+}
+interface Props {
+  items: Item[];
+  overlap?: number;
+  class?: string;
+}
+const { items, overlap = 8, class: className = '' } = Astro.props;
+
+const photos = import.meta.glob<{ default: ImageMetadata }>('/assets/photos/*.{jpg,jpeg,png,webp}', { eager: true });
+const prints = items.map((it, i) => {
+  const found = photos[`/assets/photos/${it.src}`];
+  if (!found) throw new Error(`Stack: missing /assets/photos/${it.src}`);
+  return { ...it, img: found.default, w: it.w ?? 62, x: it.x ?? (i % 2 ? 0 : 38) };
+});
+---
+
+<div class:list={['stack', className]} style={`--overlap: ${overlap}%`}>
+  {prints.map((p) => (
+    <figure class="print film" style={`--w: ${p.w}%; --x: ${p.x}%`}>
+      <Image src={p.img} alt={p.alt} widths={[480, 800, 1200]} sizes="(max-width: 780px) 70vw, 30rem" loading="lazy" />
+    </figure>
+  ))}
+</div>
+
+<style>
+  .stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .print {
+    position: relative;
+    width: var(--w);
+    margin: 0 0 0 var(--x);
+    box-shadow: 0 18px 40px rgb(var(--ch-plum) / 0.18);
+  }
+
+  .print + .print {
+    margin-top: calc(-1 * var(--overlap));
+  }
+
+  .print :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 600px) {
+    .print {
+      width: calc(var(--w) + 14%);
+      margin-left: calc(var(--x) * 0.6);
+    }
+  }
+</style>
