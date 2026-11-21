@@ -108,6 +108,15 @@ const ashley = voicesFor(lang).welcome;
   .invite-side :global(.invite-voice) {
     margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
   }
+  .invite-side :global(.invite-voice figcaption) {
+    margin-top: 0.9rem;
+    line-height: 1.6;
+  }
+  @media (max-width: 780px) {
+    .invite-side :global(.invite-voice) {
+      margin-bottom: 1.1rem;
+    }
+  }
   .invite-side :global(.invite-voice blockquote p) {
     font-size: clamp(1rem, 1.25vw, 1.12rem);
     line-height: 1.55;
