@@ -1,0 +1,97 @@
+---
+/**
+ * One client's words, set quietly (11/21). Optionally a short line from the
+ * quote set large above it. No carousel, no stars, no frame: a person's
+ * voice on the page, then who said it.
+ */
+interface Props {
+  quote: string;
+  /** A phrase from the quote, set large above it. */
+  lead?: string;
+  cite: string;
+  /** 'ground' sits on the page; 'dark' on a photograph; 'aside' a narrow
+      column with a hairline at its side. */
+  tone?: 'ground' | 'dark' | 'aside';
+  class?: string;
+}
+const { quote, lead, cite, tone = 'ground', class: className = '' } = Astro.props;
+---
+
+<figure class:list={['voice', `voice-${tone}`, className]}>
+  {lead && <p class="voice-lead" aria-hidden="true">{lead}</p>}
+  <blockquote><p>{quote}</p></blockquote>
+  <figcaption>{cite}</figcaption>
+</figure>
+
+<style>
+  .voice {
+    margin: 0;
+    max-width: 38rem;
+  }
+
+  .voice-lead {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2rem, 4.4vw, 3.3rem);
+    line-height: 1.12;
+    color: var(--color-cochineal);
+    text-wrap: balance;
+  }
+
+  .voice blockquote {
+    margin: 0;
+  }
+
+  .voice blockquote p {
+    margin: 0;
+    font-family: var(--font-soft);
+    font-size: clamp(1.15rem, 1.6vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--color-ink-2);
+  }
+
+  .voice blockquote p::before { content: '“'; }
+  .voice blockquote p::after { content: '”'; }
+
+  .voice figcaption {
+    margin-top: 1.25rem;
+    font-family: var(--font-label);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+    opacity: 0.8;
+  }
+
+  .voice figcaption::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 1px;
+    margin-right: 0.75rem;
+    vertical-align: middle;
+    background: currentColor;
+  }
+
+  .voice-dark .voice-lead,
+  .voice-dark blockquote p,
+  .voice-dark figcaption {
+    color: var(--color-bract);
+  }
+
+  .voice-dark blockquote p {
+    opacity: 0.9;
+  }
+
+  .voice-aside {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--rule-soft, rgb(0 0 0 / 0.15));
+  }
+
+  .voice-aside blockquote p {
+    font-style: italic;
+  }
+</style>

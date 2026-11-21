@@ -7,6 +7,8 @@ import OfferingCard from '../../components/OfferingCard.astro';
 import { getCollection, getEntry } from 'astro:content';
 import GetInTouch from '../../components/GetInTouch.astro';
 import Testimonials from '../../components/Testimonials.astro';
+import Voice from '../../components/Voice.astro';
+import { voices } from '../../data/voices';
 import { withBase, beginHere, shown, kit, contact } from '../../site';
 import Link from '../../components/Link.astro';
 import { abs, crumbs } from '../../seo';
@@ -143,6 +145,7 @@ const catalog = {
     })),
   ],
 };
+const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? '';
 ---
 
 <Base
@@ -243,6 +246,13 @@ const catalog = {
         </>
       )}
 
+      {vmock === '5' && (
+        <div class="voice-pair">
+          <Voice tone="aside" quote={voices.ease.short} cite={voices.ease.cite} />
+          <Voice tone="aside" quote={voices.welcome.short} cite={voices.welcome.cite} />
+        </div>
+      )}
+
       {hasQuotes && (
         <div class="after-prices">
           <Testimonials />
@@ -296,6 +306,10 @@ const catalog = {
         {rich(s.expect.where).map((part) => (part.bold ? <strong>{part.text}</strong> : part.text))}
       </p>
 
+      {(vmock === '2' || vmock === '3') && (
+        <Voice tone="dark" class="expect-voice" quote={voices.ease.full} cite={voices.ease.cite} />
+      )}
+
       <div class="scene-close">
         <p class="scene-wish">{s.expect.wish}</p>
         <Link variant="action" href={L('/begin/')}>{s.expect.link}</Link>
@@ -311,6 +325,19 @@ const catalog = {
 </Base>
 
 <style>
+  .scene-wrap :global(.expect-voice) {
+    margin: clamp(3rem, 7vh, 4.5rem) 0;
+    max-width: 40rem;
+  }
+  .voice-pair {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: clamp(4rem, 9vh, 6rem);
+  }
+  @media (min-width: 860px) {
+    .voice-pair { grid-template-columns: 1fr 1fr; gap: clamp(3rem, 6vw, 5rem); }
+  }
+
   .section-title {
     font-size: clamp(1.75rem, 3.8vw, 2.6rem);
     line-height: 1.1;
