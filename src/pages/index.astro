@@ -5,8 +5,6 @@ import Collage from '../components/Collage.astro';
 import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import Testimonials from '../components/Testimonials.astro';
-import Voice from '../components/Voice.astro';
-import { voicesFor } from '../data/voices';
 import { getCollection, getEntry } from 'astro:content';
 import { site, homeCards, shown, withBase } from '../site';
 import { person } from '../seo';
@@ -50,7 +48,6 @@ const movedAnchors = {
 };
 // The cards in view (Spine Society is kept but out of view, 11/18).
 const cards = homeCards.filter(shown);
-const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? ''; // MOCK 11/21
 ---
 
 <Base
@@ -127,13 +124,6 @@ const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? ''; // MOCK 11/21
       <Portrait src={h.welcome.portrait} alt={h.welcome.alt} colour sizes="(max-width: 780px) 100vw, 44vw" />
     </div>
   </section>
-
-  {/* A client's words after Joan's welcome (11/21). */}
-  {vmock === '' && (
-    <section class="voice-band">
-      <Voice {...voicesFor(langOf(Astro.url)).welcome} />
-    </section>
-  )}
 
   {/* 3 · What is Ma Somatrix? Her text, then the triangle; her last line
       waits beside it until a word is chosen. */}
@@ -217,13 +207,6 @@ const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? ''; // MOCK 11/21
 </Base>
 
 <style>
-  .voice-band {
-    display: grid;
-    justify-items: center;
-    padding: clamp(5rem, 12vh, 8rem) clamp(1.25rem, 5vw, 3rem);
-    text-align: center;
-  }
-  .voice-band :global(.voice) { max-width: 36rem; }
 
   /* ---- Hero ---- */
   .hero {
