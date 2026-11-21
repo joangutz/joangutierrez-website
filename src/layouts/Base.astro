@@ -168,7 +168,10 @@ const altEs = new URL(withBase(`/es${en}`), Astro.site).href;
     <script>
 
       import { onPage } from '../lib/onPage';
+      import { landOnHash } from '../lib/landOnHash';
 
+      // A link to a part of a page lands on it (11/21).
+      onPage(() => landOnHash());
 
       onPage(() => {
         // The one orchestrated motion: things open when they arrive.
