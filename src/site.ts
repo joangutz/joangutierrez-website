@@ -302,4 +302,12 @@ export const homeCards = [
     collage: 'work-2.jpg',
     register: 'one',
   },
+  {
+    // 11/21: added at the client's request; the same art as its Offerings card.
+    href: '/services/#this-very-body',
+    title: 'This Very Body: Movement Archive',
+    note: '',
+    collage: 'desire-mapping.jpg',
+    register: 'program',
+  },
 ] as const;
