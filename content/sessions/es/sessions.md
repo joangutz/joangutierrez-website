@@ -34,12 +34,13 @@ belong:
         - Encontrar más tranquilidad ante el entumecimiento, la tensión crónica, la endometriosis, el dolor pélvico, la incontinencia o la sensación de que tu mente sigue tomando el control.
         - Soltar la vergüenza, el miedo y el trauma, junto con las huellas de la cultura de la pureza, las enseñanzas religiosas y el condicionamiento temprano, para que puedas permitirte amar lo que amas y elegir desde la confianza en ti, la coherencia y la autonomía.
     - title: Límites y agencia
+      # 11/21, the client's words.
       items:
-        - Explorar límites, fronteras y consentimiento que puedas sentir desde adentro y comunicar con claridad y confianza.
-        - Notar dónde dices que sí para complacer a otras personas, y practicar elegir la intimidad con libertad.
+        - Explorar límites, fronteras y consentimiento de tal forma que puedas sentirlos desde dentro y comunicarlos con claridad y confianza.
+        - Darte cuenta dónde dices «sí» para complacer a los demás y practicar cómo elegir la intimidad libremente.
   closing:
-    - También puede que no tengas nada en particular que nombrar.
-    - Puede que simplemente sientas curiosidad o hambre de sentir más vida.
+    - También puede que no tengas nada concreto que nombrar.
+    - Puede que simplemente sientas curiosidad o hambre de sentirte más vivx.
 
 expect:
   title: Qué esperar
