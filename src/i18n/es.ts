@@ -48,8 +48,8 @@ export const es: Record<string, string> = {
   'The Space': 'El Espacio',
   'The Body': 'El Cuerpo',
   'Matrix matrīcis : of Latin origin, derived from mater, meaning mother.':
-    // 11/21, the client's words ("Latin" and "utero" given their Spanish accents).
-    'Matriz matrīcis : de origen latín, derivada de mater, que significa madre.',
+    // 11/21, the client's words, confirmed.
+    'Matriz matrīcis : de origen latino, derivada de mater, que significa madre.',
   'Speaks of the womb of potential / of the mother source. An origin point from which new life originates, develops or takes form.':
     'Habla del útero del potencial / de la fuente madre. Un punto de origen desde el cual la nueva vida se origina, se desarrolla o toma forma.', // 11/21, the client's (unchanged)
   'MA 間 : of Japanese origin, combines the character for gate 門 with the character for sun 日.':
