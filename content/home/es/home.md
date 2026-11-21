@@ -6,7 +6,7 @@
 hero:
   markLeft: Ma
   markRight: Somatrix
-  tagline: Cuidado holístico arraigado en el cuerpo para una expresión liberada
+  tagline: Cuidado holístico arraigado en el cuerpo para una expresión libre  # 11/21, the client's
   place: Chicago y más allá
   collage: hero.jpg
   alt: Un cuerpo en una luz cálida y baja, la curva de una cadera y un muslo con una franja de sol que cae sobre ellos.
