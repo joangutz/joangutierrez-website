@@ -48,7 +48,6 @@ const movedAnchors = {
 };
 // The cards in view (Spine Society is kept but out of view, 11/18).
 const cards = homeCards.filter(shown);
-const tmock = import.meta.env.PUBLIC_TITLE_MOCK ?? ''; // MOCK 11/21
 ---
 
 <Base
@@ -160,14 +159,12 @@ const tmock = import.meta.env.PUBLIC_TITLE_MOCK ?? ''; // MOCK 11/21
   <section id="begin-here">
     <div class="band section">
     <div class="wide">
-      {tmock === '1' && <h2 class="label offer-head offer-head-label">{tr('Offerings')}</h2>}
-      {tmock === '2' && <h2 class="offer-head offer-head-title">{tr('Offerings')}</h2>}
-      {tmock === '3' && (
-        <div class="offer-head offer-head-pair">
-          <h2 class="label">{tr('Offerings')}</h2>
-          <p class="offer-sub">Ways we can work together.</p>
-        </div>
-      )}
+      {/* A heading over her cards (11/21, option 3 of three): the menu's
+          word, and a line beneath it. */}
+      <div class="offer-head">
+        <h2 class="label">{tr('Offerings')}</h2>
+        <p class="offer-sub">{tr('Ways we can work together.')}</p>
+      </div>
       <ul class="cards rise" style={`--n:${cards.length}`} data-odd={cards.length % 2 === 1 ? '' : undefined}>
         {
           cards.map((o) => (
@@ -408,22 +405,12 @@ const tmock = import.meta.env.PUBLIC_TITLE_MOCK ?? ''; // MOCK 11/21
   }
 
 
-  /* MOCK 11/21: a heading over her cards. */
+  /* The heading over her cards (11/21). */
   .offer-head {
     margin: 0 0 clamp(2rem, 4vw, 3rem);
     text-align: center;
   }
-  .offer-head-label {
-    letter-spacing: 0.24em;
-  }
-  .offer-head-title {
-    font-family: var(--font-soft);
-    font-weight: 300;
-    font-size: clamp(2.2rem, 4.4vw, 3.2rem);
-    line-height: 1.1;
-    color: var(--color-cochineal);
-  }
-  .offer-head-pair .label {
+  .offer-head .label {
     margin: 0;
     letter-spacing: 0.24em;
   }
