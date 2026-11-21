@@ -9,7 +9,7 @@
 name: Joan Gutiérrez
 roles: Fundadora | Artista Multidisciplinaria | Sexóloga Somática  # 11/20, from the client
 line: Colaboro con personas que sienten curiosidad por las posibilidades que ofrece una vida centrada en el cuerpo.  # 11/20, from the client
-more: Conoce más
+more: Descubre más  # 11/21, the client's
 portrait: joan-roots.jpg
 alt: Joan sentada, con un vestido negro bordado de flores, sonriendo hacia la cámara.
 
