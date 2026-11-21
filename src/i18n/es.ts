@@ -132,13 +132,8 @@ export const es: Record<string, string> = {
   optional: 'opcional',
   'Opens your email app, addressed to': 'Abre tu app de correo, dirigido a',
 
-  // Site credit (11/21)
-  'site credit': 'créditos del sitio',
-  'Site credit': 'Créditos del sitio',
-  'Sound & Website development': 'Sonido y desarrollo web',
-  'Website Design': 'Diseño web',
-  'Portrait Photography': 'Fotografía de retrato',
-  'All original artwork & photography': 'Todo el arte y la fotografía originales',
+  // Site credits (11/21; the client's; the roles are in Credits.astro)
+  'Site Credits': 'Créditos del sitio',
 
   // Links that leave the page, read aloud
   '(opens in a new tab)': '(se abre en una nueva pestaña)',

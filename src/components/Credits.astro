@@ -1,9 +1,9 @@
 ---
 import { site } from '../site';
-import { translator } from '../i18n';
+import { langOf, translator } from '../i18n';
 
 /**
- * The foot's small line: the copyright, and beneath it "site credit"
+ * The foot's small line: the copyright, and beneath it "Site Credits"
  * (11/21), which opens a small pane of the site's glass naming who made
  * what. Shared by the footer and by the pages that close on their own
  * photograph (Book a Session, the Discovery Form), so all three say the
@@ -17,30 +17,39 @@ const year = new Date().getFullYear();
 const tr = translator(Astro.url);
 const uid = `sc-${Math.random().toString(36).slice(2, 7)}`;
 
-// The credits, as the client gave them (11/21).
-const rows: { role: string; name: string; href?: string }[] = [
-  { role: 'Sound & Website development', name: 'Stu Pender', href: 'https://beingsound.studio' },
-  { role: 'Website Design', name: 'Joan Gutiérrez' },
-  { role: 'Portrait Photography', name: 'Mod Schwalbe Photography', href: 'https://www.modschwalbe.com' },
-  { role: 'All original artwork & photography', name: 'Joan Gutiérrez' },
-];
+// The credits, as the client gave them (11/21). The Spanish is her own
+// order and wording, with design and artwork joined in one row.
+const lang = langOf(Astro.url);
+const rows: { role: string; name: string; href?: string }[] =
+  lang === 'es'
+    ? [
+        { role: 'Fotografía de retrato', name: 'Mod Schwalbe Photography', href: 'https://www.modschwalbe.com' },
+        { role: 'Sonido y desarrollo web', name: 'Stu Pender', href: 'https://beingsound.studio' },
+        { role: 'Diseño web + todo el arte y fotografía original', name: 'Joan Gutiérrez' },
+      ]
+    : [
+        { role: 'Sound & Website development', name: 'Stu Pender', href: 'https://beingsound.studio' },
+        { role: 'Website Design', name: 'Joan Gutiérrez' },
+        { role: 'Portrait Photography', name: 'Mod Schwalbe Photography', href: 'https://www.modschwalbe.com' },
+        { role: 'All original artwork & photography', name: 'Joan Gutiérrez' },
+      ];
 ---
 
 <div class:list={['credits', className]}>
   <p class="credit">© {year} {site.name}</p>
   <button type="button" class="site-credit" data-credit-open aria-controls={uid} aria-haspopup="dialog">
-    {tr('site credit')}
+    {tr('Site Credits')}
   </button>
 
-  <dialog class="credit-pane" id={uid} data-credit-pane aria-label={tr('Site credit')}>
+  <dialog class="credit-pane" id={uid} data-credit-pane aria-label={tr('Site Credits')}>
     <button type="button" class="credit-close" data-credit-close aria-label={tr('Close')}>
       <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3 L13 13 M13 3 L3 13" /></svg>
     </button>
-    <p class="credit-title">{tr('Site credit')}</p>
+    <p class="credit-title">{tr('Site Credits')}</p>
     <dl class="credit-list">
       {rows.map((r) => (
         <div>
-          <dt>{tr(r.role)}</dt>
+          <dt>{r.role}</dt>
           <dd>
             {r.href ? (
               <a href={r.href} target="_blank" rel="noopener noreferrer">
