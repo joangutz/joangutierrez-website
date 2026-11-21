@@ -245,12 +245,6 @@ const catalog = {
         </>
       )}
 
-      {/* A client's words between the offerings and What to Expect
-          (11/21; moved here from Home at the client's request). */}
-      <div class="offer-voice">
-        <Voice {...voicesFor(langOf(Astro.url)).welcome} />
-      </div>
-
       {hasQuotes && (
         <div class="after-prices">
           <Testimonials />
@@ -322,13 +316,6 @@ const catalog = {
 </Base>
 
 <style>
-  .offer-voice {
-    display: grid;
-    justify-items: center;
-    margin-top: clamp(5rem, 11vh, 7rem);
-    text-align: center;
-  }
-  .offer-voice :global(.voice) { max-width: 36rem; }
 
   .scene-wrap :global(.expect-voice) {
     margin: clamp(3rem, 7vh, 4.5rem) 0;
