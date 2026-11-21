@@ -18,9 +18,10 @@ belong:
         - Adquirir fluidez en el lenguaje de tu cuerpo y de tu sistema nervioso, y traducir lo que te dice a la vida que estás creando.
         - Redescubrir la comida como fuente de placer, vitalidad y sabiduría ancestral, y confiar en el saber de tu cuerpo sobre lo que te nutre.
     - title: Placer y deseo
+      # 11/21, the client's words ("lo qué quieres" set as "lo que quieres").
       items:
         - Sentirte libre como ser erótico, con el deseo, la excitación y la presencia entretejidos en tu vida, y un sentido de soberanía sobre tu cuerpo, tu intuición y tu expresión creativa.
-        - Recuperar el sexo como algo que disfrutas y no como algo que haces, y encontrar más soltura con el deseo bajo, la libido cambiante, la dificultad con la excitación o el orgasmo, o el dolor y la incomodidad durante el sexo.
+        - Recuperar el sexo como algo que disfrutas, en lugar de algo que haces, y sentirte más a gusto con el bajo deseo, los cambios en la libido, las dificultades para excitarte o alcanzar el orgasmo, o el dolor y las molestias durante el sexo.
         - Conocer tu anatomía erótica, explorar el autoplacer y descubrir lo que quieres de tus orgasmos.
         - Jugar en lo erótico, incluidas la fantasía y el kink, simplemente porque sientes curiosidad por lo que te excita.
         - Encontrarte con las diferencias de deseo y comunicar tus necesidades en la intimidad, con una pareja o con varias, en la forma que sea y con quien sea que ames.
