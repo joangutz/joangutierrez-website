@@ -34,7 +34,8 @@ const es: Record<'welcome' | 'ease', Voice> = {
     short: 'En mis sesiones con ella hemos podido encontrarnos con lugares vulnerables con ternura y curiosidad, risa y amor. Cuando me dice que ‘todo lo que eres es bienvenido aquí’, por fin puedo creer que es verdad.',
   },
   ease: {
-    quote: 'No sabía qué esperar y sentía nervios al acercarme a mi exploración erótica, pero Joan me dio tranquilidad con su calma, su profesionalismo y su autoridad. Joan tiene el don de detener el tiempo y sostener el espacio en momentos muy vulnerables. Aprender sobre mi cuerpo y a nombrar mis necesidades ha cultivado en mí una confianza que ha irradiado más allá de lo erótico, hasta mi propio sentido de quién soy. Una sanadora y maestra con un don.',
+    // 11/21, the client's words (accents added: brindó, más, mí misma).
+    quote: 'No sabía qué esperar y me sentía nerviosa ante la idea de adentrarme en mi exploración erótica, pero Joan me brindó tranquilidad con su calma, su profesionalismo y su autoridad. Joan tiene el don de detener el tiempo y sostener el espacio en los momentos más vulnerables. Conocer mi cuerpo y aprender a expresar mis necesidades me ha ayudado a cultivar una confianza en mí misma que ha irradiado más allá de lo erótico, hasta mi propio sentido de quién soy. Una sanadora y maestra con un don.',
     cite: 'Bethie B., Chicago',
   },
 };
