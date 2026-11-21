@@ -145,6 +145,7 @@ const catalog = {
     })),
   ],
 };
+const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? ''; // MOCK 11/21
 ---
 
 <Base
@@ -245,6 +246,12 @@ const catalog = {
         </>
       )}
 
+      {vmock === 'O1' && (
+        <div class="offer-voice">
+          <Voice {...voicesFor(langOf(Astro.url)).welcome} />
+        </div>
+      )}
+
       {hasQuotes && (
         <div class="after-prices">
           <Testimonials />
@@ -299,7 +306,14 @@ const catalog = {
       </p>
 
       {/* A client's words before the way in (11/21). */}
-      <Voice tone="dark" class="expect-voice" {...voicesFor(langOf(Astro.url)).ease} />
+      {vmock === 'O2' ? (
+        <div class="expect-voices">
+          <Voice tone="dark" {...voicesFor(langOf(Astro.url)).ease} />
+          <Voice tone="dark" quote={voicesFor(langOf(Astro.url)).welcome.short!} cite={voicesFor(langOf(Astro.url)).welcome.cite} />
+        </div>
+      ) : (
+        <Voice tone="dark" class="expect-voice" {...voicesFor(langOf(Astro.url)).ease} />
+      )}
 
       <div class="scene-close">
         <p class="scene-wish">{s.expect.wish}</p>
@@ -316,6 +330,22 @@ const catalog = {
 </Base>
 
 <style>
+  .offer-voice {
+    display: grid;
+    justify-items: center;
+    margin-top: clamp(5rem, 11vh, 7rem);
+    text-align: center;
+  }
+  .offer-voice :global(.voice) { max-width: 36rem; }
+  .expect-voices {
+    display: grid;
+    gap: 2.5rem;
+    margin: clamp(3rem, 7vh, 4.5rem) 0;
+  }
+  @media (min-width: 900px) {
+    .expect-voices { grid-template-columns: 1fr 1fr; gap: clamp(3rem, 6vw, 5rem); align-items: start; }
+  }
+
   .scene-wrap :global(.expect-voice) {
     margin: clamp(3rem, 7vh, 4.5rem) 0;
     max-width: 40rem;

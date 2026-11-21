@@ -50,6 +50,7 @@ const movedAnchors = {
 };
 // The cards in view (Spine Society is kept but out of view, 11/18).
 const cards = homeCards.filter(shown);
+const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? ''; // MOCK 11/21
 ---
 
 <Base
@@ -128,9 +129,11 @@ const cards = homeCards.filter(shown);
   </section>
 
   {/* A client's words after Joan's welcome (11/21). */}
-  <section class="voice-band">
-    <Voice {...voicesFor(langOf(Astro.url)).welcome} />
-  </section>
+  {vmock === '' && (
+    <section class="voice-band">
+      <Voice {...voicesFor(langOf(Astro.url)).welcome} />
+    </section>
+  )}
 
   {/* 3 · What is Ma Somatrix? Her text, then the triangle; her last line
       waits beside it until a word is chosen. */}

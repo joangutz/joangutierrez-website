@@ -1,5 +1,7 @@
 ---
 import Credits from '../components/Credits.astro';
+import Voice from '../components/Voice.astro';
+import { voicesFor } from '../data/voices';
 import Base from '../layouts/Base.astro';
 import Link from '../components/Link.astro';
 import PhotoGround from '../components/PhotoGround.astro';
@@ -26,6 +28,8 @@ const contact_page = {
  * sits quietly beneath it, and her WHERE list becomes one line.
  * Her sign-off closes it. Every word here is hers.
  */
+const vmock = import.meta.env.PUBLIC_VOICE_MOCK ?? ''; // MOCK 11/21
+const ashley = voicesFor(lang).welcome;
 ---
 
 <Base
@@ -81,6 +85,7 @@ const contact_page = {
           {/* …and, beside it, for anyone who would rather write: her
               address (the phone number removed 11/17) and where she works. */}
           <div class="invite-side">
+            {vmock === 'G' && <Voice tone="dark" class="invite-voice" quote={ashley.short!} cite={ashley.cite} />}
             <ul class="invite-write">
               <li><Link href={`mailto:${contact.email}`}>{contact.email}</Link></li>
             </ul>
@@ -100,6 +105,15 @@ const contact_page = {
 </Base>
 
 <style>
+  .invite-side :global(.invite-voice) {
+    margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+  }
+  .invite-side :global(.invite-voice blockquote p) {
+    font-size: clamp(1rem, 1.25vw, 1.12rem);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
   /* The window, less the bar: everything fits in one screen. */
   /* The photograph runs under the bar, so the page ends on it. */
   .invite {
