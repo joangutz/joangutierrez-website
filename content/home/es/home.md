@@ -36,6 +36,7 @@ realms:
   link: Entra en Ma
 
 land:
-  label: Reconocimiento de la tierra
-  text: Pertenezco a la intersección de las praderas de pasto alto, los bosques de maderas duras del este y la cuenca de los Grandes Lagos, donde bebo y me baño en el agua dulce del lago Míchigan. Como persona colona aquí, reconozco que me muevo entre las praderas, las sabanas, los humedales, los bosques y ahora las junglas de concreto que el Consejo de los Tres Fuegos, junto con muchas otras tribus, como los miami, ho-chunk, menominee y sac y fox, llamaron hogar. Llegué desde la frontera México-Estados Unidos de El Paso y Ciudad Juárez, donde mi familia se estableció después de emigrar de mi vibrante México. Llevo conmigo la medicina de estas tierras y de todas las demás en las que he vivido lo suficiente para reunir sueños, memorias y nutrir lazos de parentesco.
+  # 11/21, the client's words.
+  label: Reconocimiento del territorio
+  text: 'Pertenezco a la zona donde se cruzan las praderas de hierba alta, los bosques de frondosas del este y la cuenca de los Grandes Lagos, donde bebo y me baño en las aguas dulces del lago Míchigan. Como colono de estas tierras, reconozco que me muevo entre las praderas, las sabanas, los humedales, los bosques y, ahora, las junglas de asfalto donde el Consejo de los Tres Fuegos, junto con muchas otras tribus —como los miami, los ho-chunk, los menominee y los sac y fox—, tenían su hogar. Llegué desde la zona fronteriza entre México y Estados Unidos, entre El Paso y Ciudad Juárez, donde mi familia se estableció tras emigrar desde mi vibrante México. Llevo conmigo la medicina de estas tierras y de todas las demás en las que he vivido el tiempo suficiente para recoger sueños, recuerdos y alimentar los lazos de parentesco.'
 ---
