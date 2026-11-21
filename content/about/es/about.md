@@ -14,7 +14,8 @@ portrait: joan-roots.jpg
 alt: Joan sentada, con un vestido negro bordado de flores, sonriendo hacia la cámara.
 
 letter:
-  - Soy una flor femenina y fluida del desierto de Chihuahua, siempre cruzando una nueva frontera. Llevo conmigo el “espíritu de una niña, el cuerpo de una mujer y el alma de una anciana sabia.” Invoco estas y muchas otras dimensiones de mí en mi compromiso de elevar la inteligencia erótica, el cuidado pélvico y la expresión creativa como partes esenciales de la salud de todo el cuerpo.
+  # 11/21, the client's words.
+  - 'Soy una fluida flor femenina del desierto de Chihuahua, siempre cruzando una nueva frontera. En mí conviven «el espíritu de la inocencia, el cuerpo de una mujer y el alma de una anciana sabia». Recurro a estas y a muchas otras dimensiones de mi ser en mi compromiso por potenciar la inteligencia erótica, el cuidado pélvico y la expresión creativa como partes esenciales de la salud integral del cuerpo.'
   - Estoy aquí para nutrir la vida ofreciendo experiencias directas y vividas de estar en tu cuerpo, en tus propios términos. En conjunto, entretejeremos fragmentos personalmente relevantes de la somática, la sexología, el arte, el trabajo corporal, la ciencia, la nutrición ancestral y el ritual en encuentros colaborativos guiados por ti.
   - Creo que el cuerpo, percibido desde dentro, es un canal para una salud vibrante, la vitalidad sexual y una expresión sin límites cuando se le recibe con atención, intención y sintonía. Incluso al borde de la muerte, la fuerza vital sigue latiendo en nuestro interior, y se alcanza más fácilmente a través de nuestra raíz pélvica. Hasta nuestro último aliento, esa llama merece ser cuidada.
   - Permíteme acompañarte mientras recorremos este terreno.
