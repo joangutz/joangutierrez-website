@@ -18,20 +18,28 @@ const tr = translator(Astro.url);
 const uid = `sc-${Math.random().toString(36).slice(2, 7)}`;
 
 // The credits, as the client gave them (11/21). The Spanish is her own
-// order and wording, with design and artwork joined in one row.
+// order and wording, with design and artwork joined in one row. A row may
+// name more than one person, each with their own link or none.
 const lang = langOf(Astro.url);
-const rows: { role: string; name: string; href?: string }[] =
+type Name = { name: string; href?: string };
+const stu: Name = { name: 'Stu Pender', href: 'https://beingsound.studio' };
+const joan: Name = { name: 'Joan Gutiérrez' };
+const mod: Name = { name: 'Mod Schwalbe Photography', href: 'https://www.modschwalbe.com' };
+const camille: Name = { name: 'Camille Lacadee', href: 'https://www.camillelacadee.com' };
+const rows: { role: string; names: Name[] }[] =
   lang === 'es'
     ? [
-        { role: 'Fotografía de retrato', name: 'Mod Schwalbe Photography', href: 'https://www.modschwalbe.com' },
-        { role: 'Sonido y desarrollo web', name: 'Stu Pender', href: 'https://beingsound.studio' },
-        { role: 'Diseño web + todo el arte y fotografía original', name: 'Joan Gutiérrez' },
+        { role: 'Fotografía de retrato', names: [mod] },
+        { role: 'Sonido y desarrollo web', names: [stu] },
+        { role: 'Diseño web + todo el arte original', names: [joan] },
+        { role: 'Fotografía', names: [joan, camille] },
       ]
     : [
-        { role: 'Sound & Website development', name: 'Stu Pender', href: 'https://beingsound.studio' },
-        { role: 'Website Design', name: 'Joan Gutiérrez' },
-        { role: 'Portrait Photography', name: 'Mod Schwalbe Photography', href: 'https://www.modschwalbe.com' },
-        { role: 'All original artwork & photography', name: 'Joan Gutiérrez' },
+        { role: 'Sound & Website development', names: [stu] },
+        { role: 'Website Design', names: [joan] },
+        { role: 'Portrait Photography', names: [mod] },
+        { role: 'All original artwork', names: [joan] },
+        { role: 'Photography', names: [joan, camille] },
       ];
 ---
 
@@ -51,13 +59,18 @@ const rows: { role: string; name: string; href?: string }[] =
         <div>
           <dt>{r.role}</dt>
           <dd>
-            {r.href ? (
-              <a href={r.href} target="_blank" rel="noopener noreferrer">
-                {r.name}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span>
-              </a>
-            ) : (
-              r.name
-            )}
+            {r.names.map((n, k) => (
+              <>
+                {k > 0 && ' & '}
+                {n.href ? (
+                  <a href={n.href} target="_blank" rel="noopener noreferrer">
+                    {n.name}<span class="visually-hidden"> {tr('(opens in a new tab)')}</span>
+                  </a>
+                ) : (
+                  n.name
+                )}
+              </>
+            ))}
           </dd>
         </div>
       ))}
