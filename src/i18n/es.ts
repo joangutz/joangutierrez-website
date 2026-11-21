@@ -110,7 +110,7 @@ export const es: Record<string, string> = {
   Empowerment: 'Empoderamiento',
   Eroticism: 'Erotismo',
   'Asian Philosophy & Medicine': 'Filosofía y Medicina Asiáticas',
-  'Ancient Wisdom Nutrition': 'Nutrición de Sabiduría Ancestral',
+  'Ancient Wisdom Nutrition': 'Nutrición basada en Sabiduría Ancestral', // 11/21, the client's
 
   // Book a Session and the Discovery Form
   'Book a Session': 'Agenda una sesión',
