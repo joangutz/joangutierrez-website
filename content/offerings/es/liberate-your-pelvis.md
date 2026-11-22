@@ -10,15 +10,16 @@ register: one
 collage: scar-tissue.jpg
 alt: Collage — brazos pálidos y manos abiertas que se extienden sobre un fondo gris, sosteniendo algo pequeño y luminoso.
 left:
-# 11/22: the opening in the client's own words, verbatim.
+# 11/22: the opening in the client's own words, verbatim; two passages
+# revised the same day (accents and an opening ¿ added: extraño, ¿Qué,
+# provocándote).
 - paragraphs:
   - Hay un paisaje dentro de ti que merece ser conocido. Músculos, fascias, nervios, sangre y huesos. Una ecología íntima de tejidos y sensaciones que quizá haya experimentado el nacimiento, el placer, una intervención quirúrgica, el duelo, la vergüenza o épocas sin cuidado.
   - Una «Inmersión» le dedica tiempo a ese paisaje. Tiempo para escuchar, para cuidar y para convertir lo que desenterramos en buena tierra.
-  - Tu cuerpo ha sido abierto, suturado, estirado, marcado por cicatrices o transformado.
-  - Has recibido caricias que has acogido con agrado y otras que no.
-  - Tu pelvis siempre está hablando. Cuando la escuchas, ¿qué te dice? ¿Te resulta familiar o extraño su lenguaje? ¿Qué es lo que pide un cuidado tierno?
+  - Tu cuerpo ha sido abierto, cosido, estirado, marcado por cicatrices o transformado. Has recibido caricias que has acogido con agrado y otras que no.
+  - Tu pelvis siempre está hablando. Cuando escuchas, ¿qué te cuenta? ¿Te resulta familiar o extraño su lenguaje? ¿Qué es lo que pide un cuidado tierno?
   - Quizá simplemente sientas curiosidad por lo que vive en tu interior y por lo que se hace posible cuando forjas un vínculo íntimo con ello.
-  - Cada sesión de inmersión es un generoso espacio de tiempo individual, diseñado en torno a tu cuerpo, tu sistema nervioso, tus necesidades y tus deseos. No hay un protocolo fijo. Yo te acompaño, apoyándote o estimulándote según sea necesario, mientras tú llevas la iniciativa. Seguimos lo que surge a un ritmo que permite que tu cuerpo se relaje, confíe y se abra.
+  - Cada Inmersión es un tramo amplio de tiempo individual, diseñado en torno a tu cuerpo, tu sistema nervioso, tus necesidades y tus deseos. No hay un protocolo fijo. Yo te acompaño, apoyándote o provocándote según sea necesario, mientras tú llevas la iniciativa. Seguimos lo que emerge a un ritmo que permite que tu cuerpo se relaje, confíe y se abra.
 - title: Elige tu profundidad
   tiers:
   - label: MEDIO DÍA · Tres horas
