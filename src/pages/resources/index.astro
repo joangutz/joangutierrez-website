@@ -7,8 +7,9 @@ import LibraryArchive from '../../components/LibraryArchive.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, kit } from '../../site';
 import { gift, crumbs } from '../../seo';
-import { translator } from '../../i18n';
+import { linker, translator } from '../../i18n';
 const tr = translator(Astro.url);
+const L = linker(Astro.url);
 
 /**
  * Resources: cards, in the same language as Services. The gift turns
@@ -66,6 +67,17 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
   <section class="band section">
     <div class="wide res-stack">
       <GiftCard />
+
+      {/* The guide for sale (11/22), leading to its own page. */}
+      <OfferingPlain
+        id="tending-the-root"
+        matchTurning
+        title={tr('Tending the Root')}
+        note={tr('A guide for tending your pelvic root')}
+        collage="guide-marsh.jpg"
+        register="cochineal"
+        action={{ href: L('/tending-the-root/'), label: tr('Explore') }}
+      />
 
       <OfferingPlain
         id="substack"

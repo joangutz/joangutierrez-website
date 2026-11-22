@@ -2,61 +2,66 @@
 import Base from '../layouts/Base.astro';
 import Collage from '../components/Collage.astro';
 import { crumbs } from '../seo';
+import { langOf, translator } from '../i18n';
 
 /**
  * Tending the Root (11/22): Joan's guide, for sale as a PDF. The checkout
  * and the emailed download are Payhip's; this page tells what the guide
- * holds and opens Payhip's checkout. TODO-JOAN: the Payhip product link.
+ * holds and opens Payhip's checkout. The Spanish page (/es/) is a draft for
+ * Joan; the guide itself is in English.
  *
  * The layout chosen 11/22: option A, opening on the marsh as in option B.
  */
-const buy = '#'; // TODO-JOAN: the Payhip product link, e.g. https://payhip.com/b/XXXX
+const lang = langOf(Astro.url);
+const tr = translator(Astro.url);
+const buy = 'https://payhip.com/b/M1mxK'; // the client's Payhip product (11/22)
 const price = '$33';
 
 const title = 'Tending the Root';
-const line = 'Macro-pack protocols from the cornerstones of whole-body health to vital pelvic care';
+const line = tr('Macro-pack protocols from the cornerstones of whole-body health to vital pelvic care');
 const streams = [
-  ['Weather', 'the nervous system and hormones'],
-  ['Filter', 'the liver, kidneys and the routes out'],
-  ['River', 'lymph and the castor oil pack'],
-  ['Terrain', 'scars seen and unseen'],
-  ['Soil', 'nourishment, stock and broth'],
-  ['The Root', 'body literacy, self-mapping and consent'],
+  [tr('Weather'), tr('the nervous system and hormones')],
+  [tr('Filter'), tr('the liver, kidneys and the routes out')],
+  [tr('River'), tr('lymph and the castor oil pack')],
+  [tr('Terrain'), tr('scars seen and unseen')],
+  [tr('Soil'), tr('nourishment, stock and broth')],
+  [tr('The Root'), tr('body literacy, self-mapping and consent')],
 ];
 const holds = [
-  '15 pages, for all bodies',
-  'Step-by-step practices: the timings, the temperatures, the nuances',
-  'The ginger compress, castor oil packs, a sauna scar session, self-mapping',
-  'Healing meat stock and bone broth recipes',
-  'A gentle weekly rhythm to weave it together',
+  tr('15 pages, for all bodies'),
+  tr('Step-by-step practices: the timings, the temperatures, the nuances'),
+  tr('The ginger compress, castor oil packs, a sauna scar session, self-mapping'),
+  tr('Healing meat stock and bone broth recipes'),
+  tr('A gentle weekly rhythm to weave it together'),
 ];
 const pages = ['guide-p2.jpg', 'guide-p3.jpg', 'guide-p10.jpg', 'guide-p13.jpg'];
 ---
 
-<Base title={`${title} — a guide by Joan Gutiérrez`} description={line} schema={[crumbs(title, '/tending-the-root/')]} plainClose>
+<Base title={`${title} — ${tr('a guide by Joan Gutiérrez')}`} description={line} schema={[crumbs(title, lang === 'es' ? '/es/tending-the-root/' : '/tending-the-root/')]} plainClose>
 
   {/* The marsh fills the window, the guide's name on a pane of glass. */}
   <section class="b-hero on-dark">
     <div class="b-photo"><Collage src="guide-marsh.jpg" alt="" priority sizes="100vw" /></div>
     <div class="b-pane">
-      <span class="cap">A guide · PDF</span>
+      <span class="cap">{tr("A guide · PDF")}</span>
       <h1 class="t-title">Tending <em>the Root</em></h1>
       <p class="t-line">{line}</p>
-      <div class="b-row"><p class="t-price">{price}</p><a class="t-buy t-buy-light" href={buy}>Buy the guide</a></div>
-      <p class="t-note">Delivered to your inbox the moment you purchase.</p>
+      <div class="b-row"><p class="t-price">{price}</p><a class="t-buy t-buy-light" href={buy}>{tr("Buy the guide")}</a></div>
+      <p class="t-note">{tr("Delivered to your inbox the moment you purchase.")}</p>
     </div>
   </section>
 
   {/* What it holds. */}
   <section class="a-inside">
     <div class="a-col">
-      <span class="cap">What’s inside</span>
+      <span class="cap">{tr("What’s inside")}</span>
       <ol class="streams">{streams.map(([w, d], i) => <li><span class="n">{i < 5 ? i + 1 : '·'}</span><span class="w">{w}</span><span>{d}</span></li>)}</ol>
     </div>
     <div class="a-col">
-      <span class="cap">It holds</span>
+      <span class="cap">{tr("It holds")}</span>
       <ul class="holds">{holds.map((h) => <li>{h}</li>)}</ul>
-      <blockquote class="t-quote">“The body is slow, like her soil and her seasons. These pages are permission to move slow.”</blockquote>
+      <blockquote class="t-quote">“{tr("The body is slow, like her soil and her seasons. These pages are permission to move slow.")}”</blockquote>
+      {lang === 'es' && <p class="t-note">{tr("The guide is written in English.")}</p>}
     </div>
   </section>
 
@@ -65,7 +70,7 @@ const pages = ['guide-p2.jpg', 'guide-p3.jpg', 'guide-p10.jpg', 'guide-p13.jpg']
     {pages.map((p) => <div class="page-thumb film"><Collage src={p} alt="" sizes="(max-width: 780px) 45vw, 22vw" /></div>)}
   </section>
 
-  <section class="t-close"><p class="t-price">{price}</p><a class="t-buy" href={buy}>Buy the guide</a></section>
+  <section class="t-close"><p class="t-price">{price}</p><a class="t-buy" href={buy}>{tr("Buy the guide")}</a></section>
 </Base>
 
 <style>

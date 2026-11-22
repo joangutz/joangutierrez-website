@@ -138,6 +138,39 @@ export const es: Record<string, string> = {
   'Joan, arms wide, among a class of schoolchildren in Japan.': 'Joan, con los brazos abiertos, entre un grupo de escolares en Japón.',
   'Joan lying on a beach at sunset, an egg resting on her lips.': 'Joan recostada en la playa al atardecer, con un huevo sobre los labios.',
 
+  // Tending the Root, the guide for sale (11/22, draft for Joan)
+  'Macro-pack protocols from the cornerstones of whole-body health to vital pelvic care':
+    'Protocolos macro-pack, desde los pilares de la salud integral hasta el cuidado pélvico vital',
+  'a guide by Joan Gutiérrez': 'una guía de Joan Gutiérrez',
+  'A guide · PDF': 'Una guía · PDF',
+  'Buy the guide': 'Comprar la guía',
+  'Delivered to your inbox the moment you purchase.': 'Llega a tu correo en el momento de tu compra.',
+  'What’s inside': 'Contenido',
+  'It holds': 'Incluye',
+  Weather: 'Clima',
+  Filter: 'Filtro',
+  River: 'Río',
+  Terrain: 'Terreno',
+  Soil: 'Suelo',
+  'The Root': 'La Raíz',
+  'the nervous system and hormones': 'el sistema nervioso y las hormonas',
+  'the liver, kidneys and the routes out': 'el hígado, los riñones y las vías de salida',
+  'lymph and the castor oil pack': 'la linfa y la compresa de aceite de ricino',
+  'scars seen and unseen': 'cicatrices visibles e invisibles',
+  'nourishment, stock and broth': 'nutrición, caldos y fondos',
+  'body literacy, self-mapping and consent': 'alfabetización corporal, automapeo y consentimiento',
+  '15 pages, for all bodies': '15 páginas, para todos los cuerpos',
+  'Step-by-step practices: the timings, the temperatures, the nuances': 'Prácticas paso a paso: los tiempos, las temperaturas, los matices',
+  'The ginger compress, castor oil packs, a sauna scar session, self-mapping': 'La compresa de jengibre, las compresas de aceite de ricino, una sesión de sauna para cicatrices, el automapeo',
+  'Healing meat stock and bone broth recipes': 'Recetas de caldo de carne sanador y caldo de huesos',
+  'A gentle weekly rhythm to weave it together': 'Un ritmo semanal suave para entretejerlo todo',
+  'The body is slow, like her soil and her seasons. These pages are permission to move slow.':
+    'El cuerpo es lento, como su tierra y sus estaciones. Estas páginas son un permiso para ir despacio.',
+  'The guide is written in English.': 'La guía está escrita en inglés.',
+  'The cover of Tending the Root.': 'La portada de Tending the Root.',
+  'Tending the Root': 'Tending the Root',
+  'A guide for tending your pelvic root': 'Una guía para cuidar tu raíz pélvica',
+
   // Site credits (11/21; the client's; the roles are in Credits.astro)
   'Site Credits': 'Créditos del sitio',
 

@@ -37,7 +37,7 @@ export const linker = (url: URL) => {
 };
 
 /** The pages that have a Spanish version (English paths). */
-export const ES_PAGES = ['/', '/services/', '/about/', '/resources/', '/begin/', '/discovery-form/'];
+export const ES_PAGES = ['/', '/services/', '/about/', '/resources/', '/begin/', '/discovery-form/', '/tending-the-root/'];
 export const hasEs = (path: string) => ES_PAGES.includes(path);
 
 /** The same page in the other language (with the base); a page with no
