@@ -139,8 +139,8 @@ export const es: Record<string, string> = {
   'Joan lying on a beach at sunset, an egg resting on her lips.': 'Joan recostada en la playa al atardecer, con un huevo sobre los labios.',
 
   // Tending the Root, the guide for sale (11/22, draft for Joan)
-  'Macro-pack protocols from the cornerstones of whole-body health to vital pelvic care':
-    'Protocolos macro-pack, desde los pilares de la salud integral hasta el cuidado pélvico vital',
+  'Macro-packed protocols for vital pelvic health based on cornerstones of whole-body health':
+    'Protocolos macro-pack para una salud pélvica vital, basados en los pilares de la salud integral',
   'a guide by Joan Gutiérrez': 'una guía de Joan Gutiérrez',
   'A guide · PDF': 'Una guía · PDF',
   'Buy the guide': 'Comprar la guía',
