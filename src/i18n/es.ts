@@ -169,7 +169,7 @@ export const es: Record<string, string> = {
   'The guide is written in English.': 'La guía está escrita en inglés.',
   'The cover of Tending the Root.': 'La portada de Tending the Root.',
   'Tending the Root': 'Tending the Root',
-  'A guide for tending your pelvic root': 'Una guía para cuidar tu raíz pélvica',
+  'A Guide for Pelvic Health': 'Una Guía para la Salud Pélvica', // 11/22
 
   // Site credits (11/21; the client's; the roles are in Credits.astro)
   'Site Credits': 'Créditos del sitio',
