@@ -31,7 +31,7 @@ left:
     text: Espacio para más de la historia. Tiempo suficiente para moverse entre el aprendizaje, el tacto, el placer y el descanso, y dejar que el trabajo se asiente antes de cerrar.
   - label: VARIOS DÍAS
     title: Inmersión profunda
-    text: Para cuando estás en disposición de recibir acompañamiento a través de todo el terreno. Días para desplegarse, descansar e integrar, con espacio entre sesiones para que tu cuerpo digiera lo que ha surgido.
+    text: Para cuando estás en disposición de recibir acompañamiento a través de todo el terreno. Días para descubrir, descansar e integrar, con espacio entre sesiones para que tu cuerpo asimile lo que haya surgido.  # 11/22, the client's
 right:
 - title: Una muestra de lo que podemos componer en conjunto
   items:
