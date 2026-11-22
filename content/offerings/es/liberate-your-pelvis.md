@@ -52,8 +52,10 @@ right:
   - lead: Integración
     text: reflexiones rituales, nutrición ancestral, recetas y prácticas de cuidado posterior para que tu cuerpo siga usándolas, de modo que la sanación continúe mucho después de nuestro tiempo en conjunto.
 - title: Ética personal
+  # 11/22: the client's words, verbatim.
   paragraphs:
-  - En nuestros encuentros, tú eliges si recibes tacto, cuándo, dónde y cómo, y puedes cambiar de opinión, hacer una pausa o detenerte en cualquier momento. No todo lo que hacemos implica tacto ni estar sin ropa. No ejerzo la psicoterapia, la medicina ni la masoterapia. No voy a analizar, diagnosticar ni ponerme como autoridad sobre tu cuerpo. Sin embargo, me mantendré presente ante lo que surja, y todo tu ser es bienvenido. Cuando algo requiera un apoyo fuera de mi ámbito de práctica, te referiré a alguien que pueda ofrecerlo.
+  - En nuestras sesiones, tú eliges si, cuándo, dónde y cómo recibes el contacto físico, y puedes cambiar de opinión, hacer una pausa o detener la sesión en cualquier momento. No todo lo que hacemos implica contacto físico ni estar sin ropa. No soy psicoterapeuta, médico, masajista, ni trabajadora sexual. No voy a analizar, diagnosticar ni ponerme como autoridad sobre tu cuerpo. Sin embargo, me mantendré presente ante lo que surja, y todo tu ser es bienvenido.
+  - Cuando algo requiera un apoyo fuera de mi ámbito de práctica, te referiré a alguien que pueda ofrecerlo.
   - Las Inmersiones se realizan en Chicago, o con gusto viajo a donde estés si acordamos el alojamiento.
 action:
   lead: Comienza con una conversación.
