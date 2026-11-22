@@ -35,8 +35,8 @@ left:
 right:
 - title: Una muestra de lo que podemos componer en conjunto
   items:
-  - lead: Llegar
-    text: imaginar y expresar la intención, preparar el espacio, indagación y exploración somáticas, sintonía y capacitación del sistema nervioso
+  - lead: Crear el espacio  # 11/22, the client's
+    text: aterrizar y asentarse, imaginar y expresar la intención, indagación y exploración somática, sintonización con el sistema nervioso y capacitación
   - lead: Anatomía encarnada
     text: 'mapeo educativo: genital o anal, trabajo con espejo, autoexploración guiada'
   - lead: Educación sobre el tejido cicatricial
