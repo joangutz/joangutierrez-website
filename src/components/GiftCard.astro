@@ -875,7 +875,18 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
       if (!inner || !front || !back || !openBtn || !closeBtn) continue;
 
       const isOpen = () => card.hasAttribute('data-open');
-      const size = () => inner.style.setProperty('--card-h', `${(isOpen() ? back : front).offsetHeight}px`);
+      // A turned-away back stays laid out (hidden) so it can be measured, but a
+      // tall one (the Book Archive) would stretch the page past the footer:
+      // fold it to the front's height while it rests, and let it out to its
+      // full height as the card turns to it (11/22).
+      const fold = () => {
+        if (!isOpen()) back.style.maxHeight = `${front.offsetHeight}px`;
+      };
+      let folding: number | undefined;
+      const size = () => {
+        inner.style.setProperty('--card-h', `${(isOpen() ? back : front).offsetHeight}px`);
+        fold();
+      };
       const sync = () => {
         const hidden = isOpen() ? front : back;
         const shown = isOpen() ? back : front;
@@ -886,10 +897,15 @@ const audioSrc = kit.audio ? withBase(`/audio/${kit.audio}`) : null;
         openBtn.setAttribute('aria-expanded', String(isOpen()));
       };
       const turn = (open: boolean) => {
-        if (open) card.setAttribute('data-open', '');
-        else card.removeAttribute('data-open');
+        clearTimeout(folding);
+        if (open) {
+          back.style.maxHeight = '';
+          card.setAttribute('data-open', '');
+        } else card.removeAttribute('data-open');
         sync();
-        size();
+        inner.style.setProperty('--card-h', `${(isOpen() ? back : front).offsetHeight}px`);
+        // Fold the back only once it has turned out of view.
+        if (!open) folding = window.setTimeout(fold, 950);
         // Move focus to the face the reader just turned to, once the turn has
         // finished: a face is hidden until the card is halfway round, and a
         // hidden button cannot take focus.
