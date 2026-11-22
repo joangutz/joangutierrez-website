@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+import Collage from '../components/Collage.astro';
+import { crumbs } from '../seo';
+
+/**
+ * Tending the Root (11/22): Joan's guide, for sale as a PDF. The checkout
+ * and the emailed download are Payhip's; this page tells what the guide
+ * holds and opens Payhip's checkout. TODO-JOAN: the Payhip product link.
+ *
+ * MOCK: three layouts behind PUBLIC_GUIDE_MOCK (A, B, C) until one is chosen.
+ */
+const mock = import.meta.env.PUBLIC_GUIDE_MOCK || 'A';
+const buy = '#'; // TODO-JOAN: the Payhip product link, e.g. https://payhip.com/b/XXXX
+const price = '$33';
+
+const title = 'Tending the Root';
+const line = 'Macro-pack protocols from the cornerstones of whole-body health to vital pelvic care';
+const streams = [
+  ['Weather', 'the nervous system and hormones'],
+  ['Filter', 'the liver, kidneys and the routes out'],
+  ['River', 'lymph and the castor oil pack'],
+  ['Terrain', 'scars seen and unseen'],
+  ['Soil', 'nourishment, stock and broth'],
+  ['The Root', 'body literacy, self-mapping and consent'],
+];
+const holds = [
+  '15 pages, for all bodies',
+  'Step-by-step practices: the timings, the temperatures, the nuances',
+  'The ginger compress, castor oil packs, a sauna scar session, self-mapping',
+  'Healing meat stock and bone broth recipes',
+  'A gentle weekly rhythm to weave it together',
+];
+const pages = ['guide-p2.jpg', 'guide-p3.jpg', 'guide-p10.jpg', 'guide-p13.jpg'];
+---
+
+<Base title={`${title} — a guide by Joan Gutiérrez`} description={line} schema={[crumbs(title, '/tending-the-root/')]} plainClose>
+
+  {mock === 'A' && (
+    <>
+      <section class="a-hero">
+        <div class="a-cover"><span class="mat"></span><div class="print film"><Collage src="guide-p1.jpg" alt="The cover of Tending the Root." priority sizes="(max-width: 780px) 70vw, 30vw" /></div></div>
+        <div class="a-text">
+          <span class="cap">A guide · PDF</span>
+          <h1 class="t-title">Tending <em>the Root</em></h1>
+          <p class="t-line">{line}</p>
+          <p class="t-price">{price}</p>
+          <a class="t-buy" href={buy}>Buy the guide</a>
+          <p class="t-note">Delivered to your inbox the moment you purchase.</p>
+        </div>
+      </section>
+      <section class="a-inside">
+        <div class="a-col">
+          <span class="cap">What’s inside</span>
+          <ol class="streams">{streams.map(([w, d], i) => <li><span class="n">{i < 5 ? i + 1 : '·'}</span><span class="w">{w}</span><span>{d}</span></li>)}</ol>
+        </div>
+        <div class="a-col">
+          <span class="cap">It holds</span>
+          <ul class="holds">{holds.map((h) => <li>{h}</li>)}</ul>
+          <blockquote class="t-quote">“The body is slow, like her soil and her seasons. These pages are permission to move slow.”</blockquote>
+        </div>
+      </section>
+      <section class="a-pages">
+        {pages.map((p) => <div class="page-thumb film"><Collage src={p} alt="" sizes="(max-width: 780px) 45vw, 22vw" /></div>)}
+      </section>
+      <section class="t-close"><p class="t-price">{price}</p><a class="t-buy" href={buy}>Buy the guide</a></section>
+    </>
+  )}
+
+  {mock === 'B' && (
+    <>
+      <section class="b-hero on-dark">
+        <div class="b-photo"><Collage src="guide-marsh.jpg" alt="" priority sizes="100vw" /></div>
+        <div class="b-pane">
+          <span class="cap">A guide · PDF</span>
+          <h1 class="t-title">Tending <em>the Root</em></h1>
+          <p class="t-line">{line}</p>
+          <div class="b-row"><p class="t-price">{price}</p><a class="t-buy t-buy-light" href={buy}>Buy the guide</a></div>
+          <p class="t-note">Delivered to your inbox the moment you purchase.</p>
+        </div>
+      </section>
+      <section class="b-delta">
+        <h2 class="t-h2">Five streams, <em>one delta</em></h2>
+        <p class="t-lead">Picture your pelvis as a river delta. Everything upstream (how you rest, filter, flow, heal and eat) arrives here eventually. So we begin upstream.</p>
+        <ol class="streams">{streams.map(([w, d], i) => <li><span class="n">{i < 5 ? i + 1 : '·'}</span><span class="w">{w}</span><span>{d}</span></li>)}</ol>
+      </section>
+      <section class="a-pages">
+        {pages.map((p) => <div class="page-thumb film"><Collage src={p} alt="" sizes="(max-width: 780px) 45vw, 22vw" /></div>)}
+      </section>
+      <section class="t-close"><p class="t-price">{price}</p><a class="t-buy" href={buy}>Buy the guide</a></section>
+    </>
+  )}
+
+  {mock === 'C' && (
+    <>
+      <section class="c-letter">
+        <div class="c-text">
+          <span class="cap">A guide · PDF</span>
+          <h1 class="t-title">Tending <em>the Root</em></h1>
+          <p class="t-lead">My body tells the stories of growing up queer and female in the Mexican American borderlands I come from. For over a decade, I have been gathering my parts and putting them back together.</p>
+          <p class="t-body">Many professionals eased my symptoms without tending to the deeper root. This guide holds what I wish someone had handed me: five cornerstones, each a stream feeding the same delta, your pelvic root, and beside each one a practice you can do at home.</p>
+          <p class="sig">Joan</p>
+          <div class="b-row"><p class="t-price">{price}</p><a class="t-buy" href={buy}>Buy the guide</a></div>
+          <p class="t-note">Delivered to your inbox the moment you purchase.</p>
+        </div>
+        <div class="c-prints">
+          <span class="mat m1"></span><span class="mat m2"></span>
+          <div class="print p1 film"><Collage src="guide-p1.jpg" alt="The cover of Tending the Root." priority sizes="30vw" /></div>
+          <div class="print p2 film"><Collage src="guide-p10.jpg" alt="" sizes="24vw" /></div>
+        </div>
+      </section>
+      <section class="a-inside">
+        <div class="a-col"><span class="cap">What’s inside</span><ol class="streams">{streams.map(([w, d], i) => <li><span class="n">{i < 5 ? i + 1 : '·'}</span><span class="w">{w}</span><span>{d}</span></li>)}</ol></div>
+        <div class="a-col"><span class="cap">It holds</span><ul class="holds">{holds.map((h) => <li>{h}</li>)}</ul></div>
+      </section>
+      <section class="t-close"><p class="t-price">{price}</p><a class="t-buy" href={buy}>Buy the guide</a></section>
+    </>
+  )}
+</Base>
+
+<style>
+  .cap { font-family: var(--font-label); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-quick); }
+  .on-dark .cap { color: rgb(var(--ch-bract) / 0.8); }
+  .t-title { margin: 0.9rem 0 1rem; font-family: var(--font-soft); font-weight: 300; font-size: clamp(3rem, 7vw, 5.4rem); line-height: 0.95; color: var(--color-cochineal); }
+  .t-title em, .t-h2 em { font-style: italic; }
+  .on-dark .t-title, .on-dark .t-line, .on-dark .t-price, .on-dark .t-note { color: var(--color-bract); }
+  .t-line { margin: 0 0 1.6rem; max-width: 30ch; font-family: var(--font-soft); font-style: italic; font-size: clamp(1.25rem, 1.9vw, 1.5rem); line-height: 1.35; color: var(--color-ink-2); }
+  .t-price { margin: 0 0 0.9rem; font-family: var(--font-soft); font-size: 2.2rem; font-weight: 300; color: var(--color-cochineal); }
+  .t-buy { display: inline-block; padding: 0.95rem 2.2rem; background: var(--color-cochineal); color: var(--color-bract); font-family: var(--font-label); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; border-radius: 999px; transition: background-color 300ms var(--ease-open); }
+  .t-buy:hover, .t-buy:focus-visible { background: var(--color-plumstone); }
+  .t-buy-light { background: var(--color-bract); color: var(--color-cochineal); }
+  .t-buy-light:hover { background: #fff; }
+  .t-note { margin: 0.9rem 0 0; font-size: 0.95rem; font-style: italic; color: var(--color-ink-2); }
+  .t-h2 { margin: 0 0 1rem; font-family: var(--font-soft); font-weight: 300; font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.05; color: var(--color-cochineal); }
+  .t-lead { margin: 0 0 1.25rem; font-family: var(--font-soft); font-size: clamp(1.3rem, 2vw, 1.55rem); line-height: 1.45; color: var(--color-cochineal); }
+  .t-body { margin: 0 0 1rem; font-family: var(--font-soft); font-size: clamp(1.15rem, 1.6vw, 1.3rem); line-height: 1.6; color: var(--color-ink-2); }
+  .sig { margin: 0.4rem 0 1.6rem; font-family: var(--font-script); font-size: 3.4rem; line-height: 1; color: var(--color-cochineal); }
+  .t-quote { margin: 2rem 0 0; font-family: var(--font-soft); font-style: italic; font-size: 1.4rem; line-height: 1.4; color: var(--color-quick); }
+
+  .print { position: relative; overflow: hidden; box-shadow: 0 16px 36px rgb(var(--ch-plum) / 0.16); }
+  .print :global(img) { display: block; width: 100%; height: auto; }
+  .mat { position: absolute; background: rgb(150 138 128 / 0.32); }
+
+  .streams { list-style: none; margin: 1rem 0 0; padding: 0; border-top: 1px solid var(--rule-soft, rgb(61 48 41 / 0.2)); }
+  .streams li { display: grid; grid-template-columns: 2.2rem 7rem 1fr; align-items: baseline; padding: 0.8rem 0; border-bottom: 1px solid var(--rule-soft, rgb(61 48 41 / 0.2)); color: var(--color-ink-2); }
+  .streams .n { font-family: var(--font-soft); font-size: 1.4rem; color: var(--color-quick); }
+  .streams .w { font-family: var(--font-soft); font-style: italic; font-size: 1.3rem; color: var(--color-cochineal); }
+  .holds { list-style: none; margin: 1rem 0 0; padding: 0; }
+  .holds li { position: relative; padding: 0.55rem 0 0.55rem 1.2rem; font-family: var(--font-soft); font-size: 1.2rem; line-height: 1.45; color: var(--color-ink-2); }
+  .holds li::before { content: ''; position: absolute; left: 0; top: 1.2rem; width: 0.55rem; height: 1px; background: var(--color-quick); }
+
+  /* A */
+  .a-hero { display: grid; gap: clamp(3rem, 6vw, 6rem); align-items: center; width: min(68rem, 100% - 2.5rem); margin: 0 auto; padding: clamp(8rem, 16vh, 11rem) 0 clamp(4rem, 9vh, 6rem); }
+  @media (min-width: 820px) { .a-hero { grid-template-columns: 0.9fr 1fr; } }
+  .a-cover { position: relative; width: min(24rem, 78%); margin: 3rem auto 4rem; }
+  .a-cover .mat { inset: -2.4rem -2.6rem -4.2rem; }
+  .a-inside { display: grid; gap: 3rem; width: min(68rem, 100% - 2.5rem); margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) 0; border-top: 1px solid var(--rule-soft, rgb(61 48 41 / 0.2)); }
+  @media (min-width: 820px) { .a-inside { grid-template-columns: 1fr 1fr; gap: clamp(3rem, 6vw, 5rem); } }
+  .a-pages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; width: min(68rem, 100% - 2.5rem); margin: 0 auto; padding: clamp(2rem, 6vh, 4rem) 0; }
+  @media (min-width: 820px) { .a-pages { grid-template-columns: repeat(4, 1fr); gap: 1.4rem; } }
+  .page-thumb { box-shadow: 0 14px 30px rgb(var(--ch-plum) / 0.14); }
+  .page-thumb :global(img) { display: block; width: 100%; height: auto; }
+  .t-close { display: grid; justify-items: center; padding: clamp(3rem, 8vh, 5rem) 1.25rem clamp(5rem, 12vh, 8rem); text-align: center; }
+
+  /* B */
+  .b-hero { position: relative; display: grid; align-items: end; min-height: 100svh; padding: 8rem clamp(1.25rem, 5vw, 4rem) clamp(3rem, 8vh, 5rem); overflow: hidden; }
+  .b-photo { position: absolute; inset: 0; }
+  .b-photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }
+  .b-pane { position: relative; max-width: 36rem; padding: clamp(1.75rem, 4vw, 2.75rem); background: rgb(var(--ch-plum) / 0.6); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); box-shadow: inset 0 0 0 1px rgb(var(--ch-bract) / 0.2); }
+  .b-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }
+  .b-row .t-price { margin: 0; }
+  .b-delta { width: min(46rem, 100% - 2.5rem); margin: 0 auto; padding: clamp(5rem, 12vh, 8rem) 0 clamp(2rem, 5vh, 3rem); }
+
+  /* C */
+  .c-letter { display: grid; gap: 4rem; align-items: center; width: min(68rem, 100% - 2.5rem); margin: 0 auto; padding: clamp(8rem, 16vh, 11rem) 0 clamp(4rem, 9vh, 6rem); }
+  @media (min-width: 900px) { .c-letter { grid-template-columns: 1.1fr 0.9fr; } }
+  .c-prints { position: relative; min-height: 34rem; }
+  .c-prints .p1 { position: absolute; left: 0; top: 0; width: 62%; }
+  .c-prints .p2 { position: absolute; right: 0; top: 40%; width: 52%; }
+  .c-prints .m1 { left: -2rem; top: -2rem; width: calc(62% + 4rem); height: 70%; }
+  .c-prints .m2 { right: -2rem; top: calc(40% - 2rem); width: calc(52% + 4rem); height: 62%; }
+</style>
