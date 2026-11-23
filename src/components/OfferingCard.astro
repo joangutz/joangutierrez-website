@@ -202,7 +202,7 @@ const id = plainId(offering.id);
               {c === 1 && o.action && (
                 <div class="block block-action">
                   {o.action.lead && <p class="action-lead">{o.action.lead}</p>}
-                  <a class="back-action" href={href(o.action.href, o.action.subject)}>
+                  <a class="back-action" href={href(o.action.href, o.action.subject)} {...(o.action.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
                     {o.action.label}
                     <svg class="turn-arrow" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><path d="M0 5 H14.5 M10.5 1 L14.5 5 L10.5 9" /></svg>
                   </a>

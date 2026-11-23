@@ -51,6 +51,5 @@ right:
     amount: $90
 action:
   label: Únete al próximo Laboratorio
-  href: /discovery-form/
-  subject: Relational Integrity Labs
+  href: https://cal.com/relational-integrity-labs  # 11/23, its booking page
 ---
