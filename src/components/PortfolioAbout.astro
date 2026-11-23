@@ -40,7 +40,6 @@ const bio = es
     <div class="pa-text">
       <a class="pa-back" href={L('/artistportfolio/')}>← {tr('Artist Portfolio')}</a>
       <h1 class="visually-hidden">{es ? 'Semblanza' : 'About'} · Joan Gutiérrez</h1>
-      <p class="pa-kicker">{tr('Artist statement · biography')}</p>
       <div class="pa-bio">{bio.map((p) => <p set:html={p} />)}</div>
     </div>
     <div class="pa-portrait">
@@ -116,15 +115,6 @@ const bio = es
     font-size: clamp(2.4rem, 5.5vw, 5rem);
     line-height: 1;
     color: #8f8a86;
-  }
-
-  .pa-kicker {
-    margin: 0 0 2rem;
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #8a8580;
   }
 
   .pa-bio :global(p) {
