@@ -1,0 +1,78 @@
+---
+/**
+ * Across the artist portfolio (11/23) the site's bar steps back: only the
+ * egg in its opening petals shows, at the far left, on the page's own
+ * ground. Resting on the egg (or tapping it on a phone) brings the bar back
+ * as it is elsewhere; moving away (or tapping elsewhere) lets it go. A
+ * second tap on the egg goes home. Keyboard focus shows it too.
+ */
+---
+
+<style is:global>
+  body:has([data-portfolio]) .nav-bar:not(.pf-reveal) {
+    background: transparent;
+    border-bottom-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  body:has([data-portfolio]) .nav-bar .nav-inner > *,
+  body:has([data-portfolio]) .nav-bar .brand-name {
+    transition: opacity 400ms ease;
+  }
+
+  body:has([data-portfolio]) .nav-bar:not(.pf-reveal) .nav-inner > :not(.brand),
+  body:has([data-portfolio]) .nav-bar:not(.pf-reveal) .brand-name {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import { onPage } from '../lib/onPage';
+
+  onPage(() => {
+    if (!document.querySelector('[data-portfolio]')) return;
+    const bar = document.querySelector<HTMLElement>('.nav-bar');
+    const brand = bar?.querySelector<HTMLAnchorElement>('.brand');
+    if (!bar || !brand) return;
+    const show = () => bar.classList.add('pf-reveal');
+    const hide = () => bar.classList.remove('pf-reveal');
+    const enter = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') show();
+    };
+    const key = () => {
+      if (brand.matches(':focus-visible')) show();
+    };
+    const tap = (e: Event) => {
+      if (!bar.classList.contains('pf-reveal')) {
+        e.preventDefault();
+        show();
+      }
+    };
+    const away = (e: Event) => {
+      if (!bar.contains(e.target as Node)) hide();
+    };
+    const leave = () => {
+      if (!bar.matches(':focus-within')) hide();
+    };
+    const out = (e: FocusEvent) => {
+      if (!bar.contains(e.relatedTarget as Node)) hide();
+    };
+    brand.addEventListener('pointerenter', enter);
+    brand.addEventListener('focus', key);
+    brand.addEventListener('click', tap);
+    bar.addEventListener('mouseleave', leave);
+    bar.addEventListener('focusout', out);
+    document.addEventListener('pointerdown', away);
+    return () => {
+      brand.removeEventListener('pointerenter', enter);
+      brand.removeEventListener('focus', key);
+      brand.removeEventListener('click', tap);
+      bar.removeEventListener('mouseleave', leave);
+      bar.removeEventListener('focusout', out);
+      document.removeEventListener('pointerdown', away);
+      hide();
+    };
+  });
+</script>

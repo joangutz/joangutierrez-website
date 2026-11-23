@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { works } from '../data/portfolio';
 import { linker, translator } from '../i18n';
+import PortfolioBar from './PortfolioBar.astro';
 
 /**
  * Joan's artist portfolio, the index (11/23), after her Format site: the
@@ -21,7 +22,8 @@ const cover = (slug: string, n: number) => {
 };
 ---
 
-<div class="pf" data-pf>
+<div class="pf" data-pf data-portfolio>
+  <PortfolioBar />
   <h1 class="visually-hidden">{tr('Artist Portfolio')} · Joan Gutiérrez</h1>
   <ul class="pf-works" data-pf-works>
     {works.map((w, i) => (
@@ -49,27 +51,6 @@ const cover = (slug: string, n: number) => {
     transition: background-color 700ms ease;
   }
 
-  /* On the portfolio the bar steps back (11/23): only the egg in its
-     opening petals, at the far left, on the page's own ground. Resting on
-     the egg (or tapping it) brings the bar back as it is elsewhere; moving
-     away lets it go. */
-  body:has([data-pf]) .nav-bar:not(.pf-reveal) {
-    background: transparent;
-    border-bottom-color: transparent;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-
-  body:has([data-pf]) .nav-bar .nav-inner > *,
-  body:has([data-pf]) .nav-bar .brand-name {
-    transition: opacity 400ms ease;
-  }
-
-  body:has([data-pf]) .nav-bar:not(.pf-reveal) .nav-inner > :not(.brand),
-  body:has([data-pf]) .nav-bar:not(.pf-reveal) .brand-name {
-    opacity: 0;
-    pointer-events: none;
-  }
 </style>
 
 <style>
@@ -240,52 +221,6 @@ const cover = (slug: string, n: number) => {
       };
       window.addEventListener('scroll', top, { passive: true });
       cleanups.push(() => io.disconnect(), () => window.removeEventListener('scroll', top));
-    }
-
-    // The bar: shown while resting on the egg and while the pointer stays
-    // within it; on a touch screen the first tap on the egg shows it (a
-    // second tap goes home), and a tap anywhere else hides it.
-    const bar = document.querySelector<HTMLElement>('.nav-bar');
-    const brand = bar?.querySelector<HTMLAnchorElement>('.brand');
-    if (bar && brand) {
-      const show = () => bar.classList.add('pf-reveal');
-      const hide = () => bar.classList.remove('pf-reveal');
-      const tap = (e: Event) => {
-        if (!bar.classList.contains('pf-reveal')) {
-          e.preventDefault();
-          show();
-        }
-      };
-      const away = (e: Event) => {
-        if (!bar.contains(e.target as Node)) hide();
-      };
-      const leave = () => {
-        if (!bar.matches(':focus-within')) hide();
-      };
-      const out = (e: FocusEvent) => {
-        if (!bar.contains(e.relatedTarget as Node)) hide();
-      };
-      const enter = (e: PointerEvent) => {
-        if (e.pointerType === 'mouse') show();
-      };
-      brand.addEventListener('pointerenter', enter);
-      const key = () => {
-        if (brand.matches(':focus-visible')) show();
-      };
-      brand.addEventListener('focus', key);
-      brand.addEventListener('click', tap);
-      bar.addEventListener('mouseleave', leave);
-      bar.addEventListener('focusout', out);
-      document.addEventListener('pointerdown', away);
-      cleanups.push(() => {
-        brand.removeEventListener('pointerenter', enter);
-        brand.removeEventListener('focus', key);
-        brand.removeEventListener('click', tap);
-        bar.removeEventListener('mouseleave', leave);
-        bar.removeEventListener('focusout', out);
-        document.removeEventListener('pointerdown', away);
-        hide();
-      });
     }
 
     return () => {

@@ -5,7 +5,7 @@
  * /assets/portfolio/<slug>/01.jpg, 02.jpg… in the order shown.
  *
  * TODO-JOAN: sharper originals for these (the Drive copies are ~550px wide);
- * Empty Contents and Brush n Scroll still to add.
+ * Empty Contents still to add.
  *
  * `tint` is the work's own colour (r g b), which the index page's ground
  * takes on, gently, while the work is in focus.
@@ -25,6 +25,8 @@ export type Work = {
   /** A poem or longer text, paragraph by paragraph. */
   text?: string[];
   credits?: string[];
+  /** Images shown narrower than the rest (a long scroll), by number. */
+  narrow?: number[];
 };
 
 const chairs: Record<number, string> = {
@@ -110,6 +112,22 @@ export const works: Work[] = [
       'Not in a hurry to go anywhere nor to return',
       'Nobody knows the beginning of journey. where it will end',
     ],
+  },
+  {
+    slug: 'brush-n-scroll',
+    title: 'Brush n Scroll',
+    year: '2023',
+    count: 2,
+    cover: 2,
+    tint: '188 182 176',
+    details: ['Performative Ink Drawing + Functional Sculpture', 'Autumn 2019 – Summer 2023', 'Upstate NY + NYC, USA'],
+    captions: {
+      1: 'Scroll · 8 x 123 in. · NY, NY, USA · 2023',
+      2: 'Brush · 1 x 13 in. · Mt. Tremper, NY, USA · 2019',
+    },
+    narrow: [1],
+    materials:
+      'Scroll · sumi ink, lantern fly wings, red ink pen, thread on rice paper scroll. Brush · tree branch, embroidery floss, thread, hair salvaged from Haircut Piece Part II, made in collaboration with Jody Hojin Kimmel Sensei',
   },
   {
     slug: 'handmade',
