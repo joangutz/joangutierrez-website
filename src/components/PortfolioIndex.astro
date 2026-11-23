@@ -43,7 +43,7 @@ const cover = (slug: string, n: number) => {
     <li class="pf-item pf-about">
       <a class="pf-work pf-about-link" href={L('/artistportfolio/about/')} data-pf-work>
         <span class="pf-about-word">{langOf(Astro.url) === 'es' ? 'Semblanza' : 'About'}</span>
-        <span class="pf-about-kicker">{tr('Artist statement · biography')}</span>
+        <span class="pf-about-kicker">{tr('the artist')}</span>
       </a>
     </li>
   </ul>
@@ -152,6 +152,11 @@ const cover = (slug: string, n: number) => {
   }
 
   /* The last step, About: the word alone, pale, no image (11/23, B). */
+  .pf-item.pf-about {
+    width: auto;
+    max-width: 100vw;
+  }
+
   .pf-about-link {
     display: block;
     padding: 12vw 0 4vw;
