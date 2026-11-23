@@ -5,7 +5,7 @@
  * /assets/portfolio/<slug>/01.jpg, 02.jpg… in the order shown.
  *
  * TODO-JOAN: sharper originals for these (the Drive copies are ~550px wide);
- * Empty Contents, Librito del Viaje and Brush n Scroll still to add.
+ * Empty Contents and Brush n Scroll still to add.
  *
  * `tint` is the work's own colour (r g b), which the index page's ground
  * takes on, gently, while the work is in focus.
@@ -72,6 +72,44 @@ export const works: Work[] = [
     tint: '150 150 150',
     details: ['Performance Photography', 'Summer 2023 · Chicago, IL + Indiana Dunes, IN, USA'],
     materials: 'Cicada wings, hair, needles, thread, sand',
+  },
+  {
+    slug: 'librito-del-viaje',
+    title: 'Librito del Viaje',
+    year: '2023',
+    count: 23,
+    cover: 10,
+    tint: '205 196 184',
+    details: ['Artist book · mixed media poetic collage', 'Winter 2022 – Summer 2023', 'MX, DE, FR, ES, MAR, CA, USA', '4 x 4.75 in.'],
+    materials: 'Collage, ink, marker, dried flora, crayon, pencil, pastel',
+    text: [
+      'When they peel masks off the eyes split',
+      'Write your death with archaic words on rock',
+      'Let me hear the rock touch old fires of our breath',
+      'To defy gravity rock the world in slow motion',
+      'Burning poems written on seascapes under darkness',
+      'Found our way by instinct. broke the moon in half',
+      'If there are no words. invents them',
+      'Softly, so no one will hear',
+      'The mask is ripped where the sun is rich',
+      'the taproots screwed into you',
+      'The unholy fuck pulsates with them',
+      'Songs rise in the imagination',
+      'the night sky pours stars over',
+      'of questions never asked',
+      'Her small hands always tipped the scales',
+      'the setting sun hung its apron like a ribcage',
+      'the trick of knowing when to stop',
+      'the red silence licks old wounds born',
+      'Started life as a princess in a butcher shop.',
+      'Your face floods with innocence I can’t wipe off.',
+      'I want to lie next to you - grow into the earth',
+      'Spatial symmetries.',
+      'Hilma comes to me in my dreams.',
+      'watch roads of light through doorways of breath.',
+      'Not in a hurry to go anywhere nor to return',
+      'Nobody knows the beginning of journey. where it will end',
+    ],
   },
   {
     slug: 'handmade',
