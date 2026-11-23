@@ -91,10 +91,6 @@ const uid = `app-${Math.random().toString(36).slice(2, 8)}`;
 
     <button class="app-submit" type="submit">{tr('Send')}</button>
 
-    {!form.endpoint && (
-      <p class="app-note" data-app-note>{tr('Opens your email app, addressed to')} {form.to}.</p>
-    )}
-
     <p class="app-status" data-app-status role="status" aria-live="polite"></p>
   </form>
 </div>
