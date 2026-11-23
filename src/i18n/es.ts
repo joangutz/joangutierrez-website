@@ -182,7 +182,7 @@ export const es: Record<string, string> = {
   'Artist Portfolio': 'Portafolio artístico',
   'Materials': 'Materiales',
   'Next in Work': 'Siguiente obra',
-  'the artist': 'la artista',
+  'about the artist': 'sobre la artista',
   'Joan Gutiérrez, seated, in a studio portrait': 'Joan Gutiérrez, sentada, en un retrato de estudio',
   'Joan Gutiérrez, butoh': 'Joan Gutiérrez, butoh',
   'Tactile, performative and participatory works by Joan Gutiérrez.': 'Obras táctiles, performativas y participativas de Joan Gutiérrez.',

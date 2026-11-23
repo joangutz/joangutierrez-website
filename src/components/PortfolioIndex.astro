@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { works } from '../data/portfolio';
-import { langOf, linker, translator } from '../i18n';
+import { linker, translator } from '../i18n';
 import PortfolioBar from './PortfolioBar.astro';
 
 /**
@@ -42,8 +42,8 @@ const cover = (slug: string, n: number) => {
     ))}
     <li class="pf-item pf-about">
       <a class="pf-work pf-about-link" href={L('/artistportfolio/about/')} data-pf-work>
-        <span class="pf-about-word">{langOf(Astro.url) === 'es' ? 'Semblanza' : 'About'}</span>
-        <span class="pf-about-kicker">{tr('the artist')}</span>
+        <span class="pf-about-word">Joan Gutiérrez</span>
+        <span class="pf-about-kicker">{tr('about the artist')}</span>
       </a>
     </li>
   </ul>
