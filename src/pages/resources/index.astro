@@ -4,6 +4,7 @@ import PageBanner from '../../components/PageBanner.astro';
 import GiftCard from '../../components/GiftCard.astro';
 import OfferingPlain from '../../components/OfferingPlain.astro';
 import LibraryArchive from '../../components/LibraryArchive.astro';
+import KitInline from '../../components/KitInline.astro';
 import { getEntry, render } from 'astro:content';
 import { contact, kit } from '../../site';
 import { gift, crumbs } from '../../seo';
@@ -72,18 +73,10 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
           reader to its Kit form, whose email delivers the PDF. Shown once
           the form exists (kit.castorAction). */}
       {kit.castorAction && (
-        <OfferingPlain
-          id="castor-oil-pack"
-          matchTurning
-          title={tr('The Castor Oil Pack')}
-          note={tr('A free taste of Tending the Root')}
-          collage="castor-cover.jpg"
-          register="program"
-          kitAction={kit.castorAction}
-          kitButton={tr('Send it to me')}
-        >
-          <p>{tr('A four-page scar tissue care guide to learn how to integrate through practice the use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.')}</p>
-        </OfferingPlain>
+        <GiftCard id="castor-oil-pack" image="castor-cover.jpg" kicker="" title={tr('The Castor Oil Pack')} turnLabel={tr('Open')} focus="50% 45%">
+          <p class="castor-body">{tr('A four-page scar tissue care guide to learn how to integrate through practice the use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.')}</p>
+          <KitInline action={kit.castorAction} button={tr('Send it to me')} dark class="castor-form" />
+        </GiftCard>
       )}
 
       {/* The guide for sale (11/22), leading to its own page. */}
@@ -154,6 +147,15 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
 </Base>
 
 <style>
+  /* The Castor Oil Pack's turned side (11/23): its description, then the field. */
+  :global(.castor-body) {
+    margin: 0 0 1.75rem;
+    max-width: 34rem;
+    font-family: var(--font-soft);
+    font-size: clamp(1.15rem, 1.6vw, 1.3rem);
+    line-height: 1.55;
+  }
+
   .res-stack {
     display: flex;
     flex-direction: column;
