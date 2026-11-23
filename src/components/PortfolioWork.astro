@@ -28,7 +28,7 @@ const nextCover = img(next.slug, next.cover);
 <article class="pw" data-pw data-portfolio style={`--tint:${w.tint}`}>
   <PortfolioBar />
   <header class="pw-head">
-    <a class="pw-back" href={L('/portfolio/')}>← {tr('Artist Portfolio')}</a>
+    <a class="pw-back" href={L('/artistportfolio/')}>← {tr('Artist Portfolio')}</a>
     <h1 class="pw-title">{w.title}</h1>
     <p class="pw-details">{w.details.map((d) => <span>{d}</span>)}</p>
   </header>
@@ -60,7 +60,7 @@ const nextCover = img(next.slug, next.cover);
     </section>
   )}
 
-  <a class="pw-next" href={L(`/portfolio/${next.slug}/`)}>
+  <a class="pw-next" href={L(`/artistportfolio/${next.slug}/`)}>
     <span class="pw-label">{tr('Next in Work')}</span>
     <span class="pw-next-title">{next.title}</span>
     {nextCover && <Image src={nextCover} alt="" widths={[400, 700]} sizes="(max-width: 700px) 60vw, 22vw" loading="lazy" />}

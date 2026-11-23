@@ -46,6 +46,17 @@ export default defineConfig({
     '/work-with-me': to('/services/'),
     '/offerings': to('/services/'),
     '/resource/gift': to('/resources/#gift'),
+    // 11/23: the portfolio's address, renamed at the client's request.
+    '/portfolio': to('/artistportfolio/'),
+    '/es/portfolio': to('/es/artistportfolio/'),
+    '/portfolio/28-day-cycle': to('/artistportfolio/28-day-cycle/'),
+    '/portfolio/empty-chairs': to('/artistportfolio/empty-chairs/'),
+    '/portfolio/a-cicadas-cycle': to('/artistportfolio/a-cicadas-cycle/'),
+    '/portfolio/librito-del-viaje': to('/artistportfolio/librito-del-viaje/'),
+    '/portfolio/brush-n-scroll': to('/artistportfolio/brush-n-scroll/'),
+    '/portfolio/handmade': to('/artistportfolio/handmade/'),
+    '/portfolio/haircut-piece-part-ii': to('/artistportfolio/haircut-piece-part-ii/'),
+    '/portfolio/wild-thing': to('/artistportfolio/wild-thing/'),
     // Inspiration and Library show on Resources once written.
     '/resource/inspiration': to('/resources/'),
     '/resource/library': to('/resources/'),

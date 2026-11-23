@@ -28,7 +28,7 @@ const cover = (slug: string, n: number) => {
   <ul class="pf-works" data-pf-works>
     {works.map((w, i) => (
       <li class="pf-item" style={`--tint:${w.tint}`} data-tint={w.tint}>
-        <a class="pf-work" href={L(`/portfolio/${w.slug}/`)} data-pf-work>
+        <a class="pf-work" href={L(`/artistportfolio/${w.slug}/`)} data-pf-work>
           <Image
             src={cover(w.slug, w.cover)}
             alt={w.title}

@@ -13,6 +13,6 @@ const tr = translator(Astro.url);
 const es = langOf(Astro.url) === 'es';
 ---
 
-<Base title={`${w.title} — Joan Gutiérrez`} description={`${w.title}. ${w.details.join('. ')}.`} schema={[crumbs(w.title, `${es ? '/es' : ''}/portfolio/${w.slug}/`)]} plainClose>
+<Base title={`${w.title} — Joan Gutiérrez`} description={`${w.title}. ${w.details.join('. ')}.`} schema={[crumbs(w.title, `${es ? '/es' : ''}/artistportfolio/${w.slug}/`)]} plainClose>
   <PortfolioWork slug={w.slug} />
 </Base>
