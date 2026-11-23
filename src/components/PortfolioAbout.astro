@@ -38,7 +38,7 @@ const bio = es
   <PortfolioBar />
   <div class="pa-top">
     <div class="pa-text">
-      <a class="pa-back" href={L('/artistportfolio/')} aria-label={tr('Artist Portfolio')}><svg viewBox="0 0 64 12" width="64" height="12" aria-hidden="true"><path d="M63 6H1.5M7 1 1.5 6 7 11" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="pa-back" href={L('/artistportfolio/')}><svg viewBox="0 0 64 12" width="64" height="12" aria-hidden="true"><path d="M63 6H1.5M7 1 1.5 6 7 11" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <h1 class="visually-hidden">{es ? 'Semblanza' : 'About'} · Joan Gutiérrez</h1>
       <div class="pa-bio">{bio.map((p) => <p set:html={p} />)}</div>
     </div>
@@ -53,7 +53,7 @@ const bio = es
     ))}
   </ul>
 
-  <a class="pa-back pa-back-end" href={L('/artistportfolio/')} aria-label={tr('Artist Portfolio')}><svg viewBox="0 0 64 12" width="64" height="12" aria-hidden="true"><path d="M63 6H1.5M7 1 1.5 6 7 11" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a class="pa-back pa-back-end" href={L('/artistportfolio/')}><svg viewBox="0 0 64 12" width="64" height="12" aria-hidden="true"><path d="M63 6H1.5M7 1 1.5 6 7 11" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </article>
 
 <style is:global>
