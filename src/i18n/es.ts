@@ -171,6 +171,13 @@ export const es: Record<string, string> = {
   'Tending the Root': 'Tending the Root',
   'A Guide for Pelvic Health': 'Guía para la Salud Pélvica', // 11/22, the client's
 
+  // The free Castor Oil Pack extract (11/23, draft for Joan)
+  'The Castor Oil Pack': 'La compresa de aceite de ricino',
+  'A free taste of Tending the Root': 'Una muestra gratuita de Tending the Root',
+  'Send it to me': 'Envíamela',
+  'A four-page practice from my guide, sent to your inbox: lymph, the castor oil pack, and how to make it part of your week.':
+    'Una práctica de cuatro páginas de mi guía, directo a tu correo: la linfa, la compresa de aceite de ricino y cómo hacerla parte de tu semana.',
+
   // Site credits (11/21; the client's; the roles are in Credits.astro)
   'Site Credits': 'Créditos del sitio',
 

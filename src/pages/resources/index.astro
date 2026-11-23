@@ -68,6 +68,24 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
     <div class="wide res-stack">
       <GiftCard />
 
+      {/* The free taste of the guide (11/23): an email field that adds the
+          reader to its Kit form, whose email delivers the PDF. Shown once
+          the form exists (kit.castorAction). */}
+      {kit.castorAction && (
+        <OfferingPlain
+          id="castor-oil-pack"
+          matchTurning
+          title={tr('The Castor Oil Pack')}
+          note={tr('A free taste of Tending the Root')}
+          collage="castor-river.jpg"
+          register="program"
+          kitAction={kit.castorAction}
+          kitButton={tr('Send it to me')}
+        >
+          <p>{tr('A four-page practice from my guide, sent to your inbox: lymph, the castor oil pack, and how to make it part of your week.')}</p>
+        </OfferingPlain>
+      )}
+
       {/* The guide for sale (11/22), leading to its own page. */}
       <OfferingPlain
         id="tending-the-root"

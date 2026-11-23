@@ -76,6 +76,13 @@ export const kit = {
    */
   waitlistAction: null as string | null,
   /**
+   * TODO-KIT-CASTOR (11/23): a Kit form for the free Castor Oil Pack
+   * extract, whose incentive email delivers the PDF. Paste its action URL
+   * here and its sign-up card appears on Resources, under the Red Rose gift.
+   * Until then the card is not shown.
+   */
+  castorAction: (import.meta.env.PUBLIC_CASTOR_ACTION ?? null) as string | null,
+  /**
    * TODO-KIT-NEWS: a Kit form for the general mailing list. Paste its
    * action URL here and a small "stay in touch" field appears in the
    * closing pane at the foot of every page.
