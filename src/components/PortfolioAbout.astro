@@ -21,16 +21,16 @@ const stills = [s2, s3, s4, s5];
 
 const bio = es
   ? [
-      'Joan Gutiérrez desarrolla obras táctiles, performativas y participativas arraigadas en los paisajes desérticos de la frontera entre México y Estados Unidos, donde creció. Nacida en 1992 —el año en que comenzaron los feminicidios de Ciudad Juárez y se publicó <em>Trauma and Recovery</em> de la Dra. Judith Herman—, Gutiérrez sitúa su práctica interdisciplinaria en este terreno sociopolítico cargado, abordando el cuerpo como lugar de memoria, resistencia y transformación personal, colectiva y planetaria.',
+      '<em class="pa-name">Joan Gutiérrez</em> desarrolla obras táctiles, performativas y participativas arraigadas en los paisajes desérticos de la frontera entre México y Estados Unidos, donde creció. Nacida en 1992 —el año en que comenzaron los feminicidios de Ciudad Juárez y se publicó <em>Trauma and Recovery</em> de la Dra. Judith Herman—, Gutiérrez sitúa su práctica interdisciplinaria en este terreno sociopolítico cargado, abordando el cuerpo como lugar de memoria, resistencia y transformación personal, colectiva y planetaria.',
       'Rechazando la autoridad de la especialización, Gutiérrez adopta el término <em>Amateur</em> como una posición radical, queer y feminizada, que privilegia el juego, el placer y la vulnerabilidad como metodologías para transmutar la ruptura, tanto íntima como sistémica.',
       'Aunque se formó en psicología en Loyola University Chicago y tiene un BFA de la School of the Art Institute of Chicago (SAIC), la práctica de Gutiérrez se configura menos por los marcos institucionales que por una indagación sostenida y encarnada, estudiando de forma independiente con artistas, educadores somáticos de la sexualidad y maestros de zen y butoh en Europa, Asia, Norteamérica y Sudamérica.',
-      'Actualmente vive, trabaja y practica en el Zen Center of New York City – Fire Lotus Temple, en Brooklyn.',
+      'Radica entre Chicago y Brooklyn.',
     ]
   : [
-      'Joan Gutiérrez develops tactile, performative, and participatory works rooted in the desert landscapes of the Mexican-American borderlands where she was raised. Born in 1992—the year the Ciudad Juárez femicides began and Dr. Judith Herman’s <em>Trauma and Recovery</em> was published—Gutiérrez situates her interdisciplinary practice within this charged socio-political terrain, engaging the body as a site of memory, resistance, and transformation: personal, collective, and planetary.',
+      '<em class="pa-name">Joan Gutiérrez</em> develops tactile, performative, and participatory works rooted in the desert landscapes of the Mexican-American borderlands where she was raised. Born in 1992—the year the Ciudad Juárez femicides began and Dr. Judith Herman’s <em>Trauma and Recovery</em> was published—Gutiérrez situates her interdisciplinary practice within this charged socio-political terrain, engaging the body as a site of memory, resistance, and transformation: personal, collective, and planetary.',
       'Rejecting the authority of specialization, Gutiérrez embraces the term <em>Amateur</em> as a radical, queered, and feminized position—one that privileges play, pleasure, and vulnerability as methodologies for transmuting rupture, both intimate and systemic.',
       'Though trained in psychology at Loyola University Chicago and holding a BFA from the School of the Art Institute of Chicago (SAIC), Gutiérrez’s practice is shaped less by institutional frameworks than by sustained, embodied inquiry—studying independently with artists, somatic sex educators, and masters of Zen and butoh across Europe, Asia, North and South America.',
-      'She currently lives, works, and practices at the Zen Center of New York City – Fire Lotus Temple in Brooklyn.',
+      'She is based between Chicago and Brooklyn.',
     ];
 ---
 
@@ -132,6 +132,12 @@ const bio = es
     font-family: var(--font-body);
     font-size: 1.02rem;
     line-height: 1.7;
+  }
+
+  /* Her name, opening the bio, larger and in italics. */
+  .pa-bio :global(.pa-name) {
+    font-size: 1.4em;
+    line-height: 1;
   }
 
   .pa-portrait {
