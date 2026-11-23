@@ -274,7 +274,7 @@ export const homeCards = [
   // Joan's five, in her order and her words, 11/16.
   {
     href: '/services/#one-to-one',
-    title: '1:1',
+    title: '1:1 Sessions', // 11/23: matching its card on Offerings
     note: '',
     collage: 'erotic-embodiment.jpg',
     register: 'one',
