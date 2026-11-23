@@ -74,7 +74,7 @@ const shelves = (await Promise.all([shelf('inspiration'), shelf('library')])).fi
           the form exists (kit.castorAction). */}
       {kit.castorAction && (
         <GiftCard id="castor-oil-pack" image="castor-cover.jpg" kicker="" title={tr('The Castor Oil Pack')} turnLabel={tr('Open')} focus="50% 45%">
-          <p class="castor-body">{tr('A four-page scar tissue care guide to learn how to integrate through practice the use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.')}</p>
+          <p class="castor-body">{tr('A four-page scar tissue care guide to learn how to integrate through ritual the use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.')}</p>
           <KitInline action={kit.castorAction} button={tr('Send it to me')} dark class="castor-form" />
         </GiftCard>
       )}
