@@ -60,5 +60,6 @@ right:
 action:
   lead: Comienza con una conversación.
   label: Pregunta aquí
-  href: /begin/
+  href: /discovery-form/  # 11/23: as Relational Integrity Labs
+  subject: Liberate Your Pelvis
 ---
