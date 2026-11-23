@@ -175,8 +175,8 @@ export const es: Record<string, string> = {
   'The Castor Oil Pack': 'La compresa de aceite de ricino',
   'A free taste of Tending the Root': 'Una muestra gratuita de Tending the Root',
   'Send it to me': 'Envíamela',
-  'A four-page practice from my guide, sent to your inbox: lymph, the castor oil pack, and how to make it part of your week.':
-    'Una práctica de cuatro páginas de mi guía, directo a tu correo: la linfa, la compresa de aceite de ricino y cómo hacerla parte de tu semana.',
+  'A four-page scar tissue care guide to learn how to integrate through practice the use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.':
+    'Una guía de cuatro páginas para el cuidado de las cicatrices: aprende a integrar con la práctica el uso del aceite de ricino para restaurar la integridad de tu linfa, tu fascia, tus tejidos y tu circulación.',
 
   // Site credits (11/21; the client's; the roles are in Credits.astro)
   'Site Credits': 'Créditos del sitio',
