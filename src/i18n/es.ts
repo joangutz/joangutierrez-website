@@ -182,6 +182,9 @@ export const es: Record<string, string> = {
   'Artist Portfolio': 'Portafolio artístico',
   'Materials': 'Materiales',
   'Next in Work': 'Siguiente obra',
+  'Artist statement · biography': 'Declaración artística · biografía', // draft
+  'Joan Gutiérrez, seated, in a studio portrait': 'Joan Gutiérrez, sentada, en un retrato de estudio',
+  'Joan Gutiérrez, butoh': 'Joan Gutiérrez, butoh',
   'Tactile, performative and participatory works by Joan Gutiérrez.': 'Obras táctiles, performativas y participativas de Joan Gutiérrez.',
 
   // Site credits (11/21; the client's; the roles are in Credits.astro)

@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import { langOf, linker, translator } from '../i18n';
+import PortfolioBar from './PortfolioBar.astro';
+import portrait from '../../assets/portfolio/about/01.jpg';
+import s2 from '../../assets/portfolio/about/02.jpg';
+import s3 from '../../assets/portfolio/about/03.jpg';
+import s4 from '../../assets/portfolio/about/04.jpg';
+import s5 from '../../assets/portfolio/about/05.jpg';
+
+/**
+ * The portfolio's About (11/23, option 1 with the stills of option 3): her
+ * artist statement and biography beside the studio portrait (in black and
+ * white), then four butoh stills in a row, a sliver of ground between them.
+ * The English is her Format text, verbatim; the Spanish is a draft for her.
+ */
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
+const es = langOf(Astro.url) === 'es';
+const stills = [s2, s3, s4, s5];
+
+const bio = es
+  ? [
+      'Joan Gutiérrez desarrolla obras táctiles, performativas y participativas arraigadas en los paisajes desérticos de la frontera entre México y Estados Unidos, donde creció. Nacida en 1992 —el año en que comenzaron los feminicidios de Ciudad Juárez y se publicó <em>Trauma and Recovery</em> de la Dra. Judith Herman—, Gutiérrez sitúa su práctica interdisciplinaria en este terreno sociopolítico cargado, abordando el cuerpo como lugar de memoria, resistencia y transformación personal, colectiva y planetaria.',
+      'Rechazando la autoridad de la especialización, Gutiérrez adopta el término <em>Amateur</em> como una posición radical, queer y feminizada, que privilegia el juego, el placer y la vulnerabilidad como metodologías para transmutar la ruptura, tanto íntima como sistémica.',
+      'Aunque se formó en psicología en Loyola University Chicago y tiene un BFA de la School of the Art Institute of Chicago (SAIC), la práctica de Gutiérrez se configura menos por los marcos institucionales que por una indagación sostenida y encarnada, estudiando de forma independiente con artistas, educadores somáticos de la sexualidad y maestros de zen y butoh en Europa, Asia, Norteamérica y Sudamérica.',
+      'Actualmente vive, trabaja y practica en el Zen Center of New York City – Fire Lotus Temple, en Brooklyn.',
+    ]
+  : [
+      'Joan Gutiérrez develops tactile, performative, and participatory works rooted in the desert landscapes of the Mexican-American borderlands where she was raised. Born in 1992—the year the Ciudad Juárez femicides began and Dr. Judith Herman’s <em>Trauma and Recovery</em> was published—Gutiérrez situates her interdisciplinary practice within this charged socio-political terrain, engaging the body as a site of memory, resistance, and transformation: personal, collective, and planetary.',
+      'Rejecting the authority of specialization, Gutiérrez embraces the term <em>Amateur</em> as a radical, queered, and feminized position—one that privileges play, pleasure, and vulnerability as methodologies for transmuting rupture, both intimate and systemic.',
+      'Though trained in psychology at Loyola University Chicago and holding a BFA from the School of the Art Institute of Chicago (SAIC), Gutiérrez’s practice is shaped less by institutional frameworks than by sustained, embodied inquiry—studying independently with artists, somatic sex educators, and masters of Zen and butoh across Europe, Asia, North and South America.',
+      'She currently lives, works, and practices at the Zen Center of New York City – Fire Lotus Temple in Brooklyn.',
+    ];
+---
+
+<article class="pa" data-pa data-portfolio>
+  <PortfolioBar />
+  <div class="pa-top">
+    <div class="pa-text">
+      <a class="pa-back" href={L('/artistportfolio/')}>← {tr('Artist Portfolio')}</a>
+      <h1 class="pa-title">{es ? 'Semblanza' : 'About'}</h1>
+      <p class="pa-kicker">{tr('Artist statement · biography')}</p>
+      <div class="pa-bio">{bio.map((p) => <p set:html={p} />)}</div>
+    </div>
+    <div class="pa-portrait">
+      <Image src={portrait} alt={tr('Joan Gutiérrez, seated, in a studio portrait')} widths={[700, 1100, 1600]} sizes="(max-width: 800px) 100vw, 50vw" loading="eager" />
+    </div>
+  </div>
+
+  <ul class="pa-stills">
+    {stills.map((s, i) => (
+      <li><Image src={s} alt={`${tr('Joan Gutiérrez, butoh')} ${i + 1}`} widths={[400, 580]} sizes="(max-width: 800px) 50vw, 25vw" loading="lazy" /></li>
+    ))}
+  </ul>
+
+  <a class="pa-back pa-back-end" href={L('/artistportfolio/')}>← {tr('Artist Portfolio')}</a>
+</article>
+
+<style is:global>
+  body:has([data-pa]) {
+    background: #f7f6f3;
+  }
+
+  /* The portrait reaches the top of the window (the bar is only the egg). */
+  body main:has([data-pa]) {
+    padding-top: 0;
+  }
+</style>
+
+<style>
+  .pa {
+    color: #3a3633;
+    padding-bottom: clamp(4rem, 12vh, 7rem);
+  }
+
+  /* The statement on the left; the portrait, a full window tall, against
+     the right edge. */
+  .pa-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100svh;
+  }
+
+  .pa-text {
+    padding: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + clamp(2.5rem, 8vh, 5rem)) clamp(1.5rem, 5vw, 5rem) clamp(3rem, 8vh, 5rem);
+    max-width: 40rem;
+    justify-self: end;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pa-back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8a8580;
+    text-decoration: none;
+  }
+
+  .pa-back:hover,
+  .pa-back:focus-visible {
+    color: #3a3633;
+  }
+
+  .pa-title {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: clamp(2.4rem, 5.5vw, 5rem);
+    line-height: 1;
+    color: #8f8a86;
+  }
+
+  .pa-kicker {
+    margin: 1.1rem 0 2.25rem;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8a8580;
+  }
+
+  .pa-bio :global(p) {
+    margin: 0 0 1.1rem;
+    font-family: var(--font-body);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
+  .pa-portrait {
+    position: relative;
+  }
+
+  .pa-portrait :global(img) {
+    position: sticky;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100svh;
+    object-fit: cover;
+    object-position: 58% 40%;
+  }
+
+  /* The four stills in a row, edge to edge, a sliver of ground between. */
+  .pa-stills {
+    list-style: none;
+    margin: 0.4rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .pa-stills :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .pa-back-end {
+    display: block;
+    width: max-content;
+    margin: clamp(3rem, 9vh, 5rem) auto 0;
+  }
+
+  @media (max-width: 800px) {
+    .pa-top {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .pa-portrait {
+      order: -1;
+      margin-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+    }
+
+    .pa-portrait :global(img) {
+      position: static;
+      height: auto;
+      aspect-ratio: 4 / 3;
+    }
+
+    .pa-text {
+      padding-top: clamp(2rem, 6vh, 3rem);
+      justify-self: stretch;
+      max-width: none;
+    }
+
+    .pa-stills {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

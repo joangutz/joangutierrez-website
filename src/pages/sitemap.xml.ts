@@ -19,6 +19,7 @@ const PAGES = [
   { path: '/discovery-form/', priority: '0.5' },
   { path: '/artistportfolio/', priority: '0.6' },
   ...works.map((w) => ({ path: `/artistportfolio/${w.slug}/`, priority: '0.5' })),
+  { path: '/artistportfolio/about/', priority: '0.5' },
 ];
 
 // The Spanish pages (11/20), a step below their English twins.

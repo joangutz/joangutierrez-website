@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import PortfolioAbout from '../../components/PortfolioAbout.astro';
+import { crumbs } from '../../seo';
+import { langOf } from '../../i18n';
+
+const es = langOf(Astro.url) === 'es';
+---
+
+<Base title={es ? 'Semblanza — Joan Gutiérrez' : 'About — Joan Gutiérrez'} description={es ? 'Declaración artística y biografía de Joan Gutiérrez.' : 'Artist statement and biography of Joan Gutiérrez.'} schema={[crumbs(es ? 'Semblanza' : 'About', `${es ? '/es' : ''}/artistportfolio/about/`)]} plainClose>
+  <PortfolioAbout />
+</Base>
