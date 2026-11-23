@@ -36,7 +36,7 @@ const nextCover = img(next.slug, next.cover);
   <ol class="pw-images">
     {images.map((x) => (
       <li class:list={{ 'pw-narrow': w.narrow?.includes(x.n) }}>
-        <Image src={x.src!} alt={`${w.title}, ${x.n}`} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 92vw, 58vw" loading={x.n <= 2 ? 'eager' : 'lazy'} />
+        <Image src={x.src!} alt={`${w.title}, ${x.n}`} widths={[600, 1000, 1400]} sizes="(max-width: 700px) 100vw, 50vw" loading={x.n <= 2 ? 'eager' : 'lazy'} />
         {w.captions?.[x.n] && <p class="pw-cap">{w.captions[x.n]}</p>}
       </li>
     ))}
@@ -126,25 +126,81 @@ const nextCover = img(next.slug, next.cover);
     color: #7a7570;
   }
 
+  /* The images step down the page as on her Format site (11/23): each one
+     as tall as the window (so it is seen whole, without scrolling), the
+     first against the right edge, the next ending at the middle of the
+     page where the last one began, and so on, each starting where the one
+     before it ends. */
   .pw-images {
     list-style: none;
-    margin: 0 auto;
+    margin: 0 calc(-1 * clamp(1.25rem, 5vw, 4rem));
     padding: 0;
-    max-width: min(58vw, 60rem);
-    display: grid;
-    gap: clamp(3rem, 9vh, 6rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pw-images > li {
+    position: relative;
+    width: 50%;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .pw-images > li:nth-child(odd) {
+    align-self: flex-end;
+    justify-content: flex-start;
+  }
+
+  .pw-images > li:nth-child(even) {
+    align-self: flex-start;
+    justify-content: flex-end;
   }
 
   .pw-images :global(img) {
     display: block;
-    width: 100%;
+    width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: 100svh;
   }
 
-  /* A long scroll, shown narrow so it reads from top to bottom. */
-  .pw-narrow {
+  /* A long scroll keeps its own length, read from top to bottom. */
+  .pw-images > li.pw-narrow {
+    align-self: center;
     width: min(26rem, 70%);
-    justify-self: center;
+    justify-content: center;
+  }
+
+  .pw-images > li.pw-narrow :global(img) {
+    max-height: none;
+    width: 100%;
+  }
+
+  /* A name beside its image, low in the empty half of the page. */
+  .pw-images .pw-cap {
+    position: absolute;
+    bottom: 1.25rem;
+    width: max-content;
+    max-width: 18rem;
+    margin: 0;
+  }
+
+  .pw-images > li:nth-child(odd) .pw-cap {
+    right: calc(100% + 1.5rem);
+    text-align: right;
+  }
+
+  .pw-images > li:nth-child(even) .pw-cap {
+    left: calc(100% + 1.5rem);
+  }
+
+  .pw-images > li.pw-narrow .pw-cap {
+    position: static;
+    margin-top: 0.9rem;
+  }
+
+  .pw-images > li.pw-narrow {
+    flex-direction: column;
   }
 
   .pw-cap {
@@ -218,9 +274,24 @@ const nextCover = img(next.slug, next.cover);
     opacity: 1;
   }
 
-  @media (max-width: 900px) {
-    .pw-images {
-      max-width: none;
+  @media (max-width: 700px) {
+    .pw-images > li,
+    .pw-images > li:nth-child(n) {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pw-images > li + li {
+      margin-top: 1.5rem;
+    }
+
+    .pw-images .pw-cap,
+    .pw-images > li:nth-child(n) .pw-cap {
+      position: static;
+      margin: 0.7rem 1.25rem 0;
+      text-align: left;
+      align-self: flex-start;
     }
   }
 </style>
