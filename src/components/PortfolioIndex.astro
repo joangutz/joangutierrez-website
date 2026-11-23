@@ -1,0 +1,228 @@
+---
+import { Image } from 'astro:assets';
+import { works } from '../data/portfolio';
+import { linker, translator } from '../i18n';
+
+/**
+ * Joan's artist portfolio, the index (11/23), after her Format site: the
+ * works alone, no words, stepping down the page from the right edge to the
+ * left and back. Resting on a work (or, on a phone, scrolling it to the
+ * middle of the screen) brings it forward: the others fade almost away,
+ * the ground takes a gentle tint of its colours, and its name appears in
+ * bold capitals across the page.
+ */
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
+const files = import.meta.glob<{ default: ImageMetadata }>('/assets/portfolio/**/*.jpg', { eager: true });
+const cover = (slug: string, n: number) => {
+  const f = files[`/assets/portfolio/${slug}/${String(n).padStart(2, '0')}.jpg`];
+  if (!f) throw new Error(`Portfolio: missing /assets/portfolio/${slug}/${n}`);
+  return f.default;
+};
+---
+
+<div class="pf" data-pf>
+  <h1 class="visually-hidden">{tr('Artist Portfolio')} · Joan Gutiérrez</h1>
+  <ul class="pf-works" data-pf-works>
+    {works.map((w, i) => (
+      <li class="pf-item" style={`--tint:${w.tint}`} data-tint={w.tint}>
+        <a class="pf-work" href={L(`/portfolio/${w.slug}/`)} data-pf-work>
+          <Image
+            src={cover(w.slug, w.cover)}
+            alt={w.title}
+            widths={[480, 800, 1200]}
+            sizes="(max-width: 700px) 84vw, 40vw"
+            loading={i < 2 ? 'eager' : 'lazy'}
+          />
+          <span class="pf-title" aria-hidden="true">{w.title}<small>{w.year}</small></span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style is:global>
+  /* The portfolio's own ground: a pearl white, gently tinted while a work is
+     in focus (set by the script). */
+  body:has([data-pf]) {
+    background: #f7f6f3;
+    transition: background-color 700ms ease;
+  }
+</style>
+
+<style>
+  .pf {
+    overflow-x: clip;
+    padding-top: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+  }
+
+  .pf-works {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 30vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pf-item {
+    position: relative;
+    width: 40vw;
+  }
+
+  .pf-item:nth-child(odd) {
+    align-self: flex-end;
+  }
+
+  .pf-item:nth-child(even) {
+    align-self: flex-start;
+  }
+
+  .pf-item + .pf-item {
+    margin-top: 4vw;
+  }
+
+  .pf-work {
+    display: block;
+    color: inherit;
+    transition: opacity 600ms ease;
+  }
+
+  .pf-work :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* The name, across the whole page at the height of the work. */
+  .pf-title {
+    position: absolute;
+    top: 50%;
+    width: 100vw;
+    transform: translateY(-50%);
+    text-align: center;
+    pointer-events: none;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: clamp(2.1rem, 6vw, 6.75rem);
+    line-height: 1;
+    color: color-mix(in srgb, rgb(var(--tint)) 45%, #8f8f8f);
+    opacity: 0;
+    transition: opacity 500ms ease;
+    z-index: 2;
+  }
+
+  .pf-item:nth-child(odd) .pf-title {
+    left: -60vw;
+  }
+
+  .pf-item:nth-child(even) .pf-title {
+    left: 0;
+  }
+
+  .pf-title small {
+    display: block;
+    margin-top: 1.1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    opacity: 0.8;
+  }
+
+  .pf-works.has-focus .pf-work {
+    opacity: 0.1;
+  }
+
+  .pf-works.has-focus .is-focus .pf-work {
+    opacity: 1;
+  }
+
+  .is-focus .pf-title {
+    opacity: 1;
+  }
+
+  .pf-work:focus-visible {
+    outline: 2px solid var(--color-quick);
+    outline-offset: 6px;
+  }
+
+  @media (max-width: 700px) {
+    .pf-item {
+      width: 84vw;
+    }
+
+    .pf-item + .pf-item {
+      margin-top: 14vw;
+    }
+
+    .pf-item:nth-child(odd) .pf-title {
+      left: -16vw;
+    }
+
+    .pf-title {
+      font-size: 2.6rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pf-work,
+    .pf-title {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { onPage } from '../lib/onPage';
+
+  onPage(() => {
+    const list = document.querySelector<HTMLElement>('[data-pf-works]');
+    if (!list) return;
+    const items = [...list.querySelectorAll<HTMLElement>('.pf-item')];
+    const ground = '#f7f6f3';
+
+    const focus = (item: HTMLElement | null) => {
+      items.forEach((it) => it.classList.toggle('is-focus', it === item));
+      list.classList.toggle('has-focus', Boolean(item));
+      const t = item?.dataset.tint?.split(' ').join(',');
+      document.body.style.backgroundColor = t ? `color-mix(in srgb, rgb(${t}) 22%, ${ground})` : '';
+    };
+
+    const cleanups: (() => void)[] = [];
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (canHover) {
+      items.forEach((it) => {
+        const a = it.querySelector('[data-pf-work]')!;
+        const on = () => focus(it);
+        const off = () => focus(null);
+        a.addEventListener('mouseenter', on);
+        a.addEventListener('mouseleave', off);
+        a.addEventListener('focus', on);
+        a.addEventListener('blur', off);
+      });
+    } else {
+      // On a phone, the work at the middle of the screen comes forward.
+      const io = new IntersectionObserver(
+        (entries) => {
+          const hit = entries.find((e) => e.isIntersecting);
+          if (hit) focus(hit.target as HTMLElement);
+          else if (!items.some((it) => it.classList.contains('is-focus'))) focus(null);
+        },
+        { rootMargin: '-45% 0px -45% 0px' },
+      );
+      items.forEach((it) => io.observe(it));
+      const top = () => {
+        if (window.scrollY < 40) focus(null);
+      };
+      window.addEventListener('scroll', top, { passive: true });
+      cleanups.push(() => io.disconnect(), () => window.removeEventListener('scroll', top));
+    }
+
+    return () => {
+      cleanups.forEach((c) => c());
+      document.body.style.backgroundColor = '';
+    };
+  });
+</script>

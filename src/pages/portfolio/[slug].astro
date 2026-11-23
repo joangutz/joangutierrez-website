@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import PortfolioWork from '../../components/PortfolioWork.astro';
+import { works, workBySlug } from '../../data/portfolio';
+import { crumbs } from '../../seo';
+import { langOf, translator } from '../../i18n';
+
+export const getStaticPaths = () => works.map((w) => ({ params: { slug: w.slug } }));
+
+const { slug } = Astro.params;
+const w = workBySlug(slug!)!;
+const tr = translator(Astro.url);
+const es = langOf(Astro.url) === 'es';
+---
+
+<Base title={`${w.title} — Joan Gutiérrez`} description={`${w.title}. ${w.details.join('. ')}.`} schema={[crumbs(w.title, `${es ? '/es' : ''}/portfolio/${w.slug}/`)]} plainClose>
+  <PortfolioWork slug={w.slug} />
+</Base>

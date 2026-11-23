@@ -1,0 +1,218 @@
+---
+import { Image } from 'astro:assets';
+import { workBySlug, nextWork } from '../data/portfolio';
+import { linker, translator } from '../i18n';
+
+/**
+ * One work of Joan's portfolio (11/23), after its page on her Format site:
+ * its name in bold capitals and its details, then its images one after
+ * another (a name beneath where the work has one), its materials and any
+ * text, and the next work to move on to.
+ */
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const w = workBySlug(slug);
+if (!w) throw new Error(`Portfolio: no work ${slug}`);
+const next = nextWork(slug);
+const L = linker(Astro.url);
+const tr = translator(Astro.url);
+const files = import.meta.glob<{ default: ImageMetadata }>('/assets/portfolio/**/*.jpg', { eager: true });
+const img = (s: string, n: number) => files[`/assets/portfolio/${s}/${String(n).padStart(2, '0')}.jpg`]?.default;
+const images = Array.from({ length: w.count }, (_, i) => ({ n: i + 1, src: img(slug, i + 1) })).filter((x) => x.src);
+const nextCover = img(next.slug, next.cover);
+---
+
+<article class="pw" data-pw style={`--tint:${w.tint}`}>
+  <header class="pw-head">
+    <a class="pw-back" href={L('/portfolio/')}>← {tr('Artist Portfolio')}</a>
+    <h1 class="pw-title">{w.title}</h1>
+    <p class="pw-details">{w.details.map((d) => <span>{d}</span>)}</p>
+  </header>
+
+  <ol class="pw-images">
+    {images.map((x) => (
+      <li>
+        <Image src={x.src!} alt={`${w.title}, ${x.n}`} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 92vw, 58vw" loading={x.n <= 2 ? 'eager' : 'lazy'} />
+        {w.captions?.[x.n] && <p class="pw-cap">{w.captions[x.n]}</p>}
+      </li>
+    ))}
+  </ol>
+
+  {(w.materials || w.text || w.credits) && (
+    <section class="pw-notes">
+      {w.materials && (
+        <div>
+          <h2 class="pw-label">{tr('Materials')}</h2>
+          <p>{w.materials}</p>
+        </div>
+      )}
+      {w.credits && (
+        <div>
+          <h2 class="pw-label">{w.credits[0]}</h2>
+          {w.credits.slice(1).map((c) => <p>{c}</p>)}
+        </div>
+      )}
+      {w.text && <div class="pw-text">{w.text.map((p) => <p>{p}</p>)}</div>}
+    </section>
+  )}
+
+  <a class="pw-next" href={L(`/portfolio/${next.slug}/`)}>
+    <span class="pw-label">{tr('Next in Work')}</span>
+    <span class="pw-next-title">{next.title}</span>
+    {nextCover && <Image src={nextCover} alt="" widths={[400, 700]} sizes="(max-width: 700px) 60vw, 22vw" loading="lazy" />}
+  </a>
+</article>
+
+<style is:global>
+  body:has([data-pw]) {
+    background: #f7f6f3;
+  }
+</style>
+
+<style>
+  .pw {
+    padding: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + clamp(3rem, 9vh, 6rem)) clamp(1.25rem, 5vw, 4rem) clamp(5rem, 14vh, 9rem);
+    color: #3a3633;
+  }
+
+  .pw-head {
+    max-width: 62rem;
+    margin: 0 auto clamp(3rem, 8vh, 5rem);
+    text-align: center;
+  }
+
+  .pw-back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8a8580;
+    text-decoration: none;
+  }
+
+  .pw-back:hover,
+  .pw-back:focus-visible {
+    color: #3a3633;
+  }
+
+  .pw-title {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: clamp(2.2rem, 6vw, 5.5rem);
+    line-height: 1;
+    color: color-mix(in srgb, rgb(var(--tint)) 40%, #6f6a66);
+  }
+
+  .pw-details {
+    margin: 1.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.6rem;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7a7570;
+  }
+
+  .pw-images {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: min(58vw, 60rem);
+    display: grid;
+    gap: clamp(3rem, 9vh, 6rem);
+  }
+
+  .pw-images :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .pw-cap {
+    margin: 0.9rem 0 0;
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7a7570;
+  }
+
+  .pw-notes {
+    max-width: 40rem;
+    margin: clamp(4rem, 12vh, 7rem) auto 0;
+    display: grid;
+    gap: 2.25rem;
+  }
+
+  .pw-label {
+    display: block;
+    margin: 0 0 0.6rem;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8a8580;
+  }
+
+  .pw-notes p {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-body);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .pw-text p {
+    font-style: italic;
+  }
+
+  .pw-next {
+    display: grid;
+    justify-items: center;
+    gap: 1.1rem;
+    max-width: 30rem;
+    margin: clamp(5rem, 14vh, 9rem) auto 0;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .pw-next-title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    line-height: 1;
+    color: #6f6a66;
+  }
+
+  .pw-next :global(img) {
+    width: min(22rem, 60vw);
+    height: auto;
+    opacity: 0.85;
+    transition: opacity 400ms ease;
+  }
+
+  .pw-next:hover :global(img),
+  .pw-next:focus-visible :global(img) {
+    opacity: 1;
+  }
+
+  @media (max-width: 900px) {
+    .pw-images {
+      max-width: none;
+    }
+  }
+</style>

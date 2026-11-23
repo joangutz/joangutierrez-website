@@ -6,6 +6,8 @@ import { ES_PAGES } from '../i18n';
  * The site's pages, for search engines. Old addresses that forward
  * elsewhere are left out on purpose; they carry noindex.
  */
+import { works } from '../data/portfolio';
+
 const PAGES = [
   { path: '/', priority: '1.0' },
   { path: '/services/', priority: '0.9' },
@@ -15,12 +17,14 @@ const PAGES = [
   { path: '/tending-the-root/', priority: '0.7' },
   { path: '/the-work/', priority: '0.6' },
   { path: '/discovery-form/', priority: '0.5' },
+  { path: '/portfolio/', priority: '0.6' },
+  ...works.map((w) => ({ path: `/portfolio/${w.slug}/`, priority: '0.5' })),
 ];
 
 // The Spanish pages (11/20), a step below their English twins.
 const ALL = [
   ...PAGES,
-  ...PAGES.filter((p) => ES_PAGES.includes(p.path)).map((p) => ({
+  ...PAGES.filter((p) => ES_PAGES.includes(p.path) || p.path.startsWith('/portfolio/')).map((p) => ({
     path: `/es${p.path}`,
     priority: (Number(p.priority) - 0.1).toFixed(1),
   })),

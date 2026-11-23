@@ -178,6 +178,12 @@ export const es: Record<string, string> = {
   'A four-page scar tissue care guide to learn how to integrate through the ritual use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.':
     'Una guía de cuatro páginas para el cuidado de las cicatrices. Aprende a integrar a través del uso ritual del aceite de ricino para restaurar la integridad de tu linfa, tu fascia, tus tejidos y tu circulación.', // 11/23, the client's,
 
+  // The artist portfolio (11/23)
+  'Artist Portfolio': 'Portafolio artístico',
+  'Materials': 'Materiales',
+  'Next in Work': 'Siguiente obra',
+  'Tactile, performative and participatory works by Joan Gutiérrez.': 'Obras táctiles, performativas y participativas de Joan Gutiérrez.',
+
   // Site credits (11/21; the client's; the roles are in Credits.astro)
   'Site Credits': 'Créditos del sitio',
 
