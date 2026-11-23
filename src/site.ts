@@ -41,6 +41,8 @@ export const booking = {
   duration: '30 minutes',
   // Joan's wording, 11/16.
   label: 'Book a Discovery Call',
+  /** 11/23: books an online 1:1 session, from the turned side of its Rates card. */
+  onlineSession: 'https://cal.com/joan.gutierrez/somatic-sexology',
 } as const;
 
 /**

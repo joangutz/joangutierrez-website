@@ -25,6 +25,7 @@ export const es: Record<string, string> = {
   'Feel free to reach out with any inquiries. Curiosity is welcomed. Collaborations are too.':
     'Escríbeme con cualquier pregunta. La curiosidad es bienvenida. Las colaboraciones también.',
   'Book a Discovery Call': 'Agenda una llamada de descubrimiento',
+  'Book an Online Session': 'Agenda una sesión en línea',
   'Stay in touch': 'Mantente en contacto',
 
   // The home page
