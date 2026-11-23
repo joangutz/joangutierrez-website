@@ -160,7 +160,7 @@ export const es: Record<string, string> = {
   'nourishment, stock and broth': 'nutrición, caldos y fondos',
   'body literacy, self-mapping and consent': 'alfabetización corporal, automapeo y consentimiento',
   '15 pages, for all bodies': '15 páginas, para todos los cuerpos',
-  'Step-by-step practices: the timings, the temperatures, the nuances': 'Prácticas paso a paso: los tiempos, las temperaturas, los matices',
+  'Step-by-step practices with the timings, the temperatures and the nuances': 'Prácticas paso a paso con los tiempos, las temperaturas y los matices',
   'The ginger compress, castor oil packs, a sauna scar session, self-mapping': 'La compresa de jengibre, las compresas de aceite de ricino, una sesión de sauna para cicatrices, el automapeo',
   'Healing meat stock and bone broth recipes': 'Recetas de caldo de carne sanador y caldo de huesos',
   'A gentle weekly rhythm to weave it together': 'Un ritmo semanal suave para entretejerlo todo',
