@@ -178,6 +178,8 @@ export const es: Record<string, string> = {
   'A four-page scar tissue care guide to learn how to integrate through the ritual use of castor oil to restore the integrity of your lymph, fascia, tissue and circulation.':
     'Una guía de cuatro páginas para el cuidado de las cicatrices. Aprende a integrar a través del uso ritual del aceite de ricino para restaurar la integridad de tu linfa, tu fascia, tus tejidos y tu circulación.', // 11/23, the client's,
 
+  'Sign-up opens shortly.': 'La inscripción abre muy pronto.',
+
   // The artist portfolio (11/23)
   'Artist Portfolio': 'Portafolio artístico',
   'Materials': 'Materiales',
