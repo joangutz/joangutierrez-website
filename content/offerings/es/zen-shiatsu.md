@@ -28,6 +28,5 @@ right:
   - Cada semana tengo dos espacios de una hora abiertos para un intercambio. Tú recibes una sesión de Shiatsu, y yo afino mi técnica y mi práctica de la Teoría de los Cinco Elementos.
 action:
   label: Agenda una sesión de Shiatsu gratuita
-  href: /discovery-form/
-  subject: Zen Shiatsu (free treatment)
+  href: https://cal.com/joan.gutierrez/zen-shiatsu-treatment-free  # 11/23, its booking page
 ---

@@ -29,6 +29,5 @@ right:
   - Each week, I have two one-hour slots open for an exchange. You receive a Shiatsu treatment, and I refine my technique and my practice of Five Element Theory.
 action:
   label: Book a Free Shiatsu Treatment
-  href: /discovery-form/
-  subject: Zen Shiatsu (free treatment)
+  href: https://cal.com/joan.gutierrez/zen-shiatsu-treatment-free  # 11/23, its booking page
 ---
