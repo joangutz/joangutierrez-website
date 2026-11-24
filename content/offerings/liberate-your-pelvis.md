@@ -32,6 +32,10 @@ left:
   - label: MULTI-DAY
     title: Deep Immersion
     text: For when you are ready to be accompanied through the whole terrain. Days to unfold, rest, and integrate, with space between sessions for your body to digest what has surfaced.
+# 11/24, the client's: priced case by case, a ballpark starting price.
+- prices:
+  - label: Shaped to each case · Starting from
+    amount: $350
 right:
 - title: A taste of what we may compose together
   items:

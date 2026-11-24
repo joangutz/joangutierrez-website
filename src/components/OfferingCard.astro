@@ -218,6 +218,8 @@ const id = plainId(offering.id);
           <div class="back-prices">
             {/* Headed with the word on the button that turns to it (Rates, 11/17). */}
             <span class="panel-label">{o.turn}</span>
+            {/* The first session, an intake (11/24, the client's). */}
+            <p class="back-intake">{tr('Your first session is a 2-hour intake, $250. Your $15 discovery call fee goes toward it, so it comes to $235. After that, sessions are 60, 75, 90 or 120 minutes, chosen together for your needs and budget.')}</p>
             <dl class="back-price-list">
               {prices.rows.map((r) => (
                 <div class="back-price">
@@ -498,6 +500,13 @@ const id = plainId(offering.id);
   .back-prices {
     padding-top: 1.5rem;
     border-top: 1px solid var(--rule-glass);
+  }
+
+  .back-intake {
+    margin: 0 0 1.4rem;
+    max-width: 40rem;
+    font-size: 0.98rem;
+    line-height: 1.6;
   }
 
   .back-price-list {

@@ -32,6 +32,10 @@ left:
   - label: VARIOS DÍAS
     title: Inmersión profunda
     text: Para cuando estás en disposición de recibir acompañamiento a través de todo el terreno. Días para descubrir, descansar e integrar, con espacio entre sesiones para que tu cuerpo asimile lo que haya surgido.  # 11/22, the client's
+# 11/24: a medida de cada caso, un precio inicial orientativo.
+- prices:
+  - label: A medida de cada caso · Desde
+    amount: $350
 right:
 - title: Una muestra de lo que podemos componer en conjunto
   items:

@@ -287,7 +287,7 @@ export const homeCards = [
     href: '/services/#liberate-your-pelvis',
     // 11/24, home option C: a line and a price beneath the name.
     line: 'A ceremonial immersion into the ground substance of your pelvic root',
-    price: 'Half day · Full day · Multi-day',
+    price: 'From $350 · Half day to multi-day', // 11/24, the client's ballpark
     title: 'Liberate Your Pelvis',
     note: '',
     collage: 'scar-tissue.jpg',
