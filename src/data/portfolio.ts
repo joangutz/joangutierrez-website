@@ -66,6 +66,23 @@ export const works: Work[] = [
     captions: chairs,
   },
   {
+    // 11/24: added from her Format text; the cover still is hers, the film to come.
+    slug: 'hanging-from-the-earth',
+    title: 'Hanging From the Earth',
+    year: '2023',
+    count: 1,
+    cover: 1,
+    tint: '140 52 66',
+    details: ['Performance Film', 'Fall 2023 · Mexico'],
+    materials:
+      'Needle, thread, purple onion skins, red beets, orange-tangerine skins, eggs, green local herbs, milk, translucent plastic bags',
+    credits: [
+      'Credits',
+      'Concept, Artistic Direction, Research, Costume Design, Performance: Joan Gutiérrez',
+      'Cinematography, Editing: Camille Lacadee',
+    ],
+  },
+  {
     slug: 'a-cicadas-cycle',
     title: 'A Cicada’s Cycle',
     year: '2023',
