@@ -91,7 +91,7 @@ const doors = [
         <p class="subtitle">{h.hero.tagline}</p>
         {/* What the work is, in plain words, and the one way in (11/24, C). */}
         <p class="hero-line">{tr('Somatic Sex Education · Holistic Pelvic Care™ · Consent-led Bodywork')}</p>
-        <div class="hero-cta"><Link variant="action" href={booking.url}>{tr(booking.label)}</Link></div>
+        <div class="hero-cta"><Link variant="action" href={booking.url}>{langOf(Astro.url) === 'es' ? 'Agenda una llamada' : tr(booking.label)}</Link>{/* ES 11/24, the client's: short, on one line */}</div>
       </div>
 
       {/* The mark is out of the hero for now, by Joan's choice; the bar at the
