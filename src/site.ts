@@ -276,7 +276,7 @@ export const homeCards = [
     href: '/services/#one-to-one',
     // 11/24, home option C: a line and a price beneath the name.
     line: 'Somatic sex education and bodywork, online or in Chicago',
-    price: 'From $100',
+    price: '', // 11/24: prices off the home cards
     title: '1:1 Sessions', // 11/23: matching its card on Offerings
     note: '',
     collage: 'erotic-embodiment.jpg',
@@ -287,7 +287,7 @@ export const homeCards = [
     href: '/services/#liberate-your-pelvis',
     // 11/24, home option C: a line and a price beneath the name.
     line: 'A ceremonial immersion into the ground substance of your pelvic root',
-    price: 'From $350 · Half day to multi-day', // 11/24, the client's ballpark
+    price: '', // 11/24: prices off the home cards
     title: 'Liberate Your Pelvis',
     note: '',
     collage: 'scar-tissue.jpg',
@@ -297,7 +297,7 @@ export const homeCards = [
     href: '/services/#relational-integrity-labs',
     // 11/24, home option C: a line and a price beneath the name.
     line: 'A play room for learning to ask, to refuse, and to know your own yes',
-    price: '$20 drop-in · Online',
+    price: '', // 11/24: prices off the home cards
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',
@@ -329,7 +329,7 @@ export const homeCards = [
     href: '/services/#this-very-body',
     // 11/24, home option C: a line and a price beneath the name.
     line: 'Seven months through the five elements',
-    price: 'Coming soon · Waitlist',
+    price: 'Waitlist · Coming soon',
     title: 'This Very Body: Movement Archive',
     note: '',
     collage: 'desire-mapping.jpg',

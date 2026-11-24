@@ -76,7 +76,7 @@ export const es: Record<string, string> = {
   'Half day · Full day · Multi-day': 'Medio día · Día completo · Varios días',
   '$20 drop-in · Online': '$20 clase suelta · En línea',
   'Free while in training': 'Gratis durante mi formación',
-  'Coming soon · Waitlist': 'Muy pronto · Lista de espera',
+  'Waitlist · Coming soon': 'Lista de espera · Muy pronto',
   'A trauma-responsive, consent-forward practice': 'Una práctica sensible al trauma y centrada en el consentimiento',
   'Liberate Your Pelvis': 'Liberación Pélvica', // 11/20, the client's
   'Relational Integrity Labs': 'Laboratorios: Integridad Relacional', // 11/20, the client's
