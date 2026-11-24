@@ -28,7 +28,7 @@ const cover = (slug: string, n: number) => {
   <ul class="pf-works" data-pf-works>
     {works.map((w, i) => (
       <li class="pf-item" style={`--tint:${w.tint}`} data-tint={w.tint}>
-        <a class="pf-work" href={L(`/artistportfolio/${w.slug}/`)} data-pf-work>
+        <a class="pf-work" href={L(`/joangutierrez/artistportfolio/${w.slug}/`)} data-pf-work>
           <Image
             src={cover(w.slug, w.cover)}
             alt={w.title}
@@ -41,7 +41,7 @@ const cover = (slug: string, n: number) => {
       </li>
     ))}
     <li class="pf-item pf-about">
-      <a class="pf-work pf-about-link" href={L('/artistportfolio/about/')} data-pf-work>
+      <a class="pf-work pf-about-link" href={L('/joangutierrez/artistportfolio/about/')} data-pf-work>
         <span class="pf-about-word">Joan Gutiérrez</span>
         <span class="pf-about-kicker">{tr('about the artist')}</span>
       </a>

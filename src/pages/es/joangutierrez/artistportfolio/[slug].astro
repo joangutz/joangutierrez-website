@@ -1,0 +1,15 @@
+---
+// La versión en español: la misma página, que lee su idioma de la dirección (/es/).
+import Base from '../../../../layouts/Base.astro';
+import PortfolioWork from '../../../../components/PortfolioWork.astro';
+import { works, workBySlug } from '../../../../data/portfolio';
+import { crumbs } from '../../../../seo';
+
+export const getStaticPaths = () => works.map((w) => ({ params: { slug: w.slug } }));
+
+const w = workBySlug(Astro.params.slug!)!;
+---
+
+<Base title={`${w.title} — Joan Gutiérrez`} description={`${w.title}. ${w.details.join('. ')}.`} schema={[crumbs(w.title, `/es/joangutierrez/artistportfolio/${w.slug}/`)]} plainClose>
+  <PortfolioWork slug={w.slug} />
+</Base>

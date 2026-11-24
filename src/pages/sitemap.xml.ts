@@ -17,15 +17,15 @@ const PAGES = [
   { path: '/tending-the-root/', priority: '0.7' },
   { path: '/the-work/', priority: '0.6' },
   { path: '/discovery-form/', priority: '0.5' },
-  { path: '/artistportfolio/', priority: '0.6' },
-  ...works.map((w) => ({ path: `/artistportfolio/${w.slug}/`, priority: '0.5' })),
-  { path: '/artistportfolio/about/', priority: '0.5' },
+  { path: '/joangutierrez/artistportfolio/', priority: '0.6' },
+  ...works.map((w) => ({ path: `/joangutierrez/artistportfolio/${w.slug}/`, priority: '0.5' })),
+  { path: '/joangutierrez/artistportfolio/about/', priority: '0.5' },
 ];
 
 // The Spanish pages (11/20), a step below their English twins.
 const ALL = [
   ...PAGES,
-  ...PAGES.filter((p) => ES_PAGES.includes(p.path) || p.path.startsWith('/artistportfolio/')).map((p) => ({
+  ...PAGES.filter((p) => ES_PAGES.includes(p.path) || p.path.startsWith('/joangutierrez/artistportfolio/')).map((p) => ({
     path: `/es${p.path}`,
     priority: (Number(p.priority) - 0.1).toFixed(1),
   })),

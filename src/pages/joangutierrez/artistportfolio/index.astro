@@ -1,0 +1,12 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PortfolioIndex from '../../../components/PortfolioIndex.astro';
+import { crumbs } from '../../../seo';
+import { langOf, translator } from '../../../i18n';
+const tr = translator(Astro.url);
+const es = langOf(Astro.url) === 'es';
+---
+
+<Base title={`${tr('Artist Portfolio')} — Joan Gutiérrez`} description={tr('Tactile, performative and participatory works by Joan Gutiérrez.')} schema={[crumbs(tr('Artist Portfolio'), es ? '/es/joangutierrez/artistportfolio/' : '/joangutierrez/artistportfolio/')]} plainClose>
+  <PortfolioIndex />
+</Base>

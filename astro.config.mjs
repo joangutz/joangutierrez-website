@@ -13,6 +13,25 @@ const BASE = '/';
 /** Redirect targets are written to the page as-is, so they carry the base. */
 const to = (path) => `${BASE.replace(/\/$/, '')}${path}`;
 
+/**
+ * The portfolio's earlier addresses (/portfolio/, then /artistportfolio/)
+ * forward to where it lives now, /joangutierrez/artistportfolio/ (11/24).
+ */
+const PF = '/joangutierrez/artistportfolio';
+const pfPages = ['', 'about', '28-day-cycle', 'empty-chairs', 'a-cicadas-cycle', 'librito-del-viaje', 'brush-n-scroll', 'handmade', 'haircut-piece-part-ii', 'wild-thing'];
+const oldPortfolio = Object.fromEntries(
+  pfPages.flatMap((p) => {
+    const tail = p ? `/${p}` : '';
+    const dest = `${PF}${tail}/`;
+    return [
+      [`/portfolio${tail}`, to(dest)],
+      [`/artistportfolio${tail}`, to(dest)],
+      [`/es/portfolio${tail}`, to(`/es${dest}`)],
+      [`/es/artistportfolio${tail}`, to(`/es${dest}`)],
+    ];
+  }),
+);
+
 export default defineConfig({
   site: 'https://masomatrix.com',
   base: BASE,
@@ -35,16 +54,9 @@ export default defineConfig({
     '/offerings': to('/services/'),
     '/resource/gift': to('/resources/#gift'),
     // 11/23: the portfolio's address, renamed at the client's request.
-    '/portfolio': to('/artistportfolio/'),
-    '/es/portfolio': to('/es/artistportfolio/'),
-    '/portfolio/28-day-cycle': to('/artistportfolio/28-day-cycle/'),
-    '/portfolio/empty-chairs': to('/artistportfolio/empty-chairs/'),
-    '/portfolio/a-cicadas-cycle': to('/artistportfolio/a-cicadas-cycle/'),
-    '/portfolio/librito-del-viaje': to('/artistportfolio/librito-del-viaje/'),
-    '/portfolio/brush-n-scroll': to('/artistportfolio/brush-n-scroll/'),
-    '/portfolio/handmade': to('/artistportfolio/handmade/'),
-    '/portfolio/haircut-piece-part-ii': to('/artistportfolio/haircut-piece-part-ii/'),
-    '/portfolio/wild-thing': to('/artistportfolio/wild-thing/'),
+    ...oldPortfolio,
+    '/joangutierrez': to(`${PF}/`),
+    '/es/joangutierrez': to(`/es${PF}/`),
     // Inspiration and Library show on Resources once written.
     '/resource/inspiration': to('/resources/'),
     '/resource/library': to('/resources/'),
