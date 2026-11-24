@@ -33,6 +33,19 @@ const nextCover = img(next.slug, next.cover);
     <p class="pw-details">{w.details.map((d) => <span>{d}</span>)}</p>
   </header>
 
+  {w.vimeo && (
+    <div class="pw-film" style={`aspect-ratio:${w.vimeo.ratio}`}>
+      <iframe
+        src={`https://player.vimeo.com/video/${w.vimeo.id}?autopause=0&dnt=1`}
+        title={w.title}
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+  )}
+
   <ol class="pw-images">
     {images.map((x) => (
       <li class:list={{ 'pw-narrow': w.narrow?.includes(x.n) }}>
@@ -131,6 +144,20 @@ const nextCover = img(next.slug, next.cover);
      first against the right edge, the next ending at the middle of the
      page where the last one began, and so on, each starting where the one
      before it ends. */
+  /* The film, when the work has one (11/24), above its stills. */
+  .pw-film {
+    max-width: 62rem;
+    margin: 0 auto clamp(3rem, 8vh, 5rem);
+    background: #000;
+  }
+
+  .pw-film iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
   .pw-images {
     list-style: none;
     margin: 0 calc(-1 * clamp(1.25rem, 5vw, 4rem));

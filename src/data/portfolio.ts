@@ -27,6 +27,8 @@ export type Work = {
   credits?: string[];
   /** Images shown narrower than the rest (a long scroll), by number. */
   narrow?: number[];
+  /** A film on Vimeo: its id, and its shape (width / height). */
+  vimeo?: { id: string; ratio: string };
 };
 
 const chairs: Record<number, string> = {
@@ -73,6 +75,7 @@ export const works: Work[] = [
     count: 1,
     cover: 1,
     tint: '140 52 66',
+    vimeo: { id: '1249774628', ratio: '4 / 3' },
     details: ['Performance Film', 'Fall 2023 · Mexico'],
     materials:
       'Needle, thread, purple onion skins, red beets, orange-tangerine skins, eggs, green local herbs, milk, translucent plastic bags',
