@@ -21,7 +21,7 @@ const L = linker(Astro.url);
 const tr = translator(Astro.url);
 const files = import.meta.glob<{ default: ImageMetadata }>('/assets/portfolio/**/*.jpg', { eager: true });
 const img = (s: string, n: number) => files[`/assets/portfolio/${s}/${String(n).padStart(2, '0')}.jpg`]?.default;
-const images = Array.from({ length: w.count }, (_, i) => ({ n: i + 1, src: img(slug, i + 1) })).filter((x) => x.src);
+const images = w.coverOnly ? [] : Array.from({ length: w.count }, (_, i) => ({ n: i + 1, src: img(slug, i + 1) })).filter((x) => x.src);
 const nextCover = img(next.slug, next.cover);
 ---
 

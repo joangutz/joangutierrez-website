@@ -29,6 +29,8 @@ export type Work = {
   narrow?: number[];
   /** A film on Vimeo: its id, and its shape (width / height). */
   vimeo?: { id: string; ratio: string };
+  /** The images serve only as the cover on the index; the page shows the film alone. */
+  coverOnly?: boolean;
 };
 
 const chairs: Record<number, string> = {
@@ -76,6 +78,7 @@ export const works: Work[] = [
     cover: 1,
     tint: '140 52 66',
     vimeo: { id: '1249774628', ratio: '4 / 3' },
+    coverOnly: true, // 11/24: the still is the index cover only
     details: ['Performance Film', 'Fall 2023 · Mexico'],
     materials:
       'Needle, thread, purple onion skins, red beets, orange-tangerine skins, eggs, green local herbs, milk, translucent plastic bags',
