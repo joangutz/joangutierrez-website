@@ -48,6 +48,16 @@ const movedAnchors = {
 };
 // The cards in view (Spine Society is kept but out of view, 11/18).
 const cards = homeCards.filter(shown);
+// Ways to begin (11/24, option B, read as A): from a first taste to a deep
+// immersion, each step a little higher than the last.
+const steps = [
+  { price: 'Free', name: 'A gift', text: 'The Red Rose Visualization or The Castor Oil Pack', href: L('/resources/#gift') },
+  { price: '$15', name: 'A discovery call', text: '30 minutes to meet, credited to your first session', href: booking.url },
+  { price: '$20', name: 'A Relational Integrity Lab', text: 'Two hours online, drop in', href: L('/services/#relational-integrity-labs') },
+  { price: '$33', name: 'Tending the Root', text: 'A guide for pelvic health, at your own pace', href: L('/tending-the-root/') },
+  { price: '$250', name: 'A 1:1 intake', text: 'Two hours, in person or online', href: L('/services/#one-to-one') },
+  { price: 'From $350', name: 'An Immersion', text: 'Half day to multi-day, shaped to you', href: L('/services/#liberate-your-pelvis') },
+];
 // The four doorways (11/24, option C).
 const doors = [
   { title: 'Pain and scar tissue', text: 'Pelvic pain, birth, surgery, or a body that has been opened, stitched or changed.', to: 'Liberate Your Pelvis', href: '/services/#liberate-your-pelvis' },
@@ -189,6 +199,31 @@ const doors = [
     </div>
   </section>
 
+  {/* Ways to begin (11/24): a staircase of six steps, from a first taste to
+      a deep immersion. */}
+  <section class="begin-steps">
+    <div class="band section">
+      <div class="wide">
+        <div class="offer-head">
+          <h2 class="label">{tr('Ways to begin')}</h2>
+          <p class="offer-sub">{tr('Start wherever feels right.')}</p>
+        </div>
+        <ol class="steps rise">
+          {steps.map((st) => (
+            <li>
+              <a class="step" href={st.href} {...(st.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                <span class="step-price">{tr(st.price)}</span>
+                <span class="step-name">{tr(st.name)}</span>
+                <span class="step-text">{tr(st.text)}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p class="steps-note">{tr('From a first taste to a deep immersion.')}</p>
+      </div>
+    </div>
+  </section>
+
   {/* 4 · I am Joan. Welcome. Split, as on Services: her welcome on the
       blush, her portrait beside it, one window tall, held in view while the
       welcome is read. The portrait keeps its colour — this is where a reader
@@ -255,6 +290,98 @@ const doors = [
 </Base>
 
 <style>
+
+  /* ---- Ways to begin: a staircase (11/24) ---- */
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  /* Each step's top a fixed rise above the one before, so the dots climb
+     evenly whatever the length of the words. */
+  .steps > li:nth-child(1) { margin-top: 16rem; }
+  .steps > li:nth-child(2) { margin-top: 12.8rem; }
+  .steps > li:nth-child(3) { margin-top: 9.6rem; }
+  .steps > li:nth-child(4) { margin-top: 6.4rem; }
+  .steps > li:nth-child(5) { margin-top: 3.2rem; }
+
+  .step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.9rem 0 1.1rem;
+    border-left: 1px solid rgb(var(--ch-plum) / 0.25);
+    color: var(--color-cochineal);
+    text-decoration: none;
+  }
+
+  .step::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-cochineal);
+  }
+
+  .step-price {
+    margin-bottom: 0.55rem;
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+
+  .step-name {
+    font-family: var(--font-soft);
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+
+  .step-text {
+    margin-top: 0.45rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  .step:hover .step-name,
+  .step:focus-visible .step-name {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  .steps-note {
+    margin: clamp(2rem, 4vw, 2.75rem) 0 0;
+    text-align: center;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--color-ink-2);
+  }
+
+  @media (max-width: 860px) {
+    .steps {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .steps > li:nth-child(n) {
+      margin-top: 0;
+    }
+
+    .step {
+      padding: 0 0 1.6rem 1.4rem;
+    }
+  }
 
   /* ---- Hero: the plain line and the way in (11/24, C) ---- */
   .hero-line {
