@@ -274,6 +274,9 @@ export const homeCards = [
   // Joan's five, in her order and her words, 11/16.
   {
     href: '/services/#one-to-one',
+    // 11/24, home option C: a line and a price beneath the name.
+    line: 'Somatic sex education and bodywork, online or in Chicago',
+    price: 'From $100',
     title: '1:1 Sessions', // 11/23: matching its card on Offerings
     note: '',
     collage: 'erotic-embodiment.jpg',
@@ -282,6 +285,9 @@ export const homeCards = [
   {
     // Joan, 11/17: reads Liberate Your Pelvis, as on Services.
     href: '/services/#liberate-your-pelvis',
+    // 11/24, home option C: a line and a price beneath the name.
+    line: 'A ceremonial immersion into the ground substance of your pelvic root',
+    price: 'Half day · Full day · Multi-day',
     title: 'Liberate Your Pelvis',
     note: '',
     collage: 'scar-tissue.jpg',
@@ -289,6 +295,9 @@ export const homeCards = [
   },
   {
     href: '/services/#relational-integrity-labs',
+    // 11/24, home option C: a line and a price beneath the name.
+    line: 'A play room for learning to ask, to refuse, and to know your own yes',
+    price: '$20 drop-in · Online',
     title: 'Relational Integrity Labs',
     note: '',
     collage: 'all-in-one.jpg',
@@ -296,6 +305,9 @@ export const homeCards = [
   },
   {
     href: '/services/#spine-society',
+    // 11/24, home option C: a line and a price beneath the name.
+    line: '',
+    price: '',
     title: 'Spine Society',
     note: '',
     collage: 'roots-territories.jpg',
@@ -304,6 +316,9 @@ export const homeCards = [
   },
   {
     href: '/services/#zen-shiatsu',
+    // 11/24, home option C: a line and a price beneath the name.
+    line: 'Fully clothed, hands-on bodywork',
+    price: 'Free while in training',
     title: 'Zen Shiatsu',
     note: '',
     collage: 'work-2.jpg',
@@ -312,6 +327,9 @@ export const homeCards = [
   {
     // 11/21: added at the client's request; the same art as its Offerings card.
     href: '/services/#this-very-body',
+    // 11/24, home option C: a line and a price beneath the name.
+    line: 'Seven months through the five elements',
+    price: 'Coming soon · Waitlist',
     title: 'This Very Body: Movement Archive',
     note: '',
     collage: 'desire-mapping.jpg',

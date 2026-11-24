@@ -36,6 +36,30 @@ export const es: Record<string, string> = {
   '1:1': 'Sesiones individuales',
   '1:1 Sessions': 'Sesiones individuales', // 11/20, the client's
   'Ways we can work together.': 'Maneras de trabajar en conjunto.', // 11/21, the client's
+
+  // Home, option C (11/24): the plain line, the doorways, card lines and prices. Drafts.
+  'Somatic Sex Education · Holistic Pelvic Care™ · Consent-led Bodywork': 'Educación Sexual Somática · Holistic Pelvic Care™ · Trabajo Corporal Guiado por el Consentimiento',
+  'You may be here because': 'Quizás estás aquí porque',
+  'your body is asking for care.': 'tu cuerpo te pide cuidado.',
+  'Pain and scar tissue': 'Dolor y cicatrices',
+  'Pelvic pain, birth, surgery, or a body that has been opened, stitched or changed.': 'Dolor pélvico, parto, cirugía, o un cuerpo que ha sido abierto, suturado o transformado.',
+  'Desire and pleasure': 'Deseo y placer',
+  'Feeling numb, distant or disconnected during intimacy, or curious to feel more.': 'Sentir adormecimiento, distancia o desconexión en la intimidad, o curiosidad por sentir más.',
+  'Life transitions': 'Transiciones de vida',
+  'Pregnancy, postpartum, menopause, gender transition, grief or a new season of life.': 'Embarazo, posparto, menopausia, transición de género, duelo o una nueva etapa de la vida.',
+  'Boundaries and consent': 'Límites y consentimiento',
+  'Learning to ask, to say no, and to trust your own yes.': 'Aprender a pedir, a decir que no, y a confiar en tu propio sí.',
+  'Somatic sex education and bodywork, online or in Chicago': 'Educación sexual somática y trabajo corporal, en línea o en Chicago',
+  'A ceremonial immersion into the ground substance of your pelvic root': 'Una inmersión ceremonial en la sustancia fundamental de tu raíz pélvica',
+  'A play room for learning to ask, to refuse, and to know your own yes': 'Un espacio de juego para aprender a pedir, a negarte y a conocer tu propio sí',
+  'Fully clothed, hands-on bodywork': 'Trabajo corporal con las manos, con ropa',
+  'Seven months through the five elements': 'Siete meses a través de los cinco elementos',
+  'From $100': 'Desde $100',
+  'Half day · Full day · Multi-day': 'Medio día · Día completo · Varios días',
+  '$20 drop-in · Online': '$20 clase suelta · En línea',
+  'Free while in training': 'Gratis durante mi formación',
+  'Coming soon · Waitlist': 'Muy pronto · Lista de espera',
+  'A trauma-responsive, consent-forward practice': 'Una práctica sensible al trauma y centrada en el consentimiento',
   'Liberate Your Pelvis': 'Liberación Pélvica', // 11/20, the client's
   'Relational Integrity Labs': 'Laboratorios: Integridad Relacional', // 11/20, the client's
   'Zen Shiatsu': 'Zen Shiatsu',

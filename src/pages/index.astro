@@ -6,7 +6,7 @@ import Portrait from '../components/Portrait.astro';
 import Realms from '../components/Realms.astro';
 import Testimonials from '../components/Testimonials.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { site, homeCards, shown, withBase } from '../site';
+import { site, homeCards, shown, withBase, booking } from '../site';
 import { person } from '../seo';
 import { langOf, linker, translator, entryId } from '../i18n';
 
@@ -48,6 +48,13 @@ const movedAnchors = {
 };
 // The cards in view (Spine Society is kept but out of view, 11/18).
 const cards = homeCards.filter(shown);
+// The four doorways (11/24, option C).
+const doors = [
+  { title: 'Pain and scar tissue', text: 'Pelvic pain, birth, surgery, or a body that has been opened, stitched or changed.', to: 'Liberate Your Pelvis', href: '/services/#liberate-your-pelvis' },
+  { title: 'Desire and pleasure', text: 'Feeling numb, distant or disconnected during intimacy, or curious to feel more.', to: '1:1 Sessions', href: '/services/#one-to-one' },
+  { title: 'Life transitions', text: 'Pregnancy, postpartum, menopause, gender transition, grief or a new season of life.', to: '1:1 Sessions', href: '/services/#one-to-one' },
+  { title: 'Boundaries and consent', text: 'Learning to ask, to say no, and to trust your own yes.', to: 'Relational Integrity Labs', href: '/services/#relational-integrity-labs' },
+];
 ---
 
 <Base
@@ -82,6 +89,9 @@ const cards = homeCards.filter(shown);
         {/* Her line in the soft serif's italic, centred under the name
             (the homepage rendering chosen 11/16). */}
         <p class="subtitle">{h.hero.tagline}</p>
+        {/* What the work is, in plain words, and the one way in (11/24, C). */}
+        <p class="hero-line">{tr('Somatic Sex Education · Holistic Pelvic Care™ · Consent-led Bodywork')}</p>
+        <div class="hero-cta"><Link variant="action" href={booking.url}>{tr(booking.label)}</Link></div>
       </div>
 
       {/* The mark is out of the hero for now, by Joan's choice; the bar at the
@@ -109,7 +119,77 @@ const cards = homeCards.filter(shown);
       land      photograph — the lake, and her land acknowledgment
   */}
 
-  {/* 2 · I am Joan. Welcome. Split, as on Services: her welcome on the
+  {/* 2 · Recognition (11/24, option C): four plain doorways, each to the
+      offering that meets it. Wording drafted from her Offerings page, for
+      her to make her own. */}
+  <section class="doors">
+    <div class="band section">
+      <div class="wide">
+        <div class="offer-head">
+          <h2 class="label">{tr('You may be here because')}</h2>
+          <p class="offer-sub">{tr('your body is asking for care.')}</p>
+        </div>
+        <ul class="door-list rise">
+          {doors.map((d) => (
+            <li>
+              <a class="door" href={L(d.href)}>
+                <span class="door-title">{tr(d.title)}</span>
+                <span class="door-text">{tr(d.text)}</span>
+                <span class="door-to">{tr(d.to)} <span aria-hidden="true">→</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* 3 · Her five — the offerings, each with a line and a price (11/24). */}
+  <section id="begin-here">
+    <div class="band section">
+    <div class="wide">
+      {/* A heading over her cards (11/21, option 3 of three): the menu's
+          word, and a line beneath it. */}
+      <div class="offer-head">
+        <h2 class="label">{tr('Offerings')}</h2>
+        <p class="offer-sub">{tr('Ways we can work together.')}</p>
+      </div>
+      <ul class="cards rise" style={`--n:${cards.length}`} data-odd={cards.length % 2 === 1 ? '' : undefined}>
+        {
+          cards.map((o) => (
+            <li>
+              <a class="card cardstock" href={L(o.href)} data-register={o.register}>
+                <span class="card-art film">
+                  <Collage
+                    src={o.collage}
+                    alt=""
+                    register={o.register}
+                    sizes="(max-width: 640px) 80vw, (max-width: 1000px) 40vw, 19vw"
+                  />
+                </span>
+                <span class="card-meta">
+                  <span class="card-key card-rule" aria-hidden="true"></span>
+                  <span class="card-title">{tr(o.title)}</span>
+                  {o.note && <span class="card-container">{tr(o.note)}</span>}
+                  {o.line && <span class="card-line">{tr(o.line)}</span>}
+                  {o.price && <span class="card-price">{tr(o.price)}</span>}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {/* Her training and how she works, in one quiet line (11/24, C). */}
+      <p class="training">
+        Somatic Sexology · Sexological Bodywork · Holistic Pelvic Care™ · Body-Mind Centering® · Zen Shiatsu
+        <br />{tr('A trauma-responsive, consent-forward practice')}
+      </p>
+    </div>
+    </div>
+  </section>
+
+  {/* 4 · I am Joan. Welcome. Split, as on Services: her welcome on the
       blush, her portrait beside it, one window tall, held in view while the
       welcome is read. The portrait keeps its colour — this is where a reader
       meets a person. */}
@@ -125,7 +205,7 @@ const cards = homeCards.filter(shown);
     </div>
   </section>
 
-  {/* 3 · What is Ma Somatrix? Her text, then the triangle; her last line
+  {/* 5 · What is Ma Somatrix? Her text, then the triangle; her last line
       waits beside it until a word is chosen. */}
   <section class="realms-scene on-dark has-ground" id="ma-somatrix">
     <div class="realms-photo film film-still"><Collage src="resource.jpg" alt="" sizes="100vw" /></div>
@@ -155,45 +235,7 @@ const cards = homeCards.filter(shown);
     )
   }
 
-  {/* 4 · Her five — the offerings, by name only. */}
-  <section id="begin-here">
-    <div class="band section">
-    <div class="wide">
-      {/* A heading over her cards (11/21, option 3 of three): the menu's
-          word, and a line beneath it. */}
-      <div class="offer-head">
-        <h2 class="label">{tr('Offerings')}</h2>
-        <p class="offer-sub">{tr('Ways we can work together.')}</p>
-      </div>
-      <ul class="cards rise" style={`--n:${cards.length}`} data-odd={cards.length % 2 === 1 ? '' : undefined}>
-        {
-          cards.map((o) => (
-            <li>
-              <a class="card cardstock" href={L(o.href)} data-register={o.register}>
-                <span class="card-art film">
-                  <Collage
-                    src={o.collage}
-                    alt=""
-                    register={o.register}
-                    sizes="(max-width: 640px) 80vw, (max-width: 1000px) 40vw, 19vw"
-                  />
-                </span>
-                <span class="card-meta">
-                  <span class="card-key card-rule" aria-hidden="true"></span>
-                  <span class="card-title">{tr(o.title)}</span>
-                  {o.note && <span class="card-container">{tr(o.note)}</span>}
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-
-    </div>
-    </div>
-  </section>
-
-  {/* 5 · The close: her land acknowledgment over the lake, on glass, in
+  {/* 6 · The close: her land acknowledgment over the lake, on glass, in
       place of Get in Touch. */}
   <section slot="close" class="close land" aria-labelledby="land-title">
     <div class="band section">
@@ -213,6 +255,115 @@ const cards = homeCards.filter(shown);
 </Base>
 
 <style>
+
+  /* ---- Hero: the plain line and the way in (11/24, C) ---- */
+  .hero-line {
+    margin: 1.4rem auto 0;
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.9;
+    opacity: 0.92;
+  }
+
+  .hero-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  /* ---- Recognition: four doorways (11/24, C) ---- */
+  .door-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .door {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    height: 100%;
+    padding: 1.4rem 0.4rem 0.5rem;
+    border-top: 1px solid rgb(var(--ch-plum) / 0.22);
+    color: var(--color-cochineal);
+    text-decoration: none;
+  }
+
+  .door-title {
+    font-family: var(--font-soft);
+    font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+    line-height: 1.2;
+  }
+
+  .door-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    flex: 1;
+  }
+
+  .door-to {
+    margin-top: 0.4rem;
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+
+  .door:hover .door-to,
+  .door:focus-visible .door-to {
+    color: var(--color-cochineal);
+  }
+
+  @media (max-width: 860px) {
+    .door-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .door-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* A line and a price beneath each card's name (11/24, C). */
+  .card-line {
+    margin-top: 0.4rem;
+    font-family: var(--font-soft);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: var(--color-ink-2);
+  }
+
+  .card-price {
+    margin-top: 0.6rem;
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+
+  .training {
+    margin: clamp(2rem, 4vw, 3rem) auto 0;
+    max-width: 52rem;
+    text-align: center;
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    line-height: 2.1;
+    color: var(--color-ink-2);
+  }
 
   /* ---- Hero ---- */
   .hero {
