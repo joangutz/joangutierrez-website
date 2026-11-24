@@ -10,7 +10,7 @@
  */
 import { site, booking, contact, kit, withBase } from './site';
 
-const BASE_URL = 'https://joangutz.github.io';
+const BASE_URL = 'https://masomatrix.com';
 
 /** An absolute URL for a site path. */
 export const abs = (path: string) => new URL(withBase(path), BASE_URL).href;

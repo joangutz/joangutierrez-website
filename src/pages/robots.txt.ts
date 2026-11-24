@@ -8,10 +8,6 @@ import { abs } from '../seo';
  * explicit; to keep the site out of AI training while staying in AI search,
  * change GPTBot, ClaudeBot, Google-Extended and Applebot-Extended to
  * "Disallow: /" and leave the search agents as they are.
- *
- * Note: while the site lives at joangutz.github.io/joangutierrez-website,
- * search engines read robots.txt only at the domain's root, which this
- * file is not. It takes effect once the site moves to its own domain.
  */
 export const GET: APIRoute = () => {
   const agents = [

@@ -7,7 +7,7 @@
  *
  * Astro does NOT rewrite hardcoded absolute hrefs when `base` is set, so every
  * internal link has to go through this or the whole site 404s on a project
- * page like joangutz.github.io/joangutierrez-website. Returns the path
+ * page with a base path. Returns the path
  * unchanged when the base is "/".
  */
 export const withBase = (path: string): string => {
@@ -18,7 +18,7 @@ export const withBase = (path: string): string => {
 
 export const site = {
   name: 'Ma Somatrix',
-  domain: 'masomatix.com',
+  domain: 'masomatrix.com',
   /** The practitioner, still named wherever the writing is hers. */
   person: 'Joan Gutiérrez',
   tagline: 'Somatic education delivered with artistry for vibrant health',

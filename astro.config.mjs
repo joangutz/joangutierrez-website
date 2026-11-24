@@ -4,29 +4,17 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 /**
- * Deploy target: GitHub Pages project site at
- * joangutz.github.io/joangutierrez-website
- *
- * TODO-DOMAIN: moving to masomatix.com is three steps, and they have to
- * happen in this order or the live site goes dark in between:
- *   1. point the DNS at GitHub Pages (four A records for the apex, or a
- *      CNAME to joangutz.github.io for www), and set the custom domain in
- *      the repository's Settings → Pages
- *   2. add a file `public/CNAME` containing exactly: masomatix.com
- *   3. change the two values below to site: 'https://masomatix.com' and
- *      base: '/'
- * Every internal link already goes through withBase() in src/site.ts, so
- * those two values are the whole of the code change. Doing step 3 before
- * steps 1 and 2 would break the current preview URL and serve nothing in its
- * place, which is why it is not done here.
+ * Deploy target: GitHub Pages at its own domain, masomatrix.com (11/24),
+ * set in the repository's Settings → Pages, with public/CNAME. The old
+ * joangutz.github.io/joangutierrez-website address forwards here.
  */
-const BASE = '/joangutierrez-website';
+const BASE = '/';
 
 /** Redirect targets are written to the page as-is, so they carry the base. */
 const to = (path) => `${BASE.replace(/\/$/, '')}${path}`;
 
 export default defineConfig({
-  site: 'https://joangutz.github.io',
+  site: 'https://masomatrix.com',
   base: BASE,
   integrations: [mdx()],
   /**
