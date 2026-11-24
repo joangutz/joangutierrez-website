@@ -56,7 +56,7 @@ export const es: Record<string, string> = {
   'Seven months through the five elements': 'Siete meses a través de los cinco elementos',
   'From $100': 'Desde $100',
   'From $350 · Half day to multi-day': 'Desde $350 · De medio día a varios días',
-  'Your first session is a 2-hour intake, $250. Your $15 discovery call fee goes toward it, so it comes to $235. After that, sessions are 60, 75, 90 or 120 minutes, chosen together for your needs and budget.': 'Tu primera sesión es una sesión de admisión de 2 horas, $250. Los $15 de tu llamada de descubrimiento se descuentan, así que queda en $235. Después, las sesiones son de 60, 75, 90 o 120 minutos, y las elegimos juntes según tus necesidades y tu presupuesto.',
+  'Your first session is a 2-hour intake, $250, held in person when possible. It is the one 2-hour session also offered online. Your $15 discovery call fee goes toward it, so it comes to $235. After that, sessions are 60, 75, 90 or 120 minutes, chosen together for your needs and budget.': 'Tu primera sesión es una sesión de admisión de 2 horas, $250, en persona cuando es posible. Es la única sesión de 2 horas que también se ofrece en línea. Los $15 de tu llamada de descubrimiento se descuentan, así que queda en $235. Después, las sesiones son de 60, 75, 90 o 120 minutos, y las elegimos juntes según tus necesidades y tu presupuesto.',
   'Half day · Full day · Multi-day': 'Medio día · Día completo · Varios días',
   '$20 drop-in · Online': '$20 clase suelta · En línea',
   'Free while in training': 'Gratis durante mi formación',
